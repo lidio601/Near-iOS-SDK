@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "NITManager.h"
+
 //! Project version number for NearITSDK.
 FOUNDATION_EXPORT double NearITSDKVersionNumber;
 
