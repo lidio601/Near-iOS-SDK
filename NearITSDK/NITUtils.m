@@ -16,7 +16,7 @@
 * @param apiKey ApiKey provided by NearIt
 * @return AppId decoded
 */
-+ (NSString *)fetchAppIdFrom:(NSString *)apiKey {
++ (NSString *)fetchAppIdFromApiKey:(NSString *)apiKey {
     NSArray<NSString*> *components = [apiKey componentsSeparatedByString:@"."];
     
     NSString *payload = [components objectAtIndex:1];

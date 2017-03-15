@@ -10,6 +10,6 @@
 
 @interface NITUtils : NSObject
 
-+ (NSString* _Nonnull)fetchAppIdFrom:(NSString* _Nonnull)apiKey;
++ (NSString* _Nonnull)fetchAppIdFromApiKey:(NSString* _Nonnull)apiKey;
 
 @end

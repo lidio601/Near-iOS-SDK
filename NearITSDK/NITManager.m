@@ -9,6 +9,7 @@
 #import "NITManager.h"
 #import "NITConfiguration.h"
 #import "NITUserProfile.h"
+#import "NITUtils.h"
 
 @implementation NITManager
 
@@ -16,6 +17,7 @@
     self = [super init];
     if (self) {
         [[NITConfiguration defaultConfiguration] setApiKey:apiKey];
+        [[NITConfiguration defaultConfiguration] setAppId:[NITUtils fetchAppIdFromApiKey:apiKey]];
         
         [NITUserProfile createNewProfileWithCompletionHandler:^{ //Now is a sample
             

@@ -8,19 +8,22 @@
 
 #import "NITConfiguration.h"
 
-#define APIKEY @"apiKey"
+#define APIKEY @"apikey"
+#define APPID @"appid"
 
 static NITConfiguration *defaultConfiguration;
 
 @interface NITConfiguration()
 
-@property (nonatomic) NSString * _Nonnull apiKey;
+@property (nonatomic, strong) NSString * _Nonnull apiKey;
+@property (nonatomic, strong) NSString * _Nonnull appId;
 
 @end
 
 @implementation NITConfiguration
 
 @synthesize apiKey = _apiKey;
+@synthesize appId = _appId;
 
 + (NITConfiguration * _Nonnull)defaultConfiguration {
     if (defaultConfiguration == nil) {
@@ -39,6 +42,18 @@ static NITConfiguration *defaultConfiguration;
 - (void)setApiKey:(NSString * _Nonnull)apiKey {
     _apiKey = apiKey;
     [[NSUserDefaults standardUserDefaults] setObject:apiKey forKey:APIKEY];
+}
+
+- (NSString *)appId {
+    if (self.appId == nil) {
+        self.appId = [[NSUserDefaults standardUserDefaults] stringForKey:APPID];
+    }
+    return self.appId;
+}
+
+- (void)setAppId:(NSString * _Nonnull)appId {
+    _appId = appId;
+    [[NSUserDefaults standardUserDefaults] setObject:appId forKey:APPID];
 }
 
 @end

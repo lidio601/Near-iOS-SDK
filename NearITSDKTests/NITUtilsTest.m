@@ -28,7 +28,7 @@
 }
 
 - (void)testGrabAppId {
-    NSString *appId = [NITUtils fetchAppIdFrom:APIKEY];
+    NSString *appId = [NITUtils fetchAppIdFromApiKey:APIKEY];
     XCTAssertGreaterThan([appId length], 0, @"appId is empty");
 }
 
