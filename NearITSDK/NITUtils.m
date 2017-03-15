@@ -12,9 +12,9 @@
 @implementation NITUtils
 
 /**
- Fetch AppId from the ApiKey
- - parameters:
-    - apiKey: ApiKey provided by NearIt
+* Fetch AppId from the ApiKey
+* @param apiKey ApiKey provided by NearIt
+* @return AppId decoded
 */
 + (NSString *)fetchAppIdFrom:(NSString *)apiKey {
     NSArray<NSString*> *components = [apiKey componentsSeparatedByString:@"."];
