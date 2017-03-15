@@ -12,6 +12,7 @@
 
 + (NITConfiguration * _Nonnull)defaultConfiguration;
 
+- (NSString* _Nullable)apiKey;
 - (void)setApiKey:(NSString * _Nonnull)apiKey;
 - (void)setAppId:(NSString * _Nonnull)appId;
 

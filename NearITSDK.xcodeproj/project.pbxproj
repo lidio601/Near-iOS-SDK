@@ -15,6 +15,10 @@
 		1349EEA71E793413000B0666 /* NITJSONAPIResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEA51E793413000B0666 /* NITJSONAPIResource.m */; };
 		1349EEA91E793834000B0666 /* NITJSONAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEA81E793833000B0666 /* NITJSONAPITests.m */; };
 		1349EEAC1E7948FA000B0666 /* jsonapi_sample1.json in Resources */ = {isa = PBXBuildFile; fileRef = 1349EEAB1E7948FA000B0666 /* jsonapi_sample1.json */; };
+		1349EEAF1E795030000B0666 /* NITNetworkManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1349EEAD1E795030000B0666 /* NITNetworkManager.h */; };
+		1349EEB01E795030000B0666 /* NITNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEAE1E795030000B0666 /* NITNetworkManager.m */; };
+		1349EEB31E796511000B0666 /* NITNetworkProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 1349EEB11E796511000B0666 /* NITNetworkProvider.h */; };
+		1349EEB41E796511000B0666 /* NITNetworkProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEB21E796511000B0666 /* NITNetworkProvider.m */; };
 		1352CA6E1E7807FE00C0E98E /* NearITSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1352CA641E7807FE00C0E98E /* NearITSDK.framework */; };
 		1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1352CA721E7807FE00C0E98E /* NearITSDKTests.m */; };
 		1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 1352CA671E7807FE00C0E98E /* NearITSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -48,6 +52,10 @@
 		1349EEA51E793413000B0666 /* NITJSONAPIResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITJSONAPIResource.m; sourceTree = "<group>"; };
 		1349EEA81E793833000B0666 /* NITJSONAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITJSONAPITests.m; sourceTree = "<group>"; };
 		1349EEAB1E7948FA000B0666 /* jsonapi_sample1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = jsonapi_sample1.json; sourceTree = "<group>"; };
+		1349EEAD1E795030000B0666 /* NITNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITNetworkManager.h; sourceTree = "<group>"; };
+		1349EEAE1E795030000B0666 /* NITNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITNetworkManager.m; sourceTree = "<group>"; };
+		1349EEB11E796511000B0666 /* NITNetworkProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITNetworkProvider.h; sourceTree = "<group>"; };
+		1349EEB21E796511000B0666 /* NITNetworkProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITNetworkProvider.m; sourceTree = "<group>"; };
 		1352CA641E7807FE00C0E98E /* NearITSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NearITSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1352CA671E7807FE00C0E98E /* NearITSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NearITSDK.h; sourceTree = "<group>"; };
 		1352CA681E7807FE00C0E98E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -152,6 +160,10 @@
 		1352CA851E78298A00C0E98E /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				1349EEB11E796511000B0666 /* NITNetworkProvider.h */,
+				1349EEB21E796511000B0666 /* NITNetworkProvider.m */,
+				1349EEAD1E795030000B0666 /* NITNetworkManager.h */,
+				1349EEAE1E795030000B0666 /* NITNetworkManager.m */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -183,7 +195,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1349EEB31E796511000B0666 /* NITNetworkProvider.h in Headers */,
 				1352CA831E78294E00C0E98E /* NITManager.h in Headers */,
+				1349EEAF1E795030000B0666 /* NITNetworkManager.h in Headers */,
 				1352CA8D1E78313300C0E98E /* NITUserProfile.h in Headers */,
 				1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */,
 				1349EEA21E79325E000B0666 /* NITJSONAPI.h in Headers */,
@@ -298,8 +312,10 @@
 				1349EE9E1E7927A1000B0666 /* NITUtils.m in Sources */,
 				1352CA841E78294E00C0E98E /* NITManager.m in Sources */,
 				1349EEA31E79325E000B0666 /* NITJSONAPI.m in Sources */,
+				1349EEB01E795030000B0666 /* NITNetworkManager.m in Sources */,
 				1349EEA71E793413000B0666 /* NITJSONAPIResource.m in Sources */,
 				1352CA8E1E78313300C0E98E /* NITUserProfile.m in Sources */,
+				1349EEB41E796511000B0666 /* NITNetworkProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

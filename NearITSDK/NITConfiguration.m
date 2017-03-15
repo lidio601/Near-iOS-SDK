@@ -33,10 +33,10 @@ static NITConfiguration *defaultConfiguration;
 }
 
 - (NSString *)apiKey {
-    if (self.apiKey == nil) {
+    if (_apiKey == nil) {
         self.apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:APIKEY];
     }
-    return self.apiKey;
+    return _apiKey;
 }
 
 - (void)setApiKey:(NSString * _Nonnull)apiKey {
@@ -45,10 +45,10 @@ static NITConfiguration *defaultConfiguration;
 }
 
 - (NSString *)appId {
-    if (self.appId == nil) {
+    if (_appId == nil) {
         self.appId = [[NSUserDefaults standardUserDefaults] stringForKey:APPID];
     }
-    return self.appId;
+    return _appId;
 }
 
 - (void)setAppId:(NSString * _Nonnull)appId {
