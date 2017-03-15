@@ -21,7 +21,7 @@
 }
 
 + (NSURLRequest *)newProfileWithAppId:(NSString*)appId {
-    NSMutableURLRequest *request =[NITNetworkProvider requestWithPath:@"/congrego/profiles"];
+    NSMutableURLRequest *request =[NITNetworkProvider requestWithPath:@"/plugins/congrego/profiles"];
     [request setHTTPMethod:@"POST"];
     
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
@@ -35,6 +35,10 @@
     [request setHTTPBody:jsonDataBody];
     
     return request;
+}
+
++ (NSURLRequest *)geopolisNodes {
+    return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/geopolis/nodes?filter[app_id]=%@&include=children.*.children", [[NITConfiguration defaultConfiguration] appId]]];
 }
 
 + (NSMutableURLRequest*)requestWithPath:(NSString*)path {

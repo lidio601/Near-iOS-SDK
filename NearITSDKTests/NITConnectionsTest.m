@@ -14,6 +14,7 @@
 #import "NITConfiguration.h"
 
 #define APIKEY @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJlMzRhN2Q5MC0xNGQyLTQ2YjgtODFmMC04MWEyYzkzZGQ0ZDAiLCJyb2xlX2tleSI6ImFwcCJ9fX0.2GvA499N8c1Vui9au7NzUWM8B10GWaha6ASCCgPPlR8"
+#define APPID @"e34a7d90-14d2-46b8-81f0-81a2c93dd4d0"
 #define BASE_URL @"https://dev-api.nearit.com"
 
 @interface NITConnectionsTest : XCTestCase
@@ -39,6 +40,7 @@
     self.headers = headers;
     
     [[NITConfiguration defaultConfiguration] setApiKey:APIKEY];
+    [[NITConfiguration defaultConfiguration] setAppId:APPID];
 }
 
 - (void)tearDown {
@@ -80,7 +82,7 @@
 - (void)testNewProfile {
     XCTestExpectation *profileExpectation = [self expectationWithDescription:@"Profile created"];
     
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider newProfileWithAppId:@"e34a7d90-14d2-46b8-81f0-81a2c93dd4d0"] completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider newProfileWithAppId:APPID] completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
         XCTAssertNil(error);
         NSError *jsonError;
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
@@ -94,6 +96,21 @@
     [self waitForExpectationsWithTimeout:3.0 handler:^(NSError * _Nullable error) {
         
     }];
+}
+
+- (void)testGeopolisNode {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        
+        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"JSON Geopolis: %@", json);
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
 }
 
 @end

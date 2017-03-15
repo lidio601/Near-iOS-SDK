@@ -12,4 +12,6 @@
 
 - (instancetype _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey;
 
+- (void)refreshConfig;
+
 @end

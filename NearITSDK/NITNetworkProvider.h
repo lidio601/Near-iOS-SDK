@@ -12,5 +12,6 @@
 
 + (NSURLRequest*)recipesList;
 + (NSURLRequest*)newProfileWithAppId:(NSString*)appId;
++ (NSURLRequest*)geopolisNodes;
 
 @end
