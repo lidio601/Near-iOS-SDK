@@ -1,0 +1,11 @@
+framework module NearITSDK {
+    umbrella header "NearITSDK.h"
+    
+    export *
+    module * { export * }
+    
+    explicit module Private {
+        header "NITManager.h"
+        header "NITUtils.h"
+    }
+}
