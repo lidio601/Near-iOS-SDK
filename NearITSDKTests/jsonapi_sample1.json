@@ -1,0 +1,10 @@
+{
+    "data": {
+        "type": "peoples",
+        "id": "1",
+        "attributes": {
+            "name" : "Carlo",
+            "job" : "Developer"
+        }
+    }
+}
