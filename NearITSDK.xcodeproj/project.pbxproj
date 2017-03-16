@@ -60,6 +60,7 @@
 		1349EEB21E796511000B0666 /* NITNetworkProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITNetworkProvider.m; sourceTree = "<group>"; };
 		1349EEB61E797045000B0666 /* NITGeopolisManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITGeopolisManager.h; sourceTree = "<group>"; };
 		1349EEB71E797045000B0666 /* NITGeopolisManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITGeopolisManager.m; sourceTree = "<group>"; };
+		1349EEBB1E7A8C0E000B0666 /* libobjc.A.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libobjc.A.tbd; path = usr/lib/libobjc.A.tbd; sourceTree = SDKROOT; };
 		1352CA641E7807FE00C0E98E /* NearITSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NearITSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1352CA671E7807FE00C0E98E /* NearITSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NearITSDK.h; sourceTree = "<group>"; };
 		1352CA681E7807FE00C0E98E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -121,12 +122,21 @@
 			name = Geopolis;
 			sourceTree = "<group>";
 		};
+		1349EEBA1E7A8C0E000B0666 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1349EEBB1E7A8C0E000B0666 /* libobjc.A.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		1352CA5A1E7807FD00C0E98E = {
 			isa = PBXGroup;
 			children = (
 				1352CA661E7807FE00C0E98E /* NearITSDK */,
 				1352CA711E7807FE00C0E98E /* NearITSDKTests */,
 				1352CA651E7807FE00C0E98E /* Products */,
+				1349EEBA1E7A8C0E000B0666 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
