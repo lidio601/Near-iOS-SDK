@@ -62,14 +62,13 @@
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     [self fillHeadersWithRequest:request];
     
-    [NITNetworkManager makeRequestWithURLRequest:request completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
+    [NITNetworkManager makeRequestWithURLRequest:request jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         XCTAssertNil(error);
+        XCTAssertNotNil(json, @"json is nil");
         
-        NSError *jsonError;
-        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
-        if (json) {
-            NSLog(@"JSON List recipes: %@", json);
-        }
+        NITJSONAPIResource *firstResourceObject = [json firstResourceObject];
+        XCTAssertNotNil(firstResourceObject, @"first resource object is nil");
+        XCTAssertTrue([firstResourceObject.type isEqualToString:@"recipes"], @"type is not recipes");
         
         [recipeExpectation fulfill];
     }];

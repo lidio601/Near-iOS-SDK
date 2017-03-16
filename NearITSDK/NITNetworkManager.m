@@ -8,6 +8,7 @@
 
 #import "NITNetworkManager.h"
 #import "NITConfiguration.h"
+#import "NITJSONAPI.h"
 
 #define NITNetowkrErrorDomain @"com.nearit.network"
 #define LogResponseOnError YES
@@ -56,6 +57,23 @@ static NSURLSession *session;
         }
     }];
     [task resume];
+}
+
++ (void)makeRequestWithURLRequest:(NSURLRequest *)request jsonApicompletionHandler:(void (^)(NITJSONAPI * _Nullable json, NSError * _Nullable error))completionHandler {
+    [NITNetworkManager makeRequestWithURLRequest:request completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
+        if(error) {
+            completionHandler(nil, error);
+        } else {
+            NSError *jsonError;
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
+            if (jsonError) {
+                completionHandler(nil, jsonError);
+            } else {
+                NITJSONAPI *jsonApi = [NITJSONAPI jsonAPIWithDictionary:json];
+                completionHandler(jsonApi, nil);
+            }
+        }
+    }];
 }
 
 @end

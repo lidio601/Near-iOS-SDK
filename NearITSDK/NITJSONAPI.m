@@ -68,9 +68,17 @@
 
 - (NSDictionary *)toDictionary {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    if ([self.resources count] == 1) {
+    if ([self.resources count] == 0) {
+        [dict setObject:[NSNull null] forKey:@"data"];
+    } else if ([self.resources count] == 1) {
         NITJSONAPIResource *res = [self.resources objectAtIndex:0];
         [dict setObject:[res toDictionary] forKey:@"data"];
+    } else {
+        NSMutableArray *resArray = [[NSMutableArray alloc] initWithCapacity:[self.resources count]];
+        for(NITJSONAPIResource *res in self.resources) {
+            [resArray addObject:[res toDictionary]];
+        }
+        [dict setObject:resArray forKey:@"data"];
     }
     
     return [NSDictionary dictionaryWithDictionary:dict];
