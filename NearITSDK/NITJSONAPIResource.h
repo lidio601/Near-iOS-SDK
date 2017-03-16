@@ -15,7 +15,11 @@
 
 - (void)addAttributeObject:(id _Nonnull)object forKey:(NSString* _Nonnull)key;
 - (NSInteger)attributesCount;
+- (NSDictionary<NSString*, id>* _Nonnull)attributes;
+- (NSDictionary<NSString *,id>* _Nonnull)relationships;
+- (id _Nullable)attributeForKey:(NSString* _Nonnull)key;
 - (NSDictionary* _Nonnull)toDictionary;
+- (NSDictionary* _Nullable)relationshipForKey:(NSString* _Nonnull)key;
 + (NITJSONAPIResource* _Nonnull)resourceObjectWithDictiornary:(NSDictionary* _Nonnull)dictionary;
 
 @end

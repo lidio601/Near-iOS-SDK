@@ -21,6 +21,12 @@
 		1349EEB41E796511000B0666 /* NITNetworkProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEB21E796511000B0666 /* NITNetworkProvider.m */; };
 		1349EEB81E797045000B0666 /* NITGeopolisManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1349EEB61E797045000B0666 /* NITGeopolisManager.h */; };
 		1349EEB91E797045000B0666 /* NITGeopolisManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEB71E797045000B0666 /* NITGeopolisManager.m */; };
+		1349EEC01E7A9272000B0666 /* NITNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 1349EEBE1E7A9272000B0666 /* NITNode.h */; };
+		1349EEC11E7A9272000B0666 /* NITNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEBF1E7A9272000B0666 /* NITNode.m */; };
+		1349EEC41E7A95E3000B0666 /* NITNodesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1349EEC21E7A95E3000B0666 /* NITNodesManager.h */; };
+		1349EEC51E7A95E3000B0666 /* NITNodesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEC31E7A95E3000B0666 /* NITNodesManager.m */; };
+		1349EEC91E7AA1E3000B0666 /* NITResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 1349EEC71E7AA1E3000B0666 /* NITResource.h */; };
+		1349EECA1E7AA1E3000B0666 /* NITResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEC81E7AA1E3000B0666 /* NITResource.m */; };
 		1352CA6E1E7807FE00C0E98E /* NearITSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1352CA641E7807FE00C0E98E /* NearITSDK.framework */; };
 		1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1352CA721E7807FE00C0E98E /* NearITSDKTests.m */; };
 		1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 1352CA671E7807FE00C0E98E /* NearITSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -61,6 +67,12 @@
 		1349EEB61E797045000B0666 /* NITGeopolisManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITGeopolisManager.h; sourceTree = "<group>"; };
 		1349EEB71E797045000B0666 /* NITGeopolisManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITGeopolisManager.m; sourceTree = "<group>"; };
 		1349EEBB1E7A8C0E000B0666 /* libobjc.A.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libobjc.A.tbd; path = usr/lib/libobjc.A.tbd; sourceTree = SDKROOT; };
+		1349EEBE1E7A9272000B0666 /* NITNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITNode.h; sourceTree = "<group>"; };
+		1349EEBF1E7A9272000B0666 /* NITNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITNode.m; sourceTree = "<group>"; };
+		1349EEC21E7A95E3000B0666 /* NITNodesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITNodesManager.h; sourceTree = "<group>"; };
+		1349EEC31E7A95E3000B0666 /* NITNodesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITNodesManager.m; sourceTree = "<group>"; };
+		1349EEC71E7AA1E3000B0666 /* NITResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITResource.h; sourceTree = "<group>"; };
+		1349EEC81E7AA1E3000B0666 /* NITResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITResource.m; sourceTree = "<group>"; };
 		1352CA641E7807FE00C0E98E /* NearITSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NearITSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1352CA671E7807FE00C0E98E /* NearITSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NearITSDK.h; sourceTree = "<group>"; };
 		1352CA681E7807FE00C0E98E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -116,6 +128,7 @@
 		1349EEB51E796FF3000B0666 /* Geopolis */ = {
 			isa = PBXGroup;
 			children = (
+				1349EEBD1E7A9264000B0666 /* Nodes */,
 				1349EEB61E797045000B0666 /* NITGeopolisManager.h */,
 				1349EEB71E797045000B0666 /* NITGeopolisManager.m */,
 			);
@@ -128,6 +141,17 @@
 				1349EEBB1E7A8C0E000B0666 /* libobjc.A.tbd */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1349EEBD1E7A9264000B0666 /* Nodes */ = {
+			isa = PBXGroup;
+			children = (
+				1349EEBE1E7A9272000B0666 /* NITNode.h */,
+				1349EEBF1E7A9272000B0666 /* NITNode.m */,
+				1349EEC21E7A95E3000B0666 /* NITNodesManager.h */,
+				1349EEC31E7A95E3000B0666 /* NITNodesManager.m */,
+			);
+			name = Nodes;
 			sourceTree = "<group>";
 		};
 		1352CA5A1E7807FD00C0E98E = {
@@ -208,6 +232,8 @@
 				1349EEA11E79325E000B0666 /* NITJSONAPI.m */,
 				1349EEA41E793413000B0666 /* NITJSONAPIResource.h */,
 				1349EEA51E793413000B0666 /* NITJSONAPIResource.m */,
+				1349EEC71E7AA1E3000B0666 /* NITResource.h */,
+				1349EEC81E7AA1E3000B0666 /* NITResource.m */,
 			);
 			name = JSONAPI;
 			sourceTree = "<group>";
@@ -221,13 +247,16 @@
 			files = (
 				1349EEB31E796511000B0666 /* NITNetworkProvider.h in Headers */,
 				1352CA831E78294E00C0E98E /* NITManager.h in Headers */,
+				1349EEC41E7A95E3000B0666 /* NITNodesManager.h in Headers */,
 				1349EEB81E797045000B0666 /* NITGeopolisManager.h in Headers */,
 				1349EEAF1E795030000B0666 /* NITNetworkManager.h in Headers */,
 				1352CA8D1E78313300C0E98E /* NITUserProfile.h in Headers */,
 				1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */,
 				1349EEA21E79325E000B0666 /* NITJSONAPI.h in Headers */,
+				1349EEC91E7AA1E3000B0666 /* NITResource.h in Headers */,
 				1349EE9D1E7927A1000B0666 /* NITUtils.h in Headers */,
 				1352CA881E782B1600C0E98E /* NITConfiguration.h in Headers */,
+				1349EEC01E7A9272000B0666 /* NITNode.h in Headers */,
 				1349EEA61E793413000B0666 /* NITJSONAPIResource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,6 +371,9 @@
 				1349EEA71E793413000B0666 /* NITJSONAPIResource.m in Sources */,
 				1352CA8E1E78313300C0E98E /* NITUserProfile.m in Sources */,
 				1349EEB41E796511000B0666 /* NITNetworkProvider.m in Sources */,
+				1349EEC11E7A9272000B0666 /* NITNode.m in Sources */,
+				1349EEC51E7A95E3000B0666 /* NITNodesManager.m in Sources */,
+				1349EECA1E7AA1E3000B0666 /* NITResource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,5 +17,7 @@
 - (void)setDataWithResourceObject:(NITJSONAPIResource* _Nonnull)resourceObject;
 - (NITJSONAPIResource* _Nullable)firstResourceObject;
 - (NSDictionary* _Nonnull)toDictionary;
+- (void)registerClass:(Class _Nonnull)cls forType:(NSString* _Nonnull)type;
+- (NSArray* _Nonnull)parseToArrayOfObjects;
 
 @end

@@ -8,11 +8,14 @@
 
 #import "NITJSONAPI.h"
 #import "NITJSONAPIResource.h"
+#import "NITResource.h"
 
 @interface NITJSONAPI()
 
 @property (nonatomic) NSMutableDictionary* internalJson;
 @property (nonatomic, strong) NSMutableArray<NITJSONAPIResource*> *resources;
+@property (nonatomic, strong) NSMutableArray<NITJSONAPIResource*> *included;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, Class> *registerdClass;
 
 @end
 
@@ -25,6 +28,8 @@
     if (self) {
         self.internalJson = [[NSMutableDictionary alloc] init];
         self.resources = [[NSMutableArray alloc] init];
+        self.included = [[NSMutableArray alloc] init];
+        self.registerdClass = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -45,6 +50,14 @@
     } else {
         NITJSONAPIResource *res = [NITJSONAPIResource resourceObjectWithDictiornary:data];
         [jsonApi.resources addObject:res];
+    }
+    
+    NSArray *included = [json objectForKey:@"included"];
+    if (included) {
+        for(NSDictionary *resDict in included) {
+            NITJSONAPIResource *res = [NITJSONAPIResource resourceObjectWithDictiornary:resDict];
+            [jsonApi.included addObject:res];
+        }
     }
     
     return jsonApi;
@@ -82,6 +95,125 @@
     }
     
     return [NSDictionary dictionaryWithDictionary:dict];
+}
+
+- (void)registerClass:(Class)cls forType:(NSString *)type {
+    Class hcls = [self.registerdClass objectForKey:type];
+    if (hcls == nil) {
+        [self.registerdClass setObject:cls forKey:type];
+    }
+}
+
+- (NSArray*)parseToArrayOfObjects {
+    NSMutableArray<NITResource*> *objects = [[NSMutableArray alloc] init];
+    NSMutableArray<NITResource*> *includeds = [[NSMutableArray alloc] init];
+    
+    for (NITJSONAPIResource *res in self.resources) {
+        id object = [self objectWithResource:res];
+        
+        if (object) {
+            [objects addObject:object];
+        }
+    }
+    
+    for (NITJSONAPIResource *res in self.included) {
+        id object = [self objectWithResource:res];
+        
+        if (object) {
+            [includeds addObject:object];
+        }
+    }
+    
+    NSMutableArray *mergedResources = [[NSMutableArray alloc] init];
+    [mergedResources addObjectsFromArray:objects];
+    [mergedResources addObjectsFromArray:includeds];
+    
+    for(NITResource* res in mergedResources) {
+        [self resolveRelationshipsWithResouce:res inCollectionOfResources:mergedResources];
+    }
+    
+    return [[NSArray alloc] initWithArray:objects];
+}
+
+- (id)objectWithResource:(NITJSONAPIResource*)resourceObject {
+    Class cls = [self.registerdClass objectForKey:resourceObject.type];
+    if (cls == nil || ![cls isSubclassOfClass:[NITResource class]]) {
+        return nil;
+    }
+    
+    NITResource *item = [[cls alloc] init];
+    item.resourceObject = resourceObject;
+    
+    for(NSString *key in resourceObject.attributes) {
+        id value = [resourceObject.attributes objectForKey:key];
+        @try {
+            [item setValue:value forKey:key];
+        }
+        @catch (NSException *exception) {
+            // Ignore it
+        }
+    }
+    
+    return item;
+}
+
+- (void)resolveRelationshipsWithResouce:(NITResource*)resource inCollectionOfResources:(NSArray<NITResource*>*)collections {
+    for(NSString *key in resource.resourceObject.relationships) {
+        NSDictionary *relationship = [resource.resourceObject.relationships objectForKey:key];
+        id data = [relationship objectForKey:@"data"];
+        if(data == nil || [data isEqual:[NSNull null]]) {
+            continue;
+        }
+        
+        if([data isKindOfClass:[NSDictionary class]]) {
+            NSString *resID = [data objectForKey:@"id"];
+            
+            @try {
+                [resource valueForKey:key];
+                
+                NITResource *foundRes = [self findResourceWithID:resID inCollection:collections];
+                if (foundRes) {
+                    [resource setValue:foundRes forKey:key];
+                }
+            }
+            @catch (NSException *exception) {
+                continue;
+            }
+        } else if([data isKindOfClass:[NSArray class]]) {
+            NSMutableArray *objects = [[NSMutableArray alloc] init];
+            
+            for(NSDictionary *resourceLinkage in data) {
+                NSString *resID = [resourceLinkage objectForKey:@"id"];
+                
+                NITResource *foundRes = [self findResourceWithID:resID inCollection:collections];
+                if (foundRes) {
+                    [objects addObject:foundRes];
+                }
+            }
+            
+            @try {
+                [resource setValue:[[NSArray alloc] initWithArray:objects] forKey:key];
+            }
+            @catch (NSException *exception) {
+                continue;
+            }
+        }
+        
+    }
+}
+
+- (NITResource*)findResourceWithID:(NSString*)ID inCollection:(NSArray<NITResource*>*)collections {
+    for(NITResource *res in collections) {
+        if([ID isEqualToString:res.resourceObject.ID]) {
+            return res;
+        }
+    }
+    return nil;
+}
+
+- (id)resolveRelationshipsWithRoots:(NSArray*)roots includeds:(NSArray*)includeds {
+    
+    return nil;
 }
 
 @end

@@ -12,6 +12,7 @@
 #import "NITNetworkManager.h"
 #import "NITNetworkProvider.h"
 #import "NITConfiguration.h"
+#import "NITNode.h"
 
 #define APIKEY @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJlMzRhN2Q5MC0xNGQyLTQ2YjgtODFmMC04MWEyYzkzZGQ0ZDAiLCJyb2xlX2tleSI6ImFwcCJ9fX0.2GvA499N8c1Vui9au7NzUWM8B10GWaha6ASCCgPPlR8"
 #define APPID @"e34a7d90-14d2-46b8-81f0-81a2c93dd4d0"
@@ -100,12 +101,34 @@
 - (void)testGeopolisNode {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         XCTAssertNil(error);
         
+        [json registerClass:[NITNode class] forType:@"geofence_nodes"];
+        [json registerClass:[NITNode class] forType:@"beacon_nodes"];
+        
+        NSArray *nodes = [json parseToArrayOfObjects];
+        
+        XCTAssertTrue([nodes count] > 0, @"nodes is empty");
+        
+        NITNode *node = [nodes objectAtIndex:0];
+        XCTAssertTrue([node.identifier length] > 0, @"Node's identifier is empty");
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+}
+
+- (void)testGeopolisNodeJson {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
+        XCTAssertNil(error);
+         
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"JSON Geopolis: %@", json);
-        
+         
         [expectation fulfill];
     }];
     

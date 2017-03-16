@@ -11,6 +11,7 @@
 @interface NITJSONAPIResource()
 
 @property (nonatomic, strong) NSMutableDictionary<NSString*, id> *attributes;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, id> *relationships;
 
 @end
 
@@ -25,11 +26,23 @@
 }
 
 - (void)addAttributeObject:(id)object forKey:(NSString*)key {
-    [self.attributes setObject:object forKey:key];
+    [_attributes setObject:object forKey:key];
 }
 
 - (NSInteger)attributesCount {
     return [self.attributes count];
+}
+
+- (NSDictionary<NSString *,id> *)attributes {
+    return _attributes;
+}
+
+- (id)attributeForKey:(NSString *)key {
+    return [self.attributes objectForKey:key];
+}
+
+- (NSDictionary<NSString *,id> *)relationships {
+    return _relationships;
 }
 
 - (NSDictionary *)toDictionary {
@@ -47,6 +60,10 @@
     return [NSDictionary dictionaryWithDictionary:dict];
 }
 
+- (NSDictionary*)relationshipForKey:(NSString*)key {
+    return [self.relationships objectForKey:key];
+}
+
 + (NITJSONAPIResource *)resourceObjectWithDictiornary:(NSDictionary *)dictionary {
     NITJSONAPIResource *resourceObject = [[NITJSONAPIResource alloc] init];
     
@@ -55,6 +72,10 @@
     NSDictionary<NSString*, id> *attributes = [dictionary objectForKey:@"attributes"];
     if (attributes) {
         resourceObject.attributes = [[NSMutableDictionary alloc] initWithDictionary:attributes];
+    }
+    NSDictionary<NSString*, id> *relationships = [dictionary objectForKey:@"relationships"];
+    if (relationships) {
+        resourceObject.relationships = [[NSMutableDictionary alloc] initWithDictionary:relationships];
     }
     
     return resourceObject;
