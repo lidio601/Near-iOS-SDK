@@ -7,6 +7,7 @@
 //
 
 #import "NITResource.h"
+#import "NITJSONAPIResource.h"
 
 @implementation NITResource
 
@@ -19,6 +20,10 @@
  */
 - (NSDictionary*)attributesMap {
     return [NSDictionary dictionary];
+}
+
+- (NSString*)ID {
+    return self.resourceObject.ID;
 }
 
 @end

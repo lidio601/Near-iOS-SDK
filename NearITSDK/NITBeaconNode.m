@@ -7,11 +7,27 @@
 //
 
 #import "NITBeaconNode.h"
+#import <CoreLocation/CoreLocation.h>
 
 @implementation NITBeaconNode
 
 - (NSDictionary *)attributesMap {
     return @{@"proximity_uuid" : @"proximityUUID"};
+}
+
+- (CLRegion *)createRegion {
+    NSInteger depth = 1 + (self.major == nil ? 0 : 1) + (self.minor == nil ? 0 : 1);
+    NSUUID *proximityUUID = [[NSUUID alloc] initWithUUIDString:self.proximityUUID];
+    switch (depth) {
+        case 1:
+            return [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID identifier:self.ID];
+        case 2:
+            return [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID major:[self.major unsignedIntegerValue] identifier:self.ID];
+        case 3:
+            return [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID major:[self.major unsignedIntegerValue] minor:[self.minor unsignedIntegerValue] identifier:self.ID];
+        default:
+            return nil;
+    }
 }
 
 @end

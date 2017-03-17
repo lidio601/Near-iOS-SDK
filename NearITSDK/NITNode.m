@@ -10,4 +10,8 @@
 
 @implementation NITNode
 
+- (CLRegion *)createRegion {
+    return nil;
+}
+
 @end

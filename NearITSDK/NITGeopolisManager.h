@@ -8,8 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@class CLRegion;
+
 @interface NITGeopolisManager : NSObject
 
-- (void)refreshConfig;
+- (void)refreshConfigWithCompletionHandler:(void (^_Nonnull)(NSError * _Nullable error))completionHandler;
+- (BOOL)start;
+- (BOOL)startForUnitTest;
+- (void)stop;
+- (BOOL)hasCurrentNode;
+- (void)testStepInRegion:(CLRegion* _Nonnull)region;
+- (void)testStepOutRegion:(CLRegion* _Nonnull)region;
 
 @end

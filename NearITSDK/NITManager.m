@@ -10,6 +10,13 @@
 #import "NITConfiguration.h"
 #import "NITUserProfile.h"
 #import "NITUtils.h"
+#import "NITGeopolisManager.h"
+
+@interface NITManager()
+
+@property (nonatomic, strong) NITGeopolisManager *geopolisManager;
+
+@end
 
 @implementation NITManager
 
@@ -19,6 +26,8 @@
         [[NITConfiguration defaultConfiguration] setApiKey:apiKey];
         [[NITConfiguration defaultConfiguration] setAppId:[NITUtils fetchAppIdFromApiKey:apiKey]];
         
+        [self pluginSetup];
+        
         [NITUserProfile createNewProfileWithCompletionHandler:^{ //Now is a sample
             
         }];
@@ -26,8 +35,14 @@
     return self;
 }
 
+- (void)pluginSetup {
+    self.geopolisManager = [[NITGeopolisManager alloc] init];
+}
+
 - (void)refreshConfig {
-    
+    [self.geopolisManager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
+        
+    }];
 }
 
 @end

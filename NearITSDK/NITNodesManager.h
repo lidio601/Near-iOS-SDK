@@ -7,7 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+@class NITNode;
+@class NITJSONAPI;
 
 @interface NITNodesManager : NSObject
+
+- (void)parseAndSetNodes:(NITJSONAPI* _Nullable)jsonApi;
+- (NSArray<NITNode*>* _Nonnull)roots;
+- (NITNode* _Nullable)findNodeWithID:(NSString* _Nonnull)ID;
 
 @end

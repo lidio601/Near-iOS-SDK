@@ -14,5 +14,6 @@
 @property (nonatomic, strong) NITJSONAPIResource* _Nullable resourceObject;
 
 - (NSDictionary* _Nonnull)attributesMap;
+- (NSString* _Nullable)ID;
 
 @end

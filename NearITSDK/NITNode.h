@@ -8,11 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "NITResource.h"
+@class CLRegion;
 
 @interface NITNode : NITResource
 
-@property (nonatomic, strong) NSString *identifier;
-@property (nonatomic, strong) NITNode *parent;
-@property (nonatomic, strong) NSArray<NITResource*> *children;
+@property (nonatomic, strong) NSString* _Nullable identifier;
+@property (nonatomic, strong) NITNode* _Nullable parent;
+@property (nonatomic, strong) NSArray<NITNode*>* _Nullable children;
+
+- (CLRegion* _Nullable)createRegion;
 
 @end

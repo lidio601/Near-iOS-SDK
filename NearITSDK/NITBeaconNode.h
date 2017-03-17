@@ -10,8 +10,8 @@
 
 @interface NITBeaconNode : NITNode
 
-@property (nonatomic, strong) NSString *proximityUUID;
-@property (nonatomic, strong) NSNumber *major;
-@property (nonatomic, strong) NSNumber *minor;
+@property (nonatomic, strong) NSString* _Nonnull proximityUUID;
+@property (nonatomic, strong) NSNumber* _Nullable major;
+@property (nonatomic, strong) NSNumber* _Nullable minor;
 
 @end

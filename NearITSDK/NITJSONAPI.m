@@ -152,7 +152,11 @@
             if (attributeKey == nil) {
                 attributeKey = key;
             }
-            [item setValue:value forKey:attributeKey];
+            if ([value isEqual:[NSNull null]]) {
+                [item setValue:nil forKey:attributeKey];
+            } else {
+                [item setValue:value forKey:attributeKey];
+            }
         }
         @catch (NSException *exception) {
             // Ignore it
