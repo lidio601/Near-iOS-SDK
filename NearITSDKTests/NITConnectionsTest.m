@@ -13,10 +13,13 @@
 #import "NITNetworkProvider.h"
 #import "NITConfiguration.h"
 #import "NITNode.h"
+#import "NITBeaconNode.h"
+#import "NITGeofenceNode.h"
 
 #define APIKEY @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJlMzRhN2Q5MC0xNGQyLTQ2YjgtODFmMC04MWEyYzkzZGQ0ZDAiLCJyb2xlX2tleSI6ImFwcCJ9fX0.2GvA499N8c1Vui9au7NzUWM8B10GWaha6ASCCgPPlR8"
 #define APPID @"e34a7d90-14d2-46b8-81f0-81a2c93dd4d0"
 #define BASE_URL @"https://dev-api.nearit.com"
+#define WAIT_TIME_EXPECTATION 4.0
 
 @interface NITConnectionsTest : XCTestCase
 
@@ -74,7 +77,7 @@
         [recipeExpectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError * _Nullable error) {
+    [self waitForExpectationsWithTimeout:WAIT_TIME_EXPECTATION handler:^(NSError * _Nullable error) {
         NSLog(@"Expectation: %@", [error description]);
     }];
 }
@@ -93,7 +96,7 @@
         [profileExpectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError * _Nullable error) {
+    [self waitForExpectationsWithTimeout:WAIT_TIME_EXPECTATION handler:^(NSError * _Nullable error) {
         
     }];
 }
@@ -104,8 +107,8 @@
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         XCTAssertNil(error);
         
-        [json registerClass:[NITNode class] forType:@"geofence_nodes"];
-        [json registerClass:[NITNode class] forType:@"beacon_nodes"];
+        [json registerClass:[NITGeofenceNode class] forType:@"geofence_nodes"];
+        [json registerClass:[NITBeaconNode class] forType:@"beacon_nodes"];
         
         NSArray *nodes = [json parseToArrayOfObjects];
         
@@ -118,7 +121,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+    [self waitForExpectationsWithTimeout:WAIT_TIME_EXPECTATION handler:nil];
 }
 
 - (void)testGeopolisNodeJson {
@@ -133,7 +136,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+    [self waitForExpectationsWithTimeout:WAIT_TIME_EXPECTATION handler:nil];
 }
 
 @end
