@@ -113,6 +113,7 @@
         
         NITNode *node = [nodes objectAtIndex:0];
         XCTAssertTrue([node.identifier length] > 0, @"Node's identifier is empty");
+        XCTAssertTrue([node.children count] > 0, @"Children is 0");
         
         [expectation fulfill];
     }];

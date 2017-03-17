@@ -14,4 +14,11 @@
     return nil;
 }
 
+/** Dictionary for attributes mapping, if you want to change a property name and map to attributes, subclass this method, otherwise leave as it is
+ *  Example: you have an attribute (or relationship) named "fullName" in a json api, but you want to call it "completeName", so you create a dictionary like this @{"fullName" => "completeName"}
+ */
+- (NSDictionary*)attributesMap {
+    return [NSDictionary dictionary];
+}
+
 @end

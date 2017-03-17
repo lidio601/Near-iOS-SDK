@@ -143,11 +143,16 @@
     
     NITResource *item = [[cls alloc] init];
     item.resourceObject = resourceObject;
+    NSDictionary *attributesMap = [item attributesMap];
     
     for(NSString *key in resourceObject.attributes) {
         id value = [resourceObject.attributes objectForKey:key];
         @try {
-            [item setValue:value forKey:key];
+            NSString *attributeKey = [attributesMap objectForKey:key];
+            if (attributeKey == nil) {
+                attributeKey = key;
+            }
+            [item setValue:value forKey:attributeKey];
         }
         @catch (NSException *exception) {
             // Ignore it
@@ -165,6 +170,12 @@
             continue;
         }
         
+        NSDictionary *attributesMap = [resource attributesMap];
+        NSString *attributeKey = [attributesMap objectForKey:key];
+        if (attributeKey == nil) {
+            attributeKey = key;
+        }
+        
         if([data isKindOfClass:[NSDictionary class]]) {
             NSString *resID = [data objectForKey:@"id"];
             
@@ -173,7 +184,7 @@
                 
                 NITResource *foundRes = [self findResourceWithID:resID inCollection:collections];
                 if (foundRes) {
-                    [resource setValue:foundRes forKey:key];
+                    [resource setValue:foundRes forKey:attributeKey];
                 }
             }
             @catch (NSException *exception) {
@@ -192,7 +203,7 @@
             }
             
             @try {
-                [resource setValue:[[NSArray alloc] initWithArray:objects] forKey:key];
+                [resource setValue:[[NSArray alloc] initWithArray:objects] forKey:attributeKey];
             }
             @catch (NSException *exception) {
                 continue;

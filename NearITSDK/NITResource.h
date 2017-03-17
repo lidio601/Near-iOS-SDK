@@ -11,6 +11,8 @@
 
 @interface NITResource : NSObject
 
-@property (nonatomic, strong) NITJSONAPIResource *resourceObject;
+@property (nonatomic, strong) NITJSONAPIResource* _Nullable resourceObject;
+
+- (NSDictionary* _Nonnull)attributesMap;
 
 @end
