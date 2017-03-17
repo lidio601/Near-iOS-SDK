@@ -15,5 +15,6 @@
 - (void)parseAndSetNodes:(NITJSONAPI* _Nullable)jsonApi;
 - (NSArray<NITNode*>* _Nonnull)roots;
 - (NITNode* _Nullable)findNodeWithID:(NSString* _Nonnull)ID;
+- (NSArray<NITNode*>* _Nonnull)siblingsWithNode:(NITNode* _Nonnull)node;
 
 @end

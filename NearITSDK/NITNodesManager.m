@@ -58,4 +58,14 @@
     return foundNode;
 }
 
+- (NSArray<NITNode *> *)siblingsWithNode:(NITNode *)node {
+    if (node.parent == nil) {
+        return [self roots];
+    } else if(node.parent.children) {
+        return node.parent.children;
+    } else {
+        return [NSArray array];
+    }
+}
+
 @end
