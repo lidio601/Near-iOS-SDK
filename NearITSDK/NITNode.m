@@ -7,6 +7,7 @@
 //
 
 #import "NITNode.h"
+#import "NITBeaconNode.h"
 
 @interface NITNode()
 
@@ -69,6 +70,20 @@
     NITNode *parent = self.parent;
     while (parent != nil) {
         count++;
+        parent = parent.parent;
+    }
+    
+    return count;
+}
+
+- (NSInteger)parentsBeaconRegionsCount {
+    NSInteger count = 0;
+    
+    NITNode *parent = self.parent;
+    while (parent != nil) {
+        if ([parent isKindOfClass:[NITBeaconNode class]]) {
+            count++;
+        }
         parent = parent.parent;
     }
     

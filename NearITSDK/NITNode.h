@@ -21,5 +21,6 @@
 - (NITNode* _Nullable)nextSibling;
 - (BOOL)isLeaf;
 - (NSInteger)parentsCount;
+- (NSInteger)parentsBeaconRegionsCount;
 
 @end
