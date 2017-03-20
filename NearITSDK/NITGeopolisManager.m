@@ -316,6 +316,10 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
                 if (nextSibling) {
                     NSError *siblingError;
                     [self testStepOutRegion:[node createRegion]];
+                    if(![self testForStepOutWithNode:node]) {
+                        *anError = [[NSError alloc] initWithDomain:NITGeopolisErrorDomain code:10 userInfo:@{NSLocalizedDescriptionKey:@"Step out failed"}];
+                        return NO;
+                    }
                     if([self testWithNode:nextSibling error:&siblingError]) {
                         return YES;
                     } else {
@@ -324,6 +328,10 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
                     }
                 } else {
                     [self testStepOutRegion:[node createRegion]];
+                    if(![self testForStepOutWithNode:node]) {
+                        *anError = [[NSError alloc] initWithDomain:NITGeopolisErrorDomain code:10 userInfo:@{NSLocalizedDescriptionKey:@"Step out failed"}];
+                        return NO;
+                    }
                     return YES;
                 }
             } else {
@@ -333,6 +341,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         } else if(nextSibling) {
             NSError *siblingError;
             if([self testWithNode:nextSibling error:&siblingError]) {
+                *anError = [[NSError alloc] initWithDomain:NITGeopolisErrorDomain code:10 userInfo:@{NSLocalizedDescriptionKey:@"Step out failed"}];
                 return YES;
             } else {
                 *anError = siblingError;
@@ -346,6 +355,23 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         return NO;
     }
     return NO;
+}
+
+- (BOOL)testForStepOutWithNode:(NITNode*)node {
+    if (node.parent == nil) {
+        return YES;
+    }
+    
+    CLRegion *region = [node createRegion];
+    if ([self.monitoredRegions containsObject:region]) {
+        return NO;
+    }
+    if ([region isKindOfClass:[CLBeaconRegion class]]) {
+        if([self.rangedRegions containsObject:region]) {
+            return NO;
+        }
+    }
+    return YES;
 }
 
 // MARK: - Trigger

@@ -21,6 +21,6 @@
 - (void)testStepInRegion:(CLRegion* _Nonnull)region;
 - (void)testStepOutRegion:(CLRegion* _Nonnull)region;
 - (NSArray<NITNode*>* _Nullable)nodes;
-- (void)testAllNodes:(NSError** _Nonnull)anError;
+- (void)testAllNodes:(NSError** _Nullable)anError;
 
 @end
