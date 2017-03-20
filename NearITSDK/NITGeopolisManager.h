@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class CLRegion;
+@class NITNode;
 
 @interface NITGeopolisManager : NSObject
 
@@ -19,5 +20,7 @@
 - (BOOL)hasCurrentNode;
 - (void)testStepInRegion:(CLRegion* _Nonnull)region;
 - (void)testStepOutRegion:(CLRegion* _Nonnull)region;
+- (NSArray<NITNode*>* _Nullable)nodes;
+- (void)testAllNodes:(NSError** _Nonnull)anError;
 
 @end

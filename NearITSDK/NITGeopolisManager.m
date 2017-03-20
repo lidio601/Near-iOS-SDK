@@ -15,6 +15,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 NSErrorDomain const NITGeopolisErrorDomain = @"com.nearit.geopolis";
+NSString* const NodeKey = @"node";
 
 typedef NS_ENUM(NSInteger, NITRegionEvent) {
     NITRegionEventEnterArea,
@@ -32,6 +33,8 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 @property (nonatomic, strong) NITNodesManager *nodesManager;
 @property (nonatomic, strong) NITNode *currentNode;
 @property (nonatomic, strong) NSMutableArray<NSString*> *enteredRegions;
+@property (nonatomic, strong) NSMutableArray<CLRegion*> *monitoredRegions; //For test purpose
+@property (nonatomic, strong) NSMutableArray<CLRegion*> *rangedRegions; // For test purpose
 @property (nonatomic) BOOL started;
 
 @end
@@ -44,6 +47,8 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         self.nodesManager = [[NITNodesManager alloc] init];
+        self.monitoredRegions = [[NSMutableArray alloc] init];
+        self.rangedRegions = [[NSMutableArray alloc] init];
         self.started = NO;
     }
     return self;
@@ -75,7 +80,9 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 - (void)startMonitoringRoots {
     NSArray<NITNode*> *roots = [self.nodesManager roots];
     for (NITNode *node in roots) {
-        [self.locationManager startMonitoringForRegion:[node createRegion]];
+        CLRegion *region = [node createRegion];
+        [self.locationManager startMonitoringForRegion:region];
+        [self.monitoredRegions addObject:region];
     }
     
     self.started = YES;
@@ -84,9 +91,11 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 - (void)stop {
     for (CLRegion *region in self.locationManager.monitoredRegions) {
         [self.locationManager stopMonitoringForRegion:region];
+        [self.monitoredRegions removeObject:region];
         if ([region isKindOfClass:[CLBeaconRegion class]]) {
             CLBeaconRegion *beaconRegion = (CLBeaconRegion*)region;
             [self.locationManager stopRangingBeaconsInRegion:beaconRegion];
+            [self.rangedRegions removeObject:region];
         }
     }
     self.started = NO;
@@ -97,10 +106,12 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         CLRegion *region = [node createRegion];
         if (region) {
             [self.locationManager stopMonitoringForRegion:region];
+            [self.monitoredRegions removeObject:region];
             
             if([region isKindOfClass:[CLBeaconRegion class]]) {
                 CLBeaconRegion *beaconRegion = (CLBeaconRegion*)region;
                 [self.locationManager stopRangingBeaconsInRegion:beaconRegion];
+                [self.rangedRegions removeObject:region];
             }
         }
     }
@@ -111,6 +122,8 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         CLRegion *region = [node createRegion];
         if (region) {
             [self.locationManager startMonitoringForRegion:region];
+            [self.monitoredRegions addObject:region];
+            NSLog(@"%@", self.locationManager.monitoredRegions);
         }
     }
 }
@@ -160,6 +173,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
     CLRegion *currentRegion = [self.currentNode createRegion];
     if ([currentRegion isKindOfClass:[CLBeaconRegion class]]) {
         [self.locationManager startRangingBeaconsInRegion:(CLBeaconRegion*)currentRegion];
+        [self.rangedRegions addObject:currentRegion];
     } else {
         [self startMonitoringNodes:children];
     }
@@ -199,15 +213,15 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 - (BOOL)testVerifyMonitoringWithNode:(NITNode*)node error:(NSError**)anError {
     CLRegion *nodeRegion = [node createRegion];
     if ([nodeRegion isKindOfClass:[CLBeaconRegion class]]) {
-        if ([self.locationManager.monitoredRegions count] == 0 || [self.locationManager.monitoredRegions count] > 1) {
+        if ([self.monitoredRegions count] == 0 || [self.monitoredRegions count] > 1) {
             if (anError != NULL) {
-                NSString *description = [NSString stringWithFormat:@"The number of monitoredRegions is wrong: %lu", (unsigned long)[self.locationManager.monitoredRegions count]];
-                *anError = [[NSError alloc] initWithDomain:NITGeopolisErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:description}];
+                NSString *description = [NSString stringWithFormat:@"The number of monitoredRegions (CLBeaconRegion) is wrong: %lu", (unsigned long)[self.locationManager.monitoredRegions count]];
+                *anError = [[NSError alloc] initWithDomain:NITGeopolisErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:description, NodeKey: node}];
             }
             return NO;
         }
         
-        NSArray<CLRegion*> *regions = [self.locationManager.monitoredRegions allObjects];
+        NSArray<CLRegion*> *regions = self.monitoredRegions;
         CLRegion *region = [regions objectAtIndex:0];
         if(![region.identifier isEqualToString:nodeRegion.identifier]) {
             return NO;
@@ -225,13 +239,17 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         
         return YES;
     } else {
-        NSInteger nodesCount = 1 + [node.children count];
-        if ([self.locationManager.monitoredRegions count] != nodesCount) {
+        NSInteger nodesCount = [node.children count];
+        if ([self.monitoredRegions count] != nodesCount) {
+            if (anError != NULL) {
+                NSString *description = [NSString stringWithFormat:@"The number of monitoredRegions (CLRegion) is wrong: %lu", (unsigned long)[self.monitoredRegions count]];
+                *anError = [[NSError alloc] initWithDomain:NITGeopolisErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:description, NodeKey: node}];
+            }
             return NO;
         }
         
         NSMutableDictionary<NSString*, NSNumber*> *regionsMap = [[NSMutableDictionary alloc] init];
-        for(CLRegion *region in self.locationManager.monitoredRegions) {
+        for(CLRegion *region in self.monitoredRegions) {
             [regionsMap setObject:[NSNumber numberWithBool:NO] forKey:region.identifier];
         }
         
@@ -247,10 +265,69 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         
         for(NSString *key in regionsMap) {
             if (![regionsMap objectForKey:key]) {
+                if (anError != NULL) {
+                    NSString *description = [NSString stringWithFormat:@"The regions map is wrong"];
+                    *anError = [[NSError alloc] initWithDomain:NITGeopolisErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:description}];
+                }
                 return NO;
             }
         }
         return YES;
+    }
+    return NO;
+}
+
+- (void)testAllNodes:(NSError**)anError {
+    for (NITNode *node in [self.nodesManager nodes]) {
+        NSError *nodeError;
+        [self testWithNode:node error:&nodeError];
+        if (nodeError) {
+            *anError = nodeError;
+            break;
+        }
+    }
+}
+
+- (BOOL)testWithNode:(NITNode*)node error:(NSError**)anError {
+    [self testStepInRegion:[node createRegion]];
+    NSError *nodeError;
+    if([self testVerifyMonitoringWithNode:node error:&nodeError]) {
+        NITNode *firstChild = [node firstChild];
+        NITNode *nextSibling = [node nextSibling];
+        if (firstChild) {
+            NSError *childError;
+            if([self testWithNode:firstChild error:&childError]) {
+                if (nextSibling) {
+                    NSError *siblingError;
+                    [self testStepOutRegion:[node createRegion]];
+                    if([self testWithNode:nextSibling error:&siblingError]) {
+                        return YES;
+                    } else {
+                        *anError = siblingError;
+                        return NO;
+                    }
+                } else {
+                    return YES;
+                }
+            } else {
+                *anError = childError;
+                return NO;
+            }
+        } else if(nextSibling) {
+            NSError *siblingError;
+            [self testStepOutRegion:[node createRegion]];
+            if([self testWithNode:nextSibling error:&siblingError]) {
+                return YES;
+            } else {
+                *anError = siblingError;
+                return NO;
+            }
+        } else {
+            return YES;
+        }
+    } else {
+        *anError = nodeError;
+        return NO;
     }
     return NO;
 }
@@ -284,6 +361,12 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray<CLBeacon *> *)beacons inRegion:(CLBeaconRegion *)region {
     
+}
+
+// MARK: - Utils
+
+- (NSArray *)nodes {
+    return [self.nodesManager nodes];
 }
 
 @end

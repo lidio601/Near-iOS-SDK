@@ -85,4 +85,24 @@
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
+- (void)testGeopolisNodes {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] init];
+    [manager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
+        XCTAssertNil(error);
+        
+        [manager startForUnitTest];
+        
+        NSError *errorNodes;
+        [manager testAllNodes:&errorNodes];
+        XCTAssertNil(errorNodes);
+        
+        [manager stop];
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
 @end
