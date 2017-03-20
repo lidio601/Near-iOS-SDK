@@ -68,4 +68,27 @@
     }
 }
 
+- (void)traverseNodesWithBlock:(void (^)(NITNode *node))block {
+    NSMutableArray<NITNode*> *nodes = [[NSMutableArray alloc] init];
+    for(NITNode *node in [self roots]) {
+        [nodes addObject:node];
+        [self traverseWithNode:node array:nodes];
+    }
+    
+    for (NITNode *node in nodes) {
+        block(node);
+    }
+}
+
+- (void)traverseWithNode:(NITNode*)parent array:(NSMutableArray<NITNode*>*)array {
+    if ([parent.children count] == 0) {
+        return;
+    }
+    
+    for (NITNode *node = [parent firstChild]; node != nil; node = [node nextSibling]) {
+        [array addObject:node];
+        [self traverseWithNode:node array:array];
+    }
+}
+
 @end

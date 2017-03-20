@@ -16,5 +16,6 @@
 - (NSArray<NITNode*>* _Nonnull)roots;
 - (NITNode* _Nullable)findNodeWithID:(NSString* _Nonnull)ID;
 - (NSArray<NITNode*>* _Nonnull)siblingsWithNode:(NITNode* _Nonnull)node;
+- (void)traverseNodesWithBlock:(void (^_Nonnull)(NITNode* _Nonnull node))block;
 
 @end

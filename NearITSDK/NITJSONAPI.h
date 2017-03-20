@@ -19,5 +19,6 @@
 - (NSDictionary* _Nonnull)toDictionary;
 - (void)registerClass:(Class _Nonnull)cls forType:(NSString* _Nonnull)type;
 - (NSArray* _Nonnull)parseToArrayOfObjects;
+- (NSArray<NITJSONAPIResource*>* _Nonnull)allResources;
 
 @end

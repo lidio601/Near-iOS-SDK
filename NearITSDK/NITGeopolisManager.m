@@ -14,6 +14,8 @@
 #import "NITNode.h"
 #import <CoreLocation/CoreLocation.h>
 
+NSErrorDomain const NITGeopolisErrorDomain = @"com.nearit.geopolis";
+
 typedef NS_ENUM(NSInteger, NITRegionEvent) {
     NITRegionEventEnterArea,
     NITRegionEventLeaveArea,
@@ -184,12 +186,73 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
     [self startMonitoringNodes:[self.nodesManager siblingsWithNode:self.currentNode.parent]];
 }
 
+// MARK: - Tests
+
 - (void)testStepInRegion:(CLRegion*)region {
     [self stepInRegion:region];
 }
 
 - (void)testStepOutRegion:(CLRegion*)region {
     [self stepOutRegion:region];
+}
+
+- (BOOL)testVerifyMonitoringWithNode:(NITNode*)node error:(NSError**)anError {
+    CLRegion *nodeRegion = [node createRegion];
+    if ([nodeRegion isKindOfClass:[CLBeaconRegion class]]) {
+        if ([self.locationManager.monitoredRegions count] == 0 || [self.locationManager.monitoredRegions count] > 1) {
+            if (anError != NULL) {
+                NSString *description = [NSString stringWithFormat:@"The number of monitoredRegions is wrong: %lu", (unsigned long)[self.locationManager.monitoredRegions count]];
+                *anError = [[NSError alloc] initWithDomain:NITGeopolisErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:description}];
+            }
+            return NO;
+        }
+        
+        NSArray<CLRegion*> *regions = [self.locationManager.monitoredRegions allObjects];
+        CLRegion *region = [regions objectAtIndex:0];
+        if(![region.identifier isEqualToString:nodeRegion.identifier]) {
+            return NO;
+        }
+        
+        if ([self.locationManager.rangedRegions count] == 0 || [self.locationManager.rangedRegions count] > 1) {
+            return NO;
+        }
+        
+        regions = [self.locationManager.rangedRegions allObjects];
+        region = [regions objectAtIndex:0];
+        if(![region.identifier isEqualToString:nodeRegion.identifier]) {
+            return NO;
+        }
+        
+        return YES;
+    } else {
+        NSInteger nodesCount = 1 + [node.children count];
+        if ([self.locationManager.monitoredRegions count] != nodesCount) {
+            return NO;
+        }
+        
+        NSMutableDictionary<NSString*, NSNumber*> *regionsMap = [[NSMutableDictionary alloc] init];
+        for(CLRegion *region in self.locationManager.monitoredRegions) {
+            [regionsMap setObject:[NSNumber numberWithBool:NO] forKey:region.identifier];
+        }
+        
+        if ([regionsMap objectForKey:node.ID]) {
+            [regionsMap setObject:[NSNumber numberWithBool:YES] forKey:node.ID];
+        }
+        
+        for(NITNode *child in node.children) {
+            if ([regionsMap objectForKey:child.ID]) {
+                [regionsMap setObject:[NSNumber numberWithBool:YES] forKey:child.ID];
+            }
+        }
+        
+        for(NSString *key in regionsMap) {
+            if (![regionsMap objectForKey:key]) {
+                return NO;
+            }
+        }
+        return YES;
+    }
+    return NO;
 }
 
 // MARK: - Trigger

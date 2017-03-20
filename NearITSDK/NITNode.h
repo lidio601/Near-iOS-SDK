@@ -17,5 +17,7 @@
 @property (nonatomic, strong) NSArray<NITNode*>* _Nullable children;
 
 - (CLRegion* _Nullable)createRegion;
+- (NITNode* _Nullable)firstChild;
+- (NITNode* _Nullable)nextSibling;
 
 @end

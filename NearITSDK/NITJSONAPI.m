@@ -231,4 +231,11 @@
     return nil;
 }
 
+- (NSArray<NITJSONAPIResource *> *)allResources {
+    NSMutableArray *mergedResources = [[NSMutableArray alloc] init];
+    [mergedResources addObjectsFromArray:self.resources];
+    [mergedResources addObjectsFromArray:self.included];
+    return [NSArray arrayWithArray:mergedResources];
+}
+
 @end

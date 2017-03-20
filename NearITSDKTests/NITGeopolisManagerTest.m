@@ -10,6 +10,12 @@
 #import <CoreLocation/CoreLocation.h>
 #import "NITConfiguration.h"
 #import "NITGeopolisManager.h"
+#import "NITNodesManager.h"
+#import "NITNetworkManager.h"
+#import "NITNetworkProvider.h"
+#import "NITJSONAPIResource.h"
+#import "NITJSONAPI.h"
+#import "NITNode.h"
 #import "Constants.h"
 
 @interface NITGeopolisManagerTest : XCTestCase
@@ -47,6 +53,36 @@
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
     
+}
+
+- (void)testNodesTraverse {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        
+        NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+        [nodesManager parseAndSetNodes:json];
+        
+        NSArray<NITJSONAPIResource*> *resources = [json allResources];
+        __block NSInteger trueCounter = 0;
+        
+        [nodesManager traverseNodesWithBlock:^(NITNode * _Nonnull node) {
+            NSLog(@"Node => %@", node.ID);
+            for (NITResource *res in resources) {
+                if([res.ID isEqualToString:node.ID]) {
+                    trueCounter++;
+                    break;
+                }
+            }
+        }];
+        
+        XCTAssertTrue(trueCounter == [resources count], @"Not a valid traverse");
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
 @end
