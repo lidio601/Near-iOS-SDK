@@ -20,5 +20,6 @@
 - (NITNode* _Nullable)firstChild;
 - (NITNode* _Nullable)nextSibling;
 - (BOOL)isLeaf;
+- (NSInteger)parentsCount;
 
 @end

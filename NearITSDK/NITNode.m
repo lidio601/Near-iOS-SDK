@@ -63,4 +63,16 @@
     return NO;
 }
 
+- (NSInteger)parentsCount {
+    NSInteger count = 0;
+    
+    NITNode *parent = self.parent;
+    while (parent != nil) {
+        count++;
+        parent = parent.parent;
+    }
+    
+    return count;
+}
+
 @end

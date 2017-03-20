@@ -123,7 +123,6 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         if (region) {
             [self.locationManager startMonitoringForRegion:region];
             [self.monitoredRegions addObject:region];
-            NSLog(@"%@", self.locationManager.monitoredRegions);
         }
     }
 }
@@ -244,10 +243,10 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         
         return YES;
     } else {
-        NSInteger nodesCount = 1 + [node.children count];
+        NSInteger nodesCount = 1 + [node parentsCount] + [node.children count];
         if ([self.monitoredRegions count] != nodesCount) {
             if (anError != NULL) {
-                NSString *description = [NSString stringWithFormat:@"The number of monitoredRegions is wrong: %lu", (unsigned long)[self.locationManager.monitoredRegions count]];
+                NSString *description = [NSString stringWithFormat:@"The number of monitoredRegions is wrong: MR => %lu, NC => %lu", (unsigned long)[self.locationManager.monitoredRegions count], (unsigned long)nodesCount];
                 *anError = [[NSError alloc] initWithDomain:NITGeopolisErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:description, NodeKey: node}];
             }
             return NO;
@@ -325,7 +324,6 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
             }
         } else if(nextSibling) {
             NSError *siblingError;
-            [self testStepOutRegion:[node createRegion]];
             if([self testWithNode:nextSibling error:&siblingError]) {
                 return YES;
             } else {
