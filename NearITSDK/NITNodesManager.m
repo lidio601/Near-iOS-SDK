@@ -60,9 +60,21 @@
 
 - (NSArray<NITNode *> *)siblingsWithNode:(NITNode *)node {
     if (node.parent == nil) {
-        return [self roots];
+        NSMutableArray<NITNode*>* siblings = [[NSMutableArray alloc] init];
+        for(NITNode *rootNode in [self roots]) {
+            if(![node.ID isEqualToString:rootNode.ID]) {
+                [siblings addObject:rootNode];
+            }
+        }
+        return [NSArray arrayWithArray:siblings];
     } else if(node.parent.children) {
-        return node.parent.children;
+        NSMutableArray<NITNode*>* siblings = [[NSMutableArray alloc] init];
+        for(NITNode *childNode in node.parent.children) {
+            if(![node.ID isEqualToString:childNode.ID]) {
+                [siblings addObject:childNode];
+            }
+        }
+        return [NSArray arrayWithArray:siblings];
     } else {
         return [NSArray array];
     }

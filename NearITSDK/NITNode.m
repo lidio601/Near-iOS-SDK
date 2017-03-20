@@ -56,4 +56,11 @@
     }
 }
 
+- (BOOL)isLeaf {
+    if (self.children == nil || [self.children count] == 0) {
+        return YES;
+    }
+    return NO;
+}
+
 @end

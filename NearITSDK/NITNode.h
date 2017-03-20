@@ -19,5 +19,6 @@
 - (CLRegion* _Nullable)createRegion;
 - (NITNode* _Nullable)firstChild;
 - (NITNode* _Nullable)nextSibling;
+- (BOOL)isLeaf;
 
 @end

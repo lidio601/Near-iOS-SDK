@@ -131,7 +131,9 @@
         XCTAssertNil(error);
          
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        NSString *jsonString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSLog(@"JSON Geopolis: %@", json);
+        NSLog(@"JSON String Geopolis: %@", jsonString);
          
         [expectation fulfill];
     }];
