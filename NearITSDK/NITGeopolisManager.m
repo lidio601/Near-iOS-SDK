@@ -35,6 +35,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 @property (nonatomic, strong) NSMutableArray<NSString*> *enteredRegions;
 @property (nonatomic, strong) NSMutableArray<CLRegion*> *monitoredRegions; //For test purpose
 @property (nonatomic, strong) NSMutableArray<CLRegion*> *rangedRegions; // For test purpose
+@property (nonatomic, strong) NSString *pluginName;
 @property (nonatomic) BOOL started;
 
 @end
@@ -50,6 +51,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         self.enteredRegions = [[NSMutableArray alloc] init];
         self.monitoredRegions = [[NSMutableArray alloc] init];
         self.rangedRegions = [[NSMutableArray alloc] init];
+        self.pluginName = @"geopolis";
         self.started = NO;
     }
     return self;
@@ -377,7 +379,10 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 // MARK: - Trigger
 
 - (void)triggerWithEvent:(NITRegionEvent)event node:(NITNode*)node { // It's only a stub for now
-    
+    if([self.recipesManager respondsToSelector:@selector(gotPulseWithPulsePlugin:pulseAction:pulseBundle:)]) {
+        NSString *pulseAction = [self stringFromRegionEvent:event];
+        [self.recipesManager gotPulseWithPulsePlugin:self.pluginName pulseAction:pulseAction pulseBundle:node.identifier];
+    }
 }
 
 // MARK: - Location manager delegate
@@ -409,6 +414,27 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 
 - (NSArray *)nodes {
     return [self.nodesManager nodes];
+}
+
+- (NSString*)stringFromRegionEvent:(NITRegionEvent)event {
+    switch (event) {
+        case NITRegionEventEnterPlace:
+            return @"enter_place";
+        case NITRegionEventLeavePlace:
+            return @"leave_place";
+        case NITRegionEventEnterArea:
+            return @"enter_area";
+        case NITRegionEventLeaveArea:
+            return @"leave_area";
+        case NITRegionEventImmediate:
+            return @"ranging.immediate";
+        case NITRegionEventNear:
+            return @"ranging.near";
+        case NITRegionEventFar:
+            return @"ranging.far";
+        default:
+            return @"";
+    }
 }
 
 @end

@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NITRecipesManager.h"
 
 @class CLRegion;
 @class NITNode;
 
 @interface NITGeopolisManager : NSObject
+
+@property (nonatomic, weak) id<NITRecipesManaging> _Nullable recipesManager;
 
 - (void)refreshConfigWithCompletionHandler:(void (^_Nonnull)(NSError * _Nullable error))completionHandler;
 - (BOOL)start;

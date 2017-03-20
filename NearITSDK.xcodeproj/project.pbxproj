@@ -43,6 +43,8 @@
 		1352CA8D1E78313300C0E98E /* NITUserProfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 1352CA8B1E78313300C0E98E /* NITUserProfile.h */; };
 		1352CA8E1E78313300C0E98E /* NITUserProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 1352CA8C1E78313300C0E98E /* NITUserProfile.m */; };
 		1352CA911E78372B00C0E98E /* NITUtilsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1352CA901E78372B00C0E98E /* NITUtilsTest.m */; };
+		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
+		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +100,8 @@
 		1352CA8B1E78313300C0E98E /* NITUserProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITUserProfile.h; sourceTree = "<group>"; };
 		1352CA8C1E78313300C0E98E /* NITUserProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITUserProfile.m; sourceTree = "<group>"; };
 		1352CA901E78372B00C0E98E /* NITUtilsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITUtilsTest.m; sourceTree = "<group>"; };
+		137838631E800EC1001C8CDE /* NITRecipesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipesManager.h; sourceTree = "<group>"; };
+		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +195,7 @@
 		1352CA661E7807FE00C0E98E /* NearITSDK */ = {
 			isa = PBXGroup;
 			children = (
+				137838621E800EA8001C8CDE /* Recipes */,
 				1349EEB51E796FF3000B0666 /* Geopolis */,
 				1349EE9A1E79274C000B0666 /* Utils */,
 				1352CA8F1E78338200C0E98E /* JSONAPI */,
@@ -255,6 +260,15 @@
 			name = JSONAPI;
 			sourceTree = "<group>";
 		};
+		137838621E800EA8001C8CDE /* Recipes */ = {
+			isa = PBXGroup;
+			children = (
+				137838631E800EC1001C8CDE /* NITRecipesManager.h */,
+				137838641E800EC1001C8CDE /* NITRecipesManager.m */,
+			);
+			name = Recipes;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -272,6 +286,7 @@
 				1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */,
 				1349EEA21E79325E000B0666 /* NITJSONAPI.h in Headers */,
 				13423EDF1E7BC89D008CAAC8 /* NITBeaconNode.h in Headers */,
+				137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */,
 				1349EEC91E7AA1E3000B0666 /* NITResource.h in Headers */,
 				1349EE9D1E7927A1000B0666 /* NITUtils.h in Headers */,
 				1352CA881E782B1600C0E98E /* NITConfiguration.h in Headers */,
@@ -391,6 +406,7 @@
 				1349EEB01E795030000B0666 /* NITNetworkManager.m in Sources */,
 				1349EEA71E793413000B0666 /* NITJSONAPIResource.m in Sources */,
 				1352CA8E1E78313300C0E98E /* NITUserProfile.m in Sources */,
+				137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */,
 				1349EEB41E796511000B0666 /* NITNetworkProvider.m in Sources */,
 				1349EEC11E7A9272000B0666 /* NITNode.m in Sources */,
 				1349EEC51E7A95E3000B0666 /* NITNodesManager.m in Sources */,
