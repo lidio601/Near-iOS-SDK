@@ -316,6 +316,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
                         return NO;
                     }
                 } else {
+                    [self testStepOutRegion:[node createRegion]];
                     return YES;
                 }
             } else {
