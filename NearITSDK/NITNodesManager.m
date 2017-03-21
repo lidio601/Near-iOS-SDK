@@ -11,6 +11,7 @@
 #import "NITNode.h"
 #import "NITBeaconNode.h"
 #import "NITGeofenceNode.h"
+#import <CoreLocation/CoreLocation.h>
 
 @interface NITNodesManager()
 
@@ -59,25 +60,47 @@
 }
 
 - (NSArray<NITNode *> *)siblingsWithNode:(NITNode *)node {
-    if (node.parent == nil) {
-        NSMutableArray<NITNode*>* siblings = [[NSMutableArray alloc] init];
-        for(NITNode *rootNode in [self roots]) {
-            if(![node.ID isEqualToString:rootNode.ID]) {
-                [siblings addObject:rootNode];
-            }
-        }
-        return [NSArray arrayWithArray:siblings];
+    if (node == nil) {
+        return [NSArray array];
+    } else if (node.parent == nil) {
+        return [self roots];
     } else if(node.parent.children) {
-        NSMutableArray<NITNode*>* siblings = [[NSMutableArray alloc] init];
-        for(NITNode *childNode in node.parent.children) {
-            if(![node.ID isEqualToString:childNode.ID]) {
-                [siblings addObject:childNode];
-            }
-        }
-        return [NSArray arrayWithArray:siblings];
+        return node.parent.children;
     } else {
         return [NSArray array];
     }
+}
+
+- (NSInteger)countSiblingsAndChildrenBeaconNode:(NITNode*)node {
+    NSInteger counter = 0;
+    NSArray<NITNode*>* siblings = [self siblingsWithNode:node];
+    for(NITNode *node in siblings) {
+        if([node isKindOfClass:[NITBeaconNode class]]) {
+            counter++;
+        }
+    }
+    for(NITNode *childNode in node.children) {
+        if([childNode isKindOfClass:[NITBeaconNode class]]) {
+            counter++;
+        }
+    }
+    return counter;
+}
+
+- (NSInteger)countIdentifierBeaconNodeWithNode:(NITNode*)node {
+    NSInteger counter = 0;
+    if ([node isKindOfClass:[NITBeaconNode class]] && node.identifier != nil) {
+        counter++;
+    }
+    NITNode *parent = node.parent;
+    while(parent != nil) {
+        if ([parent isKindOfClass:[NITBeaconNode class]] && parent.identifier != nil) {
+            counter++;
+        }
+        parent = parent.parent;
+    }
+    
+    return counter;
 }
 
 - (void)traverseNodesWithBlock:(void (^)(NITNode *node))block {
@@ -101,6 +124,19 @@
         [array addObject:node];
         [self traverseWithNode:node array:array];
     }
+}
+
+- (NITBeaconNode *)beaconNodeWithBeacon:(CLBeacon *)beacon inChildren:(NSArray<NITNode *> *)children {
+    NITBeaconNode *beaconNode = nil;
+    for(NITNode *node in children) {
+        if ([node isKindOfClass:[NITBeaconNode class]]) {
+            NITBeaconNode *bNode = (NITBeaconNode*)node;
+            if ([beacon.minor integerValue] == [bNode.minor integerValue]) {
+                beaconNode = bNode;
+            }
+        }
+    }
+    return beaconNode;
 }
 
 @end
