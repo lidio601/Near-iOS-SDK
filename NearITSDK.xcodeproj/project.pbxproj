@@ -45,6 +45,7 @@
 		1352CA911E78372B00C0E98E /* NITUtilsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1352CA901E78372B00C0E98E /* NITUtilsTest.m */; };
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
+		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +103,8 @@
 		1352CA901E78372B00C0E98E /* NITUtilsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITUtilsTest.m; sourceTree = "<group>"; };
 		137838631E800EC1001C8CDE /* NITRecipesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipesManager.h; sourceTree = "<group>"; };
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
+		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
+		137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NITGeopolisManager+Tests.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +218,7 @@
 		1352CA711E7807FE00C0E98E /* NearITSDKTests */ = {
 			isa = PBXGroup;
 			children = (
+				1378386A1E816ADF001C8CDE /* Classes */,
 				1349EEAA1E7948CD000B0666 /* Files */,
 				13423EE71E7BE15D008CAAC8 /* Constants.h */,
 				1352CA721E7807FE00C0E98E /* NearITSDKTests.m */,
@@ -267,6 +271,15 @@
 				137838641E800EC1001C8CDE /* NITRecipesManager.m */,
 			);
 			name = Recipes;
+			sourceTree = "<group>";
+		};
+		1378386A1E816ADF001C8CDE /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */,
+				137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -423,6 +436,7 @@
 				1349EEA91E793834000B0666 /* NITJSONAPITests.m in Sources */,
 				1352CA801E7808DA00C0E98E /* NITConnectionsTest.m in Sources */,
 				13423EE61E7BD451008CAAC8 /* NITGeopolisManagerTest.m in Sources */,
+				137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

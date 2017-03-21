@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "NITConfiguration.h"
 #import "NITGeopolisManager.h"
+#import "NITGeopolisManager+Tests.h"
 #import "NITNodesManager.h"
 #import "NITNetworkManager.h"
 #import "NITNetworkProvider.h"
