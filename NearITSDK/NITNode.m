@@ -90,4 +90,8 @@
     return count;
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"Node ID: %@", self.ID];
+}
+
 @end
