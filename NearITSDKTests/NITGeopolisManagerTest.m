@@ -63,7 +63,7 @@
         XCTAssertNil(error);
         
         NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
-        [nodesManager parseAndSetNodes:json];
+        [nodesManager setNodesWithJsonApi:json];
         
         NSArray<NITJSONAPIResource*> *resources = [json allResources];
         __block NSInteger trueCounter = 0;
@@ -95,7 +95,7 @@
     XCTAssertNil(jsonApiError);
     
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
-    [nodesManager parseAndSetNodes:jsonApi];
+    [nodesManager setNodesWithJsonApi:jsonApi];
     
     NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager];
     [manager startForUnitTest];

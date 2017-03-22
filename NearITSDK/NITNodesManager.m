@@ -21,7 +21,7 @@
 
 @implementation NITNodesManager
 
-- (void)parseAndSetNodes:(NITJSONAPI *)jsonApi {
+- (void)setNodesWithJsonApi:(NITJSONAPI *)jsonApi {
     if (jsonApi == nil) {
         return;
     }
@@ -39,18 +39,18 @@
     return [NSArray array];
 }
 
-- (NITNode *)findNodeWithID:(NSString *)ID {
-    return [self findNodeWithID:ID inNodes:self.nodes];
+- (NITNode *)nodeWithID:(NSString *)ID {
+    return [self nodeWithID:ID inNodes:self.nodes];
 }
 
-- (NITNode*)findNodeWithID:(NSString *)ID inNodes:(NSArray<NITNode*>*)nodes {
+- (NITNode*)nodeWithID:(NSString *)ID inNodes:(NSArray<NITNode*>*)nodes {
     NITNode *foundNode = nil;
     for (NITNode *node in nodes) {
         if ([[node ID] isEqualToString:ID]) {
             foundNode = node;
             break;
         } else if ([node.children count] > 0) {
-            foundNode = [self findNodeWithID:ID inNodes:node.children];
+            foundNode = [self nodeWithID:ID inNodes:node.children];
             if (foundNode) {
                 break;
             }

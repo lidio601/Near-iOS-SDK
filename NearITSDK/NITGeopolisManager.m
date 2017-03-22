@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable error))completionHandler {
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
-        [self.nodesManager parseAndSetNodes:json];
+        [self.nodesManager setNodesWithJsonApi:json];
         completionHandler(error);
     }];
 }
@@ -152,7 +152,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 // MARK: - Region step
 
 - (void)stepInRegion:(CLRegion*)region {
-    NITNode * newCurrentNode = [self.nodesManager findNodeWithID:region.identifier];
+    NITNode * newCurrentNode = [self.nodesManager nodeWithID:region.identifier];
     if (newCurrentNode == nil) {
         return;
     }
@@ -197,7 +197,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 }
 
 - (void)stepOutRegion:(CLRegion*)region {
-    NITNode * exitedNode = [self.nodesManager findNodeWithID:region.identifier];
+    NITNode * exitedNode = [self.nodesManager nodeWithID:region.identifier];
     if (exitedNode == nil) {
         return;
     }
@@ -250,7 +250,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 }
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray<CLBeacon *> *)beacons inRegion:(CLBeaconRegion *)region {
-    NITNode *node = [self.nodesManager findNodeWithID:region.identifier];
+    NITNode *node = [self.nodesManager nodeWithID:region.identifier];
     NITBeaconNode *beaconNode;
     if ([node isKindOfClass:[NITBeaconNode class]]) {
         beaconNode = (NITBeaconNode*)node;
