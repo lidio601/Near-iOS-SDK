@@ -38,7 +38,7 @@
 }
 
 + (NSURLRequest *)geopolisNodes {
-    return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/geopolis/nodes?filter[app_id]=%@&include=children.*.children", [[NITConfiguration defaultConfiguration] appId]]];
+    return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/geopolis/nodes?filter[app_id]=%@&include=**.children", [[NITConfiguration defaultConfiguration] appId]]];
 }
 
 + (NSMutableURLRequest*)requestWithPath:(NSString*)path {
