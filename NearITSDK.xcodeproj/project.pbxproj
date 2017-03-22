@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1327D88C1E8266B700C6689E /* beacon_areas_in_bg.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8871E8266B700C6689E /* beacon_areas_in_bg.json */; };
+		1327D88D1E8266B700C6689E /* empty_config.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8881E8266B700C6689E /* empty_config.json */; };
+		1327D88E1E8266B700C6689E /* gf_array.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8891E8266B700C6689E /* gf_array.json */; };
+		1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D88A1E8266B700C6689E /* multi_level_gf.json */; };
+		1327D8901E8266B700C6689E /* single_gf.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D88B1E8266B700C6689E /* single_gf.json */; };
 		13423EDF1E7BC89D008CAAC8 /* NITBeaconNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 13423EDD1E7BC89D008CAAC8 /* NITBeaconNode.h */; };
 		13423EE01E7BC89D008CAAC8 /* NITBeaconNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 13423EDE1E7BC89D008CAAC8 /* NITBeaconNode.m */; };
 		13423EE31E7BCB07008CAAC8 /* NITGeofenceNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 13423EE11E7BCB07008CAAC8 /* NITGeofenceNode.h */; };
@@ -59,6 +64,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1327D8871E8266B700C6689E /* beacon_areas_in_bg.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = beacon_areas_in_bg.json; sourceTree = "<group>"; };
+		1327D8881E8266B700C6689E /* empty_config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = empty_config.json; sourceTree = "<group>"; };
+		1327D8891E8266B700C6689E /* gf_array.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gf_array.json; sourceTree = "<group>"; };
+		1327D88A1E8266B700C6689E /* multi_level_gf.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = multi_level_gf.json; sourceTree = "<group>"; };
+		1327D88B1E8266B700C6689E /* single_gf.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = single_gf.json; sourceTree = "<group>"; };
 		13423EDD1E7BC89D008CAAC8 /* NITBeaconNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITBeaconNode.h; sourceTree = "<group>"; };
 		13423EDE1E7BC89D008CAAC8 /* NITBeaconNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITBeaconNode.m; sourceTree = "<group>"; };
 		13423EE11E7BCB07008CAAC8 /* NITGeofenceNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITGeofenceNode.h; sourceTree = "<group>"; };
@@ -126,6 +136,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1327D8861E8266A600C6689E /* Nodes Manager */ = {
+			isa = PBXGroup;
+			children = (
+				1327D8871E8266B700C6689E /* beacon_areas_in_bg.json */,
+				1327D8881E8266B700C6689E /* empty_config.json */,
+				1327D8891E8266B700C6689E /* gf_array.json */,
+				1327D88A1E8266B700C6689E /* multi_level_gf.json */,
+				1327D88B1E8266B700C6689E /* single_gf.json */,
+			);
+			name = "Nodes Manager";
+			sourceTree = "<group>";
+		};
 		1349EE9A1E79274C000B0666 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,12 +157,13 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
-		1349EEAA1E7948CD000B0666 /* Files */ = {
+		1349EEAA1E7948CD000B0666 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				1327D8861E8266A600C6689E /* Nodes Manager */,
 				1349EEAB1E7948FA000B0666 /* jsonapi_sample1.json */,
 			);
-			name = Files;
+			name = Fixtures;
 			sourceTree = "<group>";
 		};
 		1349EEB51E796FF3000B0666 /* Geopolis */ = {
@@ -219,7 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				1378386A1E816ADF001C8CDE /* Classes */,
-				1349EEAA1E7948CD000B0666 /* Files */,
+				1349EEAA1E7948CD000B0666 /* Fixtures */,
 				13423EE71E7BE15D008CAAC8 /* Constants.h */,
 				1352CA721E7807FE00C0E98E /* NearITSDKTests.m */,
 				1352CA7F1E7808DA00C0E98E /* NITConnectionsTest.m */,
@@ -398,7 +421,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1327D88E1E8266B700C6689E /* gf_array.json in Resources */,
+				1327D88C1E8266B700C6689E /* beacon_areas_in_bg.json in Resources */,
+				1327D8901E8266B700C6689E /* single_gf.json in Resources */,
+				1327D88D1E8266B700C6689E /* empty_config.json in Resources */,
 				1349EEAC1E7948FA000B0666 /* jsonapi_sample1.json in Resources */,
+				1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

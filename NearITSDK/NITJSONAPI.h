@@ -12,7 +12,8 @@
 @interface NITJSONAPI : NSObject
 
 - (instancetype _Nonnull)init;
-+ (instancetype _Nonnull)jsonAPIWithDictionary:(NSDictionary* _Nonnull)json;
+- (instancetype _Nullable)initWithContentsOfFile:(NSString* _Nonnull)path error:(NSError* _Nullable * _Nullable)anError;
+- (instancetype _Nonnull)initWithDictionary:(NSDictionary* _Nonnull)json;
 
 - (void)setDataWithResourceObject:(NITJSONAPIResource* _Nonnull)resourceObject;
 - (NITJSONAPIResource* _Nullable)firstResourceObject;

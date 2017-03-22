@@ -46,11 +46,16 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 @implementation NITGeopolisManager
 
 - (instancetype)init {
+    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    return [self initWithNodesManager:nodesManager];
+}
+
+- (instancetype)initWithNodesManager:(NITNodesManager*)nodesManager {
     self = [super init];
     if (self) {
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
-        self.nodesManager = [[NITNodesManager alloc] init];
+        self.nodesManager = nodesManager;
         self.enteredRegions = [[NSMutableArray alloc] init];
         self.monitoredRegions = [[NSMutableArray alloc] init];
         self.rangedRegions = [[NSMutableArray alloc] init];

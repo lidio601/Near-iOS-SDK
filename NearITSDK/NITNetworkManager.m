@@ -69,7 +69,7 @@ static NSURLSession *session;
             if (jsonError) {
                 completionHandler(nil, jsonError);
             } else {
-                NITJSONAPI *jsonApi = [NITJSONAPI jsonAPIWithDictionary:json];
+                NITJSONAPI *jsonApi = [[NITJSONAPI alloc] initWithDictionary:json];
                 completionHandler(jsonApi, nil);
             }
         }

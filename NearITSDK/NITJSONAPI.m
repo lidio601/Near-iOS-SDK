@@ -36,31 +36,58 @@
 
 /**
  * Instanciate an object with an initial dictionary
+ * @param path Path to JSON Api file
+ * @param anError Pointer to a NSError
+ */
+- (instancetype)initWithContentsOfFile:(NSString*)path error:(NSError**)anError {
+    NSError *fileError;
+    NSString *jsonContent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&fileError];
+    if (fileError) {
+        if(anError != NULL) {
+            *anError = fileError;
+        }
+        return nil;
+    }
+    
+    NSError *jsonError;
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:[jsonContent dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&jsonError];
+    if(jsonError) {
+        if(anError != NULL) {
+            *anError = jsonError;
+        }
+        return nil;
+    }
+    
+    return [self initWithDictionary:json];
+}
+
+/**
+ * Instanciate an object with an initial dictionary
  * @param json Your json
  */
-+ (instancetype)jsonAPIWithDictionary:(NSDictionary*)json {
-    NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
-    //jsonApi.internalJson = [[NSMutableDictionary alloc] initWithDictionary:json];
+- (instancetype)initWithDictionary:(NSDictionary*)json {
+    self = [self init];
+    
     id data = [json objectForKey:@"data"];
     if ([data isKindOfClass:[NSArray class]]) {
         for(NSDictionary *resDict in data) {
             NITJSONAPIResource *res = [NITJSONAPIResource resourceObjectWithDictiornary:resDict];
-            [jsonApi.resources addObject:res];
+            [self.resources addObject:res];
         }
     } else {
         NITJSONAPIResource *res = [NITJSONAPIResource resourceObjectWithDictiornary:data];
-        [jsonApi.resources addObject:res];
+        [self.resources addObject:res];
     }
     
     NSArray *included = [json objectForKey:@"included"];
     if (included) {
         for(NSDictionary *resDict in included) {
             NITJSONAPIResource *res = [NITJSONAPIResource resourceObjectWithDictiornary:resDict];
-            [jsonApi.included addObject:res];
+            [self.included addObject:res];
         }
     }
     
-    return jsonApi;
+    return self;
 }
 
 /**

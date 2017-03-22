@@ -87,23 +87,22 @@
 }
 
 - (void)testGeopolisNodes {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *path = [bundle pathForResource:@"beacon_areas_in_bg" ofType:@"json"];
     
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] init];
-    [manager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
-        XCTAssertNil(error);
-        
-        [manager startForUnitTest];
-        
-        NSError *errorNodes;
-        [manager testAllNodes:&errorNodes];
-        XCTAssertNil(errorNodes);
-        
-        [manager stop];
-        [expectation fulfill];
-    }];
+    NSError *jsonApiError;
+    NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithContentsOfFile:path error:&jsonApiError];
+    XCTAssertNil(jsonApiError);
     
-    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    [nodesManager parseAndSetNodes:jsonApi];
+    
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager];
+    [manager startForUnitTest];
+    NSError *errorNodes;
+    [manager testAllNodes:&errorNodes];
+    XCTAssertNil(errorNodes);
+    [manager stop];
 }
 
 @end

@@ -53,7 +53,20 @@
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:[jsonContent dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
     XCTAssertNotNil(json, @"json dictionary is nil");
     
-    NITJSONAPI *jsonApi = [NITJSONAPI jsonAPIWithDictionary:json];
+    NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithDictionary:json];
+    NITJSONAPIResource *resource = [jsonApi firstResourceObject];
+    XCTAssertNotNil(resource, @"First resource object is nil");
+    XCTAssertTrue([resource.type isEqualToString:@"peoples"], @"Type is not equal to 'peoples'");
+    XCTAssertEqual([resource attributesCount], 2, @"Attributes count is wrong");
+}
+
+- (void)testWithFile {
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *path = [bundle pathForResource:@"jsonapi_sample1" ofType:@"json"];
+    
+    NSError *jsonApiError;
+    NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithContentsOfFile:path error:&jsonApiError];
+    XCTAssertNil(jsonApiError);
     NITJSONAPIResource *resource = [jsonApi firstResourceObject];
     XCTAssertNotNil(resource, @"First resource object is nil");
     XCTAssertTrue([resource.type isEqualToString:@"peoples"], @"Type is not equal to 'peoples'");
