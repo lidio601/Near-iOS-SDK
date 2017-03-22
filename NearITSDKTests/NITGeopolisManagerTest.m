@@ -18,6 +18,7 @@
 #import "NITJSONAPI.h"
 #import "NITNode.h"
 #import "Constants.h"
+#import "NITBeaconProximityManager.h"
 
 @interface NITGeopolisManagerTest : XCTestCase
 
@@ -103,6 +104,36 @@
     [manager testAllNodes:&errorNodes];
     XCTAssertNil(errorNodes);
     [manager stop];
+}
+
+- (void)testBeaconProximity {
+    NITBeaconProximityManager *beaconProximity = [[NITBeaconProximityManager alloc] init];
+    
+    NSString *region1 = @"region1";
+    
+    [beaconProximity addRegionWithIdentifier:region1];
+    [beaconProximity addRegionWithIdentifier:@"region2"];
+    
+    XCTAssertTrue([beaconProximity regionProximitiesCount] == 2, @"Region count is wrong");
+    XCTAssertTrue([beaconProximity beaconItemsCountWithRegionIdentifier:region1] == 0);
+    
+    [beaconProximity addProximityWithBeaconIdentifier:@"beacon1" regionIdentifier:region1 proximity:CLProximityNear];
+    [beaconProximity addProximityWithBeaconIdentifier:@"beacon2" regionIdentifier:region1 proximity:CLProximityImmediate];
+    [beaconProximity addProximityWithBeaconIdentifier:@"beacon3" regionIdentifier:region1 proximity:CLProximityUnknown];
+    [beaconProximity addProximityWithBeaconIdentifier:@"beacon4" regionIdentifier:region1 proximity:CLProximityFar];
+    
+    XCTAssertTrue([beaconProximity beaconItemsCountWithRegionIdentifier:region1] == 3);
+    XCTAssertTrue([beaconProximity proximityWithBeaconIdentifier:@"beacon2" regionIdentifier:region1] == CLProximityImmediate);
+    
+    [beaconProximity addProximityWithBeaconIdentifier:@"beacon2" regionIdentifier:region1 proximity:CLProximityNear];
+    
+    XCTAssertTrue([beaconProximity proximityWithBeaconIdentifier:@"beacon2" regionIdentifier:region1] == CLProximityNear);
+    
+    NSArray<NSString*>* identifiers = @[@"beacon4"];
+    [beaconProximity evaluateDisappearedWithBeaconIdentifiers:identifiers regionIdentifier:region1];
+    XCTAssertTrue([beaconProximity beaconItemsCountWithRegionIdentifier:region1] == 1);
+    XCTAssertTrue([beaconProximity proximityWithBeaconIdentifier:@"beacon2" regionIdentifier:region1] == CLProximityUnknown);
+    XCTAssertTrue([beaconProximity proximityWithBeaconIdentifier:@"beacon4" regionIdentifier:region1] == CLProximityFar);
 }
 
 @end

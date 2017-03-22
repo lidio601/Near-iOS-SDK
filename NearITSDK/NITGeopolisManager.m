@@ -13,6 +13,7 @@
 #import "NITJSONAPI.h"
 #import "NITNode.h"
 #import "NITBeaconNode.h"
+#import "NITBeaconProximityManager.h"
 #import <CoreLocation/CoreLocation.h>
 
 NSErrorDomain const NITGeopolisErrorDomain = @"com.nearit.geopolis";
@@ -33,12 +34,12 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NITNodesManager *nodesManager;
+@property (nonatomic, strong) NITBeaconProximityManager *beaconProximity;
 @property (nonatomic, strong) NITNode *currentNode;
 @property (nonatomic, strong) NSMutableArray<NSString*> *enteredRegions;
 @property (nonatomic, strong) NSMutableArray<CLRegion*> *monitoredRegions; //For test purpose
 @property (nonatomic, strong) NSMutableArray<CLRegion*> *rangedRegions; // For test purpose
 @property (nonatomic, strong) NSString *pluginName;
-@property (nonatomic, strong) NSMutableDictionary<NSString*,NSMutableDictionary<NSString*, NSNumber*>*>* beaconProximity;
 @property (nonatomic) BOOL started;
 
 @end
@@ -186,7 +187,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
     
     CLRegion *currentRegion = [self.currentNode createRegion];
     if ([currentRegion isKindOfClass:[CLBeaconRegion class]] && self.currentNode.identifier != nil) {
-        [self.beaconProximity setObject:[[NSMutableDictionary alloc] init] forKey:currentRegion.identifier];
+        [self.beaconProximity addRegionWithIdentifier:currentRegion.identifier];
         [self.locationManager startRangingBeaconsInRegion:(CLBeaconRegion*)currentRegion];
         if (![self.rangedRegions containsObject:currentRegion]) {
             [self.rangedRegions addObject:currentRegion];
@@ -212,7 +213,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         return;
     }
     
-    [self.beaconProximity removeObjectForKey:region.identifier];
+    [self.beaconProximity removeRegionWithIdentifier:region.identifier];
     
     self.currentNode = exitedNode.parent;
     [self stopMonitoringNodes:self.currentNode.children];
@@ -258,6 +259,8 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         return;
     }
     
+    NSMutableArray<NSString*>* appeared = [[NSMutableArray alloc] init];
+    
     for(CLBeacon *beacon in beacons) {
         CLProximity proximity = beacon.proximity;
         
@@ -270,9 +273,17 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
         NSString *beaconIdentifier = minorNode.identifier;
         
         if (minorNode != nil && beaconIdentifier != nil) {
-            [self triggerWithEvent:beaconEvent node:minorNode];
+            [appeared addObject:beaconIdentifier];
+            
+            CLProximity previousProximity = [self.beaconProximity proximityWithBeaconIdentifier:beaconIdentifier regionIdentifier:region.identifier];
+            if (previousProximity != beacon.proximity) {
+                [self.beaconProximity addProximityWithBeaconIdentifier:beaconIdentifier regionIdentifier:region.identifier proximity:beacon.proximity];
+                [self triggerWithEvent:beaconEvent node:minorNode];
+            }
         }
     }
+    
+    [self.beaconProximity evaluateDisappearedWithBeaconIdentifiers:appeared regionIdentifier:region.identifier];
 }
 
 // MARK: - Utils

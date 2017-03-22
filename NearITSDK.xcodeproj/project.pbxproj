@@ -12,6 +12,8 @@
 		1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D88A1E8266B700C6689E /* multi_level_gf.json */; };
 		1327D8901E8266B700C6689E /* single_gf.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D88B1E8266B700C6689E /* single_gf.json */; };
 		1327D8921E827EFC00C6689E /* beacon_areas_in_bg.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8911E827EFC00C6689E /* beacon_areas_in_bg.json */; };
+		1327D8961E82824800C6689E /* NITBeaconProximityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1327D8941E82824800C6689E /* NITBeaconProximityManager.h */; };
+		1327D8971E82824800C6689E /* NITBeaconProximityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1327D8951E82824800C6689E /* NITBeaconProximityManager.m */; };
 		13423EDF1E7BC89D008CAAC8 /* NITBeaconNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 13423EDD1E7BC89D008CAAC8 /* NITBeaconNode.h */; };
 		13423EE01E7BC89D008CAAC8 /* NITBeaconNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 13423EDE1E7BC89D008CAAC8 /* NITBeaconNode.m */; };
 		13423EE31E7BCB07008CAAC8 /* NITGeofenceNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 13423EE11E7BCB07008CAAC8 /* NITGeofenceNode.h */; };
@@ -69,6 +71,8 @@
 		1327D88A1E8266B700C6689E /* multi_level_gf.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = multi_level_gf.json; sourceTree = "<group>"; };
 		1327D88B1E8266B700C6689E /* single_gf.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = single_gf.json; sourceTree = "<group>"; };
 		1327D8911E827EFC00C6689E /* beacon_areas_in_bg.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = beacon_areas_in_bg.json; sourceTree = "<group>"; };
+		1327D8941E82824800C6689E /* NITBeaconProximityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITBeaconProximityManager.h; sourceTree = "<group>"; };
+		1327D8951E82824800C6689E /* NITBeaconProximityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITBeaconProximityManager.m; sourceTree = "<group>"; };
 		13423EDD1E7BC89D008CAAC8 /* NITBeaconNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITBeaconNode.h; sourceTree = "<group>"; };
 		13423EDE1E7BC89D008CAAC8 /* NITBeaconNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITBeaconNode.m; sourceTree = "<group>"; };
 		13423EE11E7BCB07008CAAC8 /* NITGeofenceNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITGeofenceNode.h; sourceTree = "<group>"; };
@@ -148,6 +152,15 @@
 			name = "Nodes Manager";
 			sourceTree = "<group>";
 		};
+		1327D8931E82823300C6689E /* Beacon */ = {
+			isa = PBXGroup;
+			children = (
+				1327D8941E82824800C6689E /* NITBeaconProximityManager.h */,
+				1327D8951E82824800C6689E /* NITBeaconProximityManager.m */,
+			);
+			name = Beacon;
+			sourceTree = "<group>";
+		};
 		1349EE9A1E79274C000B0666 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +182,7 @@
 		1349EEB51E796FF3000B0666 /* Geopolis */ = {
 			isa = PBXGroup;
 			children = (
+				1327D8931E82823300C6689E /* Beacon */,
 				1349EEBD1E7A9264000B0666 /* Nodes */,
 				1349EEB61E797045000B0666 /* NITGeopolisManager.h */,
 				1349EEB71E797045000B0666 /* NITGeopolisManager.m */,
@@ -321,6 +335,7 @@
 				1352CA8D1E78313300C0E98E /* NITUserProfile.h in Headers */,
 				1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */,
 				1349EEA21E79325E000B0666 /* NITJSONAPI.h in Headers */,
+				1327D8961E82824800C6689E /* NITBeaconProximityManager.h in Headers */,
 				13423EDF1E7BC89D008CAAC8 /* NITBeaconNode.h in Headers */,
 				137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */,
 				1349EEC91E7AA1E3000B0666 /* NITResource.h in Headers */,
@@ -446,6 +461,7 @@
 				1349EEA31E79325E000B0666 /* NITJSONAPI.m in Sources */,
 				1349EEB01E795030000B0666 /* NITNetworkManager.m in Sources */,
 				1349EEA71E793413000B0666 /* NITJSONAPIResource.m in Sources */,
+				1327D8971E82824800C6689E /* NITBeaconProximityManager.m in Sources */,
 				1352CA8E1E78313300C0E98E /* NITUserProfile.m in Sources */,
 				137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */,
 				1349EEB41E796511000B0666 /* NITNetworkProvider.m in Sources */,
