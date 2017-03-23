@@ -10,6 +10,6 @@
 
 @interface NITUserProfile : NSObject
 
-+ (void)createNewProfileWithCompletionHandler:(void (^)(void))handler;
++ (void)createNewProfileWithCompletionHandler:(void (^ _Nullable)(NSString* _Nullable profileId, NSError* _Nullable error))handler;
 
 @end

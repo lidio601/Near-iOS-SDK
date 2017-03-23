@@ -28,7 +28,7 @@
         
         [self pluginSetup];
         
-        [NITUserProfile createNewProfileWithCompletionHandler:^{ //Now is a sample
+        [NITUserProfile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
             
         }];
     }

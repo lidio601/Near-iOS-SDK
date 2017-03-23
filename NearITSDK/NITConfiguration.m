@@ -10,6 +10,8 @@
 
 #define APIKEY @"apikey"
 #define APPID @"appid"
+#define PROFILE_ID @"profileId"
+#define INSTALLATIONID @"installationid"
 
 static NITConfiguration *defaultConfiguration;
 
@@ -17,6 +19,8 @@ static NITConfiguration *defaultConfiguration;
 
 @property (nonatomic, strong) NSString * _Nonnull apiKey;
 @property (nonatomic, strong) NSString * _Nonnull appId;
+@property (nonatomic, strong) NSString * _Nonnull profileId;
+@property (nonatomic, strong) NSString * _Nullable installationId;
 
 @end
 
@@ -24,6 +28,8 @@ static NITConfiguration *defaultConfiguration;
 
 @synthesize apiKey = _apiKey;
 @synthesize appId = _appId;
+@synthesize profileId = _profileId;
+@synthesize installationId = _installationId;
 
 + (NITConfiguration * _Nonnull)defaultConfiguration {
     if (defaultConfiguration == nil) {
@@ -54,6 +60,30 @@ static NITConfiguration *defaultConfiguration;
 - (void)setAppId:(NSString * _Nonnull)appId {
     _appId = appId;
     [[NSUserDefaults standardUserDefaults] setObject:appId forKey:APPID];
+}
+
+- (NSString *)profileId {
+    if(_profileId == nil) {
+        self.profileId = [[NSUserDefaults standardUserDefaults] stringForKey:PROFILE_ID];
+    }
+    return _profileId;
+}
+
+- (void)setProfileId:(NSString *)profileId {
+    _profileId = profileId;
+    [[NSUserDefaults standardUserDefaults] setObject:profileId forKey:PROFILE_ID];
+}
+
+- (NSString *)installationId {
+    if(_installationId == nil) {
+        self.installationId = [[NSUserDefaults standardUserDefaults] stringForKey:INSTALLATIONID];
+    }
+    return _installationId;
+}
+
+- (void)setInstallationId:(NSString *)installationId {
+    _installationId = installationId;
+    [[NSUserDefaults standardUserDefaults] setObject:installationId forKey:INSTALLATIONID];
 }
 
 @end

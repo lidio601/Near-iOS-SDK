@@ -37,6 +37,27 @@
     return request;
 }
 
++ (NSURLRequest *)newInstallationWithJsonApi:(NITJSONAPI *)jsonApi {
+    NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:@"/installations"];
+    [request setHTTPMethod:@"POST"];
+    
+    NSDictionary *json = [jsonApi toDictionary];
+    NSData *jsonDataBody = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    [request setHTTPBody:jsonDataBody];
+    
+    return request;
+}
+
++ (NSURLRequest *)updateInstallationWithJsonApi:(NITJSONAPI *)jsonApi installationId:(NSString *)installationId {
+    NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/installations/%@", installationId]];
+    [request setHTTPMethod:@"POST"];
+    
+    NSDictionary *json = [jsonApi toDictionary];
+    NSData *jsonDataBody = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    [request setHTTPBody:jsonDataBody];
+    return request;
+}
+
 + (NSURLRequest *)geopolisNodes {
     return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/geopolis/nodes?filter[app_id]=%@&include=**.children", [[NITConfiguration defaultConfiguration] appId]]];
 }

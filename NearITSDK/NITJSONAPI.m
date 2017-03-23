@@ -209,6 +209,7 @@
         
         if([data isKindOfClass:[NSDictionary class]]) {
             NSString *resID = [data objectForKey:@"id"];
+            NSString *type = [data objectForKey:@"type"];
             
             @try {
                 [resource valueForKey:key];
@@ -216,6 +217,13 @@
                 NITResource *foundRes = [self findResourceWithID:resID inCollection:collections];
                 if (foundRes) {
                     [resource setValue:foundRes forKey:attributeKey];
+                } else {
+                    NITJSONAPIResource *resourceObject = [[NITJSONAPIResource alloc] init];
+                    resourceObject.ID = resID;
+                    resourceObject.type = type;
+                    NITResource *basicResource = [[NITResource alloc] init];
+                    basicResource.resourceObject = resourceObject;
+                    [resource setValue:basicResource forKey:attributeKey];
                 }
             }
             @catch (NSException *exception) {

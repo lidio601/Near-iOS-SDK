@@ -11,9 +11,17 @@
 		1327D88E1E8266B700C6689E /* gf_array.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8891E8266B700C6689E /* gf_array.json */; };
 		1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D88A1E8266B700C6689E /* multi_level_gf.json */; };
 		1327D8901E8266B700C6689E /* single_gf.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D88B1E8266B700C6689E /* single_gf.json */; };
-		1327D8921E827EFC00C6689E /* beacon_areas_in_bg.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8911E827EFC00C6689E /* beacon_areas_in_bg.json */; };
 		1327D8961E82824800C6689E /* NITBeaconProximityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1327D8941E82824800C6689E /* NITBeaconProximityManager.h */; };
 		1327D8971E82824800C6689E /* NITBeaconProximityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1327D8951E82824800C6689E /* NITBeaconProximityManager.m */; };
+		1327D89B1E82A4E700C6689E /* NITRecipe.h in Headers */ = {isa = PBXBuildFile; fileRef = 1327D8991E82A4E700C6689E /* NITRecipe.h */; };
+		1327D89C1E82A4E700C6689E /* NITRecipe.m in Sources */ = {isa = PBXBuildFile; fileRef = 1327D89A1E82A4E700C6689E /* NITRecipe.m */; };
+		1327D89F1E82A99600C6689E /* NITPulseBundle.h in Headers */ = {isa = PBXBuildFile; fileRef = 1327D89D1E82A99600C6689E /* NITPulseBundle.h */; };
+		1327D8A01E82A99600C6689E /* NITPulseBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1327D89E1E82A99600C6689E /* NITPulseBundle.m */; };
+		1327D8A31E83B7C400C6689E /* NITConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 1327D8A11E83B7C400C6689E /* NITConstants.h */; };
+		1327D8A41E83B7C400C6689E /* NITConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1327D8A21E83B7C400C6689E /* NITConstants.m */; };
+		1327D8A81E83BE3100C6689E /* NITInstallation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1327D8A61E83BE3100C6689E /* NITInstallation.h */; };
+		1327D8A91E83BE3100C6689E /* NITInstallation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1327D8A71E83BE3100C6689E /* NITInstallation.m */; };
+		1327D8AB1E83E6A300C6689E /* beacon_areas_in_bg.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8AA1E83E6A300C6689E /* beacon_areas_in_bg.json */; };
 		13423EDF1E7BC89D008CAAC8 /* NITBeaconNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 13423EDD1E7BC89D008CAAC8 /* NITBeaconNode.h */; };
 		13423EE01E7BC89D008CAAC8 /* NITBeaconNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 13423EDE1E7BC89D008CAAC8 /* NITBeaconNode.m */; };
 		13423EE31E7BCB07008CAAC8 /* NITGeofenceNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 13423EE11E7BCB07008CAAC8 /* NITGeofenceNode.h */; };
@@ -70,9 +78,17 @@
 		1327D8891E8266B700C6689E /* gf_array.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gf_array.json; sourceTree = "<group>"; };
 		1327D88A1E8266B700C6689E /* multi_level_gf.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = multi_level_gf.json; sourceTree = "<group>"; };
 		1327D88B1E8266B700C6689E /* single_gf.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = single_gf.json; sourceTree = "<group>"; };
-		1327D8911E827EFC00C6689E /* beacon_areas_in_bg.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = beacon_areas_in_bg.json; sourceTree = "<group>"; };
 		1327D8941E82824800C6689E /* NITBeaconProximityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITBeaconProximityManager.h; sourceTree = "<group>"; };
 		1327D8951E82824800C6689E /* NITBeaconProximityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITBeaconProximityManager.m; sourceTree = "<group>"; };
+		1327D8991E82A4E700C6689E /* NITRecipe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipe.h; sourceTree = "<group>"; };
+		1327D89A1E82A4E700C6689E /* NITRecipe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipe.m; sourceTree = "<group>"; };
+		1327D89D1E82A99600C6689E /* NITPulseBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITPulseBundle.h; sourceTree = "<group>"; };
+		1327D89E1E82A99600C6689E /* NITPulseBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITPulseBundle.m; sourceTree = "<group>"; };
+		1327D8A11E83B7C400C6689E /* NITConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITConstants.h; sourceTree = "<group>"; };
+		1327D8A21E83B7C400C6689E /* NITConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITConstants.m; sourceTree = "<group>"; };
+		1327D8A61E83BE3100C6689E /* NITInstallation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITInstallation.h; sourceTree = "<group>"; };
+		1327D8A71E83BE3100C6689E /* NITInstallation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITInstallation.m; sourceTree = "<group>"; };
+		1327D8AA1E83E6A300C6689E /* beacon_areas_in_bg.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = beacon_areas_in_bg.json; sourceTree = "<group>"; };
 		13423EDD1E7BC89D008CAAC8 /* NITBeaconNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITBeaconNode.h; sourceTree = "<group>"; };
 		13423EDE1E7BC89D008CAAC8 /* NITBeaconNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITBeaconNode.m; sourceTree = "<group>"; };
 		13423EE11E7BCB07008CAAC8 /* NITGeofenceNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITGeofenceNode.h; sourceTree = "<group>"; };
@@ -143,7 +159,7 @@
 		1327D8861E8266A600C6689E /* Nodes Manager */ = {
 			isa = PBXGroup;
 			children = (
-				1327D8911E827EFC00C6689E /* beacon_areas_in_bg.json */,
+				1327D8AA1E83E6A300C6689E /* beacon_areas_in_bg.json */,
 				1327D8881E8266B700C6689E /* empty_config.json */,
 				1327D8891E8266B700C6689E /* gf_array.json */,
 				1327D88A1E8266B700C6689E /* multi_level_gf.json */,
@@ -161,11 +177,33 @@
 			name = Beacon;
 			sourceTree = "<group>";
 		};
+		1327D8981E82A4D200C6689E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1327D8991E82A4E700C6689E /* NITRecipe.h */,
+				1327D89A1E82A4E700C6689E /* NITRecipe.m */,
+				1327D89D1E82A99600C6689E /* NITPulseBundle.h */,
+				1327D89E1E82A99600C6689E /* NITPulseBundle.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		1327D8A51E83BE1500C6689E /* Installation */ = {
+			isa = PBXGroup;
+			children = (
+				1327D8A61E83BE3100C6689E /* NITInstallation.h */,
+				1327D8A71E83BE3100C6689E /* NITInstallation.m */,
+			);
+			name = Installation;
+			sourceTree = "<group>";
+		};
 		1349EE9A1E79274C000B0666 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
 				1349EE9B1E7927A1000B0666 /* NITUtils.h */,
 				1349EE9C1E7927A1000B0666 /* NITUtils.m */,
+				1327D8A11E83B7C400C6689E /* NITConstants.h */,
+				1327D8A21E83B7C400C6689E /* NITConstants.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -239,6 +277,7 @@
 				1349EEB51E796FF3000B0666 /* Geopolis */,
 				1349EE9A1E79274C000B0666 /* Utils */,
 				1352CA8F1E78338200C0E98E /* JSONAPI */,
+				1327D8A51E83BE1500C6689E /* Installation */,
 				1352CA8A1E78312400C0E98E /* Profile */,
 				1352CA851E78298A00C0E98E /* Network */,
 				1352CA671E7807FE00C0E98E /* NearITSDK.h */,
@@ -304,6 +343,7 @@
 		137838621E800EA8001C8CDE /* Recipes */ = {
 			isa = PBXGroup;
 			children = (
+				1327D8981E82A4D200C6689E /* Models */,
 				137838631E800EC1001C8CDE /* NITRecipesManager.h */,
 				137838641E800EC1001C8CDE /* NITRecipesManager.m */,
 			);
@@ -327,15 +367,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				1349EEB31E796511000B0666 /* NITNetworkProvider.h in Headers */,
+				1327D8A81E83BE3100C6689E /* NITInstallation.h in Headers */,
 				1352CA831E78294E00C0E98E /* NITManager.h in Headers */,
+				1327D89F1E82A99600C6689E /* NITPulseBundle.h in Headers */,
 				1349EEC41E7A95E3000B0666 /* NITNodesManager.h in Headers */,
 				13423EE31E7BCB07008CAAC8 /* NITGeofenceNode.h in Headers */,
 				1349EEB81E797045000B0666 /* NITGeopolisManager.h in Headers */,
 				1349EEAF1E795030000B0666 /* NITNetworkManager.h in Headers */,
+				1327D89B1E82A4E700C6689E /* NITRecipe.h in Headers */,
 				1352CA8D1E78313300C0E98E /* NITUserProfile.h in Headers */,
 				1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */,
 				1349EEA21E79325E000B0666 /* NITJSONAPI.h in Headers */,
 				1327D8961E82824800C6689E /* NITBeaconProximityManager.h in Headers */,
+				1327D8A31E83B7C400C6689E /* NITConstants.h in Headers */,
 				13423EDF1E7BC89D008CAAC8 /* NITBeaconNode.h in Headers */,
 				137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */,
 				1349EEC91E7AA1E3000B0666 /* NITResource.h in Headers */,
@@ -440,7 +484,7 @@
 				1327D8901E8266B700C6689E /* single_gf.json in Resources */,
 				1327D88D1E8266B700C6689E /* empty_config.json in Resources */,
 				1349EEAC1E7948FA000B0666 /* jsonapi_sample1.json in Resources */,
-				1327D8921E827EFC00C6689E /* beacon_areas_in_bg.json in Resources */,
+				1327D8AB1E83E6A300C6689E /* beacon_areas_in_bg.json in Resources */,
 				1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -453,15 +497,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				1352CA891E782B1600C0E98E /* NITConfiguration.m in Sources */,
+				1327D8A01E82A99600C6689E /* NITPulseBundle.m in Sources */,
 				1349EE9E1E7927A1000B0666 /* NITUtils.m in Sources */,
 				1349EEB91E797045000B0666 /* NITGeopolisManager.m in Sources */,
 				13423EE01E7BC89D008CAAC8 /* NITBeaconNode.m in Sources */,
+				1327D8A91E83BE3100C6689E /* NITInstallation.m in Sources */,
 				1352CA841E78294E00C0E98E /* NITManager.m in Sources */,
 				13423EE41E7BCB07008CAAC8 /* NITGeofenceNode.m in Sources */,
 				1349EEA31E79325E000B0666 /* NITJSONAPI.m in Sources */,
 				1349EEB01E795030000B0666 /* NITNetworkManager.m in Sources */,
+				1327D8A41E83B7C400C6689E /* NITConstants.m in Sources */,
 				1349EEA71E793413000B0666 /* NITJSONAPIResource.m in Sources */,
 				1327D8971E82824800C6689E /* NITBeaconProximityManager.m in Sources */,
+				1327D89C1E82A4E700C6689E /* NITRecipe.m in Sources */,
 				1352CA8E1E78313300C0E98E /* NITUserProfile.m in Sources */,
 				137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */,
 				1349EEB41E796511000B0666 /* NITNetworkProvider.m in Sources */,

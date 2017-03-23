@@ -8,10 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+@class NITJSONAPI;
+
 @interface NITNetworkProvider : NSObject
 
 + (NSURLRequest*)recipesList;
 + (NSURLRequest*)newProfileWithAppId:(NSString*)appId;
 + (NSURLRequest*)geopolisNodes;
++ (NSURLRequest*)newInstallationWithJsonApi:(NITJSONAPI*)jsonApi;
++ (NSURLRequest*)updateInstallationWithJsonApi:(NITJSONAPI*)jsonApi installationId:(NSString*)installationId;
 
 @end

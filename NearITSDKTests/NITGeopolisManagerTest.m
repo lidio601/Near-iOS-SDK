@@ -89,7 +89,7 @@
 
 - (void)testGeopolisNodes {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSString *path = [bundle pathForResource:@"gf_array" ofType:@"json"];
+    NSString *path = [bundle pathForResource:@"beacon_areas_in_bg" ofType:@"json"];
     
     NSError *jsonApiError;
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithContentsOfFile:path error:&jsonApiError];
