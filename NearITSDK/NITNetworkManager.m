@@ -9,6 +9,7 @@
 #import "NITNetworkManager.h"
 #import "NITConfiguration.h"
 #import "NITJSONAPI.h"
+#import "NITNetworkMock.h"
 
 #define NITNetowkrErrorDomain @"com.nearit.network"
 #define LogResponseOnError YES
@@ -25,6 +26,11 @@ static NSURLSession *session;
 }
 
 + (void)makeRequestWithURLRequest:(NSURLRequest *)request completionHandler:(void (^)(NSData * _Nullable, NSError * _Nullable))completionHandler {
+    NSData *data = [[NITNetworkMock sharedInstance] dataWithRequest:request];
+    if(data) {
+        completionHandler(data, nil);
+        return;
+    }
     NSURLSessionDataTask *task = [[NITNetworkManager defaultSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if(error) {
             completionHandler(data, error);
