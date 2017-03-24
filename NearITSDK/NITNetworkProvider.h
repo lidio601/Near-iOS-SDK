@@ -12,7 +12,7 @@
 
 @interface NITNetworkProvider : NSObject
 
-+ (NSURLRequest*)recipesList;
++ (NSURLRequest*)recipesProcessList;
 + (NSURLRequest*)newProfileWithAppId:(NSString*)appId;
 + (NSURLRequest*)geopolisNodes;
 + (NSURLRequest*)newInstallationWithJsonApi:(NITJSONAPI*)jsonApi;

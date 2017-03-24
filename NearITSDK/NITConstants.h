@@ -8,5 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, NITRegionEvent) {
+    NITRegionEventEnterArea,
+    NITRegionEventLeaveArea,
+    NITRegionEventImmediate,
+    NITRegionEventNear,
+    NITRegionEventFar,
+    NITRegionEventEnterPlace,
+    NITRegionEventLeavePlace,
+    NITRegionEventUnknown
+};
+
 extern NSErrorDomain const NITUserProfileErrorDomain;
 extern NSErrorDomain const NITInstallationErrorDomain;
+extern NSErrorDomain const NITReactionErrorDomain;

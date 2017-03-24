@@ -16,12 +16,30 @@
 
 @implementation NITNetworkProvider
 
-+ (NSURLRequest *)recipesList {
-    return [NITNetworkProvider requestWithPath:@"/recipes"];
++ (NSURLRequest *)recipesProcessList {
+    NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:@"/recipes/post"];
+    
+    NITConfiguration *config = [NITConfiguration defaultConfiguration];
+    NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
+    NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
+    resource.type = @"evaluation";
+    if (config.appId && config.profileId && config.installationId) {
+        NSMutableDictionary<NSString*, NSString*> *core = [[NSMutableDictionary alloc] init];
+        [core setObject:config.profileId forKey:@"profile_id"];
+        [core setObject:config.installationId forKey:@"installation_id"];
+        [core setObject:config.appId forKey:@"app_id"];
+        [resource addAttributeObject:core forKey:@"core"];
+    }
+    [jsonApi setDataWithResourceObject:resource];
+    NSDictionary *json = [jsonApi toDictionary];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    [request setHTTPBody:jsonData];
+    
+    return request;
 }
 
 + (NSURLRequest *)newProfileWithAppId:(NSString*)appId {
-    NSMutableURLRequest *request =[NITNetworkProvider requestWithPath:@"/plugins/congrego/profiles"];
+    NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:@"/plugins/congrego/profiles"];
     [request setHTTPMethod:@"POST"];
     
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
@@ -50,7 +68,7 @@
 
 + (NSURLRequest *)updateInstallationWithJsonApi:(NITJSONAPI *)jsonApi installationId:(NSString *)installationId {
     NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/installations/%@", installationId]];
-    [request setHTTPMethod:@"POST"];
+    [request setHTTPMethod:@"PUT"];
     
     NSDictionary *json = [jsonApi toDictionary];
     NSData *jsonDataBody = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];

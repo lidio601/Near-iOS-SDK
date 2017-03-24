@@ -14,21 +14,11 @@
 #import "NITNode.h"
 #import "NITBeaconNode.h"
 #import "NITBeaconProximityManager.h"
+#import "NITUtils.h"
 #import <CoreLocation/CoreLocation.h>
 
 NSErrorDomain const NITGeopolisErrorDomain = @"com.nearit.geopolis";
 NSString* const NodeKey = @"node";
-
-typedef NS_ENUM(NSInteger, NITRegionEvent) {
-    NITRegionEventEnterArea,
-    NITRegionEventLeaveArea,
-    NITRegionEventImmediate,
-    NITRegionEventNear,
-    NITRegionEventFar,
-    NITRegionEventEnterPlace,
-    NITRegionEventLeavePlace,
-    NITRegionEventUnknown
-};
 
 @interface NITGeopolisManager()<CLLocationManagerDelegate>
 
@@ -224,7 +214,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 
 - (void)triggerWithEvent:(NITRegionEvent)event node:(NITNode*)node { // It's only a stub for now
     if([self.recipesManager respondsToSelector:@selector(gotPulseWithPulsePlugin:pulseAction:pulseBundle:)]) {
-        NSString *pulseAction = [self stringFromRegionEvent:event];
+        NSString *pulseAction = [NITUtils stringFromRegionEvent:event];
         [self.recipesManager gotPulseWithPulsePlugin:self.pluginName pulseAction:pulseAction pulseBundle:node.identifier];
     }
 }
@@ -290,27 +280,6 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
 
 - (NSArray *)nodes {
     return [self.nodesManager nodes];
-}
-
-- (NSString*)stringFromRegionEvent:(NITRegionEvent)event {
-    switch (event) {
-        case NITRegionEventEnterPlace:
-            return @"enter_place";
-        case NITRegionEventLeavePlace:
-            return @"leave_place";
-        case NITRegionEventEnterArea:
-            return @"enter_area";
-        case NITRegionEventLeaveArea:
-            return @"leave_area";
-        case NITRegionEventImmediate:
-            return @"ranging.immediate";
-        case NITRegionEventNear:
-            return @"ranging.near";
-        case NITRegionEventFar:
-            return @"ranging.far";
-        default:
-            return @"";
-    }
 }
 
 - (NITRegionEvent)regionEventFromProximity:(CLProximity)proximity {

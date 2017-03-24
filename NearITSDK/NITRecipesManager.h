@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NITManager.h"
 
 @class NITJSONAPI;
 
@@ -18,6 +19,8 @@
 @end
 
 @interface NITRecipesManager : NSObject<NITRecipesManaging>
+
+@property (nonatomic, strong) id<NITManaging> _Nullable manager;
 
 - (void)refreshConfigWithCompletionHandler:(void (^_Nonnull)(NSError * _Nullable error))completionHandler;
 

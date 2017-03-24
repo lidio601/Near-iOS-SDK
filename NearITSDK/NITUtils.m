@@ -47,4 +47,25 @@
     return @"";
 }
 
++ (NSString*)stringFromRegionEvent:(NITRegionEvent)event {
+    switch (event) {
+        case NITRegionEventEnterPlace:
+            return @"enter_place";
+        case NITRegionEventLeavePlace:
+            return @"leave_place";
+        case NITRegionEventEnterArea:
+            return @"enter_area";
+        case NITRegionEventLeaveArea:
+            return @"leave_area";
+        case NITRegionEventImmediate:
+            return @"ranging.immediate";
+        case NITRegionEventNear:
+            return @"ranging.near";
+        case NITRegionEventFar:
+            return @"ranging.far";
+        default:
+            return @"";
+    }
+}
+
 @end

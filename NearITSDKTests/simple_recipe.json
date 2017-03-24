@@ -1,0 +1,36 @@
+{
+"data" : {
+"id" : "68594099-a211-42ac-99f0-a5cb0a4376b8",
+"type" : "recipes",
+"attributes" : {
+"state" : "finalized",
+"reaction_plugin_id" : "simple-notification",
+"active" : true,
+"created_at" : "2017-03-14T11:25:14.392Z",
+"labels" : {
+
+},
+"scheduling" : {
+"date" : {
+"to" : null,
+"from" : null
+},
+"timetable" : {
+
+}
+},
+"pulse_plugin_id" : "geopolis",
+"operation_plugin_id" : "congrego",
+"operation_bundle_id" : "05e3f3a3-7b3f-4898-8a12-0da03a3ff7f7",
+"notification" : {
+"title" : "Benvenuto nella BatCaverna",
+"body" : "Accendi la luce per vedere dove sei"
+},
+"updated_at" : "2017-03-14T11:27:00.830Z",
+"reaction_bundle_id" : null,
+"pulse_bundle_id" : "1cb0d78b-0299-4800-b781-59c4c37d8b3a",
+"kind" : "passive",
+"name" : null
+}
+}
+}

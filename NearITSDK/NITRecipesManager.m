@@ -25,7 +25,7 @@
 }
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))completionHandler {
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider recipesList] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider recipesProcessList] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         self.recipes = [json parseToArrayOfObjects];
         completionHandler(error);
     }];
@@ -48,7 +48,9 @@
 }
 
 - (void)gotRecipe:(NITRecipe*)recipe {
-    
+    if ([self.manager respondsToSelector:@selector(recipesManager:gotRecipe:)]) {
+        [self.manager recipesManager:self gotRecipe:recipe];
+    }
 }
 
 @end

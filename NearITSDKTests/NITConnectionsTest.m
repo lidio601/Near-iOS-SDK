@@ -22,6 +22,7 @@
 #define APIKEY @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJlMzRhN2Q5MC0xNGQyLTQ2YjgtODFmMC04MWEyYzkzZGQ0ZDAiLCJyb2xlX2tleSI6ImFwcCJ9fX0.2GvA499N8c1Vui9au7NzUWM8B10GWaha6ASCCgPPlR8"
 #define APPID @"e34a7d90-14d2-46b8-81f0-81a2c93dd4d0"
 #define PROFILEID @"6a2490f4-28b9-4e36-b0f6-2c97c86b0002"
+#define INSTALLATIONID @"fb56d2f1-0ef6-4333-b576-3efa8701b13d"
 #define BASE_URL @"https://dev-api.nearit.com"
 #define WAIT_TIME_EXPECTATION 4.0
 
@@ -50,6 +51,7 @@
     [[NITConfiguration defaultConfiguration] setApiKey:APIKEY];
     [[NITConfiguration defaultConfiguration] setAppId:APPID];
     [[NITConfiguration defaultConfiguration] setProfileId:PROFILEID];
+    [[NITConfiguration defaultConfiguration] setInstallationId:INSTALLATIONID];
 }
 
 - (void)tearDown {
@@ -67,9 +69,24 @@
 - (void)testListRecipes {
     XCTestExpectation *recipeExpectation = [self expectationWithDescription:@"List recipes"];
     
-    NSURL *url = [NSURL URLWithString:[BASE_URL stringByAppendingString:@"/recipes"]];
+    NSURL *url = [NSURL URLWithString:[BASE_URL stringByAppendingString:@"/recipes/process"]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"POST"];
     [self fillHeadersWithRequest:request];
+    
+    NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
+    NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
+    resource.type = @"evaluation";
+    NSMutableDictionary<NSString*, NSString*> *core = [[NSMutableDictionary alloc] init];
+    [core setObject:PROFILEID forKey:@"profile_id"];
+    [core setObject:INSTALLATIONID forKey:@"installation_id"];
+    [core setObject:APPID forKey:@"app_id"];
+    [resource addAttributeObject:core forKey:@"core"];
+    [jsonApi setDataWithResourceObject:resource];
+    NSDictionary *json = [jsonApi toDictionary];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    XCTAssertNotNil(jsonData);
+    [request setHTTPBody:jsonData];
     
     [NITNetworkManager makeRequestWithURLRequest:request jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         XCTAssertNil(error);
@@ -81,8 +98,11 @@
         
         [json registerClass:[NITRecipe class] forType:@"recipes"];
         
-        NSArray *recipes = [json parseToArrayOfObjects];
+        NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
         XCTAssertTrue([recipes count] > 0);
+        
+        NITRecipe *recipe = [recipes objectAtIndex:0];
+        XCTAssertNotNil(recipe.reactionPluginId);
         
         [recipeExpectation fulfill];
     }];

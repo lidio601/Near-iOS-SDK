@@ -12,13 +12,17 @@
 
 @interface NITRecipe : NITResource
 
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSDictionary<NSString*, id> *notification;
-@property (nonatomic, strong) NSDictionary<NSString*, id> *labels;
-@property (nonatomic, strong) NSString *pulsePluginId;
-@property (nonatomic, strong) NITResource *pulseBundle;
-@property (nonatomic, strong) NITResource *pulseAction;
+@property (nonatomic, strong) NSString * _Nullable name;
+@property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable notification;
+@property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable labels;
+@property (nonatomic, strong) NSString * _Nonnull pulsePluginId;
+@property (nonatomic, strong) NSString * _Nonnull reactionPluginId;
+@property (nonatomic, strong) NITResource * _Nonnull pulseBundle;
+@property (nonatomic, strong) NITResource * _Nonnull pulseAction;
 
 - (BOOL)isEvaluatedOnline;
+- (BOOL)isForeground;
+- (NSString* _Nullable)notificationTitle;
+- (NSString* _Nullable)notificationBody;
 
 @end
