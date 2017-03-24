@@ -17,8 +17,11 @@
 @property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable labels;
 @property (nonatomic, strong) NSString * _Nonnull pulsePluginId;
 @property (nonatomic, strong) NSString * _Nonnull reactionPluginId;
+@property (nonatomic, strong) NSString * _Nonnull reactionBundleId;
 @property (nonatomic, strong) NITResource * _Nonnull pulseBundle;
 @property (nonatomic, strong) NITResource * _Nonnull pulseAction;
+@property (nonatomic, strong) NITResource * _Nonnull reactionAction;
+@property (nonatomic, strong) NITResource * _Nonnull reactionBundle;
 
 - (BOOL)isEvaluatedOnline;
 - (BOOL)isForeground;

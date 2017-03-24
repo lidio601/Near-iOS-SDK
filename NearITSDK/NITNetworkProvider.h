@@ -17,5 +17,6 @@
 + (NSURLRequest*)geopolisNodes;
 + (NSURLRequest*)newInstallationWithJsonApi:(NITJSONAPI*)jsonApi;
 + (NSURLRequest*)updateInstallationWithJsonApi:(NITJSONAPI*)jsonApi installationId:(NSString*)installationId;
++ (NSURLRequest*)contentWithBundleId:(NSString*)bundleId;
 
 @end

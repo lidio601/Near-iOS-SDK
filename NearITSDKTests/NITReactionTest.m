@@ -11,6 +11,8 @@
 #import "NITRecipe.h"
 #import "NITSimpleNotificationReaction.h"
 #import "NITSimpleNotification.h"
+#import "NITContentReaction.h"
+#import "NITContent.h"
 
 @interface NITReactionTest : XCTestCase
 
@@ -42,6 +44,25 @@
         NITSimpleNotification *notification = (NITSimpleNotification*)content;
         XCTAssertNotNil(notification.notificationTitle);
         XCTAssertNotNil(notification.message);
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
+- (void)testContentNotification {
+    NITRecipe *recipe = [self recipeWithContentsOfFile:@"content_recipe"];
+    NITContentReaction *reaction = [[NITContentReaction alloc] init];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    
+    [reaction contentWithRecipe:recipe completionHandler:^(id _Nonnull content, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        XCTAssertNotNil(content);
+        XCTAssertTrue([content isKindOfClass:[NITContent class]]);
+        
+        NITContent *cntnt = (NITContent*)content;
+        XCTAssertTrue([cntnt.images count] > 0);
         
         [expectation fulfill];
     }];

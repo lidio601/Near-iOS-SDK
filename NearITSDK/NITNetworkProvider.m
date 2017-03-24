@@ -76,6 +76,11 @@
     return request;
 }
 
++ (NSURLRequest *)contentWithBundleId:(NSString *)bundleId {
+    NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/content-notification/contents/%@?include=images,audio,upload", bundleId]];
+    return request;
+}
+
 + (NSURLRequest *)geopolisNodes {
     return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/geopolis/nodes?filter[app_id]=%@&include=**.children", [[NITConfiguration defaultConfiguration] appId]]];
 }

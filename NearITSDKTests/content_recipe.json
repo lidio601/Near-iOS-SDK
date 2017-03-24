@@ -1,0 +1,38 @@
+{
+    "data" : [
+              {
+              "id" : "6fced5b1-b27a-40d3-8cb6-9503200aeb11",
+              "type" : "recipes",
+              "attributes" : {
+              "state" : "finalized",
+              "reaction_plugin_id" : "content-notification",
+              "active" : true,
+              "created_at" : "2017-03-24T10:37:00.733Z",
+              "labels" : {
+              
+              },
+              "scheduling" : {
+              "date" : {
+              "to" : null,
+              "from" : null
+              },
+              "timetable" : {
+              
+              }
+              },
+              "pulse_plugin_id" : "geopolis",
+              "operation_plugin_id" : "congrego",
+              "operation_bundle_id" : "136dcbe3-98de-4b93-b32e-a16a43914c7f",
+              "notification" : {
+              "title" : "Notifica con contenuti",
+              "body" : "Ci sono tanti bei contenuti che ti aspettano"
+              },
+              "updated_at" : "2017-03-24T10:41:55.139Z",
+              "reaction_bundle_id" : "e77d28fc-c6a0-4b9f-a28a-44e776119e25",
+              "pulse_bundle_id" : "8373e68b-7c5d-411c-9a9c-3cc7ebf039e4",
+              "kind" : "passive",
+              "name" : "Contenuto Spiderman"
+              }
+              }
+              ]
+}

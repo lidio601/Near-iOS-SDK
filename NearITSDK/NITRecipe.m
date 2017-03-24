@@ -15,7 +15,10 @@
     return @{ @"pulse_plugin_id" : @"pulsePluginId",
               @"pulse_bundle" : @"pulseBundle",
               @"pulse_action" : @"pulseAction",
-              @"reaction_plugin_id" : @"reactionPluginId"};
+              @"reaction_plugin_id" : @"reactionPluginId",
+              @"reaction_action" : @"reactionAction",
+              @"reaction_bundle" : @"reactionBundle",
+              @"reaction_bundle_id" : @"reactionBundleId" };
 }
 
 - (BOOL)isEvaluatedOnline {

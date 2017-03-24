@@ -19,7 +19,7 @@
         if(notification) {
             handler(notification, nil);
         } else {
-            NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:@"Invalid notification in recipe"}];
+            NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:100 userInfo:@{NSLocalizedDescriptionKey:@"Invalid notification in recipe"}];
             handler(nil, anError);
         }
     }

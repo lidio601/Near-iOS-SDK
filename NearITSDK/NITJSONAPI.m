@@ -12,7 +12,7 @@
 
 @interface NITJSONAPI()
 
-@property (nonatomic) NSMutableDictionary* internalJson;
+@property (nonatomic) NSDictionary* sourceJson;
 @property (nonatomic, strong) NSMutableArray<NITJSONAPIResource*> *resources;
 @property (nonatomic, strong) NSMutableArray<NITJSONAPIResource*> *included;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, Class> *registerdClass;
@@ -26,7 +26,6 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.internalJson = [[NSMutableDictionary alloc] init];
         self.resources = [[NSMutableArray alloc] init];
         self.included = [[NSMutableArray alloc] init];
         self.registerdClass = [[NSMutableDictionary alloc] init];
@@ -67,6 +66,7 @@
  */
 - (instancetype)initWithDictionary:(NSDictionary*)json {
     self = [self init];
+    self.sourceJson = json;
     
     id data = [json objectForKey:@"data"];
     if ([data isKindOfClass:[NSArray class]]) {
@@ -122,6 +122,20 @@
     }
     
     return [NSDictionary dictionaryWithDictionary:dict];
+}
+
+- (NSString *)description {
+    NSDictionary *dict = self.sourceJson;
+    if (dict == nil) {
+        dict = [self toDictionary];
+    }
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+    if(jsonData) {
+        return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    } else {
+        return @"";
+    }
 }
 
 - (void)registerClass:(Class)cls forType:(NSString *)type {
