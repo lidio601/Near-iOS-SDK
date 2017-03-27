@@ -197,7 +197,7 @@ NSString* const NodeKey = @"node";
         if ([region isKindOfClass:[CLBeaconRegion class]]) {
             [self triggerWithEvent:NITRegionEventLeaveArea node:exitedNode];
         } else {
-            [self triggerWithEvent:NITRegionEventEnterPlace node:exitedNode];
+            [self triggerWithEvent:NITRegionEventLeavePlace node:exitedNode];
         }
     } else {
         return;
@@ -205,9 +205,11 @@ NSString* const NodeKey = @"node";
     
     [self.beaconProximity removeRegionWithIdentifier:region.identifier];
     
-    self.currentNode = exitedNode.parent;
-    [self stopMonitoringNodes:self.currentNode.children];
-    [self startMonitoringNodes:[self.nodesManager siblingsWithNode:self.currentNode.parent]];
+    if (![exitedNode.parent.ID isEqualToString:self.currentNode.parent.ID]) {
+        self.currentNode = exitedNode.parent;
+        [self stopMonitoringNodes:self.currentNode.children];
+        [self startMonitoringNodes:[self.nodesManager siblingsWithNode:self.currentNode.parent]];
+    }
 }
 
 // MARK: - Trigger
