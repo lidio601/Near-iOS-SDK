@@ -19,7 +19,7 @@ public final class NearManager: NSObject, NITManagerDelegate {
     private var manager: NITManager!
     public var delegate: NearManagerDelegate?
     
-    init(apiKey: String) {
+    public init(apiKey: String) {
         super.init()
         manager = NITManager(apiKey: apiKey)
         manager.delegate = self
