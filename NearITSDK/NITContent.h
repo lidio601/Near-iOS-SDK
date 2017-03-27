@@ -8,9 +8,11 @@
 
 #import "NITResource.h"
 
+@class NITImage;
+
 @interface NITContent : NITResource
 
 @property (nonatomic, strong) NSString *content;
-@property (nonatomic, strong) NSArray<NITResource*> *images;
+@property (nonatomic, strong) NSArray<NITImage*> *images;
 
 @end

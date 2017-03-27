@@ -13,7 +13,7 @@
 #import "NITJSONAPI.h"
 #import "NITConstants.h"
 #import "NITRecipe.h"
-#import "NITResource.h"
+#import "NITImage.h"
 
 @implementation NITContentReaction
 
@@ -33,7 +33,7 @@
             handler(nil, anError);
         } else {
             [json registerClass:[NITContent class] forType:@"contents"];
-            [json registerClass:[NITResource class] forType:@"images"];
+            [json registerClass:[NITImage class] forType:@"images"];
             
             NSArray<NITContent*> *contents = [json parseToArrayOfObjects];
             if([contents count] > 0) {

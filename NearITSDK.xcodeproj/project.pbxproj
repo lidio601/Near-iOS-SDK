@@ -77,6 +77,8 @@
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
+		13824FF11E88F22100264BAC /* NITImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 13824FEF1E88F22100264BAC /* NITImage.h */; };
+		13824FF21E88F22100264BAC /* NITImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 13824FF01E88F22100264BAC /* NITImage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -167,6 +169,8 @@
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
 		137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NITGeopolisManager+Tests.m"; sourceTree = "<group>"; };
+		13824FEF1E88F22100264BAC /* NITImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITImage.h; sourceTree = "<group>"; };
+		13824FF01E88F22100264BAC /* NITImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITImage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -414,6 +418,8 @@
 			children = (
 				135A708A1E85448E00D4C9EC /* NITContent.h */,
 				135A708B1E85448E00D4C9EC /* NITContent.m */,
+				13824FEF1E88F22100264BAC /* NITImage.h */,
+				13824FF01E88F22100264BAC /* NITImage.m */,
 				135A70861E85328900D4C9EC /* NITContentReaction.h */,
 				135A70871E85328900D4C9EC /* NITContentReaction.m */,
 			);
@@ -456,6 +462,7 @@
 				1349EEAF1E795030000B0666 /* NITNetworkManager.h in Headers */,
 				1327D89B1E82A4E700C6689E /* NITRecipe.h in Headers */,
 				1352CA8D1E78313300C0E98E /* NITUserProfile.h in Headers */,
+				13824FF11E88F22100264BAC /* NITImage.h in Headers */,
 				1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */,
 				1349EEA21E79325E000B0666 /* NITJSONAPI.h in Headers */,
 				135A708C1E85448E00D4C9EC /* NITContent.h in Headers */,
@@ -588,6 +595,7 @@
 				1352CA891E782B1600C0E98E /* NITConfiguration.m in Sources */,
 				1327D8A01E82A99600C6689E /* NITPulseBundle.m in Sources */,
 				135A70891E85328900D4C9EC /* NITContentReaction.m in Sources */,
+				13824FF21E88F22100264BAC /* NITImage.m in Sources */,
 				135A707F1E85210300D4C9EC /* NITSimpleNotification.m in Sources */,
 				1349EE9E1E7927A1000B0666 /* NITUtils.m in Sources */,
 				1349EEB91E797045000B0666 /* NITGeopolisManager.m in Sources */,

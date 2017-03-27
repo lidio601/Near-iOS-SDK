@@ -13,6 +13,7 @@
 #import "NITSimpleNotification.h"
 #import "NITContentReaction.h"
 #import "NITContent.h"
+#import "NITImage.h"
 #import "NITNetworkMock.h"
 
 @interface NITReactionTest : XCTestCase
@@ -74,6 +75,11 @@
         NITContent *cntnt = (NITContent*)content;
         XCTAssertTrue([cntnt.images count] > 0);
         XCTAssert([cntnt.content containsString:@"Benvenuto e Benvenuti"]);
+        
+        NITImage *image = [cntnt.images objectAtIndex:0];
+        NSURL *smallSizeURL = [image smallSizeURL];
+        XCTAssertNotNil(smallSizeURL);
+        XCTAssertTrue([smallSizeURL.absoluteString containsString:@"square_300_file.jpeg"]);
         
         [expectation fulfill];
     }];
