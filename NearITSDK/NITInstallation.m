@@ -67,6 +67,9 @@ static NITInstallation *sharedInstallation;
     [resource addAttributeObject:@"0.1.0" forKey:@"sdk_version"];
     [resource addAttributeObject:config.appId forKey:@"app_id"];
     [resource addAttributeObject:config.profileId forKey:@"profile_id"];
+    if (config.deviceToken) {
+        [resource addAttributeObject:config.deviceToken forKey:@"device_identifier"];
+    }
     
     // FIXME: Check real status
     [resource addAttributeObject:[NSNumber numberWithBool:NO] forKey:@"bluetooth"];

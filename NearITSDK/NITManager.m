@@ -65,6 +65,14 @@
     }];
 }
 
+/**
+ * Set the APN token for push.
+ * @param deviceToken The token in string format
+ */
+- (void)setDeviceToken:(NSString *)deviceToken {
+    [[NITConfiguration defaultConfiguration] setDeviceToken:deviceToken];
+}
+
 
 // MARK: - NITManaging
 
