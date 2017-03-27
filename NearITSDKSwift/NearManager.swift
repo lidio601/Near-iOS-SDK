@@ -9,12 +9,12 @@
 import UIKit
 import NearITSDK
 
-protocol NearManagerDelegate {
+public protocol NearManagerDelegate {
     func manager(_ manager: NearManager, eventWithContent content: Any);
     func manager(_ manager: NearManager, eventFailureWithError error: Error);
 }
 
-class NearManager: NSObject, NITManagerDelegate {
+public final class NearManager: NSObject, NITManagerDelegate {
     
     private var manager: NITManager!
     public var delegate: NearManagerDelegate?
@@ -25,19 +25,19 @@ class NearManager: NSObject, NITManagerDelegate {
         manager.delegate = self
     }
     
-    func setDeviceToken(_ token: String) {
+    public func setDeviceToken(_ token: String) {
         manager.setDeviceToken(token)
     }
     
-    func refreshConfig() {
+    public func refreshConfig() {
         manager.refreshConfig()
     }
     
-    func manager(_ manager: NITManager, eventWithContent content: Any) {
+    public func manager(_ manager: NITManager, eventWithContent content: Any) {
         delegate?.manager(self, eventWithContent: content)
     }
 
-    func manager(_ manager: NITManager, eventFailureWithError error: Error) {
+    public func manager(_ manager: NITManager, eventFailureWithError error: Error) {
         delegate?.manager(self, eventFailureWithError: error);
     }
 }
