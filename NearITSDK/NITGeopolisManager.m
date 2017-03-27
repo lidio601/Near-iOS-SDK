@@ -64,6 +64,14 @@ NSString* const NodeKey = @"node";
 }
 
 - (BOOL)start {
+    if(self.started) {
+        return YES;
+    }
+    
+    if([[self.nodesManager roots] count] == 0) {
+        return NO;
+    }
+    
     CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
     if (authorizationStatus != kCLAuthorizationStatusAuthorizedWhenInUse && authorizationStatus != kCLAuthorizationStatusAuthorizedAlways) {
         return false;
@@ -75,6 +83,10 @@ NSString* const NodeKey = @"node";
 }
 
 - (BOOL)startForUnitTest {
+    if(self.started) {
+        return YES;
+    }
+    
     [self startMonitoringRoots];
     return YES;
 }

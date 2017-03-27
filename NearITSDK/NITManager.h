@@ -31,6 +31,8 @@
 
 - (instancetype _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey;
 
+- (void)start;
+- (void)stop;
 - (void)refreshConfig;
 - (void)setDeviceToken:(NSString* _Nonnull)deviceToken;
 

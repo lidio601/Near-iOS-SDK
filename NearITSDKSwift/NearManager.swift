@@ -25,6 +25,14 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.delegate = self
     }
     
+    public func start() {
+        manager.start()
+    }
+    
+    public func stop() {
+        manager.stop()
+    }
+    
     public func setDeviceToken(_ token: String) {
         manager.setDeviceToken(token)
     }

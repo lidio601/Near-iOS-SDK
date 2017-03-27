@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NITGeopolisManager *geopolisManager;
 @property (nonatomic, strong) NITRecipesManager *recipesManager;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NITReaction*> *reactions;
+@property (nonatomic) BOOL started;
 
 @end
 
@@ -33,14 +34,25 @@
         
         [self pluginSetup];
         [self reactionsSetup];
+        self.started = NO;
         
         [NITUserProfile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
-            if(error != nil) {
+            if(error == nil) {
                 [self refreshConfig];
             }
         }];
     }
     return self;
+}
+
+- (void)start {
+    self.started = YES;
+    [self.geopolisManager start];
+}
+
+- (void)stop {
+    self.started = NO;
+    [self.geopolisManager stop];
 }
 
 - (void)pluginSetup {
@@ -58,7 +70,9 @@
 
 - (void)refreshConfig {
     [self.geopolisManager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
-        
+        if(self.started) {
+            [self.geopolisManager start];
+        }
     }];
     [self.recipesManager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
         
