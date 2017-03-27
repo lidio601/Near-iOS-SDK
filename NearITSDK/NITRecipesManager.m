@@ -26,6 +26,7 @@
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))completionHandler {
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider recipesProcessList] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        [json registerClass:[NITRecipe class] forType:@"recipes"];
         self.recipes = [json parseToArrayOfObjects];
         completionHandler(error);
     }];

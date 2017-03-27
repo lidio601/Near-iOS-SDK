@@ -14,6 +14,7 @@
 #import "NITReaction.h"
 #import "NITSimpleNotificationReaction.h"
 #import "NITRecipe.h"
+#import "NITContentReaction.h"
 
 @interface NITManager()<NITManaging>
 
@@ -66,6 +67,7 @@
     self.reactions = [[NSMutableDictionary alloc] init];
     
     [self.reactions setObject:[[NITSimpleNotificationReaction alloc] init] forKey:@"simple-notification"];
+    [self.reactions setObject:[[NITContentReaction alloc] init] forKey:@"content-notification"];
 }
 
 - (void)refreshConfig {

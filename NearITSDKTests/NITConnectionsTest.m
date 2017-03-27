@@ -112,6 +112,22 @@
     }];
 }
 
+- (void)testRecipesProcess {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider recipesProcessList] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        XCTAssertNotNil(json);
+        [json registerClass:[NITRecipe class] forType:@"recipes"];
+        NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
+        XCTAssertTrue([recipes count] > 0);
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
 - (void)testNewProfile {
     XCTestExpectation *profileExpectation = [self expectationWithDescription:@"Profile created"];
     

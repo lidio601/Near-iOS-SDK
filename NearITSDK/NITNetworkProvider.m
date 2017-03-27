@@ -17,7 +17,8 @@
 @implementation NITNetworkProvider
 
 + (NSURLRequest *)recipesProcessList {
-    NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:@"/recipes/post"];
+    NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:@"/recipes/process"];
+    [request setHTTPMethod:@"POST"];
     
     NITConfiguration *config = [NITConfiguration defaultConfiguration];
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
