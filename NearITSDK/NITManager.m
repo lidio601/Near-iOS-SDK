@@ -75,7 +75,7 @@
         [reaction contentWithRecipe:recipe completionHandler:^(id _Nonnull content, NSError * _Nullable error) {
             if(error) {
                 if([self.delegate respondsToSelector:@selector(manager:eventFailureWithError:)]) {
-                    [self.delegate manager:self eventWithContent:error];
+                    [self.delegate manager:self eventFailureWithError:error];
                 }
             } else {
                 //Notify the delegate
