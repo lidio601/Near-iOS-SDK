@@ -69,14 +69,18 @@
         if (error) {
             self.contents = [self.cacheManager loadArrayForKey:CACHE_KEY];
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:102 userInfo:@{NSLocalizedDescriptionKey:@"Invalid contents data", NSUnderlyingErrorKey: error}];
-            handler(anError);
+            if(handler) {
+                handler(anError);
+            }
         } else {
             [json registerClass:[NITContent class] forType:@"contents"];
             [json registerClass:[NITImage class] forType:@"images"];
             
             self.contents = [json parseToArrayOfObjects];
             [self.cacheManager saveWithArray:self.contents forKey:CACHE_KEY];
-            handler(nil);
+            if (handler) {
+                handler(nil);
+            }
         }
     }];
 }

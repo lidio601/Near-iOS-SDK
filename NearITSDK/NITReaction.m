@@ -42,8 +42,10 @@
                                  userInfo:nil];
 }
 
-- (void)refreshConfig {
-    
+- (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))handler {
+    if(handler) {
+        handler(nil);
+    }
 }
 
 @end
