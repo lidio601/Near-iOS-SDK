@@ -88,4 +88,26 @@ static NITCacheManager *defaultCache;
     return [[NSFileManager defaultManager] fileExistsAtPath:filePath];
 }
 
+- (void)removeAllItemsWithCompletionHandler:(void(^)(void))handler {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSString *appPath = [self appDirectory];
+        NSArray *dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:appPath error:nil];
+        for(NSString *filename in dirContents) {
+            NSString *filePath = [appPath stringByAppendingPathComponent:filename];
+            [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+        }
+        if (handler) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                handler();
+            });
+        }
+    });
+}
+
+- (NSInteger)numberOfStoredKeys {
+    NSString *filePath = [self appDirectory];
+    NSArray *dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:filePath error:nil];
+    return [dirContents count];
+}
+
 @end

@@ -12,10 +12,13 @@
 
 - (instancetype _Nonnull)initWithAppId:(NSString* _Nonnull)appId;
 
+- (void)setAppId:(NSString * _Nonnull)appId;
 - (NSString* _Nonnull)appDirectory;
 - (void)saveWithArray:(NSArray* _Nonnull)array forKey:(NSString* _Nonnull)key;
 - (NSArray* _Nullable)loadArrayForKey:(NSString* _Nonnull)key;
 - (BOOL)removeKey:(NSString* _Nonnull)key;
 - (BOOL)existsItemForKey:(NSString* _Nonnull)key;
+- (void)removeAllItemsWithCompletionHandler:(void(^_Nullable)(void))handler;
+- (NSInteger)numberOfStoredKeys;
 
 @end
