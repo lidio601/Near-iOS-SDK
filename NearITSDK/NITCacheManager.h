@@ -10,6 +10,7 @@
 
 @interface NITCacheManager : NSObject
 
++ (instancetype _Nonnull)sharedInstance;
 - (instancetype _Nonnull)initWithAppId:(NSString* _Nonnull)appId;
 
 - (void)setAppId:(NSString * _Nonnull)appId;

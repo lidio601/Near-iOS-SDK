@@ -80,6 +80,7 @@
 		137E38A41E8A4464008E83E6 /* NITCacheManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137E38A21E8A4464008E83E6 /* NITCacheManager.h */; };
 		137E38A51E8A4464008E83E6 /* NITCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137E38A31E8A4464008E83E6 /* NITCacheManager.m */; };
 		137E38A71E8A4AA6008E83E6 /* NITCacheManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 137E38A61E8A4AA6008E83E6 /* NITCacheManagerTest.m */; };
+		137E38A91E8A6B16008E83E6 /* contents1.json in Resources */ = {isa = PBXBuildFile; fileRef = 137E38A81E8A6B16008E83E6 /* contents1.json */; };
 		13824FF11E88F22100264BAC /* NITImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 13824FEF1E88F22100264BAC /* NITImage.h */; };
 		13824FF21E88F22100264BAC /* NITImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 13824FF01E88F22100264BAC /* NITImage.m */; };
 		1382501D1E88F88500264BAC /* NearITSDKSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 138250141E88F88500264BAC /* NearITSDKSwift.framework */; };
@@ -194,6 +195,7 @@
 		137E38A21E8A4464008E83E6 /* NITCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITCacheManager.h; sourceTree = "<group>"; };
 		137E38A31E8A4464008E83E6 /* NITCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITCacheManager.m; sourceTree = "<group>"; };
 		137E38A61E8A4AA6008E83E6 /* NITCacheManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITCacheManagerTest.m; sourceTree = "<group>"; };
+		137E38A81E8A6B16008E83E6 /* contents1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = contents1.json; sourceTree = "<group>"; };
 		13824FEF1E88F22100264BAC /* NITImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITImage.h; sourceTree = "<group>"; };
 		13824FF01E88F22100264BAC /* NITImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITImage.m; sourceTree = "<group>"; };
 		138250141E88F88500264BAC /* NearITSDKSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NearITSDKSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -463,6 +465,7 @@
 				135A70831E85281F00D4C9EC /* simple_recipe.json */,
 				135A708E1E8547AF00D4C9EC /* content_recipe.json */,
 				135A70961E8555CB00D4C9EC /* response_content_reaction.json */,
+				137E38A81E8A6B16008E83E6 /* contents1.json */,
 			);
 			name = Reactions;
 			sourceTree = "<group>";
@@ -717,6 +720,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1327D88E1E8266B700C6689E /* gf_array.json in Resources */,
+				137E38A91E8A6B16008E83E6 /* contents1.json in Resources */,
 				135A70841E85281F00D4C9EC /* simple_recipe.json in Resources */,
 				1327D8901E8266B700C6689E /* single_gf.json in Resources */,
 				1327D88D1E8266B700C6689E /* empty_config.json in Resources */,

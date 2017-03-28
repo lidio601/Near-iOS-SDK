@@ -9,7 +9,21 @@
 #import "NITResource.h"
 #import "NITJSONAPIResource.h"
 
+#define ResourceKey @"resource"
+
 @implementation NITResource
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+    if (self) {
+        self.resourceObject = [aDecoder decodeObjectForKey:ResourceKey];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.resourceObject forKey:ResourceKey];
+}
 
 - (id)valueForUndefinedKey:(NSString *)key {
     return nil;

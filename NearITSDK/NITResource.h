@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 @class NITJSONAPIResource;
 
-@interface NITResource : NSObject
+@interface NITResource : NSObject<NSCoding>
 
 @property (nonatomic, strong) NITJSONAPIResource* _Nullable resourceObject;
 

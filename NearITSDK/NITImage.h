@@ -8,7 +8,7 @@
 
 #import "NITResource.h"
 
-@interface NITImage : NITResource
+@interface NITImage : NITResource<NSCoding>
 
 @property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable image;
 

@@ -10,7 +10,7 @@
 
 @class NITImage;
 
-@interface NITContent : NITResource
+@interface NITContent : NITResource<NSCoding>
 
 @property (nonatomic, strong) NSString *content;
 @property (nonatomic, strong) NSArray<NITImage*> *images;

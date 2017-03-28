@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NITJSONAPIResource : NSObject
+@interface NITJSONAPIResource : NSObject<NSCoding>
 
 @property (nonatomic, strong) id _Nullable ID;
 @property (nonatomic, strong) NSString * _Nonnull type;

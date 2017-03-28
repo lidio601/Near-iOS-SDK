@@ -18,5 +18,6 @@
 + (NSURLRequest*)newInstallationWithJsonApi:(NITJSONAPI*)jsonApi;
 + (NSURLRequest*)updateInstallationWithJsonApi:(NITJSONAPI*)jsonApi installationId:(NSString*)installationId;
 + (NSURLRequest*)contentWithBundleId:(NSString*)bundleId;
++ (NSURLRequest*)contents;
 
 @end

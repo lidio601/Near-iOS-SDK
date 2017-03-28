@@ -8,6 +8,11 @@
 
 #import "NITJSONAPIResource.h"
 
+#define IDKey @"ID"
+#define TypeKey @"type"
+#define AttributesKey @"attributes"
+#define RelationshipsKey @"relationships"
+
 @interface NITJSONAPIResource()
 
 @property (nonatomic, strong) NSMutableDictionary<NSString*, id> *attributes;
@@ -23,6 +28,24 @@
         self.attributes = [[NSMutableDictionary alloc] init];
     }
     return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+    if (self) {
+        self.ID = [aDecoder decodeObjectForKey:IDKey];
+        self.type = [aDecoder decodeObjectForKey:TypeKey];
+        self.attributes = [aDecoder decodeObjectForKey:AttributesKey];
+        self.relationships = [aDecoder decodeObjectForKey:RelationshipsKey];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.ID forKey:IDKey];
+    [aCoder encodeObject:self.type forKey:TypeKey];
+    [aCoder encodeObject:self.attributes forKey:AttributesKey];
+    [aCoder encodeObject:self.relationships forKey:RelationshipsKey];
 }
 
 - (void)addAttributeObject:(id)object forKey:(NSString*)key {

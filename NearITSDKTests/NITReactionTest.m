@@ -34,6 +34,12 @@
         }
         return NO;
     }];
+    [[NITNetworkMock sharedInstance] registerData:[NSData data] withTest:^BOOL(NSURLRequest * _Nonnull request) {
+        if([request.URL.absoluteString containsString:@"/plugins/content-notification/contents/c66db20c-20c4-4768-98e2-daf24def7722"]) {
+            return YES;
+        }
+        return NO;
+    }];
 }
 
 - (void)tearDown {
@@ -87,6 +93,27 @@
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
+- (void)testCachedContentNotification {
+    NSArray<NITContent*> *contents = [self contentsWithContentsOfFile:@"contents1"];
+    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"content-test"];
+    [cacheManager saveWithArray:contents forKey:@"ContentReaction"];
+    NITRecipe *recipe = [self recipeWithContentsOfFile:@"content_recipe"];
+    recipe.reactionBundleId = @"c66db20c-20c4-4768-98e2-daf24def7722";
+    NITContentReaction *reaction = [[NITContentReaction alloc] initWithCacheManager:cacheManager];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    
+    [reaction contentWithRecipe:recipe completionHandler:^(id  _Nonnull content, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        XCTAssertNotNil(content);
+        
+        [cacheManager removeKey:@"ContentReaction"];
+        [expectation fulfill];
+    }];
+    
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
 - (NITRecipe*)recipeWithContentsOfFile:(NSString*)filename {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *path = [bundle pathForResource:filename ofType:@"json"];
@@ -101,6 +128,23 @@
     XCTAssertTrue([recipes count] > 0);
     
     return [recipes objectAtIndex:0];
+}
+
+- (NSArray<NITContent*>*)contentsWithContentsOfFile:(NSString*)filename {
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *path = [bundle pathForResource:filename ofType:@"json"];
+    
+    NSError *jsonApiError;
+    NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithContentsOfFile:path error:&jsonApiError];
+    XCTAssertNil(jsonApiError);
+    
+    [jsonApi registerClass:[NITContent class] forType:@"contents"];
+    [jsonApi registerClass:[NITImage class] forType:@"images"];
+    
+    NSArray<NITContent*> *contents = [jsonApi parseToArrayOfObjects];
+    XCTAssertTrue([contents count] > 0);
+    
+    return contents;
 }
 
 @end

@@ -201,4 +201,17 @@
     [self waitForExpectationsWithTimeout:WAIT_TIME_EXPECTATION handler:nil];
 }
 
+- (void)testContents {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider contents] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        XCTAssertNotNil(json);
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
 @end

@@ -15,9 +15,26 @@
 #import "NITRecipe.h"
 #import "NITImage.h"
 
+#define CACHE_KEY @"ContentReaction"
+
+@interface NITContentReaction()
+
+@property (nonatomic, strong) NSArray<NITContent*> *contents;
+
+@end
+
 @implementation NITContentReaction
 
 - (void)contentWithRecipe:(NITRecipe *)recipe completionHandler:(void (^)(id _Nonnull content, NSError * _Nullable error))handler {
+    if (self.contents == nil) {
+        self.contents = [self.cacheManager loadArrayForKey:CACHE_KEY];
+    }
+    for(NITContent *content in self.contents) {
+        if([content.ID isEqualToString:recipe.reactionBundleId]) {
+            handler(content, nil);
+            return;
+        }
+    }
     [self requestSingleReactionWithBundleId:recipe.reactionBundleId completionHandler:^(id content, NSError *requestError) {
         if(handler) {
             handler(content, requestError);
@@ -42,6 +59,27 @@
             } else {
                 NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"Invalid content data"}];
                 handler(nil, anError);
+            }
+        }
+    }];
+}
+
+- (void)refreshConfigWithCompletionHandler:(void(^)(NSError * _Nullable error))handler {
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider contents] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        if (error) {
+            NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:102 userInfo:@{NSLocalizedDescriptionKey:@"Invalid contents data", NSUnderlyingErrorKey: error}];
+            handler(anError);
+        } else {
+            [json registerClass:[NITContent class] forType:@"contents"];
+            [json registerClass:[NITImage class] forType:@"images"];
+            
+            self.contents = [json parseToArrayOfObjects];
+            if([self.contents count] > 0) {
+                [self.cacheManager saveWithArray:self.contents forKey:CACHE_KEY];
+                handler(nil);
+            } else {
+                NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:102 userInfo:@{NSLocalizedDescriptionKey:@"Invalid contents data"}];
+                handler(anError);
             }
         }
     }];

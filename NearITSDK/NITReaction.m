@@ -16,6 +16,19 @@
 
 @implementation NITReaction
 
+- (instancetype)init {
+    self = [self initWithCacheManager:[NITCacheManager sharedInstance]];
+    return self;
+}
+
+- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager {
+    self = [super init];
+    if (self) {
+        self.cacheManager = cacheManager;
+    }
+    return self;
+}
+
 - (NSString *)pluginName {
     return @"";
 }
@@ -27,6 +40,10 @@
     @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                    reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                  userInfo:nil];
+}
+
+- (void)refreshConfig {
+    
 }
 
 @end

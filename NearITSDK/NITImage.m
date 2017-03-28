@@ -8,6 +8,8 @@
 
 #import "NITImage.h"
 
+#define ImageKey @"image"
+
 @implementation NITImage
 
 - (NSURL *)smallSizeURL {
@@ -17,6 +19,19 @@
         return [NSURL URLWithString:urlString];
     }
     return nil;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        self.image = [aDecoder decodeObjectForKey:ImageKey];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.image forKey:ImageKey];
 }
 
 @end
