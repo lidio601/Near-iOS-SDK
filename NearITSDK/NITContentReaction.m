@@ -67,6 +67,7 @@
 - (void)refreshConfigWithCompletionHandler:(void(^)(NSError * _Nullable error))handler {
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider contents] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
+            self.contents = [self.cacheManager loadArrayForKey:CACHE_KEY];
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:102 userInfo:@{NSLocalizedDescriptionKey:@"Invalid contents data", NSUnderlyingErrorKey: error}];
             handler(anError);
         } else {
@@ -78,6 +79,7 @@
                 [self.cacheManager saveWithArray:self.contents forKey:CACHE_KEY];
                 handler(nil);
             } else {
+                self.contents = [self.cacheManager loadArrayForKey:CACHE_KEY];
                 NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:102 userInfo:@{NSLocalizedDescriptionKey:@"Invalid contents data"}];
                 handler(anError);
             }
