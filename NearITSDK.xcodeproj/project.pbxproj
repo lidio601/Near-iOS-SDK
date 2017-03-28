@@ -77,6 +77,9 @@
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
+		137E38A41E8A4464008E83E6 /* NITCacheManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137E38A21E8A4464008E83E6 /* NITCacheManager.h */; };
+		137E38A51E8A4464008E83E6 /* NITCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137E38A31E8A4464008E83E6 /* NITCacheManager.m */; };
+		137E38A71E8A4AA6008E83E6 /* NITCacheManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 137E38A61E8A4AA6008E83E6 /* NITCacheManagerTest.m */; };
 		13824FF11E88F22100264BAC /* NITImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 13824FEF1E88F22100264BAC /* NITImage.h */; };
 		13824FF21E88F22100264BAC /* NITImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 13824FF01E88F22100264BAC /* NITImage.m */; };
 		1382501D1E88F88500264BAC /* NearITSDKSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 138250141E88F88500264BAC /* NearITSDKSwift.framework */; };
@@ -188,6 +191,9 @@
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
 		137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NITGeopolisManager+Tests.m"; sourceTree = "<group>"; };
+		137E38A21E8A4464008E83E6 /* NITCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITCacheManager.h; sourceTree = "<group>"; };
+		137E38A31E8A4464008E83E6 /* NITCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITCacheManager.m; sourceTree = "<group>"; };
+		137E38A61E8A4AA6008E83E6 /* NITCacheManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITCacheManagerTest.m; sourceTree = "<group>"; };
 		13824FEF1E88F22100264BAC /* NITImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITImage.h; sourceTree = "<group>"; };
 		13824FF01E88F22100264BAC /* NITImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITImage.m; sourceTree = "<group>"; };
 		138250141E88F88500264BAC /* NearITSDKSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NearITSDKSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -356,6 +362,7 @@
 		1352CA661E7807FE00C0E98E /* NearITSDK */ = {
 			isa = PBXGroup;
 			children = (
+				137E389F1E8A4436008E83E6 /* Cache */,
 				135A70721E85039200D4C9EC /* Reactions */,
 				137838621E800EA8001C8CDE /* Recipes */,
 				1349EEB51E796FF3000B0666 /* Geopolis */,
@@ -388,6 +395,7 @@
 				13423EE51E7BD451008CAAC8 /* NITGeopolisManagerTest.m */,
 				135A70801E8525F700D4C9EC /* NITReactionTest.m */,
 				1352CA741E7807FE00C0E98E /* Info.plist */,
+				137E38A61E8A4AA6008E83E6 /* NITCacheManagerTest.m */,
 			);
 			path = NearITSDKTests;
 			sourceTree = "<group>";
@@ -491,6 +499,15 @@
 			name = Classes;
 			sourceTree = "<group>";
 		};
+		137E389F1E8A4436008E83E6 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				137E38A21E8A4464008E83E6 /* NITCacheManager.h */,
+				137E38A31E8A4464008E83E6 /* NITCacheManager.m */,
+			);
+			name = Cache;
+			sourceTree = "<group>";
+		};
 		138250151E88F88500264BAC /* NearITSDKSwift */ = {
 			isa = PBXGroup;
 			children = (
@@ -526,6 +543,7 @@
 				1349EEB81E797045000B0666 /* NITGeopolisManager.h in Headers */,
 				1349EEAF1E795030000B0666 /* NITNetworkManager.h in Headers */,
 				1327D89B1E82A4E700C6689E /* NITRecipe.h in Headers */,
+				137E38A41E8A4464008E83E6 /* NITCacheManager.h in Headers */,
 				1352CA8D1E78313300C0E98E /* NITUserProfile.h in Headers */,
 				13824FF11E88F22100264BAC /* NITImage.h in Headers */,
 				1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */,
@@ -645,6 +663,7 @@
 					1352CA631E7807FE00C0E98E = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = H673MARJ2R;
+						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
 					1352CA6C1E7807FE00C0E98E = {
@@ -748,6 +767,7 @@
 				1327D8A41E83B7C400C6689E /* NITConstants.m in Sources */,
 				1349EEA71E793413000B0666 /* NITJSONAPIResource.m in Sources */,
 				135A70931E854F3200D4C9EC /* NITNetworkMock.m in Sources */,
+				137E38A51E8A4464008E83E6 /* NITCacheManager.m in Sources */,
 				1327D8971E82824800C6689E /* NITBeaconProximityManager.m in Sources */,
 				1327D89C1E82A4E700C6689E /* NITRecipe.m in Sources */,
 				1352CA8E1E78313300C0E98E /* NITUserProfile.m in Sources */,
@@ -766,6 +786,7 @@
 			files = (
 				1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */,
 				1352CA911E78372B00C0E98E /* NITUtilsTest.m in Sources */,
+				137E38A71E8A4AA6008E83E6 /* NITCacheManagerTest.m in Sources */,
 				1349EEA91E793834000B0666 /* NITJSONAPITests.m in Sources */,
 				1352CA801E7808DA00C0E98E /* NITConnectionsTest.m in Sources */,
 				13423EE61E7BD451008CAAC8 /* NITGeopolisManagerTest.m in Sources */,
@@ -911,6 +932,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = H673MARJ2R;
@@ -924,6 +946,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nearit.NearITSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -931,6 +955,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = H673MARJ2R;
@@ -944,6 +969,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nearit.NearITSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1078,6 +1104,7 @@
 				138250261E88F88500264BAC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1382502A1E88F88500264BAC /* Build configuration list for PBXNativeTarget "NearITSDKSwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -1086,6 +1113,7 @@
 				138250281E88F88500264BAC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
