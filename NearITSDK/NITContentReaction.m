@@ -75,14 +75,8 @@
             [json registerClass:[NITImage class] forType:@"images"];
             
             self.contents = [json parseToArrayOfObjects];
-            if([self.contents count] > 0) {
-                [self.cacheManager saveWithArray:self.contents forKey:CACHE_KEY];
-                handler(nil);
-            } else {
-                self.contents = [self.cacheManager loadArrayForKey:CACHE_KEY];
-                NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:102 userInfo:@{NSLocalizedDescriptionKey:@"Invalid contents data"}];
-                handler(anError);
-            }
+            [self.cacheManager saveWithArray:self.contents forKey:CACHE_KEY];
+            handler(nil);
         }
     }];
 }
