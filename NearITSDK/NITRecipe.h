@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSString * _Nullable name;
 @property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable notification;
 @property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable labels;
+@property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable scheduling;
 @property (nonatomic, strong) NSString * _Nonnull pulsePluginId;
 @property (nonatomic, strong) NSString * _Nonnull reactionPluginId;
 @property (nonatomic, strong) NSString * _Nonnull reactionBundleId;
@@ -27,5 +28,6 @@
 - (BOOL)isForeground;
 - (NSString* _Nullable)notificationTitle;
 - (NSString* _Nullable)notificationBody;
+- (BOOL)isScheduledNow:(NSDate* _Nonnull)now;
 
 @end

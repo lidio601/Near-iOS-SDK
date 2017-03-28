@@ -10,14 +10,21 @@
 "labels" : {
 
 },
-"scheduling" : {
-"date" : {
-"to" : null,
-"from" : null
-},
-"timetable" : {
-
-}
+"scheduling": {
+    "date": {
+        "to": "2017-03-05",
+        "from": "2017-02-27"
+    },
+    "days": [
+             "Mon",
+             "Tue",
+             "Fri",
+             "Sat"
+             ],
+    "timetable": {
+        "to": "18:00:00",
+        "from": "08:00:00"
+    }
 },
 "pulse_plugin_id" : "geopolis",
 "operation_plugin_id" : "congrego",

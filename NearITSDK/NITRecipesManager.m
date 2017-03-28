@@ -43,7 +43,17 @@
         }
     }
     
-    if ([matchingRecipes count] > 0) {
+    NSDate *now = [NSDate date];
+    NSMutableArray<NITRecipe*> *validRecipes = [[NSMutableArray alloc] init];
+    for (NITRecipe *recipe in matchingRecipes) {
+        if([recipe isScheduledNow:now]) {
+            [validRecipes addObject:recipe];
+        }
+    }
+    
+    if ([validRecipes count] == 0) {
+        // TODO: Online pulse evaluation
+    } else {
         [self gotRecipe:[matchingRecipes objectAtIndex:0]];
     }
 }

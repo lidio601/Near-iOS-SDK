@@ -56,4 +56,44 @@
     return nil;
 }
 
+- (BOOL)isScheduledNow:(NSDate*)now {
+    // TODO: Timetable and Day valid
+    return (self.scheduling == nil || [self.scheduling isEqual:[NSNull null]]) || ([self isDateValid:now]);
+}
+
+- (BOOL)isDateValid:(NSDate*)now {
+    BOOL valid = YES;
+    NSDictionary<NSString*, id> *date = [self.scheduling objectForKey:@"date"];
+    if(date == nil || [date isEqual:[NSNull null]]) {
+        return YES;
+    }
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    
+    id from = [date objectForKey:@"from"];
+    id to = [date objectForKey:@"to"];
+    
+    if (from != nil && ![from isEqual:[NSNull null]]) {
+        NSDate *fromDate = [dateFormatter dateFromString:from];
+        NSComparisonResult result = [fromDate compare:now];
+        if(result == NSOrderedSame || result == NSOrderedAscending) {
+            valid &= YES;
+        } else {
+            valid &= NO;
+        }
+    }
+    if (to != nil && ![to isEqual:[NSNull null]]) {
+        NSDate *toDate = [dateFormatter dateFromString:to];
+        NSComparisonResult result = [toDate compare:now];
+        if(result == NSOrderedSame || result == NSOrderedDescending) {
+            valid &= YES;
+        } else {
+            valid &= NO;
+        }
+    }
+    
+    return valid;
+}
+
 @end
