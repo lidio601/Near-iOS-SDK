@@ -80,6 +80,10 @@
     [self.recipesManager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
         
     }];
+    
+    for(NITReaction *reaction in self.reactions) {
+        [reaction refreshConfigWithCompletionHandler:nil];
+    }
 }
 
 /**
