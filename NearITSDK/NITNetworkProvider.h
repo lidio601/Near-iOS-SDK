@@ -20,5 +20,6 @@
 + (NSURLRequest*)updateInstallationWithJsonApi:(NITJSONAPI*)jsonApi installationId:(NSString*)installationId;
 + (NSURLRequest*)contentWithBundleId:(NSString*)bundleId;
 + (NSURLRequest*)contents;
++ (NSURLRequest*)sendTrackingsWithJsonApi:(NITJSONAPI*)jsonApi;
 
 @end

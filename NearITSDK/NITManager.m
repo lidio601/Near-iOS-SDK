@@ -102,6 +102,7 @@
     
     NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
     if(recipeId) {
+        [self.recipesManager sendTracking:recipeId];
         [self.recipesManager processRecipe:recipeId];
     }
 }

@@ -11,6 +11,8 @@
 #import "NITNetworkProvider.h"
 #import "NITJSONAPI.h"
 #import "NITRecipe.h"
+#import "NITJSONAPIResource.h"
+#import "NITConfiguration.h"
 
 @interface NITRecipesManager()
 
@@ -68,6 +70,29 @@
                 [self gotRecipe:recipe];
             }
         }
+    }];
+}
+
+- (void)sendTracking:(NSString *)recipeId {
+    NITConfiguration *config = [NITConfiguration defaultConfiguration];
+    NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
+    NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
+    resource.type = @"trackings";
+    [resource addAttributeObject:config.profileId forKey:@"profile_id"];
+    [resource addAttributeObject:config.installationId forKey:@"installation_id"];
+    [resource addAttributeObject:config.appId forKey:@"app_id"];
+    [resource addAttributeObject:recipeId forKey:@"recipe_id"];
+    // TODO: Pass event as argument
+    [resource addAttributeObject:@"engaged" forKey:@"event"];
+    
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    [resource addAttributeObject:[dateFormatter stringFromDate:[NSDate date]] forKey:@"tracked_at"];
+    
+    [jsonApi setDataWithResourceObject:resource];
+    
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider sendTrackingsWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        
     }];
 }
 

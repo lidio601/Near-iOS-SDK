@@ -96,6 +96,17 @@
     return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/geopolis/nodes?filter[app_id]=%@&include=**.children", [[NITConfiguration defaultConfiguration] appId]]];
 }
 
++ (NSURLRequest *)sendTrackingsWithJsonApi:(NITJSONAPI *)jsonApi {
+    NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:@"/trackings"];
+    [request setHTTPMethod:@"POST"];
+    NSDictionary *json = [jsonApi toDictionary];
+    NSData *jsonDataBody = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    [request setHTTPBody:jsonDataBody];
+    return request;
+}
+
+// MARK: - Private functions
+
 + (NSMutableURLRequest*)requestWithPath:(NSString*)path {
     NSURL *url = [NSURL URLWithString:[BASE_URL stringByAppendingString:path]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];

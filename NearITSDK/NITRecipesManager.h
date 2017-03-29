@@ -24,5 +24,6 @@
 
 - (void)refreshConfigWithCompletionHandler:(void (^_Nonnull)(NSError * _Nullable error))completionHandler;
 - (void)processRecipe:(NSString* _Nonnull)recipeId;
+- (void)sendTracking:(NSString* _Nonnull)recipeId;
 
 @end
