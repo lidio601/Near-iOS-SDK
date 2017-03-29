@@ -91,6 +91,21 @@
     [[NITInstallation sharedInstance] registerInstallationWithCompletionHandler:nil];
 }
 
+/**
+ * Process a recipe from a remote notification.
+ * @param userInfo The remote notification userInfo dictionary
+ */
+- (void)processRecipeWithUserInfo:(NSDictionary<NSString *,id> *)userInfo {
+    if(userInfo == nil) {
+        return;
+    }
+    
+    NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
+    if(recipeId) {
+        [self.recipesManager processRecipe:recipeId];
+    }
+}
+
 
 // MARK: - NITManaging
 

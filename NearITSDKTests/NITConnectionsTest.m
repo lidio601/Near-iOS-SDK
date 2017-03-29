@@ -211,7 +211,29 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+    [self waitForExpectationsWithTimeout:WAIT_TIME_EXPECTATION handler:nil];
+}
+
+- (void)testProcessRecipe {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    
+    NSString *recipeId = @"1e11aae1-98cc-4f96-af84-1af70f57c5f9";
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider processRecipeWithId:recipeId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        XCTAssertNotNil(json);
+        if (json) {
+            [json registerClass:[NITRecipe class] forType:@"recipes"];
+            NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
+            XCTAssertTrue([recipes count] > 0);
+            if ([recipes count] > 0) {
+                NITRecipe *recipe = [recipes objectAtIndex:0];
+                XCTAssertTrue([recipe.ID isEqualToString:recipeId]);
+            }
+        }
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:WAIT_TIME_EXPECTATION handler:nil];
 }
 
 @end

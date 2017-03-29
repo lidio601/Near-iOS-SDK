@@ -23,5 +23,6 @@
 @property (nonatomic, strong) id<NITManaging> _Nullable manager;
 
 - (void)refreshConfigWithCompletionHandler:(void (^_Nonnull)(NSError * _Nullable error))completionHandler;
+- (void)processRecipe:(NSString* _Nonnull)recipeId;
 
 @end

@@ -35,5 +35,6 @@
 - (void)stop;
 - (void)refreshConfig;
 - (void)setDeviceToken:(NSString* _Nonnull)deviceToken;
+- (void)processRecipeWithUserInfo:(NSDictionary<NSString*, id> * _Nullable)userInfo;
 
 @end

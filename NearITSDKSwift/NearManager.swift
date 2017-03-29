@@ -41,6 +41,12 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.refreshConfig()
     }
     
+    public func processRecipe(_ userInfo: [AnyHashable : Any]) {
+        if let ui = userInfo as? [String : Any] {
+            manager.processRecipe(userInfo: ui)
+        }
+    }
+    
     public func manager(_ manager: NITManager, eventWithContent content: Any) {
         delegate?.manager(self, eventWithContent: content)
     }

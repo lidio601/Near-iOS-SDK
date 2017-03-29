@@ -39,6 +39,11 @@
     return request;
 }
 
++ (NSURLRequest *)processRecipeWithId:(NSString *)recipeId {
+    NITConfiguration *config = [NITConfiguration defaultConfiguration];
+    return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/recipes/%@?filter[core][profile_id]=%@&include=reaction_bundle", recipeId, config.profileId]];
+}
+
 + (NSURLRequest *)newProfileWithAppId:(NSString*)appId {
     NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:@"/plugins/congrego/profiles"];
     [request setHTTPMethod:@"POST"];

@@ -58,6 +58,19 @@
     }
 }
 
+- (void)processRecipe:(NSString*)recipeId {
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider processRecipeWithId:recipeId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        if (json) {
+            [json registerClass:[NITRecipe class] forType:@"recipes"];
+            NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
+            if ([recipes count] > 0) {
+                NITRecipe *recipe = [recipes objectAtIndex:0];
+                [self gotRecipe:recipe];
+            }
+        }
+    }];
+}
+
 - (void)gotRecipe:(NITRecipe*)recipe {
     if ([self.manager respondsToSelector:@selector(recipesManager:gotRecipe:)]) {
         [self.manager recipesManager:self gotRecipe:recipe];
