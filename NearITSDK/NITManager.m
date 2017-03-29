@@ -15,6 +15,7 @@
 #import "NITSimpleNotificationReaction.h"
 #import "NITRecipe.h"
 #import "NITContentReaction.h"
+#import "NITInstallation.h"
 
 @interface NITManager()<NITManaging>
 
@@ -87,6 +88,7 @@
  */
 - (void)setDeviceToken:(NSString *)deviceToken {
     [[NITConfiguration defaultConfiguration] setDeviceToken:deviceToken];
+    [[NITInstallation sharedInstance] registerInstallationWithCompletionHandler:nil];
 }
 
 
