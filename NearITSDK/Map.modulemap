@@ -6,5 +6,7 @@ framework module NearITSDK {
     
     explicit module Private {
         header "NITManager.h"
+        header "NITContent.h"
+        header "NITResource.h"
     }
 }

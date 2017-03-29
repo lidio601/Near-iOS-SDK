@@ -45,7 +45,7 @@
 		1349EEC11E7A9272000B0666 /* NITNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEBF1E7A9272000B0666 /* NITNode.m */; };
 		1349EEC41E7A95E3000B0666 /* NITNodesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1349EEC21E7A95E3000B0666 /* NITNodesManager.h */; };
 		1349EEC51E7A95E3000B0666 /* NITNodesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEC31E7A95E3000B0666 /* NITNodesManager.m */; };
-		1349EEC91E7AA1E3000B0666 /* NITResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 1349EEC71E7AA1E3000B0666 /* NITResource.h */; };
+		1349EEC91E7AA1E3000B0666 /* NITResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 1349EEC71E7AA1E3000B0666 /* NITResource.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		1349EECA1E7AA1E3000B0666 /* NITResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEC81E7AA1E3000B0666 /* NITResource.m */; };
 		1352CA6E1E7807FE00C0E98E /* NearITSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1352CA641E7807FE00C0E98E /* NearITSDK.framework */; };
 		1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1352CA721E7807FE00C0E98E /* NearITSDKTests.m */; };
@@ -68,7 +68,7 @@
 		135A70841E85281F00D4C9EC /* simple_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 135A70831E85281F00D4C9EC /* simple_recipe.json */; };
 		135A70881E85328900D4C9EC /* NITContentReaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 135A70861E85328900D4C9EC /* NITContentReaction.h */; };
 		135A70891E85328900D4C9EC /* NITContentReaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 135A70871E85328900D4C9EC /* NITContentReaction.m */; };
-		135A708C1E85448E00D4C9EC /* NITContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 135A708A1E85448E00D4C9EC /* NITContent.h */; };
+		135A708C1E85448E00D4C9EC /* NITContent.h in Headers */ = {isa = PBXBuildFile; fileRef = 135A708A1E85448E00D4C9EC /* NITContent.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		135A708D1E85448E00D4C9EC /* NITContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 135A708B1E85448E00D4C9EC /* NITContent.m */; };
 		135A708F1E8547AF00D4C9EC /* content_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 135A708E1E8547AF00D4C9EC /* content_recipe.json */; };
 		135A70921E854F3200D4C9EC /* NITNetworkMock.h in Headers */ = {isa = PBXBuildFile; fileRef = 135A70901E854F3200D4C9EC /* NITNetworkMock.h */; };
