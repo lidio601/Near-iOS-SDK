@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		132296E21E8CF14600AE6EFC /* online_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 132296E11E8CF14600AE6EFC /* online_recipe.json */; };
+		132296E41E8CFA1F00AE6EFC /* recipes.json in Resources */ = {isa = PBXBuildFile; fileRef = 132296E31E8CFA1F00AE6EFC /* recipes.json */; };
 		1327D88D1E8266B700C6689E /* empty_config.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8881E8266B700C6689E /* empty_config.json */; };
 		1327D88E1E8266B700C6689E /* gf_array.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8891E8266B700C6689E /* gf_array.json */; };
 		1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D88A1E8266B700C6689E /* multi_level_gf.json */; };
@@ -117,6 +119,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		132296E11E8CF14600AE6EFC /* online_recipe.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = online_recipe.json; sourceTree = "<group>"; };
+		132296E31E8CFA1F00AE6EFC /* recipes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recipes.json; sourceTree = "<group>"; };
 		1327D8881E8266B700C6689E /* empty_config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = empty_config.json; sourceTree = "<group>"; };
 		1327D8891E8266B700C6689E /* gf_array.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gf_array.json; sourceTree = "<group>"; };
 		1327D88A1E8266B700C6689E /* multi_level_gf.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = multi_level_gf.json; sourceTree = "<group>"; };
@@ -247,6 +251,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		132296E01E8CF12700AE6EFC /* Recipes Manager */ = {
+			isa = PBXGroup;
+			children = (
+				132296E11E8CF14600AE6EFC /* online_recipe.json */,
+				132296E31E8CFA1F00AE6EFC /* recipes.json */,
+			);
+			name = "Recipes Manager";
+			sourceTree = "<group>";
+		};
 		1327D8861E8266A600C6689E /* Nodes Manager */ = {
 			isa = PBXGroup;
 			children = (
@@ -302,6 +315,7 @@
 		1349EEAA1E7948CD000B0666 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				132296E01E8CF12700AE6EFC /* Recipes Manager */,
 				135A70821E85260A00D4C9EC /* Reactions */,
 				1327D8861E8266A600C6689E /* Nodes Manager */,
 				1349EEAB1E7948FA000B0666 /* jsonapi_sample1.json */,
@@ -734,7 +748,9 @@
 				1327D88D1E8266B700C6689E /* empty_config.json in Resources */,
 				135A70971E8555CB00D4C9EC /* response_content_reaction.json in Resources */,
 				1349EEAC1E7948FA000B0666 /* jsonapi_sample1.json in Resources */,
+				132296E41E8CFA1F00AE6EFC /* recipes.json in Resources */,
 				135A708F1E8547AF00D4C9EC /* content_recipe.json in Resources */,
+				132296E21E8CF14600AE6EFC /* online_recipe.json in Resources */,
 				1327D8AB1E83E6A300C6689E /* beacon_areas_in_bg.json in Resources */,
 				1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */,
 			);

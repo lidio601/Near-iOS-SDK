@@ -26,4 +26,13 @@
     return [recipes objectAtIndex:0];
 }
 
+- (NITJSONAPI*)jsonApiWithContentsOfFile:(NSString*)filename {
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *path = [bundle pathForResource:filename ofType:@"json"];
+    
+    NSError *jsonApiError;
+    NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithContentsOfFile:path error:&jsonApiError];
+    return jsonApi;
+}
+
 @end

@@ -23,11 +23,12 @@
 @implementation NITRecipesManager
 
 - (void)setRecipesWithJsonApi:(NITJSONAPI*)json {
+    [json registerClass:[NITRecipe class] forType:@"recipes"];
     self.recipes = [json parseToArrayOfObjects];
 }
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))completionHandler {
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider recipesProcessList] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider recipesProcessListWithJsonApi:[self buildEvaluationBody]] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         [json registerClass:[NITRecipe class] forType:@"recipes"];
         self.recipes = [json parseToArrayOfObjects];
         completionHandler(error);
@@ -54,9 +55,14 @@
     }
     
     if ([validRecipes count] == 0) {
-        // TODO: Online pulse evaluation
+        [self onlinePulseEvaluationWithPlugin:pulsePlugin action:pulseAction bundle:pulseBundle];
     } else {
-        [self gotRecipe:[matchingRecipes objectAtIndex:0]];
+        NITRecipe *recipe = [matchingRecipes objectAtIndex:0];
+        if(recipe.isEvaluatedOnline) {
+            [self evaluateRecipeWithId:recipe.ID];
+        } else {
+            [self gotRecipe:recipe];
+        }
     }
 }
 
@@ -66,6 +72,23 @@
             [json registerClass:[NITRecipe class] forType:@"recipes"];
             NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
             if ([recipes count] > 0) {
+                NITRecipe *recipe = [recipes objectAtIndex:0];
+                [self gotRecipe:recipe];
+            }
+        }
+    }];
+}
+
+- (void)onlinePulseEvaluationWithPlugin:(NSString*)plugin action:(NSString*)action bundle:(NSString*)bundle {
+    // TODO: Online pulse evaluation
+}
+
+- (void)evaluateRecipeWithId:(NSString*)recipeId {
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider evaluateRecipeWithId:recipeId jsonApi:[self buildEvaluationBody]] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        if (json) {
+            [json registerClass:[NITRecipe class] forType:@"recipes"];
+            NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
+            if([recipes count] > 0) {
                 NITRecipe *recipe = [recipes objectAtIndex:0];
                 [self gotRecipe:recipe];
             }
@@ -100,6 +123,26 @@
     if ([self.manager respondsToSelector:@selector(recipesManager:gotRecipe:)]) {
         [self.manager recipesManager:self gotRecipe:recipe];
     }
+}
+
+- (NITJSONAPI*)buildEvaluationBody {
+    NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
+    NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
+    resource.type = @"evaluation";
+    [resource addAttributeObject:[self buildCoreObject] forKey:@"core"];
+    [jsonApi setDataWithResourceObject:resource];
+    return jsonApi;
+}
+
+- (NSDictionary*)buildCoreObject {
+    NITConfiguration *config = [NITConfiguration defaultConfiguration];
+    NSMutableDictionary<NSString*, NSString*> *core = [[NSMutableDictionary alloc] init];
+    if (config.appId && config.profileId && config.installationId) {
+        [core setObject:config.profileId forKey:@"profile_id"];
+        [core setObject:config.installationId forKey:@"installation_id"];
+        [core setObject:config.appId forKey:@"app_id"];
+    }
+    return [NSDictionary dictionaryWithDictionary:core];
 }
 
 @end

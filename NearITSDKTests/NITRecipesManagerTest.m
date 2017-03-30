@@ -8,8 +8,11 @@
 
 #import <XCTest/XCTest.h>
 #import "NITTestCase.h"
+#import "NITRecipesManager.h"
 
-@interface NITRecipesManagerTest : NITTestCase
+@interface NITRecipesManagerTest : NITTestCase<NITManaging>
+
+@property (nonatomic, strong) XCTestExpectation *expectation;
 
 @end
 
@@ -37,6 +40,27 @@
     
     isScheduled = [recipe isScheduledNow:[NSDate dateWithTimeIntervalSince1970:1495458086]]; // Mon, 22 May 2017 13:01:26 GMT
     XCTAssertFalse(isScheduled);
+}
+
+- (void)testOnlineEvaluation {
+    self.expectation = [self expectationWithDescription:@"expectation"];
+    
+    NITJSONAPI *recipesJson = [self jsonApiWithContentsOfFile:@"online_recipe"];
+    
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] init];
+    [recipesManager setRecipesWithJsonApi:recipesJson];
+    recipesManager.manager = self;
+    
+    [recipesManager gotPulseWithPulsePlugin:@"geopolis" pulseAction:@"leave_place" pulseBundle:@"9712e11a-ef3a-4b34-bdf6-413a84146f2e"];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
+- (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {
+    if ([self.name containsString:@"testOnlineEvaluation"]) {
+        XCTAssertNotNil(recipe);
+        [self.expectation fulfill];
+    }
 }
 
 @end

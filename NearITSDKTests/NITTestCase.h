@@ -13,5 +13,6 @@
 @interface NITTestCase : XCTestCase
 
 - (NITRecipe*)recipeWithContentsOfFile:(NSString*)filename;
+- (NITJSONAPI*)jsonApiWithContentsOfFile:(NSString*)filename;
 
 @end

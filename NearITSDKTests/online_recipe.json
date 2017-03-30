@@ -1,0 +1,360 @@
+{
+    "data" : [
+              {
+              "id" : "7d41504f-99e9-45e0-b272-a6fdd202b688",
+              "relationships" : {
+              "operation_action" : {
+              "data" : {
+              "id" : "every_user",
+              "type" : "operation_actions"
+              }
+              },
+              "operation_bundle" : {
+              "data" : {
+              "id" : "a855f8cf-3c2c-4533-8bf2-37f614afa7ab",
+              "type" : "operation_bundles"
+              }
+              },
+              "pulse_action" : {
+              "data" : {
+              "id" : "leave_place",
+              "type" : "pulse_actions"
+              }
+              },
+              "reaction_action" : {
+              "data" : {
+              "id" : "ask_feedback",
+              "type" : "reaction_actions"
+              }
+              },
+              "pulse_bundle" : {
+              "data" : {
+              "id" : "9712e11a-ef3a-4b34-bdf6-413a84146f2e",
+              "type" : "pulse_bundles"
+              }
+              },
+              "reaction_bundle" : {
+              "data" : {
+              "id" : "08b4935a-8ee5-45cd-923e-078a7d35953f",
+              "type" : "reaction_bundles"
+              }
+              }
+              },
+              "type" : "recipes",
+              "attributes" : {
+              "state" : "finalized",
+              "reaction_plugin_id" : "feedbacks",
+              "active" : true,
+              "created_at" : "2017-03-28T13:23:11.073Z",
+              "labels" : {
+              "online" : true
+              },
+              "scheduling" : {
+              "date" : {
+              
+              },
+              "timetable" : {
+              
+              }
+              },
+              "pulse_plugin_id" : "geopolis",
+              "operation_plugin_id" : "congrego",
+              "operation_bundle_id" : "a855f8cf-3c2c-4533-8bf2-37f614afa7ab",
+              "notification" : {
+              "title" : "Valuta la tua esperienza",
+              "body" : "Il tuo contributo è importante"
+              },
+              "updated_at" : "2017-03-28T13:26:02.586Z",
+              "reaction_bundle_id" : "08b4935a-8ee5-45cd-923e-078a7d35953f",
+              "pulse_bundle_id" : "9712e11a-ef3a-4b34-bdf6-413a84146f2e",
+              "kind" : "passive",
+              "name" : "Valuta Barian"
+              }
+              },
+              {
+              "id" : "fe92307e-a3b8-4637-86d8-922bf7a53b5f",
+              "relationships" : {
+              "operation_action" : {
+              "data" : {
+              "id" : "every_user",
+              "type" : "operation_actions"
+              }
+              },
+              "operation_bundle" : {
+              "data" : {
+              "id" : "ac570629-da50-4a18-8fb8-ec985e5705db",
+              "type" : "operation_bundles"
+              }
+              },
+              "pulse_action" : {
+              "data" : {
+              "id" : "leave_place",
+              "type" : "pulse_actions"
+              }
+              },
+              "reaction_action" : {
+              "data" : {
+              "id" : "show_coupon",
+              "type" : "reaction_actions"
+              }
+              },
+              "pulse_bundle" : {
+              "data" : {
+              "id" : "1cb0d78b-0299-4800-b781-59c4c37d8b3a",
+              "type" : "pulse_bundles"
+              }
+              },
+              "reaction_bundle" : {
+              "data" : {
+              "id" : "a2219054-6a9f-4764-aa7f-6763c076d5ec",
+              "type" : "reaction_bundles"
+              }
+              }
+              },
+              "type" : "recipes",
+              "attributes" : {
+              "state" : "finalized",
+              "reaction_plugin_id" : "coupon-blaster",
+              "active" : true,
+              "created_at" : "2017-03-29T11:41:42.174Z",
+              "labels" : {
+              "online" : true
+              },
+              "scheduling" : {
+              "date" : {
+              "to" : null,
+              "from" : null
+              },
+              "timetable" : {
+              
+              }
+              },
+              "pulse_plugin_id" : "geopolis",
+              "operation_plugin_id" : "congrego",
+              "operation_bundle_id" : "ac570629-da50-4a18-8fb8-ec985e5705db",
+              "notification" : {
+              "title" : "Le Coupon",
+              "body" : "Spendi subito 50 € gratis!"
+              },
+              "updated_at" : "2017-03-29T11:46:21.024Z",
+              "reaction_bundle_id" : "a2219054-6a9f-4764-aa7f-6763c076d5ec",
+              "pulse_bundle_id" : "1cb0d78b-0299-4800-b781-59c4c37d8b3a",
+              "kind" : "passive",
+              "name" : "Le Coupon"
+              }
+              },
+              {
+              "id" : "6fced5b1-b27a-40d3-8cb6-9503200aeb11",
+              "relationships" : {
+              "operation_action" : {
+              "data" : {
+              "id" : "every_user",
+              "type" : "operation_actions"
+              }
+              },
+              "operation_bundle" : {
+              "data" : {
+              "id" : "136dcbe3-98de-4b93-b32e-a16a43914c7f",
+              "type" : "operation_bundles"
+              }
+              },
+              "pulse_action" : {
+              "data" : {
+              "id" : "ranging.near",
+              "type" : "pulse_actions"
+              }
+              },
+              "reaction_action" : {
+              "data" : {
+              "id" : "show_content",
+              "type" : "reaction_actions"
+              }
+              },
+              "pulse_bundle" : {
+              "data" : {
+              "id" : "8373e68b-7c5d-411c-9a9c-3cc7ebf039e4",
+              "type" : "pulse_bundles"
+              }
+              },
+              "reaction_bundle" : {
+              "data" : {
+              "id" : "e77d28fc-c6a0-4b9f-a28a-44e776119e25",
+              "type" : "reaction_bundles"
+              }
+              }
+              },
+              "type" : "recipes",
+              "attributes" : {
+              "state" : "finalized",
+              "reaction_plugin_id" : "content-notification",
+              "active" : true,
+              "created_at" : "2017-03-24T10:37:00.733Z",
+              "labels" : {
+              
+              },
+              "scheduling" : {
+              "date" : {
+              "to" : null,
+              "from" : null
+              },
+              "timetable" : {
+              
+              }
+              },
+              "pulse_plugin_id" : "geopolis",
+              "operation_plugin_id" : "congrego",
+              "operation_bundle_id" : "136dcbe3-98de-4b93-b32e-a16a43914c7f",
+              "notification" : {
+              "title" : "Notifica con contenuti",
+              "body" : "Ci sono tanti bei contenuti che ti aspettano"
+              },
+              "updated_at" : "2017-03-24T10:41:55.139Z",
+              "reaction_bundle_id" : "e77d28fc-c6a0-4b9f-a28a-44e776119e25",
+              "pulse_bundle_id" : "8373e68b-7c5d-411c-9a9c-3cc7ebf039e4",
+              "kind" : "passive",
+              "name" : "Contenuto Spiderman"
+              }
+              },
+              {
+              "id" : "68594099-a211-42ac-99f0-a5cb0a4376b8",
+              "relationships" : {
+              "operation_action" : {
+              "data" : {
+              "id" : "every_user",
+              "type" : "operation_actions"
+              }
+              },
+              "operation_bundle" : {
+              "data" : {
+              "id" : "05e3f3a3-7b3f-4898-8a12-0da03a3ff7f7",
+              "type" : "operation_bundles"
+              }
+              },
+              "pulse_action" : {
+              "data" : {
+              "id" : "enter_place",
+              "type" : "pulse_actions"
+              }
+              },
+              "reaction_action" : {
+              "data" : {
+              "id" : "simple_notification",
+              "type" : "reaction_actions"
+              }
+              },
+              "pulse_bundle" : {
+              "data" : {
+              "id" : "1cb0d78b-0299-4800-b781-59c4c37d8b3a",
+              "type" : "pulse_bundles"
+              }
+              },
+              "reaction_bundle" : {
+              "data" : null
+              }
+              },
+              "type" : "recipes",
+              "attributes" : {
+              "state" : "finalized",
+              "reaction_plugin_id" : "simple-notification",
+              "active" : true,
+              "created_at" : "2017-03-14T11:25:14.392Z",
+              "labels" : {
+              
+              },
+              "scheduling" : {
+              "date" : {
+              "to" : null,
+              "from" : null
+              },
+              "timetable" : {
+              
+              }
+              },
+              "pulse_plugin_id" : "geopolis",
+              "operation_plugin_id" : "congrego",
+              "operation_bundle_id" : "05e3f3a3-7b3f-4898-8a12-0da03a3ff7f7",
+              "notification" : {
+              "title" : "Benvenuto nella BatCaverna",
+              "body" : "Accendi la luce per vedere dove sei"
+              },
+              "updated_at" : "2017-03-24T10:42:28.138Z",
+              "reaction_bundle_id" : null,
+              "pulse_bundle_id" : "1cb0d78b-0299-4800-b781-59c4c37d8b3a",
+              "kind" : "passive",
+              "name" : "Notifica BatCaverna"
+              }
+              },
+              {
+              "id" : "d1dcaac3-528a-4a72-b1a3-4ece2b44ee2d",
+              "relationships" : {
+              "operation_action" : {
+              "data" : {
+              "id" : "every_user",
+              "type" : "operation_actions"
+              }
+              },
+              "operation_bundle" : {
+              "data" : {
+              "id" : "15eee75c-70d5-4037-b83a-2e862fcca8a5",
+              "type" : "operation_bundles"
+              }
+              },
+              "pulse_action" : {
+              "data" : {
+              "id" : "enter_place",
+              "type" : "pulse_actions"
+              }
+              },
+              "reaction_action" : {
+              "data" : {
+              "id" : "show_content",
+              "type" : "reaction_actions"
+              }
+              },
+              "pulse_bundle" : {
+              "data" : {
+              "id" : "9712e11a-ef3a-4b34-bdf6-413a84146f2e",
+              "type" : "pulse_bundles"
+              }
+              },
+              "reaction_bundle" : {
+              "data" : {
+              "id" : "c66db20c-20c4-4768-98e2-daf24def7722",
+              "type" : "reaction_bundles"
+              }
+              }
+              },
+              "type" : "recipes",
+              "attributes" : {
+              "state" : "finalized",
+              "reaction_plugin_id" : "content-notification",
+              "active" : true,
+              "created_at" : "2017-03-27T08:18:54.669Z",
+              "labels" : {
+              
+              },
+              "scheduling" : {
+              "date" : {
+              "to" : null,
+              "from" : null
+              },
+              "timetable" : {
+              
+              }
+              },
+              "pulse_plugin_id" : "geopolis",
+              "operation_plugin_id" : "congrego",
+              "operation_bundle_id" : "15eee75c-70d5-4037-b83a-2e862fcca8a5",
+              "notification" : {
+              "title" : "Entrato a casa",
+              "body" : "Benvenuto a casa tua"
+              },
+              "updated_at" : "2017-03-27T08:22:16.943Z",
+              "reaction_bundle_id" : "c66db20c-20c4-4768-98e2-daf24def7722",
+              "pulse_bundle_id" : "9712e11a-ef3a-4b34-bdf6-413a84146f2e",
+              "kind" : "passive",
+              "name" : "Entrato a casa"
+              }
+              }
+              ]
+}
