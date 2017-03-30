@@ -106,6 +106,10 @@
     return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/coupon-blaster/coupons?filter[claims.profile_id]=%@&include=claims,icon", profileId]];
 }
 
++ (NSURLRequest *)feedbackWithBundleId:(NSString *)bundleId {
+    return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/feedbacks/feedbacks/%@", bundleId]];
+}
+
 // MARK: - Private functions
 
 + (NSDictionary*)buildCoreObject {

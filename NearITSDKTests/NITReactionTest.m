@@ -19,6 +19,8 @@
 #import "NITRecipesManager.h"
 #import "NITCouponReaction.h"
 #import "NITConfiguration.h"
+#import "NITFeedbackReaction.h"
+#import "NITFeedback.h"
 
 @interface NITReactionTest : NITTestCase
 
@@ -47,6 +49,13 @@
     path = [bundle pathForResource:@"coupons" ofType:@"json"];
     [[NITNetworkMock sharedInstance] registerData:[NSData dataWithContentsOfFile:path] withTest:^BOOL(NSURLRequest * _Nonnull request) {
         if([request.URL.absoluteString containsString:@"/plugins/coupon-blaster/coupons?filter[claims.profile_id]"]) {
+            return YES;
+        }
+        return NO;
+    }];
+    path = [bundle pathForResource:@"response_feeback_reaction" ofType:@"json"];
+    [[NITNetworkMock sharedInstance] registerData:[NSData dataWithContentsOfFile:path] withTest:^BOOL(NSURLRequest * _Nonnull request) {
+        if([request.URL.absoluteString containsString:@"/plugins/feedbacks/feedbacks/08b4935a-8ee5-45cd-923e-078a7d35953f"]) {
             return YES;
         }
         return NO;
@@ -97,6 +106,30 @@
         NSURL *smallSizeURL = [image smallSizeURL];
         XCTAssertNotNil(smallSizeURL);
         XCTAssertTrue([smallSizeURL.absoluteString containsString:@"square_300_file.jpeg"]);
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
+- (void)testFeedbackReaction {
+    NITRecipe *recipe = [[NITRecipe alloc] init];
+    recipe.reactionBundleId = @"08b4935a-8ee5-45cd-923e-078a7d35953f";
+    
+    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[NSString stringWithFormat:@"test-%@", recipe.reactionBundleId]];
+    NITFeedbackReaction *feedbackReaction = [[NITFeedbackReaction alloc] initWithCacheManager:cacheManager];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    [feedbackReaction contentWithRecipe:recipe completionHandler:^(id  _Nullable content, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        XCTAssertNotNil(content);
+        XCTAssertTrue([content isKindOfClass:[NITFeedback class]]);
+        
+        if ([content isKindOfClass:[NITFeedback class]]) {
+            NITFeedback *feedback = (NITFeedback*)content;
+            XCTAssertTrue([feedback.question isEqualToString:@"Sei pronto a rispondere?"]);
+        }
         
         [expectation fulfill];
     }];

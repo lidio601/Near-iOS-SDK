@@ -24,6 +24,14 @@
 
 @implementation NITCouponReaction
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.configuration = [NITConfiguration defaultConfiguration];
+    }
+    return self;
+}
+
 - (instancetype)initWithConfiguration:(NITConfiguration*)configuration {
     self = [super init];
     if (self) {

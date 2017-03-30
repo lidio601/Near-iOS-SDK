@@ -18,6 +18,11 @@
 		132296F81E8D140B00AE6EFC /* NITClaim.h in Headers */ = {isa = PBXBuildFile; fileRef = 132296F61E8D140B00AE6EFC /* NITClaim.h */; };
 		132296F91E8D140B00AE6EFC /* NITClaim.m in Sources */ = {isa = PBXBuildFile; fileRef = 132296F71E8D140B00AE6EFC /* NITClaim.m */; };
 		132296FB1E8D2BA300AE6EFC /* coupons.json in Resources */ = {isa = PBXBuildFile; fileRef = 132296FA1E8D2BA300AE6EFC /* coupons.json */; };
+		132296FF1E8D2F6400AE6EFC /* NITFeedbackReaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 132296FD1E8D2F6400AE6EFC /* NITFeedbackReaction.h */; };
+		132297001E8D2F6400AE6EFC /* NITFeedbackReaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 132296FE1E8D2F6400AE6EFC /* NITFeedbackReaction.m */; };
+		132297031E8D306A00AE6EFC /* NITFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 132297011E8D306A00AE6EFC /* NITFeedback.h */; };
+		132297041E8D306A00AE6EFC /* NITFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 132297021E8D306A00AE6EFC /* NITFeedback.m */; };
+		132297061E8D362400AE6EFC /* response_feeback_reaction.json in Resources */ = {isa = PBXBuildFile; fileRef = 132297051E8D362400AE6EFC /* response_feeback_reaction.json */; };
 		1327D88D1E8266B700C6689E /* empty_config.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8881E8266B700C6689E /* empty_config.json */; };
 		1327D88E1E8266B700C6689E /* gf_array.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8891E8266B700C6689E /* gf_array.json */; };
 		1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D88A1E8266B700C6689E /* multi_level_gf.json */; };
@@ -139,6 +144,11 @@
 		132296F61E8D140B00AE6EFC /* NITClaim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITClaim.h; sourceTree = "<group>"; };
 		132296F71E8D140B00AE6EFC /* NITClaim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITClaim.m; sourceTree = "<group>"; };
 		132296FA1E8D2BA300AE6EFC /* coupons.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = coupons.json; sourceTree = "<group>"; };
+		132296FD1E8D2F6400AE6EFC /* NITFeedbackReaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITFeedbackReaction.h; sourceTree = "<group>"; };
+		132296FE1E8D2F6400AE6EFC /* NITFeedbackReaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITFeedbackReaction.m; sourceTree = "<group>"; };
+		132297011E8D306A00AE6EFC /* NITFeedback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITFeedback.h; sourceTree = "<group>"; };
+		132297021E8D306A00AE6EFC /* NITFeedback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITFeedback.m; sourceTree = "<group>"; };
+		132297051E8D362400AE6EFC /* response_feeback_reaction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_feeback_reaction.json; sourceTree = "<group>"; };
 		1327D8881E8266B700C6689E /* empty_config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = empty_config.json; sourceTree = "<group>"; };
 		1327D8891E8266B700C6689E /* gf_array.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gf_array.json; sourceTree = "<group>"; };
 		1327D88A1E8266B700C6689E /* multi_level_gf.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = multi_level_gf.json; sourceTree = "<group>"; };
@@ -291,6 +301,17 @@
 				132296F71E8D140B00AE6EFC /* NITClaim.m */,
 			);
 			name = Coupon;
+			sourceTree = "<group>";
+		};
+		132296FC1E8D2EAC00AE6EFC /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				132297011E8D306A00AE6EFC /* NITFeedback.h */,
+				132297021E8D306A00AE6EFC /* NITFeedback.m */,
+				132296FD1E8D2F6400AE6EFC /* NITFeedbackReaction.h */,
+				132296FE1E8D2F6400AE6EFC /* NITFeedbackReaction.m */,
+			);
+			name = Feedback;
 			sourceTree = "<group>";
 		};
 		1327D8861E8266A600C6689E /* Nodes Manager */ = {
@@ -493,6 +514,7 @@
 		135A70721E85039200D4C9EC /* Reactions */ = {
 			isa = PBXGroup;
 			children = (
+				132296FC1E8D2EAC00AE6EFC /* Feedback */,
 				132296E51E8CFC4D00AE6EFC /* Coupon */,
 				135A70851E85326B00D4C9EC /* Content */,
 				135A707B1E8520E700D4C9EC /* SimpleNotification */,
@@ -521,6 +543,7 @@
 				135A70961E8555CB00D4C9EC /* response_content_reaction.json */,
 				137E38A81E8A6B16008E83E6 /* contents1.json */,
 				132296FA1E8D2BA300AE6EFC /* coupons.json */,
+				132297051E8D362400AE6EFC /* response_feeback_reaction.json */,
 			);
 			name = Reactions;
 			sourceTree = "<group>";
@@ -602,6 +625,8 @@
 				1349EEC41E7A95E3000B0666 /* NITNodesManager.h in Headers */,
 				13423EE31E7BCB07008CAAC8 /* NITGeofenceNode.h in Headers */,
 				1349EEB81E797045000B0666 /* NITGeopolisManager.h in Headers */,
+				132296FF1E8D2F6400AE6EFC /* NITFeedbackReaction.h in Headers */,
+				132297031E8D306A00AE6EFC /* NITFeedback.h in Headers */,
 				1349EEAF1E795030000B0666 /* NITNetworkManager.h in Headers */,
 				1327D89B1E82A4E700C6689E /* NITRecipe.h in Headers */,
 				137E38A41E8A4464008E83E6 /* NITCacheManager.h in Headers */,
@@ -788,6 +813,7 @@
 				1327D88D1E8266B700C6689E /* empty_config.json in Resources */,
 				135A70971E8555CB00D4C9EC /* response_content_reaction.json in Resources */,
 				1349EEAC1E7948FA000B0666 /* jsonapi_sample1.json in Resources */,
+				132297061E8D362400AE6EFC /* response_feeback_reaction.json in Resources */,
 				132296E41E8CFA1F00AE6EFC /* recipes.json in Resources */,
 				132296ED1E8D046500AE6EFC /* response_online_recipe.json in Resources */,
 				135A708F1E8547AF00D4C9EC /* content_recipe.json in Resources */,
@@ -838,7 +864,9 @@
 				1327D8A41E83B7C400C6689E /* NITConstants.m in Sources */,
 				132296F51E8D09D400AE6EFC /* NITCoupon.m in Sources */,
 				1349EEA71E793413000B0666 /* NITJSONAPIResource.m in Sources */,
+				132297041E8D306A00AE6EFC /* NITFeedback.m in Sources */,
 				135A70931E854F3200D4C9EC /* NITNetworkMock.m in Sources */,
+				132297001E8D2F6400AE6EFC /* NITFeedbackReaction.m in Sources */,
 				137E38A51E8A4464008E83E6 /* NITCacheManager.m in Sources */,
 				1327D8971E82824800C6689E /* NITBeaconProximityManager.m in Sources */,
 				1327D89C1E82A4E700C6689E /* NITRecipe.m in Sources */,
