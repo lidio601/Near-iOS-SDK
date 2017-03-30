@@ -12,8 +12,25 @@
 #import "NITCoupon.h"
 #import "NITConstants.h"
 #import "NITJSONAPI.h"
+#import "NITNetworkManager.h"
+#import "NITNetworkProvider.h"
+#import "NITConfiguration.h"
+
+@interface NITCouponReaction()
+
+@property (nonatomic, strong) NITConfiguration *configuration;
+
+@end
 
 @implementation NITCouponReaction
+
+- (instancetype)initWithConfiguration:(NITConfiguration*)configuration {
+    self = [super init];
+    if (self) {
+        self.configuration = configuration;
+    }
+    return self;
+}
 
 - (void)contentWithRecipe:(NITRecipe *)recipe completionHandler:(void (^)(id _Nullable, NSError * _Nullable))handler {
     if ([recipe.reactionBundle isKindOfClass:[NITCoupon class]]) {
@@ -26,6 +43,25 @@
             handler(nil, anError);
         }
     }
+}
+
+- (void)couponsWithCompletionHandler:(void (^)(NSArray<NITCoupon *> * _Nullable, NSError * _Nullable))handler {
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider couponsWithProfileId:self.configuration.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        if(error) {
+            if (handler) {
+                NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:104 userInfo:@{NSLocalizedDescriptionKey:@"Invalid coupons data", NSUnderlyingErrorKey: error}];
+                handler(nil, anError);
+            }
+        } else {
+            [json registerClass:[NITCoupon class] forType:@"coupons"];
+            [json registerClass:[NITClaim class] forType:@"claims"];
+            [json registerClass:[NITImage class] forType:@"images"];
+            NSArray<NITCoupon*> *coupons = [json parseToArrayOfObjects];
+            if (handler) {
+                handler(coupons, nil);
+            }
+        }
+    }];
 }
 
 @end

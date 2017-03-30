@@ -18,6 +18,7 @@
 #import "NITNetworkMock.h"
 #import "NITRecipesManager.h"
 #import "NITCouponReaction.h"
+#import "NITConfiguration.h"
 
 @interface NITReactionTest : NITTestCase
 
@@ -39,6 +40,13 @@
     }];
     [[NITNetworkMock sharedInstance] registerData:[NSData data] withTest:^BOOL(NSURLRequest * _Nonnull request) {
         if([request.URL.absoluteString containsString:@"/plugins/content-notification/contents/c66db20c-20c4-4768-98e2-daf24def7722"]) {
+            return YES;
+        }
+        return NO;
+    }];
+    path = [bundle pathForResource:@"coupons" ofType:@"json"];
+    [[NITNetworkMock sharedInstance] registerData:[NSData dataWithContentsOfFile:path] withTest:^BOOL(NSURLRequest * _Nonnull request) {
+        if([request.URL.absoluteString containsString:@"/plugins/coupon-blaster/coupons?filter[claims.profile_id]"]) {
             return YES;
         }
         return NO;
@@ -106,6 +114,28 @@
         XCTAssertNil(error);
         XCTAssertNotNil(content);
         XCTAssertTrue([content isKindOfClass:[NITCoupon class]]);
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
+- (void)testCoupons {
+    NITConfiguration *config = [[NITConfiguration alloc] init];
+    config.profileId = @"6a2490f4-28b9-4e36-b0f6-2c97c86b0002";
+    NITCouponReaction *reaction = [[NITCouponReaction alloc] initWithConfiguration:config];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    [reaction couponsWithCompletionHandler:^(NSArray<NITCoupon *> * _Nullable coupons, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        XCTAssertNotNil(coupons);
+        XCTAssertTrue([coupons count] > 0);
+        if ([coupons count] > 0) {
+            NITCoupon *coupon = [coupons objectAtIndex:0];
+            XCTAssertTrue([coupon.name isEqualToString:@"Le Coupon"]);
+            XCTAssertTrue([coupon.value isEqualToString:@"50 €"]);
+        }
         
         [expectation fulfill];
     }];

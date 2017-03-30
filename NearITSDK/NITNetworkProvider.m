@@ -102,6 +102,10 @@
     return request;
 }
 
++ (NSURLRequest *)couponsWithProfileId:(NSString *)profileId {
+    return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/coupon-blaster/coupons?filter[claims.profile_id]=%@&include=claims,icon", profileId]];
+}
+
 // MARK: - Private functions
 
 + (NSDictionary*)buildCoreObject {

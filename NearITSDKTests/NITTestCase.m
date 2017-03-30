@@ -20,6 +20,8 @@
     
     [jsonApi registerClass:[NITRecipe class] forType:@"recipes"];
     [jsonApi registerClass:[NITCoupon class] forType:@"coupons"];
+    [jsonApi registerClass:[NITClaim class] forType:@"claims"];
+    [jsonApi registerClass:[NITImage class] forType:@"images"];
     
     NSArray<NITRecipe*> *recipes = [jsonApi parseToArrayOfObjects];
     XCTAssertTrue([recipes count] > 0);

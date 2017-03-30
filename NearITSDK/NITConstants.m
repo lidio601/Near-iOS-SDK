@@ -11,3 +11,5 @@
 NSErrorDomain const NITUserProfileErrorDomain = @"com.nearit.profile";
 NSErrorDomain const NITInstallationErrorDomain = @"com.nearit.installation";
 NSErrorDomain const NITReactionErrorDomain = @"com.nearit.reaction";
+
+NSString* const ISO8601DateFormatMilliseconds = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ";

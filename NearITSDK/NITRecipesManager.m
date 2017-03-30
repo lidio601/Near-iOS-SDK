@@ -14,6 +14,7 @@
 #import "NITJSONAPIResource.h"
 #import "NITConfiguration.h"
 #import "NITCoupon.h"
+#import "NITConstants.h"
 
 @interface NITRecipesManager()
 
@@ -70,7 +71,7 @@
 - (void)processRecipe:(NSString*)recipeId {
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider processRecipeWithId:recipeId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (json) {
-            [json registerClass:[NITRecipe class] forType:@"recipes"];
+            [self registerClassesWithJsonApi:json];
             NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
             if ([recipes count] > 0) {
                 NITRecipe *recipe = [recipes objectAtIndex:0];
@@ -87,8 +88,7 @@
 - (void)evaluateRecipeWithId:(NSString*)recipeId {
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider evaluateRecipeWithId:recipeId jsonApi:[self buildEvaluationBody]] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (json) {
-            [json registerClass:[NITRecipe class] forType:@"recipes"];
-            [json registerClass:[NITCoupon class] forType:@"coupons"];
+            [self registerClassesWithJsonApi:json];
             NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
             if([recipes count] > 0) {
                 NITRecipe *recipe = [recipes objectAtIndex:0];
@@ -111,7 +111,7 @@
     [resource addAttributeObject:@"engaged" forKey:@"event"];
     
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    dateFormatter.dateFormat = ISO8601DateFormatMilliseconds;
     [resource addAttributeObject:[dateFormatter stringFromDate:[NSDate date]] forKey:@"tracked_at"];
     
     [jsonApi setDataWithResourceObject:resource];
@@ -125,6 +125,13 @@
     if ([self.manager respondsToSelector:@selector(recipesManager:gotRecipe:)]) {
         [self.manager recipesManager:self gotRecipe:recipe];
     }
+}
+
+- (void)registerClassesWithJsonApi:(NITJSONAPI*)jsonApi {
+    [jsonApi registerClass:[NITRecipe class] forType:@"recipes"];
+    [jsonApi registerClass:[NITCoupon class] forType:@"coupons"];
+    [jsonApi registerClass:[NITClaim class] forType:@"claims"];
+    [jsonApi registerClass:[NITImage class] forType:@"images"];
 }
 
 - (NITJSONAPI*)buildEvaluationBody {

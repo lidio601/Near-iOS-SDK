@@ -22,5 +22,6 @@
 + (NSURLRequest*)contentWithBundleId:(NSString*)bundleId;
 + (NSURLRequest*)contents;
 + (NSURLRequest*)sendTrackingsWithJsonApi:(NITJSONAPI*)jsonApi;
++ (NSURLRequest*)couponsWithProfileId:(NSString*)profileId;
 
 @end

@@ -10,4 +10,9 @@
 
 @implementation NITCoupon
 
+- (NSDictionary *)attributesMap {
+    return @{ @"description" : @"couponDescription",
+              @"expires_at" : @"expiresAt" };
+}
+
 @end
