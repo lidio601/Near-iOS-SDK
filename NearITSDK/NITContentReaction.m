@@ -25,7 +25,7 @@
 
 @implementation NITContentReaction
 
-- (void)contentWithRecipe:(NITRecipe *)recipe completionHandler:(void (^)(id _Nonnull content, NSError * _Nullable error))handler {
+- (void)contentWithRecipe:(NITRecipe *)recipe completionHandler:(void (^)(id _Nullable content, NSError * _Nullable error))handler {
     if (self.contents == nil) {
         self.contents = [self.cacheManager loadArrayForKey:CACHE_KEY];
     }

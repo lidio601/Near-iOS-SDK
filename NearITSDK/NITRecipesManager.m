@@ -13,6 +13,7 @@
 #import "NITRecipe.h"
 #import "NITJSONAPIResource.h"
 #import "NITConfiguration.h"
+#import "NITCoupon.h"
 
 @interface NITRecipesManager()
 
@@ -87,6 +88,7 @@
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider evaluateRecipeWithId:recipeId jsonApi:[self buildEvaluationBody]] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (json) {
             [json registerClass:[NITRecipe class] forType:@"recipes"];
+            [json registerClass:[NITCoupon class] forType:@"coupons"];
             NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
             if([recipes count] > 0) {
                 NITRecipe *recipe = [recipes objectAtIndex:0];

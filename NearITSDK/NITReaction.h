@@ -19,7 +19,7 @@
 - (instancetype _Nonnull)initWithCacheManager:(NITCacheManager* _Nonnull)cacheManager;
 
 - (NSString* _Nonnull)pluginName;
-- (void)contentWithRecipe:(NITRecipe* _Nonnull)recipe completionHandler:(void (^_Nullable)(id _Nonnull content, NSError * _Nullable error))handler;
+- (void)contentWithRecipe:(NITRecipe* _Nonnull)recipe completionHandler:(void (^_Nullable)(id _Nullable content, NSError * _Nullable error))handler;
 - (void)refreshConfigWithCompletionHandler:(void(^ _Nullable)(NSError * _Nullable error))handler;
 
 @end

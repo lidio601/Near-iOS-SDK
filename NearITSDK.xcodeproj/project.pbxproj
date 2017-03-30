@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		132296E21E8CF14600AE6EFC /* online_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 132296E11E8CF14600AE6EFC /* online_recipe.json */; };
 		132296E41E8CFA1F00AE6EFC /* recipes.json in Resources */ = {isa = PBXBuildFile; fileRef = 132296E31E8CFA1F00AE6EFC /* recipes.json */; };
+		132296EA1E8CFCAD00AE6EFC /* NITCouponReaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 132296E81E8CFCAD00AE6EFC /* NITCouponReaction.h */; };
+		132296EB1E8CFCAD00AE6EFC /* NITCouponReaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 132296E91E8CFCAD00AE6EFC /* NITCouponReaction.m */; };
+		132296ED1E8D046500AE6EFC /* response_online_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 132296EC1E8D046500AE6EFC /* response_online_recipe.json */; };
+		132296F11E8D078200AE6EFC /* response_coupon_evaluated_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 132296F01E8D078200AE6EFC /* response_coupon_evaluated_recipe.json */; };
+		132296F41E8D09D400AE6EFC /* NITCoupon.h in Headers */ = {isa = PBXBuildFile; fileRef = 132296F21E8D09D400AE6EFC /* NITCoupon.h */; };
+		132296F51E8D09D400AE6EFC /* NITCoupon.m in Sources */ = {isa = PBXBuildFile; fileRef = 132296F31E8D09D400AE6EFC /* NITCoupon.m */; };
 		1327D88D1E8266B700C6689E /* empty_config.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8881E8266B700C6689E /* empty_config.json */; };
 		1327D88E1E8266B700C6689E /* gf_array.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8891E8266B700C6689E /* gf_array.json */; };
 		1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D88A1E8266B700C6689E /* multi_level_gf.json */; };
@@ -121,6 +127,12 @@
 /* Begin PBXFileReference section */
 		132296E11E8CF14600AE6EFC /* online_recipe.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = online_recipe.json; sourceTree = "<group>"; };
 		132296E31E8CFA1F00AE6EFC /* recipes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recipes.json; sourceTree = "<group>"; };
+		132296E81E8CFCAD00AE6EFC /* NITCouponReaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITCouponReaction.h; sourceTree = "<group>"; };
+		132296E91E8CFCAD00AE6EFC /* NITCouponReaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITCouponReaction.m; sourceTree = "<group>"; };
+		132296EC1E8D046500AE6EFC /* response_online_recipe.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_online_recipe.json; sourceTree = "<group>"; };
+		132296F01E8D078200AE6EFC /* response_coupon_evaluated_recipe.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_coupon_evaluated_recipe.json; sourceTree = "<group>"; };
+		132296F21E8D09D400AE6EFC /* NITCoupon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITCoupon.h; sourceTree = "<group>"; };
+		132296F31E8D09D400AE6EFC /* NITCoupon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITCoupon.m; sourceTree = "<group>"; };
 		1327D8881E8266B700C6689E /* empty_config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = empty_config.json; sourceTree = "<group>"; };
 		1327D8891E8266B700C6689E /* gf_array.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gf_array.json; sourceTree = "<group>"; };
 		1327D88A1E8266B700C6689E /* multi_level_gf.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = multi_level_gf.json; sourceTree = "<group>"; };
@@ -256,8 +268,21 @@
 			children = (
 				132296E11E8CF14600AE6EFC /* online_recipe.json */,
 				132296E31E8CFA1F00AE6EFC /* recipes.json */,
+				132296EC1E8D046500AE6EFC /* response_online_recipe.json */,
+				132296F01E8D078200AE6EFC /* response_coupon_evaluated_recipe.json */,
 			);
 			name = "Recipes Manager";
+			sourceTree = "<group>";
+		};
+		132296E51E8CFC4D00AE6EFC /* Coupon */ = {
+			isa = PBXGroup;
+			children = (
+				132296E81E8CFCAD00AE6EFC /* NITCouponReaction.h */,
+				132296E91E8CFCAD00AE6EFC /* NITCouponReaction.m */,
+				132296F21E8D09D400AE6EFC /* NITCoupon.h */,
+				132296F31E8D09D400AE6EFC /* NITCoupon.m */,
+			);
+			name = Coupon;
 			sourceTree = "<group>";
 		};
 		1327D8861E8266A600C6689E /* Nodes Manager */ = {
@@ -460,6 +485,7 @@
 		135A70721E85039200D4C9EC /* Reactions */ = {
 			isa = PBXGroup;
 			children = (
+				132296E51E8CFC4D00AE6EFC /* Coupon */,
 				135A70851E85326B00D4C9EC /* Content */,
 				135A707B1E8520E700D4C9EC /* SimpleNotification */,
 				135A70731E8503D900D4C9EC /* NITReaction.h */,
@@ -563,6 +589,7 @@
 				1327D8A81E83BE3100C6689E /* NITInstallation.h in Headers */,
 				1352CA831E78294E00C0E98E /* NITManager.h in Headers */,
 				1327D89F1E82A99600C6689E /* NITPulseBundle.h in Headers */,
+				132296F41E8D09D400AE6EFC /* NITCoupon.h in Headers */,
 				1349EEC41E7A95E3000B0666 /* NITNodesManager.h in Headers */,
 				13423EE31E7BCB07008CAAC8 /* NITGeofenceNode.h in Headers */,
 				1349EEB81E797045000B0666 /* NITGeopolisManager.h in Headers */,
@@ -570,6 +597,7 @@
 				1327D89B1E82A4E700C6689E /* NITRecipe.h in Headers */,
 				137E38A41E8A4464008E83E6 /* NITCacheManager.h in Headers */,
 				1352CA8D1E78313300C0E98E /* NITUserProfile.h in Headers */,
+				132296EA1E8CFCAD00AE6EFC /* NITCouponReaction.h in Headers */,
 				13824FF11E88F22100264BAC /* NITImage.h in Headers */,
 				1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */,
 				1349EEA21E79325E000B0666 /* NITJSONAPI.h in Headers */,
@@ -745,10 +773,12 @@
 				137E38A91E8A6B16008E83E6 /* contents1.json in Resources */,
 				135A70841E85281F00D4C9EC /* simple_recipe.json in Resources */,
 				1327D8901E8266B700C6689E /* single_gf.json in Resources */,
+				132296F11E8D078200AE6EFC /* response_coupon_evaluated_recipe.json in Resources */,
 				1327D88D1E8266B700C6689E /* empty_config.json in Resources */,
 				135A70971E8555CB00D4C9EC /* response_content_reaction.json in Resources */,
 				1349EEAC1E7948FA000B0666 /* jsonapi_sample1.json in Resources */,
 				132296E41E8CFA1F00AE6EFC /* recipes.json in Resources */,
+				132296ED1E8D046500AE6EFC /* response_online_recipe.json in Resources */,
 				135A708F1E8547AF00D4C9EC /* content_recipe.json in Resources */,
 				132296E21E8CF14600AE6EFC /* online_recipe.json in Resources */,
 				1327D8AB1E83E6A300C6689E /* beacon_areas_in_bg.json in Resources */,
@@ -786,6 +816,7 @@
 				1349EEB91E797045000B0666 /* NITGeopolisManager.m in Sources */,
 				13423EE01E7BC89D008CAAC8 /* NITBeaconNode.m in Sources */,
 				1327D8A91E83BE3100C6689E /* NITInstallation.m in Sources */,
+				132296EB1E8CFCAD00AE6EFC /* NITCouponReaction.m in Sources */,
 				1352CA841E78294E00C0E98E /* NITManager.m in Sources */,
 				135A707A1E851F1F00D4C9EC /* NITSimpleNotificationReaction.m in Sources */,
 				13423EE41E7BCB07008CAAC8 /* NITGeofenceNode.m in Sources */,
@@ -793,6 +824,7 @@
 				135A708D1E85448E00D4C9EC /* NITContent.m in Sources */,
 				1349EEB01E795030000B0666 /* NITNetworkManager.m in Sources */,
 				1327D8A41E83B7C400C6689E /* NITConstants.m in Sources */,
+				132296F51E8D09D400AE6EFC /* NITCoupon.m in Sources */,
 				1349EEA71E793413000B0666 /* NITJSONAPIResource.m in Sources */,
 				135A70931E854F3200D4C9EC /* NITNetworkMock.m in Sources */,
 				137E38A51E8A4464008E83E6 /* NITCacheManager.m in Sources */,
