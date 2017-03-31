@@ -61,4 +61,24 @@
     }];
 }
 
+- (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))handler {
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider feedbacks] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        if (error) {
+            self.feedbacks = [self.cacheManager loadArrayForKey:CACHE_KEY];
+            NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:112 userInfo:@{NSLocalizedDescriptionKey:@"Invalid feedbacks data", NSUnderlyingErrorKey: error}];
+            if(handler) {
+                handler(anError);
+            }
+        } else {
+            [json registerClass:[NITFeedback class] forType:@"feedbacks"];
+            
+            self.feedbacks = [json parseToArrayOfObjects];
+            [self.cacheManager saveWithArray:self.feedbacks forKey:CACHE_KEY];
+            if (handler) {
+                handler(nil);
+            }
+        }
+    }];
+}
+
 @end

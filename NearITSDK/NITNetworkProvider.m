@@ -89,6 +89,10 @@
     return request;
 }
 
++ (NSURLRequest*)feedbacks {
+    return [NITNetworkProvider requestWithPath:@"/plugins/feedbacks/feedbacks"];
+}
+
 + (NSURLRequest *)geopolisNodes {
     return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/geopolis/nodes?filter[app_id]=%@&include=**.children", [[NITConfiguration defaultConfiguration] appId]]];
 }

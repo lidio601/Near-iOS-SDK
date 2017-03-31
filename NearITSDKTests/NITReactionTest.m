@@ -181,7 +181,7 @@
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"content-test"];
     [cacheManager saveWithArray:contents forKey:@"ContentReaction"];
     [NSThread sleepForTimeInterval:0.5];
-    NITRecipe *recipe = [self recipeWithContentsOfFile:@"content_recipe"];
+    NITRecipe *recipe = [[NITRecipe alloc] init];
     recipe.reactionBundleId = @"c66db20c-20c4-4768-98e2-daf24def7722";
     NITContentReaction *reaction = [[NITContentReaction alloc] initWithCacheManager:cacheManager];
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
