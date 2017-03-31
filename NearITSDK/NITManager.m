@@ -15,6 +15,9 @@
 #import "NITSimpleNotificationReaction.h"
 #import "NITRecipe.h"
 #import "NITContentReaction.h"
+#import "NITCouponReaction.h"
+#import "NITFeedbackReaction.h"
+#import "NITCustomJSONReaction.h"
 #import "NITInstallation.h"
 
 @interface NITManager()<NITManaging>
@@ -69,6 +72,9 @@
     
     [self.reactions setObject:[[NITSimpleNotificationReaction alloc] init] forKey:@"simple-notification"];
     [self.reactions setObject:[[NITContentReaction alloc] init] forKey:@"content-notification"];
+    [self.reactions setObject:[[NITCouponReaction alloc] init] forKey:@"coupon-blaster"];
+    [self.reactions setObject:[[NITFeedbackReaction alloc] init] forKey:@"feedbacks"];
+    [self.reactions setObject:[[NITCustomJSONReaction alloc] init] forKey:@"json-sender"];
 }
 
 - (void)refreshConfig {
