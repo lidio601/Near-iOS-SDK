@@ -21,6 +21,8 @@
 #import "NITConfiguration.h"
 #import "NITFeedbackReaction.h"
 #import "NITFeedback.h"
+#import "NITCustomJSON.h"
+#import "NITCustomJSONReaction.h"
 
 @interface NITReactionTest : NITTestCase
 
@@ -56,6 +58,13 @@
     path = [bundle pathForResource:@"response_feeback_reaction" ofType:@"json"];
     [[NITNetworkMock sharedInstance] registerData:[NSData dataWithContentsOfFile:path] withTest:^BOOL(NSURLRequest * _Nonnull request) {
         if([request.URL.absoluteString containsString:@"/plugins/feedbacks/feedbacks/08b4935a-8ee5-45cd-923e-078a7d35953f"]) {
+            return YES;
+        }
+        return NO;
+    }];
+    path = [bundle pathForResource:@"response_custom_json_reaction" ofType:@"json"];
+    [[NITNetworkMock sharedInstance] registerData:[NSData dataWithContentsOfFile:path] withTest:^BOOL(NSURLRequest * _Nonnull request) {
+        if ([request.URL.absoluteString containsString:@"/plugins/json-sender/json_contents/bb40734c-75c2-4ac6-a716-9267f9893baa"]) {
             return YES;
         }
         return NO;
@@ -129,6 +138,30 @@
         if ([content isKindOfClass:[NITFeedback class]]) {
             NITFeedback *feedback = (NITFeedback*)content;
             XCTAssertTrue([feedback.question isEqualToString:@"Sei pronto a rispondere?"]);
+        }
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
+- (void)testCustomJSON {
+    NITRecipe *recipe = [[NITRecipe alloc] init];
+    recipe.reactionBundleId = @"bb40734c-75c2-4ac6-a716-9267f9893baa";
+    
+    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[NSString stringWithFormat:@"test-%@", recipe.reactionBundleId]];
+    NITCustomJSONReaction *reaction = [[NITCustomJSONReaction alloc] initWithCacheManager:cacheManager];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    [reaction contentWithRecipe:recipe completionHandler:^(id  _Nullable content, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        XCTAssertNotNil(content);
+        XCTAssertTrue([content isKindOfClass:[NITCustomJSON class]]);
+        
+        if ([content isKindOfClass:[NITCustomJSON class]]) {
+            NITCustomJSON *customJson = (NITCustomJSON*)content;
+            XCTAssertTrue([[customJson.content objectForKey:@"name"] isEqualToString:@"Mariolino"]);
         }
         
         [expectation fulfill];

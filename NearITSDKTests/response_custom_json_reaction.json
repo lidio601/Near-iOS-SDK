@@ -1,0 +1,16 @@
+{
+    "data" :{
+              "type" : "json_contents",
+              "id" : "bb40734c-75c2-4ac6-a716-9267f9893baa",
+              "attributes" : {
+              "content" : {
+              "name" : "Mariolino",
+              "city" : "Milan"
+              },
+              "owner_id" : "fa71a6e6-b091-48ee-b79e-bd893d673713",
+              "app_id" : "e34a7d90-14d2-46b8-81f0-81a2c93dd4d0",
+              "updated_at" : "2017-03-31T07:20:36.890421Z",
+              "created_at" : "2017-03-31T07:20:36.890421Z"
+              }
+            }
+}

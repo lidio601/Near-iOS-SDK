@@ -114,6 +114,15 @@
     return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/feedbacks/feedbacks/%@", bundleId]];
 }
 
++ (NSURLRequest *)customJSONWithBundleId:(NSString *)bundleId {
+    return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/json-sender/json_contents/%@", bundleId]];
+}
+
++ (NSURLRequest *)customJSONs {
+    NITConfiguration *config = [NITConfiguration defaultConfiguration];
+    return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/json-sender/json_contents?filter[app_id]=%@", config.appId]];
+}
+
 // MARK: - Private functions
 
 + (NSDictionary*)buildCoreObject {

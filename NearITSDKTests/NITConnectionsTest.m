@@ -24,7 +24,7 @@
 #define PROFILEID @"6a2490f4-28b9-4e36-b0f6-2c97c86b0002"
 #define INSTALLATIONID @"fb56d2f1-0ef6-4333-b576-3efa8701b13d"
 #define BASE_URL @"https://dev-api.nearit.com"
-#define WAIT_TIME_EXPECTATION 4.0
+#define WAIT_TIME_EXPECTATION 6.0
 
 @interface NITConnectionsTest : XCTestCase
 
@@ -189,6 +189,19 @@
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider contents] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        XCTAssertNotNil(json);
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:WAIT_TIME_EXPECTATION handler:nil];
+}
+
+- (void)testCustomJSONs {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider customJSONs] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         XCTAssertNil(error);
         XCTAssertNotNil(json);
         

@@ -25,5 +25,7 @@
 + (NSURLRequest*)couponsWithProfileId:(NSString*)profileId;
 + (NSURLRequest*)feedbackWithBundleId:(NSString*)bundleId;
 + (NSURLRequest*)feedbacks;
++ (NSURLRequest*)customJSONWithBundleId:(NSString*)bundleId;
++ (NSURLRequest*)customJSONs;
 
 @end
