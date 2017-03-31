@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable notification;
 @property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable labels;
 @property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable scheduling;
+@property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable cooldown;
 @property (nonatomic, strong) NSString * _Nonnull pulsePluginId;
 @property (nonatomic, strong) NSString * _Nonnull reactionPluginId;
 @property (nonatomic, strong) NSString * _Nonnull reactionBundleId;

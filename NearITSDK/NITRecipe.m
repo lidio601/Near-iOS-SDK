@@ -74,6 +74,8 @@
     id from = [date objectForKey:@"from"];
     id to = [date objectForKey:@"to"];
     
+    // FIXME: Check hours, seconds between date
+    
     if (from != nil && ![from isEqual:[NSNull null]]) {
         NSDate *fromDate = [dateFormatter dateFromString:from];
         NSComparisonResult result = [fromDate compare:now];
