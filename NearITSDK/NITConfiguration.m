@@ -48,6 +48,7 @@ static NITConfiguration *defaultConfiguration;
     return _apiKey;
 }
 
+// TODO: Develop a multi apiKey configuration (useful for testing)
 - (void)setApiKey:(NSString * _Nonnull)apiKey {
     _apiKey = apiKey;
     [[NSUserDefaults standardUserDefaults] setObject:apiKey forKey:APIKEY];
@@ -100,5 +101,7 @@ static NITConfiguration *defaultConfiguration;
     _deviceToken = deviceToken;
     [[NSUserDefaults standardUserDefaults] setObject:deviceToken forKey:DEVICETOKEN];
 }
+
+// TODO: Develop e clear configuration (useful for testing)
 
 @end

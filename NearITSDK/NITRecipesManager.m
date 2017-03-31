@@ -98,6 +98,7 @@
     }];
 }
 
+// TODO: Send tracking implementation is not complete (check Android SDK)
 - (void)sendTracking:(NSString *)recipeId {
     NITConfiguration *config = [NITConfiguration defaultConfiguration];
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
