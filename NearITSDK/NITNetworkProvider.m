@@ -93,6 +93,15 @@
     return [NITNetworkProvider requestWithPath:@"/plugins/feedbacks/feedbacks"];
 }
 
++ (NSURLRequest *)sendFeedbackEventWithJsonApi:(NITJSONAPI *)jsonApi feedbackId:(NSString*)feedbackId {
+    NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/feedbacks/feedbacks/%@/answers", feedbackId]];
+    [request setHTTPMethod:@"POST"];
+    NSDictionary *json = [jsonApi toDictionary];
+    NSData *jsonDataBody = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    [request setHTTPBody:jsonDataBody];
+    return request;
+}
+
 + (NSURLRequest *)geopolisNodes {
     return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/geopolis/nodes?filter[app_id]=%@&include=**.children", [[NITConfiguration defaultConfiguration] appId]]];
 }

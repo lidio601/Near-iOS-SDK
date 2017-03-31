@@ -29,6 +29,22 @@
     return [recipes objectAtIndex:0];
 }
 
+- (NITFeedback*)feedbackWithContentsOfFile:(NSString*)filename {
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *path = [bundle pathForResource:filename ofType:@"json"];
+    
+    NSError *jsonApiError;
+    NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithContentsOfFile:path error:&jsonApiError];
+    XCTAssertNil(jsonApiError);
+    
+    [jsonApi registerClass:[NITFeedback class] forType:@"feedbacks"];
+    
+    NSArray<NITFeedback*> *feedbacks = [jsonApi parseToArrayOfObjects];
+    XCTAssertTrue([feedbacks count] > 0);
+    
+    return [feedbacks objectAtIndex:0];
+}
+
 - (NSArray<NITContent*>*)contentsWithContentsOfFile:(NSString*)filename {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *path = [bundle pathForResource:filename ofType:@"json"];

@@ -11,5 +11,6 @@
 @interface NITFeedback : NITResource
 
 @property (nonatomic, strong) NSString* _Nonnull question;
+@property (nonatomic, strong) NSString* _Nonnull recipeId;
 
 @end

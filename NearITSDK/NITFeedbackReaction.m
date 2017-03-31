@@ -13,16 +13,43 @@
 #import "NITJSONAPI.h"
 #import "NITConstants.h"
 #import "NITRecipe.h"
+#import "NITFeedbackEvent.h"
+#import "NITConfiguration.h"
 
 #define CACHE_KEY @"ContentReaction"
 
 @interface NITFeedbackReaction()
 
 @property (nonatomic, strong) NSArray<NITFeedback*> *feedbacks;
+@property (nonatomic, strong) NITConfiguration *configuration;
 
 @end
 
 @implementation NITFeedbackReaction
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.configuration = [NITConfiguration defaultConfiguration];
+    }
+    return self;
+}
+
+- (instancetype)initWithCacheManager:(NITCacheManager *)cacheManager {
+    self = [super initWithCacheManager:cacheManager];
+    if (self) {
+        self.configuration = [NITConfiguration defaultConfiguration];
+    }
+    return self;
+}
+
+- (instancetype)initWithCacheManager:(NITCacheManager *)cacheManager configuration:(NITConfiguration*)configuration {
+    self = [super initWithCacheManager:cacheManager];
+    if (self) {
+        self.configuration = configuration;
+    }
+    return self;
+}
 
 - (void)contentWithRecipe:(NITRecipe *)recipe completionHandler:(void (^)(id _Nullable, NSError * _Nullable))handler {
     if (self.feedbacks == nil) {
@@ -30,18 +57,20 @@
     }
     for(NITFeedback *feedback in self.feedbacks) {
         if([feedback.ID isEqualToString:recipe.reactionBundleId]) {
+            feedback.recipeId = recipe.ID;
             handler(feedback, nil);
             return;
         }
     }
-    [self requestSingleReactionWithBundleId:recipe.reactionBundleId completionHandler:^(id content, NSError *requestError) {
+    [self requestSingleReactionWithBundleId:recipe.reactionBundleId completionHandler:^(NITFeedback *feedback, NSError *requestError) {
         if(handler) {
-            handler(content, requestError);
+            feedback.recipeId = recipe.ID;
+            handler(feedback, requestError);
         }
     }];
 }
 
-- (void)requestSingleReactionWithBundleId:(NSString*)bundleId completionHandler:(void (^)(id content, NSError *error))handler {
+- (void)requestSingleReactionWithBundleId:(NSString*)bundleId completionHandler:(void (^)(NITFeedback*, NSError*))handler {
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider feedbackWithBundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:111 userInfo:@{NSLocalizedDescriptionKey:@"Invalid feedback data", NSUnderlyingErrorKey: error}];
@@ -74,6 +103,29 @@
             
             self.feedbacks = [json parseToArrayOfObjects];
             [self.cacheManager saveWithArray:self.feedbacks forKey:CACHE_KEY];
+            if (handler) {
+                handler(nil);
+            }
+        }
+    }];
+}
+
+- (void)sendEventWithFeedbackEvent:(NITFeedbackEvent*)event completionHandler:(void (^)(NSError*))handler {
+    NITJSONAPI *jsonApi = [event toJsonAPI:self.configuration];
+    if (jsonApi == nil) {
+        if (handler) {
+            NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:113 userInfo:@{NSLocalizedDescriptionKey:@"Invalid feedback event data"}];
+            handler(anError);
+        }
+        return;
+    }
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider sendFeedbackEventWithJsonApi:jsonApi feedbackId:event.ID] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        if (error) {
+            NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:114 userInfo:@{NSLocalizedDescriptionKey:@"Error sending feedback event", NSUnderlyingErrorKey : error}];
+            if (handler) {
+                handler(anError);
+            }
+        } else {
             if (handler) {
                 handler(nil);
             }
