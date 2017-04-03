@@ -86,7 +86,6 @@
 }
 
 - (void)onlinePulseEvaluationWithPlugin:(NSString*)plugin action:(NSString*)action bundle:(NSString*)bundle {
-    // TODO: Online pulse evaluation
     NITJSONAPI *jsonApi = [self buildEvaluationBodyWithPlugin:plugin action:action bundle:bundle];
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider onlinePulseEvaluationWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (json) {
