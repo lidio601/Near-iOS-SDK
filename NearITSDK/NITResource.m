@@ -40,4 +40,11 @@
     return self.resourceObject.ID;
 }
 
+- (void)setID:(NSString*)ID {
+    if (self.resourceObject == nil) {
+        self.resourceObject = [[NITJSONAPIResource alloc] init];
+    }
+    self.resourceObject.ID = ID;
+}
+
 @end

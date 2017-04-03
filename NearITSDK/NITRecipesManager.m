@@ -71,12 +71,12 @@
         }
     }
     
-    // TODO: Filter recipe with RecipeCooler
+    NSArray<NITRecipe*> *recipes = [self.cooler filterRecipeWithRecipes:validRecipes];
     
-    if ([validRecipes count] == 0) {
+    if ([recipes count] == 0) {
         [self onlinePulseEvaluationWithPlugin:pulsePlugin action:pulseAction bundle:pulseBundle];
     } else {
-        NITRecipe *recipe = [matchingRecipes objectAtIndex:0];
+        NITRecipe *recipe = [recipes objectAtIndex:0];
         if(recipe.isEvaluatedOnline) {
             [self evaluateRecipeWithId:recipe.ID];
         } else {

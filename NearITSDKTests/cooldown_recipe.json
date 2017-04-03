@@ -38,8 +38,8 @@
             },
             "cooldown": {
                 "spam_level": 1,
-                "self_cooldown": 294481,
-                "global_cooldown": 300
+                "self_cooldown": 4,
+                "global_cooldown": 2
             }
         },
         "relationships": {

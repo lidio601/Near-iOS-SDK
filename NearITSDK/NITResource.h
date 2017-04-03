@@ -15,5 +15,6 @@
 
 - (NSDictionary* _Nonnull)attributesMap;
 - (NSString* _Nullable)ID;
+- (void)setID:(NSString* _Nonnull)ID;
 
 @end

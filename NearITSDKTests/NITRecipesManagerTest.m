@@ -10,6 +10,7 @@
 #import "NITTestCase.h"
 #import "NITRecipesManager.h"
 #import "NITNetworkMock.h"
+#import "NITRecipeCooler.h"
 
 @interface NITRecipesManagerTest : NITTestCase<NITManaging>
 
@@ -85,6 +86,42 @@
     [recipesManager gotPulseWithPulsePlugin:@"beacon_forest" pulseAction:@"always_evaluated" pulseBundle:@"e11f58db-054e-4df1-b09b-d0cbe2676031"];
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
+- (void)testRecipeCooler {
+    NITRecipe *recipe1 = [[NITRecipe alloc] init];
+    recipe1.ID = @"recipe1";
+    recipe1.cooldown = @{@"global_cooldown" : [NSNumber numberWithDouble:1.0], @"self_cooldown" : [NSNumber numberWithDouble:2.0]};
+    
+    NITRecipe *recipe2 = [[NITRecipe alloc] init];
+    recipe2.ID = @"recipe2";
+    recipe2.cooldown = @{@"global_cooldown" : [NSNumber numberWithDouble:1.0], @"self_cooldown" : [NSNumber numberWithDouble:3.0]};
+    
+    NSArray<NITRecipe*> *recipes = @[recipe1, recipe2];
+    
+    NITRecipeCooler *cooler = [[NITRecipeCooler alloc] init];
+    [cooler markRecipeAsShownWithId:recipe1.ID];
+    
+    [NSThread sleepForTimeInterval:0.2];
+    
+    NSArray<NITRecipe*> *filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
+    XCTAssertTrue([filteredRecipes count] == 0);
+    
+    [NSThread sleepForTimeInterval:1.5];
+    
+    filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
+    XCTAssertTrue([filteredRecipes count] == 1);
+    [cooler markRecipeAsShownWithId:recipe2.ID];
+    
+    [NSThread sleepForTimeInterval:1.5];
+    
+    filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
+    XCTAssertTrue([filteredRecipes count] == 1);
+    
+    [NSThread sleepForTimeInterval:2.0];
+    
+    filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
+    XCTAssertTrue([filteredRecipes count] == 2);
 }
 
 - (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {
