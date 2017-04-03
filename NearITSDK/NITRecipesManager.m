@@ -17,16 +17,26 @@
 #import "NITConstants.h"
 #import "NITImage.h"
 #import "NITClaim.h"
+#import "NITRecipeCooler.h"
 
 #define NITRecipeStatusNotified @"notified"
 
 @interface NITRecipesManager()
 
 @property (nonatomic, strong) NSArray<NITRecipe*> *recipes;
+@property (nonatomic, strong) NITRecipeCooler *cooler;
 
 @end
 
 @implementation NITRecipesManager
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.cooler = [[NITRecipeCooler alloc] init];
+    }
+    return self;
+}
 
 - (void)setRecipesWithJsonApi:(NITJSONAPI*)json {
     [json registerClass:[NITRecipe class] forType:@"recipes"];
@@ -59,6 +69,8 @@
             [validRecipes addObject:recipe];
         }
     }
+    
+    // TODO: Filter recipe with RecipeCooler
     
     if ([validRecipes count] == 0) {
         [self onlinePulseEvaluationWithPlugin:pulsePlugin action:pulseAction bundle:pulseBundle];
@@ -114,7 +126,7 @@
 
 - (void)sendTrackingWithRecipeId:(NSString *)recipeId event:(NSString*)event {
     if ([event isEqualToString:NITRecipeStatusNotified]) {
-        // TODO: Recipe cooler, markRecipeAsShown(recipeId)
+        [self.cooler markRecipeAsShownWithId:recipeId];
     }
     
     NITConfiguration *config = [NITConfiguration defaultConfiguration];

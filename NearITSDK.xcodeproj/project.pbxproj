@@ -33,6 +33,9 @@
 		132297171E8E438A00AE6EFC /* NITFeedbackEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 132297151E8E438A00AE6EFC /* NITFeedbackEvent.m */; };
 		132297191E8E4DF100AE6EFC /* feedback1.json in Resources */ = {isa = PBXBuildFile; fileRef = 132297181E8E4DF100AE6EFC /* feedback1.json */; };
 		1322971D1E9238AB00AE6EFC /* response_pulse_evaluation.json in Resources */ = {isa = PBXBuildFile; fileRef = 1322971C1E9238AB00AE6EFC /* response_pulse_evaluation.json */; };
+		1322971F1E923BAE00AE6EFC /* cooldown_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 1322971E1E923BAE00AE6EFC /* cooldown_recipe.json */; };
+		132297221E923D3300AE6EFC /* NITRecipeCooler.h in Headers */ = {isa = PBXBuildFile; fileRef = 132297201E923D3300AE6EFC /* NITRecipeCooler.h */; };
+		132297231E923D3300AE6EFC /* NITRecipeCooler.m in Sources */ = {isa = PBXBuildFile; fileRef = 132297211E923D3300AE6EFC /* NITRecipeCooler.m */; };
 		1327D88D1E8266B700C6689E /* empty_config.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8881E8266B700C6689E /* empty_config.json */; };
 		1327D88E1E8266B700C6689E /* gf_array.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8891E8266B700C6689E /* gf_array.json */; };
 		1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D88A1E8266B700C6689E /* multi_level_gf.json */; };
@@ -169,6 +172,9 @@
 		132297151E8E438A00AE6EFC /* NITFeedbackEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITFeedbackEvent.m; sourceTree = "<group>"; };
 		132297181E8E4DF100AE6EFC /* feedback1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feedback1.json; sourceTree = "<group>"; };
 		1322971C1E9238AB00AE6EFC /* response_pulse_evaluation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_pulse_evaluation.json; sourceTree = "<group>"; };
+		1322971E1E923BAE00AE6EFC /* cooldown_recipe.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cooldown_recipe.json; sourceTree = "<group>"; };
+		132297201E923D3300AE6EFC /* NITRecipeCooler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipeCooler.h; sourceTree = "<group>"; };
+		132297211E923D3300AE6EFC /* NITRecipeCooler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipeCooler.m; sourceTree = "<group>"; };
 		1327D8881E8266B700C6689E /* empty_config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = empty_config.json; sourceTree = "<group>"; };
 		1327D8891E8266B700C6689E /* gf_array.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gf_array.json; sourceTree = "<group>"; };
 		1327D88A1E8266B700C6689E /* multi_level_gf.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = multi_level_gf.json; sourceTree = "<group>"; };
@@ -307,6 +313,7 @@
 				132296EC1E8D046500AE6EFC /* response_online_recipe.json */,
 				132296F01E8D078200AE6EFC /* response_coupon_evaluated_recipe.json */,
 				1322971C1E9238AB00AE6EFC /* response_pulse_evaluation.json */,
+				1322971E1E923BAE00AE6EFC /* cooldown_recipe.json */,
 			);
 			name = "Recipes Manager";
 			sourceTree = "<group>";
@@ -603,6 +610,8 @@
 			isa = PBXGroup;
 			children = (
 				1327D8981E82A4D200C6689E /* Models */,
+				132297201E923D3300AE6EFC /* NITRecipeCooler.h */,
+				132297211E923D3300AE6EFC /* NITRecipeCooler.m */,
 				137838631E800EC1001C8CDE /* NITRecipesManager.h */,
 				137838641E800EC1001C8CDE /* NITRecipesManager.m */,
 			);
@@ -665,6 +674,7 @@
 				13423EE31E7BCB07008CAAC8 /* NITGeofenceNode.h in Headers */,
 				1349EEB81E797045000B0666 /* NITGeopolisManager.h in Headers */,
 				132296FF1E8D2F6400AE6EFC /* NITFeedbackReaction.h in Headers */,
+				132297221E923D3300AE6EFC /* NITRecipeCooler.h in Headers */,
 				132297031E8D306A00AE6EFC /* NITFeedback.h in Headers */,
 				1349EEAF1E795030000B0666 /* NITNetworkManager.h in Headers */,
 				1327D89B1E82A4E700C6689E /* NITRecipe.h in Headers */,
@@ -852,6 +862,7 @@
 				135A70841E85281F00D4C9EC /* simple_recipe.json in Resources */,
 				1327D8901E8266B700C6689E /* single_gf.json in Resources */,
 				132296F11E8D078200AE6EFC /* response_coupon_evaluated_recipe.json in Resources */,
+				1322971F1E923BAE00AE6EFC /* cooldown_recipe.json in Resources */,
 				1327D88D1E8266B700C6689E /* empty_config.json in Resources */,
 				135A70971E8555CB00D4C9EC /* response_content_reaction.json in Resources */,
 				1349EEAC1E7948FA000B0666 /* jsonapi_sample1.json in Resources */,
@@ -925,6 +936,7 @@
 				1349EEC11E7A9272000B0666 /* NITNode.m in Sources */,
 				1349EEC51E7A95E3000B0666 /* NITNodesManager.m in Sources */,
 				1349EECA1E7AA1E3000B0666 /* NITResource.m in Sources */,
+				132297231E923D3300AE6EFC /* NITRecipeCooler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

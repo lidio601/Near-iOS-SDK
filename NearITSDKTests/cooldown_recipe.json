@@ -1,0 +1,84 @@
+{
+    "data": {
+        "id": "d51ff564-c97e-4ab7-acdd-d7596a837df0",
+        "type": "recipes",
+        "attributes": {
+            "name": "Test",
+            "active": true,
+            "pulse_plugin_id": "c",
+            "pulse_bundle_id": "850b0fd4-7893-474e-91c2-6cef4f6baee9",
+            "operation_plugin_id": "c",
+            "operation_bundle_id": "f71ee55e-d2c6-480c-b4bb-904eecebc85d",
+            "reaction_plugin_id": "a",
+            "reaction_bundle_id": "770af317-e1df-4d22-9ddc-b77c362e7518",
+            "created_at": "2017-03-31T14:14:19.852Z",
+            "updated_at": "2017-03-31T14:14:19.852Z",
+            "notification": {
+                "title": "Title",
+                "body": "Test"
+            },
+            "kind": null,
+            "labels": "{}",
+            "state": "draft",
+            "scheduling": {
+                "date": {
+                    "to": "2017-04-02",
+                    "from": "2017-03-27"
+                },
+                "days": [
+                         "Mon",
+                         "Tue",
+                         "Fri",
+                         "Sat"
+                         ],
+                "timetable": {
+                    "to": "18:00:00",
+                    "from": "08:00:00"
+                }
+            },
+            "cooldown": {
+                "spam_level": 1,
+                "self_cooldown": 294481,
+                "global_cooldown": 300
+            }
+        },
+        "relationships": {
+            "pulse_action": {
+                "data": {
+                    "id": "enter_region",
+                    "type": "actions"
+                }
+            },
+            "operation_action": {
+                "data": {
+                    "id": "enter_region",
+                    "type": "actions"
+                }
+            },
+            "reaction_action": {
+                "data": {
+                    "id": "enter_region",
+                    "type": "actions"
+                }
+            },
+            "pulse_bundle": {
+                "data": {
+                    "id": "850b0fd4-7893-474e-91c2-6cef4f6baee9",
+                    "type": "pulse_bundles"
+                }
+            },
+            "reaction_bundle": {
+                "data": {
+                    "id": "770af317-e1df-4d22-9ddc-b77c362e7518",
+                    "type": "reaction_bundles"
+                }
+            },
+            "operation_bundle": {
+                "data": {
+                    "id": "f71ee55e-d2c6-480c-b4bb-904eecebc85d",
+                    "type": "operation_bundles"
+                }
+            }
+        }
+    }
+}
