@@ -7,6 +7,7 @@
 //
 
 #import "NITConfiguration.h"
+#import "NITUtils.h"
 
 #define APIKEY @"apikey"
 #define APPID @"appid"
@@ -41,22 +42,31 @@ static NITConfiguration *defaultConfiguration;
     return defaultConfiguration;
 }
 
+- (NSString*)paramKeyWithKey:(NSString*)key {
+    if (_appId) {
+        NSString *param = [key stringByAppendingString:[NSString stringWithFormat:@"-%@", _appId]];
+        return param;
+    }
+    return @"NearNothing";
+}
+
 - (NSString *)apiKey {
     if (_apiKey == nil) {
-        self.apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:APIKEY];
+        _apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:[self paramKeyWithKey:APIKEY]];
     }
     return _apiKey;
 }
 
-// TODO: Develop a multi apiKey configuration (useful for testing)
 - (void)setApiKey:(NSString * _Nonnull)apiKey {
     _apiKey = apiKey;
-    [[NSUserDefaults standardUserDefaults] setObject:apiKey forKey:APIKEY];
+    _appId = [NITUtils fetchAppIdFromApiKey:apiKey];
+    [[NSUserDefaults standardUserDefaults] setObject:apiKey forKey:[self paramKeyWithKey:APIKEY]];
+    [[NSUserDefaults standardUserDefaults] setObject:_appId forKey:[self paramKeyWithKey:APPID]];
 }
 
 - (NSString *)appId {
     if (_appId == nil) {
-        self.appId = [[NSUserDefaults standardUserDefaults] stringForKey:APPID];
+        _appId = [[NSUserDefaults standardUserDefaults] stringForKey:[self paramKeyWithKey:APPID]];
     }
     return _appId;
 }
@@ -68,7 +78,7 @@ static NITConfiguration *defaultConfiguration;
 
 - (NSString *)profileId {
     if(_profileId == nil) {
-        self.profileId = [[NSUserDefaults standardUserDefaults] stringForKey:PROFILE_ID];
+        _profileId = [[NSUserDefaults standardUserDefaults] stringForKey:PROFILE_ID];
     }
     return _profileId;
 }
@@ -80,7 +90,7 @@ static NITConfiguration *defaultConfiguration;
 
 - (NSString *)installationId {
     if(_installationId == nil) {
-        self.installationId = [[NSUserDefaults standardUserDefaults] stringForKey:INSTALLATIONID];
+        _installationId = [[NSUserDefaults standardUserDefaults] stringForKey:INSTALLATIONID];
     }
     return _installationId;
 }
@@ -92,7 +102,7 @@ static NITConfiguration *defaultConfiguration;
 
 - (NSString *)deviceToken {
     if(_deviceToken == nil) {
-        self.deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:DEVICETOKEN];
+        _deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:DEVICETOKEN];
     }
     return _deviceToken;
 }
@@ -102,6 +112,18 @@ static NITConfiguration *defaultConfiguration;
     [[NSUserDefaults standardUserDefaults] setObject:deviceToken forKey:DEVICETOKEN];
 }
 
-// TODO: Develop e clear configuration (useful for testing)
+- (void)clear {
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud removeObjectForKey:[self paramKeyWithKey:APIKEY]];
+    [ud removeObjectForKey:[self paramKeyWithKey:APPID]];
+    [ud removeObjectForKey:[self paramKeyWithKey:PROFILE_ID]];
+    [ud removeObjectForKey:[self paramKeyWithKey:INSTALLATIONID]];
+    [ud removeObjectForKey:[self paramKeyWithKey:DEVICETOKEN]];
+    _apiKey = nil;
+    _appId = nil;
+    _profileId = nil;
+    _installationId = nil;
+    _deviceToken = nil;
+}
 
 @end

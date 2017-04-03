@@ -36,6 +36,7 @@
 		1322971F1E923BAE00AE6EFC /* cooldown_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 1322971E1E923BAE00AE6EFC /* cooldown_recipe.json */; };
 		132297221E923D3300AE6EFC /* NITRecipeCooler.h in Headers */ = {isa = PBXBuildFile; fileRef = 132297201E923D3300AE6EFC /* NITRecipeCooler.h */; };
 		132297231E923D3300AE6EFC /* NITRecipeCooler.m in Sources */ = {isa = PBXBuildFile; fileRef = 132297211E923D3300AE6EFC /* NITRecipeCooler.m */; };
+		132297251E92417200AE6EFC /* NITConfigurationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 132297241E92417200AE6EFC /* NITConfigurationTest.m */; };
 		1327D88D1E8266B700C6689E /* empty_config.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8881E8266B700C6689E /* empty_config.json */; };
 		1327D88E1E8266B700C6689E /* gf_array.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8891E8266B700C6689E /* gf_array.json */; };
 		1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D88A1E8266B700C6689E /* multi_level_gf.json */; };
@@ -175,6 +176,7 @@
 		1322971E1E923BAE00AE6EFC /* cooldown_recipe.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cooldown_recipe.json; sourceTree = "<group>"; };
 		132297201E923D3300AE6EFC /* NITRecipeCooler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipeCooler.h; sourceTree = "<group>"; };
 		132297211E923D3300AE6EFC /* NITRecipeCooler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipeCooler.m; sourceTree = "<group>"; };
+		132297241E92417200AE6EFC /* NITConfigurationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITConfigurationTest.m; sourceTree = "<group>"; };
 		1327D8881E8266B700C6689E /* empty_config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = empty_config.json; sourceTree = "<group>"; };
 		1327D8891E8266B700C6689E /* gf_array.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gf_array.json; sourceTree = "<group>"; };
 		1327D88A1E8266B700C6689E /* multi_level_gf.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = multi_level_gf.json; sourceTree = "<group>"; };
@@ -512,6 +514,7 @@
 				135A70801E8525F700D4C9EC /* NITReactionTest.m */,
 				137E38A61E8A4AA6008E83E6 /* NITCacheManagerTest.m */,
 				137E38B01E8A9569008E83E6 /* NITRecipesManagerTest.m */,
+				132297241E92417200AE6EFC /* NITConfigurationTest.m */,
 				1352CA741E7807FE00C0E98E /* Info.plist */,
 			);
 			path = NearITSDKTests;
@@ -950,6 +953,7 @@
 				137E38B11E8A9569008E83E6 /* NITRecipesManagerTest.m in Sources */,
 				137E38A71E8A4AA6008E83E6 /* NITCacheManagerTest.m in Sources */,
 				1349EEA91E793834000B0666 /* NITJSONAPITests.m in Sources */,
+				132297251E92417200AE6EFC /* NITConfigurationTest.m in Sources */,
 				1352CA801E7808DA00C0E98E /* NITConnectionsTest.m in Sources */,
 				13423EE61E7BD451008CAAC8 /* NITGeopolisManagerTest.m in Sources */,
 				137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */,

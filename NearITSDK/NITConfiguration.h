@@ -12,6 +12,7 @@
 
 + (NITConfiguration * _Nonnull)defaultConfiguration;
 
+- (NSString* _Nonnull)paramKeyWithKey:(NSString* _Nonnull)key;
 - (NSString* _Nullable)apiKey;
 - (NSString* _Nullable)appId;
 - (NSString* _Nullable)profileId;
@@ -22,5 +23,6 @@
 - (void)setInstallationId:(NSString* _Nonnull)installationId;
 - (NSString * _Nullable)deviceToken;
 - (void)setDeviceToken:(NSString * _Nonnull)deviceToken;
+- (void)clear;
 
 @end

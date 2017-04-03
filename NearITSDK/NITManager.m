@@ -35,7 +35,6 @@
     self = [super init];
     if (self) {
         [[NITConfiguration defaultConfiguration] setApiKey:apiKey];
-        [[NITConfiguration defaultConfiguration] setAppId:[NITUtils fetchAppIdFromApiKey:apiKey]];
         
         [self pluginSetup];
         [self reactionsSetup];
