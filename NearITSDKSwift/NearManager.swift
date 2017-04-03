@@ -47,6 +47,10 @@ public final class NearManager: NSObject, NITManagerDelegate {
         }
     }
     
+    public func sendTracking(_ recipeId: String, event event: String) {
+        manager.sendTracking(withRecipeId: recipeId, event: event)
+    }
+    
     public func manager(_ manager: NITManager, eventWithContent content: Any) {
         delegate?.manager(self, eventWithContent: content)
     }

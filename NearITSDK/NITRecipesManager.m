@@ -16,6 +16,8 @@
 #import "NITCoupon.h"
 #import "NITConstants.h"
 
+#define NITRecipeStatusNotified @"notified"
+
 @interface NITRecipesManager()
 
 @property (nonatomic, strong) NSArray<NITRecipe*> *recipes;
@@ -99,7 +101,11 @@
 }
 
 // TODO: Send tracking implementation is not complete (check Android SDK)
-- (void)sendTracking:(NSString *)recipeId {
+- (void)sendTrackingWithRecipeId:(NSString *)recipeId event:(NSString*)event {
+    if ([event isEqualToString:NITRecipeStatusNotified]) {
+        // TODO: Recipe cooler, markRecipeAsShown(recipeId)
+    }
+    
     NITConfiguration *config = [NITConfiguration defaultConfiguration];
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
     NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
@@ -108,8 +114,7 @@
     [resource addAttributeObject:config.installationId forKey:@"installation_id"];
     [resource addAttributeObject:config.appId forKey:@"app_id"];
     [resource addAttributeObject:recipeId forKey:@"recipe_id"];
-    // TODO: Pass event as argument
-    [resource addAttributeObject:@"engaged" forKey:@"event"];
+    [resource addAttributeObject:event forKey:@"event"];
     
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = ISO8601DateFormatMilliseconds;

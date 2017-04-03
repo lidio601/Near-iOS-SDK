@@ -36,5 +36,6 @@
 - (void)refreshConfig;
 - (void)setDeviceToken:(NSString* _Nonnull)deviceToken;
 - (void)processRecipeWithUserInfo:(NSDictionary<NSString*, id> * _Nullable)userInfo;
+- (void)sendTrackingWithRecipeId:(NSString * _Nonnull)recipeId event:(NSString* _Nonnull)event;
 
 @end

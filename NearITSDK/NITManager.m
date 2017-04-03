@@ -112,10 +112,12 @@
     
     NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
     if(recipeId) {
-        // FIXME: Send tracking is a manual call from developer
-        [self.recipesManager sendTracking:recipeId];
         [self.recipesManager processRecipe:recipeId];
     }
+}
+
+- (void)sendTrackingWithRecipeId:(NSString *)recipeId event:(NSString *)event {
+    [self.recipesManager sendTrackingWithRecipeId:recipeId event:event];
 }
 
 
