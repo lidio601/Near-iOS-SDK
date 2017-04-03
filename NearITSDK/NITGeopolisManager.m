@@ -57,6 +57,7 @@ NSString* const NodeKey = @"node";
 }
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable error))completionHandler {
+    // TODO: Manage cache
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         [self.nodesManager setNodesWithJsonApi:json];
         completionHandler(error);
