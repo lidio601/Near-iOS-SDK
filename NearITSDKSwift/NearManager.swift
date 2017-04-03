@@ -10,8 +10,8 @@ import UIKit
 import NearITSDK
 
 public protocol NearManagerDelegate {
-    func manager(_ manager: NearManager, eventWithContent content: Any);
-    func manager(_ manager: NearManager, eventFailureWithError error: Error);
+    func manager(_ manager: NearManager, eventWithContent content: Any, recipe: NITRecipe);
+    func manager(_ manager: NearManager, eventFailureWithError error: Error, recipe: NITRecipe);
 }
 
 public final class NearManager: NSObject, NITManagerDelegate {
@@ -47,15 +47,15 @@ public final class NearManager: NSObject, NITManagerDelegate {
         }
     }
     
-    public func sendTracking(_ recipeId: String, event event: String) {
+    public func sendTracking(_ recipeId: String, event: String) {
         manager.sendTracking(withRecipeId: recipeId, event: event)
     }
     
-    public func manager(_ manager: NITManager, eventWithContent content: Any) {
-        delegate?.manager(self, eventWithContent: content)
+    public func manager(_ manager: NITManager, eventWithContent content: Any, recipe: NITRecipe) {
+        delegate?.manager(self, eventWithContent: content, recipe: recipe)
     }
-
-    public func manager(_ manager: NITManager, eventFailureWithError error: Error) {
-        delegate?.manager(self, eventFailureWithError: error);
+    
+    public func manager(_ manager: NITManager, eventFailureWithError error: Error, recipe: NITRecipe) {
+        delegate?.manager(self, eventFailureWithError: error, recipe: recipe);
     }
 }

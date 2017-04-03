@@ -129,13 +129,13 @@
     if(reaction) {
         [reaction contentWithRecipe:recipe completionHandler:^(id _Nonnull content, NSError * _Nullable error) {
             if(error) {
-                if([self.delegate respondsToSelector:@selector(manager:eventFailureWithError:)]) {
-                    [self.delegate manager:self eventFailureWithError:error];
+                if([self.delegate respondsToSelector:@selector(manager:eventFailureWithError:recipe:)]) {
+                    [self.delegate manager:self eventFailureWithError:error recipe:recipe];
                 }
             } else {
                 //Notify the delegate
-                if ([self.delegate respondsToSelector:@selector(manager:eventWithContent:)]) {
-                    [self.delegate manager:self eventWithContent:content];
+                if ([self.delegate respondsToSelector:@selector(manager:eventWithContent:recipe:)]) {
+                    [self.delegate manager:self eventWithContent:content recipe:recipe];
                 }
             }
         }];

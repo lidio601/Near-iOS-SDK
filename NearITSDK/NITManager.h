@@ -20,8 +20,8 @@
 
 @protocol NITManagerDelegate <NSObject>
 
-- (void)manager:(NITManager* _Nonnull)manager eventWithContent:(id _Nonnull)content;
-- (void)manager:(NITManager* _Nonnull)manager eventFailureWithError:(NSError* _Nonnull)error;
+- (void)manager:(NITManager* _Nonnull)manager eventWithContent:(id _Nonnull)content recipe:(NITRecipe* _Nonnull)recipe;
+- (void)manager:(NITManager* _Nonnull)manager eventFailureWithError:(NSError* _Nonnull)error recipe:(NITRecipe* _Nonnull)recipe;
 
 @end
 
