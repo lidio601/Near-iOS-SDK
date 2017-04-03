@@ -1,0 +1,95 @@
+{
+    "data": {
+        "id": "bfeaced5-3cbd-4d19-8c97-11f716fbd8af",
+        "type": "recipes",
+        "attributes": {
+            "name": "Test",
+            "active": true,
+            "pulse_plugin_id": "beacon_forest",
+            "pulse_bundle_id": "e11f58db-054e-4df1-b09b-d0cbe2676031",
+            "operation_plugin_id": "always_included",
+            "operation_bundle_id": "3770729c-f3b5-457c-af8e-7ec9b58cb4b9",
+            "reaction_plugin_id": "always_evaluated",
+            "reaction_bundle_id": "92c08455-75ae-4c9e-8328-d31dfb117282",
+            "created_at": "2017-03-31T14:14:26.363Z",
+            "updated_at": "2017-03-31T14:14:26.363Z",
+            "notification": {
+                "title": "Title",
+                "body": "Test"
+            },
+            "kind": "passive",
+            "labels": {
+                "online": true
+            },
+            "state": "finalized",
+            "scheduling": null,
+            "cooldown": null
+        },
+        "relationships": {
+            "pulse_action": {
+                "data": {
+                    "id": "always_evaluated",
+                    "type": "pulse_actions"
+                }
+            },
+            "operation_action": {
+                "data": {
+                    "id": "b.a",
+                    "type": "operation_actions"
+                }
+            },
+            "reaction_action": {
+                "data": {
+                    "id": "a.a",
+                    "type": "reaction_actions"
+                }
+            },
+            "pulse_bundle": {
+                "data": {
+                    "id": "e11f58db-054e-4df1-b09b-d0cbe2676031",
+                    "type": "pulse_bundles"
+                }
+            },
+            "reaction_bundle": {
+                "data": {
+                    "id": "92c08455-75ae-4c9e-8328-d31dfb117282",
+                    "type": "a-bundle-types"
+                }
+            },
+            "operation_bundle": {
+                "data": {
+                    "id": "3770729c-f3b5-457c-af8e-7ec9b58cb4b9",
+                    "type": "operation_bundles"
+                }
+            }
+        }
+    },
+    "included": [
+                 {
+                 "id": "92c08455-75ae-4c9e-8328-d31dfb117282",
+                 "type": "a-bundle-types",
+                 "attributes": {
+                 "some_key": "some-value",
+                 "some_other_key": "some-other-value"
+                 },
+                 "relationships": {
+                 "some_relationships": {
+                 "data": {
+                 "id": "36747c45-ea8d-4ced-8021-2fa00effadeb",
+                 "type": "some-types"
+                 }
+                 },
+                 "icon": {
+                 "data": null
+                 }
+                 }
+                 },
+                 {
+                 "id": "36747c45-ea8d-4ced-8021-2fa00effadeb",
+                 "type": "some-types",
+                 "attributes": {
+                 "some_included_attributes": "some-value"
+                 }
+                 }
+                 ]
+}

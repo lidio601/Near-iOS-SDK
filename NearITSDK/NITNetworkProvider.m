@@ -41,6 +41,17 @@
     return request;
 }
 
++ (NSURLRequest *)onlinePulseEvaluationWithJsonApi:(NITJSONAPI*)jsonApi {
+    NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:@"/recipes/evaluate"];
+    [request setHTTPMethod:@"POST"];
+    
+    NSDictionary *json = [jsonApi toDictionary];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    [request setHTTPBody:jsonData];
+    
+    return request;
+}
+
 + (NSURLRequest *)newProfileWithAppId:(NSString*)appId {
     NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:@"/plugins/congrego/profiles"];
     [request setHTTPMethod:@"POST"];

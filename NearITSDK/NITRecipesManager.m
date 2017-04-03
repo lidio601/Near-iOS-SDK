@@ -87,6 +87,17 @@
 
 - (void)onlinePulseEvaluationWithPlugin:(NSString*)plugin action:(NSString*)action bundle:(NSString*)bundle {
     // TODO: Online pulse evaluation
+    NITJSONAPI *jsonApi = [self buildEvaluationBodyWithPlugin:plugin action:action bundle:bundle];
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider onlinePulseEvaluationWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        if (json) {
+            [self registerClassesWithJsonApi:json];
+            NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
+            if ([recipes count] > 0) {
+                NITRecipe *recipe = [recipes objectAtIndex:0];
+                [self gotRecipe:recipe];
+            }
+        }
+    }];
 }
 
 - (void)evaluateRecipeWithId:(NSString*)recipeId {
@@ -102,7 +113,6 @@
     }];
 }
 
-// TODO: Send tracking implementation is not complete (check Android SDK)
 - (void)sendTrackingWithRecipeId:(NSString *)recipeId event:(NSString*)event {
     if ([event isEqualToString:NITRecipeStatusNotified]) {
         // TODO: Recipe cooler, markRecipeAsShown(recipeId)
@@ -143,14 +153,28 @@
 }
 
 - (NITJSONAPI*)buildEvaluationBody {
+    return [self buildEvaluationBodyWithPlugin:nil action:nil bundle:nil];
+}
+
+- (NITJSONAPI*)buildEvaluationBodyWithPlugin:(NSString*)plugin action:(NSString*)action bundle:(NSString*)bundle {
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
     NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
     resource.type = @"evaluation";
     [resource addAttributeObject:[self buildCoreObject] forKey:@"core"];
+    if(plugin) {
+        [resource addAttributeObject:plugin forKey:@"pulse_plugin_id"];
+    }
+    if(action) {
+        [resource addAttributeObject:action forKey:@"pulse_action_id"];
+    }
+    if(bundle) {
+        [resource addAttributeObject:bundle forKey:@"pulse_bundle_id"];
+    }
     [jsonApi setDataWithResourceObject:resource];
     return jsonApi;
 }
 
+// TODO: Check recipe cooler
 - (NSDictionary*)buildCoreObject {
     NITConfiguration *config = [NITConfiguration defaultConfiguration];
     NSMutableDictionary<NSString*, NSString*> *core = [[NSMutableDictionary alloc] init];

@@ -31,6 +31,13 @@
         }
         return NO;
     }];
+    path = [bundle pathForResource:@"response_pulse_evaluation" ofType:@"json"];
+    [[NITNetworkMock sharedInstance] registerData:[NSData dataWithContentsOfFile:path] withTest:^BOOL(NSURLRequest * _Nonnull request) {
+        if([request.URL.absoluteString containsString:@"/recipes/evaluate"]) {
+            return YES;
+        }
+        return NO;
+    }];
 }
 
 - (void)tearDown {
@@ -66,9 +73,27 @@
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
+- (void)testOnlinePulseEvaluation {
+    self.expectation = [self expectationWithDescription:@"expectation"];
+    
+    NITJSONAPI *recipesJson = [self jsonApiWithContentsOfFile:@"online_recipe"];
+    
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] init];
+    [recipesManager setRecipesWithJsonApi:recipesJson];
+    recipesManager.manager = self;
+    
+    [recipesManager gotPulseWithPulsePlugin:@"beacon_forest" pulseAction:@"always_evaluated" pulseBundle:@"e11f58db-054e-4df1-b09b-d0cbe2676031"];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
 - (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {
     if ([self.name containsString:@"testOnlineEvaluation"]) {
         XCTAssertNotNil(recipe);
+        [self.expectation fulfill];
+    } else if([self.name containsString:@"testOnlinePulseEvaluation"]) {
+        XCTAssertNotNil(recipe);
+        XCTAssertTrue([recipe.pulseBundle.ID isEqualToString:@"e11f58db-054e-4df1-b09b-d0cbe2676031"]);
         [self.expectation fulfill];
     }
 }

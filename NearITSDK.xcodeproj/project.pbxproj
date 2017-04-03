@@ -32,6 +32,7 @@
 		132297161E8E438A00AE6EFC /* NITFeedbackEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 132297141E8E438A00AE6EFC /* NITFeedbackEvent.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		132297171E8E438A00AE6EFC /* NITFeedbackEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 132297151E8E438A00AE6EFC /* NITFeedbackEvent.m */; };
 		132297191E8E4DF100AE6EFC /* feedback1.json in Resources */ = {isa = PBXBuildFile; fileRef = 132297181E8E4DF100AE6EFC /* feedback1.json */; };
+		1322971D1E9238AB00AE6EFC /* response_pulse_evaluation.json in Resources */ = {isa = PBXBuildFile; fileRef = 1322971C1E9238AB00AE6EFC /* response_pulse_evaluation.json */; };
 		1327D88D1E8266B700C6689E /* empty_config.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8881E8266B700C6689E /* empty_config.json */; };
 		1327D88E1E8266B700C6689E /* gf_array.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D8891E8266B700C6689E /* gf_array.json */; };
 		1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */ = {isa = PBXBuildFile; fileRef = 1327D88A1E8266B700C6689E /* multi_level_gf.json */; };
@@ -167,6 +168,7 @@
 		132297141E8E438A00AE6EFC /* NITFeedbackEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITFeedbackEvent.h; sourceTree = "<group>"; };
 		132297151E8E438A00AE6EFC /* NITFeedbackEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITFeedbackEvent.m; sourceTree = "<group>"; };
 		132297181E8E4DF100AE6EFC /* feedback1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = feedback1.json; sourceTree = "<group>"; };
+		1322971C1E9238AB00AE6EFC /* response_pulse_evaluation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_pulse_evaluation.json; sourceTree = "<group>"; };
 		1327D8881E8266B700C6689E /* empty_config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = empty_config.json; sourceTree = "<group>"; };
 		1327D8891E8266B700C6689E /* gf_array.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gf_array.json; sourceTree = "<group>"; };
 		1327D88A1E8266B700C6689E /* multi_level_gf.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = multi_level_gf.json; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 				132296E31E8CFA1F00AE6EFC /* recipes.json */,
 				132296EC1E8D046500AE6EFC /* response_online_recipe.json */,
 				132296F01E8D078200AE6EFC /* response_coupon_evaluated_recipe.json */,
+				1322971C1E9238AB00AE6EFC /* response_pulse_evaluation.json */,
 			);
 			name = "Recipes Manager";
 			sourceTree = "<group>";
@@ -842,6 +845,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1322971D1E9238AB00AE6EFC /* response_pulse_evaluation.json in Resources */,
 				1327D88E1E8266B700C6689E /* gf_array.json in Resources */,
 				132296FB1E8D2BA300AE6EFC /* coupons.json in Resources */,
 				137E38A91E8A6B16008E83E6 /* contents1.json in Resources */,
