@@ -15,6 +15,8 @@
 #import "NITConfiguration.h"
 #import "NITCoupon.h"
 #import "NITConstants.h"
+#import "NITImage.h"
+#import "NITClaim.h"
 
 #define NITRecipeStatusNotified @"notified"
 

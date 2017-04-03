@@ -15,6 +15,8 @@
 #import "NITNetworkManager.h"
 #import "NITNetworkProvider.h"
 #import "NITConfiguration.h"
+#import "NITClaim.h"
+#import "NITImage.h"
 
 @interface NITCouponReaction()
 

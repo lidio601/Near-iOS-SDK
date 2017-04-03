@@ -6,9 +6,10 @@
 //  Copyright © 2017 NearIT. All rights reserved.
 //
 
-#import <NearITSDK/NearITSDK.h>
-#import "NITClaim.h"
-#import "NITImage.h"
+#import "NITResource.h"
+
+@class NITClaim;
+@class NITImage;
 
 @interface NITCoupon : NITResource
 

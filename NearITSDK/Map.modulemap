@@ -6,7 +6,15 @@ framework module NearITSDK {
     
     explicit module Private {
         header "NITManager.h"
+        header "NITSimpleNotification.h"
         header "NITContent.h"
+        header "NITImage.h"
         header "NITResource.h"
+        header "NITRecipe.h"
+        header "NITCoupon.h"
+        header "NITClaim.h"
+        header "NITFeedback.h"
+        header "NITFeedbackEvent.h"
+        header "NITCustomJSON.h"
     }
 }

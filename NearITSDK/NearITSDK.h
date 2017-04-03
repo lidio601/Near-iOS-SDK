@@ -10,7 +10,14 @@
 
 #import <NearITSDK/NITManager.h>
 #import <NearITSDK/NITContent.h>
+#import <NearITSDK/NITImage.h>
 #import <NearITSDK/NITResource.h>
+#import <NearITSDK/NITRecipe.h>
+#import <NearITSDK/NITCoupon.h>
+#import <NearITSDK/NITClaim.h>
+#import <NearITSDK/NITFeedback.h>
+#import <NearITSDK/NITFeedbackEvent.h>
+#import <NearITSDK/NITCustomJSON.h>
 
 //! Project version number for NearITSDK.
 FOUNDATION_EXPORT double NearITSDKVersionNumber;
