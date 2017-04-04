@@ -87,7 +87,8 @@
         
     }];
     
-    for(NITReaction *reaction in self.reactions) {
+    for(NSString *reactionKey in self.reactions) {
+        NITReaction *reaction = [self.reactions objectForKey:reactionKey];
         [reaction refreshConfigWithCompletionHandler:nil];
     }
 }
