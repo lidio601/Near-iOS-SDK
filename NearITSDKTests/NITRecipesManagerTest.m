@@ -47,15 +47,27 @@
     [super tearDown];
 }
 
-- (void)testScheduling {
-    NITRecipe *recipe = [self recipeWithContentsOfFile:@"simple_recipe"];
-    XCTAssertNotNil(recipe);
-    if(recipe == nil) {
-        return;
-    }
+- (void)testSchedulingDate {
+    NITRecipe *recipe = [[NITRecipe alloc] init];
+    recipe.scheduling = @{@"date" : @{
+        @"from" : @"2017-02-27",
+        @"to" : @"2017-03-05"
+    }};
     
     BOOL isScheduled = [recipe isScheduledNow:[NSDate dateWithTimeIntervalSince1970:1488459686]]; // Thu, 02 Mar 2017 13:01:26 GMT
     XCTAssertTrue(isScheduled);
+    
+    isScheduled = [recipe isScheduledNow:[NSDate dateWithTimeIntervalSince1970:1488152700]]; // Sun, 26 Feb 2017 23:45:00 +0000
+    XCTAssertFalse(isScheduled);
+    
+    isScheduled = [recipe isScheduledNow:[NSDate dateWithTimeIntervalSince1970:1488197400]]; // Mon, 27 Feb 2017 12:10:00 +0000
+    XCTAssertTrue(isScheduled);
+    
+    isScheduled = [recipe isScheduledNow:[NSDate dateWithTimeIntervalSince1970:1488756600]]; // Sun, 05 Mar 2017 23:30:00 +0000
+    XCTAssertTrue(isScheduled);
+    
+    isScheduled = [recipe isScheduledNow:[NSDate dateWithTimeIntervalSince1970:1488762000]]; // Mon, 06 Mar 2017 01:00:00 +0000
+    XCTAssertFalse(isScheduled);
     
     isScheduled = [recipe isScheduledNow:[NSDate dateWithTimeIntervalSince1970:1495458086]]; // Mon, 22 May 2017 13:01:26 GMT
     XCTAssertFalse(isScheduled);

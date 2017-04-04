@@ -70,31 +70,46 @@
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     
     id from = [date objectForKey:@"from"];
     id to = [date objectForKey:@"to"];
     
-    // FIXME: Check hours, seconds between date
-    
     if (from != nil && ![from isEqual:[NSNull null]]) {
         NSDate *fromDate = [dateFormatter dateFromString:from];
-        NSComparisonResult result = [fromDate compare:now];
-        if(result == NSOrderedSame || result == NSOrderedAscending) {
-            valid &= YES;
-        } else {
-            valid &= NO;
-        }
+        valid &= [self isGreatherOrEqualDMYWithFromDate:now referenceDate:fromDate];
     }
     if (to != nil && ![to isEqual:[NSNull null]]) {
         NSDate *toDate = [dateFormatter dateFromString:to];
-        NSComparisonResult result = [toDate compare:now];
-        if(result == NSOrderedSame || result == NSOrderedDescending) {
+        valid &= [self isGreatherOrEqualDMYWithFromDate:toDate referenceDate:now];
+    }
+    
+    return valid;
+}
+
+- (BOOL)isGreatherOrEqualDMYWithFromDate:(NSDate*)fromDate referenceDate:(NSDate*)refDate {
+    BOOL valid = YES;
+    NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+    [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    NSDateComponents *fromComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:fromDate];
+    NSDateComponents *refComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:refDate];
+    if (fromComponents.year == refComponents.year) {
+        if (fromComponents.month == refComponents.month) {
+            if (fromComponents.day >= refComponents.day) {
+                valid &= YES;
+            } else {
+                valid &= NO;
+            }
+        } else if (fromComponents.month > refComponents.month) {
             valid &= YES;
         } else {
             valid &= NO;
         }
+    } else if (fromComponents.year > refComponents.year) {
+        valid &= YES;
+    } else {
+        valid &= NO;
     }
-    
     return valid;
 }
 
