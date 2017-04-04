@@ -98,4 +98,41 @@
     return valid;
 }
 
+// MARK: - NSCoding
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        self.name = [aDecoder decodeObjectForKey:@"name"];
+        self.notification = [aDecoder decodeObjectForKey:@"notification"];
+        self.labels = [aDecoder decodeObjectForKey:@"labels"];
+        self.scheduling = [aDecoder decodeObjectForKey:@"scheduling"];
+        self.cooldown = [aDecoder decodeObjectForKey:@"cooldown"];
+        self.pulsePluginId = [aDecoder decodeObjectForKey:@"pulsePluginId"];
+        self.reactionPluginId = [aDecoder decodeObjectForKey:@"reactionPluginId"];
+        self.reactionBundleId = [aDecoder decodeObjectForKey:@"reactionBundleId"];
+        self.pulseBundle = [aDecoder decodeObjectForKey:@"pulseBundle"];
+        self.pulseAction = [aDecoder decodeObjectForKey:@"pulseAction"];
+        self.reactionAction = [aDecoder decodeObjectForKey:@"reactionAction"];
+        self.reactionBundle = [aDecoder decodeObjectForKey:@"reactionBundle"];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeObject:self.notification forKey:@"notification"];
+    [aCoder encodeObject:self.labels forKey:@"labels"];
+    [aCoder encodeObject:self.scheduling forKey:@"scheduling"];
+    [aCoder encodeObject:self.cooldown forKey:@"cooldown"];
+    [aCoder encodeObject:self.pulsePluginId forKey:@"pulsePluginId"];
+    [aCoder encodeObject:self.reactionPluginId forKey:@"reactionPluginId"];
+    [aCoder encodeObject:self.reactionBundleId forKey:@"reactionBundleId"];
+    [aCoder encodeObject:self.pulseBundle forKey:@"pulseBundle"];
+    [aCoder encodeObject:self.pulseAction forKey:@"pulseAction"];
+    [aCoder encodeObject:self.reactionAction forKey:@"reactionAction"];
+    [aCoder encodeObject:self.reactionBundle forKey:@"reactionBundle"];
+}
+
 @end

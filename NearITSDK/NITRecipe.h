@@ -10,7 +10,7 @@
 
 @class NITPulseBundle;
 
-@interface NITRecipe : NITResource
+@interface NITRecipe : NITResource<NSCoding>
 
 @property (nonatomic, strong) NSString * _Nullable name;
 @property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable notification;
