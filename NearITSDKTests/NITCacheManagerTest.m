@@ -28,7 +28,7 @@
 - (void)testAppDirectory {
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"e34a7d90-14d2-46b8-81f0-81a2c93dd4d0"];
     NSString *appPath = [cacheManager appDirectory];
-    XCTAssertTrue([appPath containsString:@"Near/e34a7d90-14d2-46b8-81f0-81a2c93dd4d0"]);
+    XCTAssertTrue([appPath containsString:@"com.nearit.sdk.cache/e34a7d90-14d2-46b8-81f0-81a2c93dd4d0"]);
 }
 
 - (void)testComplete {
@@ -56,6 +56,7 @@
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"e34a7d90-14d2-46b8-81f0-81a2c93dd4d0"];
     [cacheManager saveWithArray:stringItems1 forKey:@"array1"];
     [cacheManager saveWithArray:stringItems2 forKey:@"array2"];
+    [NSThread sleepForTimeInterval:0.5];
     XCTAssertTrue([cacheManager numberOfStoredKeys] == 2);
     [cacheManager removeAllItemsWithCompletionHandler:^{
         XCTAssertTrue([cacheManager numberOfStoredKeys] == 0);
