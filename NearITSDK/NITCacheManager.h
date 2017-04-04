@@ -16,7 +16,7 @@
 - (void)setAppId:(NSString * _Nonnull)appId;
 - (NSString* _Nonnull)appDirectory;
 - (void)saveWithArray:(NSArray* _Nonnull)array forKey:(NSString* _Nonnull)key;
-- (void)saveWithObject:(id<NSCopying> _Nonnull)object forKey:(NSString* _Nonnull)key;
+- (void)saveWithObject:(id<NSCoding> _Nonnull)object forKey:(NSString* _Nonnull)key;
 - (NSArray* _Nullable)loadArrayForKey:(NSString* _Nonnull)key;
 - (NSDictionary* _Nullable)loadDictionaryForKey:(NSString* _Nonnull)key;
 - (id _Nullable)loadObjectForKey:(NSString* _Nonnull)key;

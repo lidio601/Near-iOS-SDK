@@ -65,7 +65,7 @@ static NITCacheManager *defaultCache;
     });
 }
 
-- (void)saveWithObject:(id<NSCopying>)object forKey:(NSString*)key {
+- (void)saveWithObject:(id<NSCoding>)object forKey:(NSString*)key {
     NSString *filePath = [[self appDirectory] stringByAppendingPathComponent:key];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object];

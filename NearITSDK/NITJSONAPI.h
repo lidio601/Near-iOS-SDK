@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 @class NITJSONAPIResource;
 
-@interface NITJSONAPI : NSObject
+@interface NITJSONAPI : NSObject<NSCoding>
 
 - (instancetype _Nonnull)init;
 - (instancetype _Nullable)initWithContentsOfFile:(NSString* _Nonnull)path error:(NSError* _Nullable * _Nullable)anError;
@@ -21,5 +21,6 @@
 - (void)registerClass:(Class _Nonnull)cls forType:(NSString* _Nonnull)type;
 - (NSArray* _Nonnull)parseToArrayOfObjects;
 - (NSArray<NITJSONAPIResource*>* _Nonnull)allResources;
+- (NSArray<NITJSONAPIResource*>* _Nonnull)rootResources;
 
 @end

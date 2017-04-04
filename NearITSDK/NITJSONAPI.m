@@ -287,4 +287,25 @@
     return [NSArray arrayWithArray:mergedResources];
 }
 
+- (NSArray<NITJSONAPIResource *> *)rootResources {
+    return [NSArray arrayWithArray:self.resources];
+}
+
+// MARK: - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    if (self.sourceJson) {
+        [aCoder encodeObject:self.sourceJson forKey:@"SourceJSON"];
+    }
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    id sourceJson = [aDecoder decodeObjectForKey:@"SourceJSON"];
+    if (sourceJson && [sourceJson isKindOfClass:[NSDictionary class]]) {
+        return [self initWithDictionary:sourceJson];
+    } else {
+        return [super init];
+    }
+}
+
 @end

@@ -15,15 +15,18 @@
 #import "NITBeaconNode.h"
 #import "NITBeaconProximityManager.h"
 #import "NITUtils.h"
+#import "NITCacheManager.h"
 #import <CoreLocation/CoreLocation.h>
 
 NSErrorDomain const NITGeopolisErrorDomain = @"com.nearit.geopolis";
 NSString* const NodeKey = @"node";
+NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 
 @interface NITGeopolisManager()<CLLocationManagerDelegate>
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NITNodesManager *nodesManager;
+@property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) NITBeaconProximityManager *beaconProximity;
 @property (nonatomic, strong) NITNode *currentNode;
 @property (nonatomic, strong) NSMutableArray<NSString*> *enteredRegions;
@@ -38,15 +41,16 @@ NSString* const NodeKey = @"node";
 
 - (instancetype)init {
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
-    return [self initWithNodesManager:nodesManager];
+    return [self initWithNodesManager:nodesManager cachaManager:[NITCacheManager sharedInstance]];
 }
 
-- (instancetype)initWithNodesManager:(NITNodesManager*)nodesManager {
+- (instancetype)initWithNodesManager:(NITNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager {
     self = [super init];
     if (self) {
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         self.nodesManager = nodesManager;
+        self.cacheManager = cacheManager;
         self.enteredRegions = [[NSMutableArray alloc] init];
         self.monitoredRegions = [[NSMutableArray alloc] init];
         self.rangedRegions = [[NSMutableArray alloc] init];
@@ -57,10 +61,20 @@ NSString* const NodeKey = @"node";
 }
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable error))completionHandler {
-    // TODO: Manage cache
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
-        [self.nodesManager setNodesWithJsonApi:json];
-        completionHandler(error);
+        if (error) {
+            NITJSONAPI *jsonApi = [self.cacheManager loadObjectForKey:NodeJSONCacheKey];
+            if (jsonApi) {
+                [self.nodesManager setNodesWithJsonApi:jsonApi];
+                completionHandler(nil);
+            } else {
+                completionHandler(error);
+            }
+        } else {
+            [self.nodesManager setNodesWithJsonApi:json];
+            [self.cacheManager saveWithObject:json forKey:NodeJSONCacheKey];
+            completionHandler(nil);
+        }
     }];
 }
 
