@@ -22,19 +22,27 @@
 
 #define NITRecipeStatusNotified @"notified"
 
+NSString* const RecipesCacheKey = @"Recipes";
+
 @interface NITRecipesManager()
 
 @property (nonatomic, strong) NSArray<NITRecipe*> *recipes;
 @property (nonatomic, strong) NITRecipeCooler *cooler;
+@property (nonatomic, strong) NITCacheManager *cacheManager;
 
 @end
 
 @implementation NITRecipesManager
 
 - (instancetype)init {
+    return [self initWithCacheManager:[NITCacheManager sharedInstance]];
+}
+
+- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager {
     self = [super init];
     if (self) {
-        self.cooler = [[NITRecipeCooler alloc] initWithCacheManager:[NITCacheManager sharedInstance]];
+        self.cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager];
+        self.cacheManager = cacheManager;
     }
     return self;
 }
@@ -45,11 +53,21 @@
 }
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))completionHandler {
-    // TODO: Manage cache
     [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider recipesProcessListWithJsonApi:[self buildEvaluationBody]] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
-        [json registerClass:[NITRecipe class] forType:@"recipes"];
-        self.recipes = [json parseToArrayOfObjects];
-        completionHandler(error);
+        if (error) {
+            NSArray<NITRecipe*> *cachedRecipes = [self.cacheManager loadArrayForKey:RecipesCacheKey];
+            if (cachedRecipes) {
+                self.recipes = cachedRecipes;
+                completionHandler(nil);
+            } else {
+                completionHandler(error);
+            }
+        } else {
+            [json registerClass:[NITRecipe class] forType:@"recipes"];
+            self.recipes = [json parseToArrayOfObjects];
+            [self.cacheManager saveWithObject:self.recipes forKey:RecipesCacheKey];
+            completionHandler(error);
+        }
     }];
 }
 
@@ -163,6 +181,10 @@
     [jsonApi registerClass:[NITCoupon class] forType:@"coupons"];
     [jsonApi registerClass:[NITClaim class] forType:@"claims"];
     [jsonApi registerClass:[NITImage class] forType:@"images"];
+}
+
+- (NSInteger)recipesCount {
+    return [self.recipes count];
 }
 
 - (NITJSONAPI*)buildEvaluationBody {

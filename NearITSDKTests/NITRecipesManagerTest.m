@@ -219,6 +219,41 @@
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
+- (void)testRecipesManagerCacheNotEmpty {
+    [[NITNetworkMock sharedInstance] registerData:[NSData data] withTest:^BOOL(NSURLRequest * _Nonnull request) {
+        if([request.URL.absoluteString containsString:@"/recipes/process"]) {
+            return YES;
+        }
+        return NO;
+    }];
+    
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *path = [bundle pathForResource:@"recipes" ofType:@"json"];
+    NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithContentsOfFile:path error:nil];
+    [jsonApi registerClass:[NITRecipe class] forType:@"recipes"];
+    
+    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testRecipesManagerCacheNotEmpty"];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager];
+    [cacheManager saveWithObject:[jsonApi parseToArrayOfObjects] forKey:@"Recipes"];
+    [NSThread sleepForTimeInterval:0.5];
+    
+    XCTestExpectation *recipesExp = [self expectationWithDescription:@"Recipes"];
+    [recipesManager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
+        XCTAssertNil(error);
+        XCTAssertTrue([recipesManager recipesCount] == 6);
+        [recipesExp fulfill];
+    }];
+    
+    XCTestExpectation *cacheExp = [self expectationWithDescription:@"Cache"];
+    [cacheManager removeAllItemsWithCompletionHandler:^{
+        [cacheExp fulfill];
+    }];
+    
+    [[NITNetworkMock sharedInstance] clearTests];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
 - (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {
     if ([self.name containsString:@"testOnlineEvaluation"]) {
         XCTAssertNotNil(recipe);

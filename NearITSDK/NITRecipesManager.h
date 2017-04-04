@@ -10,6 +10,7 @@
 #import "NITManager.h"
 
 @class NITJSONAPI;
+@class NITCacheManager;
 
 @protocol NITRecipesManaging <NSObject>
 
@@ -22,8 +23,11 @@
 
 @property (nonatomic, strong) id<NITManaging> _Nullable manager;
 
+- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager* _Nonnull)cacheManager;
+
 - (void)refreshConfigWithCompletionHandler:(void (^_Nonnull)(NSError * _Nullable error))completionHandler;
 - (void)processRecipe:(NSString* _Nonnull)recipeId;
 - (void)sendTrackingWithRecipeId:(NSString * _Nonnull)recipeId event:(NSString* _Nonnull)event;
+- (NSInteger)recipesCount;
 
 @end
