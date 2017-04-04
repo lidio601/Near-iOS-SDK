@@ -9,8 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @class NITRecipe;
+@class NITCacheManager;
 
 @interface NITRecipeCooler : NSObject
+
+- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager* _Nonnull)cacheManager;
 
 - (void)markRecipeAsShownWithId:(NSString* _Nonnull)recipeId;
 - (NSArray<NITRecipe*>* _Nonnull)filterRecipeWithRecipes:(NSArray<NITRecipe*>* _Nonnull)recipes;

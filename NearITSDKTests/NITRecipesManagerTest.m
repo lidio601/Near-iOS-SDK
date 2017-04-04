@@ -11,6 +11,7 @@
 #import "NITRecipesManager.h"
 #import "NITNetworkMock.h"
 #import "NITRecipeCooler.h"
+#import "NITCacheManager.h"
 
 @interface NITRecipesManagerTest : NITTestCase<NITManaging>
 
@@ -99,7 +100,8 @@
     
     NSArray<NITRecipe*> *recipes = @[recipe1, recipe2];
     
-    NITRecipeCooler *cooler = [[NITRecipeCooler alloc] init];
+    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testRecipeCooler"];
+    NITRecipeCooler *cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager];
     [cooler markRecipeAsShownWithId:recipe1.ID];
     
     [NSThread sleepForTimeInterval:0.2];
@@ -122,6 +124,99 @@
     
     filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
     XCTAssertTrue([filteredRecipes count] == 2);
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    [cacheManager removeAllItemsWithCompletionHandler:^{
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void)testRecipeCoolerCacheEmpty {
+    NITRecipe *recipe1 = [[NITRecipe alloc] init];
+    recipe1.ID = @"recipe1";
+    recipe1.cooldown = @{@"global_cooldown" : [NSNumber numberWithDouble:1.0], @"self_cooldown" : [NSNumber numberWithDouble:2.0]};
+    
+    NITRecipe *recipe2 = [[NITRecipe alloc] init];
+    recipe2.ID = @"recipe2";
+    recipe2.cooldown = @{@"global_cooldown" : [NSNumber numberWithDouble:1.0], @"self_cooldown" : [NSNumber numberWithDouble:3.0]};
+    
+    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testRecipeCoolerCacheEmpty"];
+    NITRecipeCooler *cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager];
+    [cooler markRecipeAsShownWithId:recipe1.ID];
+    
+    NSDate *now = [NSDate date];
+    [NSThread sleepForTimeInterval:0.5];
+    
+    NSDictionary<NSString*, NSNumber*> *log = [cacheManager loadDictionaryForKey:@"CoolerLogMap"];
+    NSTimeInterval latestLog = [[cacheManager loadNumberForKey:@"CoolerLatestLog"] doubleValue];
+    XCTAssertTrue([log count] == 1);
+    XCTAssertTrue(now.timeIntervalSince1970 - latestLog < 1);
+    XCTAssertNotNil([log objectForKey:recipe1.ID]);
+    XCTAssertNil([log objectForKey:recipe2.ID]);
+    
+    [cooler markRecipeAsShownWithId:recipe2.ID];
+    
+    [NSThread sleepForTimeInterval:1.0];
+    
+    log = [cacheManager loadDictionaryForKey:@"CoolerLogMap"];
+    latestLog = [[cacheManager loadNumberForKey:@"CoolerLatestLog"] doubleValue];
+    XCTAssertTrue([log count] == 2);
+    XCTAssertTrue(latestLog - now.timeIntervalSince1970 > 0.4 && latestLog - now.timeIntervalSince1970 < 1);
+    XCTAssertNotNil([log objectForKey:recipe1.ID]);
+    XCTAssertNotNil([log objectForKey:recipe2.ID]);
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    [cacheManager removeAllItemsWithCompletionHandler:^{
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void)testRecipeCoolerCacheNotEmpty {
+    NITRecipe *recipe1 = [[NITRecipe alloc] init];
+    recipe1.ID = @"recipe1";
+    recipe1.cooldown = @{@"global_cooldown" : [NSNumber numberWithDouble:1.0], @"self_cooldown" : [NSNumber numberWithDouble:2.0]};
+    
+    NITRecipe *recipe2 = [[NITRecipe alloc] init];
+    recipe2.ID = @"recipe2";
+    recipe2.cooldown = @{@"global_cooldown" : [NSNumber numberWithDouble:1.0], @"self_cooldown" : [NSNumber numberWithDouble:3.0]};
+    
+    NSArray<NITRecipe*> *recipes = @[recipe1, recipe2];
+    
+    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testRecipeCoolerCacheNotEmpty"];
+    NSDate *now = [NSDate date];
+    NSDictionary<NSString*, NSNumber*> *cachedLog = @{recipe1.ID : [NSNumber numberWithDouble:now.timeIntervalSince1970], recipe2.ID : [NSNumber numberWithDouble:now.timeIntervalSince1970]};
+    NSNumber *cachedLatestLog = [NSNumber numberWithDouble:now.timeIntervalSince1970];
+    
+    [cacheManager saveWithObject:cachedLog forKey:@"CoolerLogMap"];
+    [cacheManager saveWithObject:cachedLatestLog forKey:@"CoolerLatestLog"];
+    [NSThread sleepForTimeInterval:0.2];
+    
+    NITRecipeCooler *cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager];
+    NSArray<NITRecipe*> *filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
+    XCTAssertTrue([filteredRecipes count] == 0);
+    
+    [NSThread sleepForTimeInterval:1.2];
+    
+    filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
+    XCTAssertTrue([filteredRecipes count] == 0);
+    
+    [NSThread sleepForTimeInterval:1.0];
+    
+    filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
+    XCTAssertTrue([filteredRecipes count] == 1);
+    
+    [NSThread sleepForTimeInterval:1.0];
+    
+    filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
+    XCTAssertTrue([filteredRecipes count] == 2);
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    [cacheManager removeAllItemsWithCompletionHandler:^{
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {

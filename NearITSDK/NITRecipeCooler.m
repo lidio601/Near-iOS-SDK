@@ -8,21 +8,28 @@
 
 #import "NITRecipeCooler.h"
 #import "NITRecipe.h"
+#import "NITCacheManager.h"
+
+#define LOGMAP_CACHE_KEY @"CoolerLogMap"
+#define LATESTLOG_CACHE_KEY @"CoolerLatestLog"
 
 @interface NITRecipeCooler()
 
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NSNumber*> *log;
-@property (nonatomic) NSTimeInterval latestLog;
+@property (nonatomic, strong) NSNumber *latestLog;
+@property (nonatomic, strong) NITCacheManager *cacheManager;
 
 @end
 
-// TODO: Manage cache
 @implementation NITRecipeCooler
 
-- (instancetype)init {
+@synthesize log = _log;
+@synthesize latestLog = _latestLog;
+
+- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager {
     self = [super init];
     if (self) {
-        self.log = [[NSMutableDictionary alloc] init];
+        self.cacheManager = cacheManager;
     }
     return self;
 }
@@ -31,7 +38,9 @@
     NSDate *now = [NSDate date];
     NSTimeInterval timestamp = now.timeIntervalSince1970;
     [self.log setObject:[NSNumber numberWithDouble:timestamp] forKey:recipeId];
-    self.latestLog = timestamp;
+    self.latestLog = [NSNumber numberWithDouble:timestamp];
+    [self.cacheManager saveWithObject:self.log forKey:LOGMAP_CACHE_KEY];
+    [self.cacheManager saveWithObject:self.latestLog forKey:LATESTLOG_CACHE_KEY];
 }
 
 - (NSArray<NITRecipe *> *)filterRecipeWithRecipes:(NSArray<NITRecipe *> *)recipes {
@@ -57,7 +66,7 @@
     }
     
     NSDate *now = [NSDate date];
-    NSTimeInterval expiredSeconds = now.timeIntervalSince1970 - self.latestLog;
+    NSTimeInterval expiredSeconds = now.timeIntervalSince1970 - [self.latestLog doubleValue];
     return expiredSeconds >= [globalCooldown doubleValue];
 }
 
@@ -71,6 +80,30 @@
     NSTimeInterval recipeLatestLog = [[self.log objectForKey:recipe.ID] doubleValue];
     NSTimeInterval expiredSeconds = now.timeIntervalSince1970 - recipeLatestLog;
     return expiredSeconds >= [selfCooldown doubleValue];
+}
+
+- (NSMutableDictionary<NSString *,NSNumber *> *)log {
+    if (_log == nil) {
+        NSDictionary<NSString*, NSNumber*> *savedLog = [self.cacheManager loadDictionaryForKey:LOGMAP_CACHE_KEY];
+        if (savedLog) {
+            _log = [savedLog mutableCopy];
+        } else {
+            _log = [[NSMutableDictionary alloc] init];
+        }
+    }
+    return _log;
+}
+
+- (NSNumber*)latestLog {
+    if (_latestLog == nil) {
+        NSNumber *savedLatestLog = [self.cacheManager loadNumberForKey:LATESTLOG_CACHE_KEY];
+        if (savedLatestLog) {
+            _latestLog = savedLatestLog;
+        } else {
+            _latestLog = [NSNumber numberWithDouble:0];
+        }
+    }
+    return _latestLog;
 }
 
 @end

@@ -18,6 +18,7 @@
 #import "NITImage.h"
 #import "NITClaim.h"
 #import "NITRecipeCooler.h"
+#import "NITCacheManager.h"
 
 #define NITRecipeStatusNotified @"notified"
 
@@ -33,7 +34,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.cooler = [[NITRecipeCooler alloc] init];
+        self.cooler = [[NITRecipeCooler alloc] initWithCacheManager:[NITCacheManager sharedInstance]];
     }
     return self;
 }

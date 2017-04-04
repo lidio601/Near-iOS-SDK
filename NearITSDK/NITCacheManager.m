@@ -65,6 +65,14 @@ static NITCacheManager *defaultCache;
     });
 }
 
+- (void)saveWithObject:(id<NSCopying>)object forKey:(NSString*)key {
+    NSString *filePath = [[self appDirectory] stringByAppendingPathComponent:key];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object];
+        [data writeToFile:filePath atomically:NO];
+    });
+}
+
 - (NSArray*)loadArrayForKey:(NSString*)key {
     NSString *filePath = [[self appDirectory] stringByAppendingPathComponent:key];
     NSData *data = [NSData dataWithContentsOfFile:filePath];
@@ -74,6 +82,55 @@ static NITCacheManager *defaultCache;
     id array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     if ([array isKindOfClass:[NSArray class]]) {
         return (NSArray*)array;
+    }
+    return nil;
+}
+
+- (NSDictionary *)loadDictionaryForKey:(NSString *)key {
+    NSString *filePath = [[self appDirectory] stringByAppendingPathComponent:key];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    if (data == nil) {
+        return nil;
+    }
+    id dictionary = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if ([dictionary isKindOfClass:[NSDictionary class]]) {
+        return (NSDictionary*)dictionary;
+    }
+    return nil;
+}
+
+- (id)loadObjectForKey:(NSString*)key {
+    NSString *filePath = [[self appDirectory] stringByAppendingPathComponent:key];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    if (data == nil) {
+        return nil;
+    }
+    id object = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    return object;
+}
+
+- (NSString*)loadStringForKey:(NSString*)key {
+    NSString *filePath = [[self appDirectory] stringByAppendingPathComponent:key];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    if (data == nil) {
+        return nil;
+    }
+    id object = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if([object isKindOfClass:[NSString class]]) {
+        return (NSString*)object;
+    }
+    return nil;
+}
+
+- (NSNumber*)loadNumberForKey:(NSString*)key {
+    NSString *filePath = [[self appDirectory] stringByAppendingPathComponent:key];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    if (data == nil) {
+        return nil;
+    }
+    id object = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    if([object isKindOfClass:[NSNumber class]]) {
+        return (NSNumber*)object;
     }
     return nil;
 }
