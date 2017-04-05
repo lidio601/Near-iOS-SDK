@@ -59,6 +59,14 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.setBatchUserDataWith(valuesDictionary, completionHandler: completionHandler)
     }
     
+    public func sendEvent(_ event: NITEvent, completionHandler: ((Error?) -> Void)?) {
+        manager.sendEvent(with: event, completionHandler: completionHandler)
+    }
+    
+    public func coupons(_ completionHandler: (([NITCoupon]?, Error?) -> Void)?) {
+        manager.coupons(completionHandler: completionHandler)
+    }
+    
     public func manager(_ manager: NITManager, eventWithContent content: Any, recipe: NITRecipe) {
         delegate?.manager(self, eventWithContent: content, recipe: recipe)
     }

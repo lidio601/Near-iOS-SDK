@@ -19,12 +19,16 @@
 #import "NITFeedbackReaction.h"
 #import "NITCustomJSONReaction.h"
 #import "NITInstallation.h"
+#import "NITEvent.h"
+#import "NITConstants.h"
 
 @interface NITManager()<NITManaging>
 
 @property (nonatomic, strong) NITGeopolisManager *geopolisManager;
 @property (nonatomic, strong) NITRecipesManager *recipesManager;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NITReaction*> *reactions;
+@property (nonatomic, strong) NITFeedbackReaction *feedbackReaction;
+@property (nonatomic, strong) NITCouponReaction *couponReaction;
 @property (nonatomic) BOOL started;
 
 @end
@@ -70,10 +74,13 @@
 - (void)reactionsSetup {
     self.reactions = [[NSMutableDictionary alloc] init];
     
+    self.couponReaction = [[NITCouponReaction alloc] init];
+    self.feedbackReaction = [[NITFeedbackReaction alloc] init];
+    
     [self.reactions setObject:[[NITSimpleNotificationReaction alloc] init] forKey:@"simple-notification"];
     [self.reactions setObject:[[NITContentReaction alloc] init] forKey:@"content-notification"];
-    [self.reactions setObject:[[NITCouponReaction alloc] init] forKey:@"coupon-blaster"];
-    [self.reactions setObject:[[NITFeedbackReaction alloc] init] forKey:@"feedbacks"];
+    [self.reactions setObject:self.couponReaction forKey:@"coupon-blaster"];
+    [self.reactions setObject:self.feedbackReaction forKey:@"feedbacks"];
     [self.reactions setObject:[[NITCustomJSONReaction alloc] init] forKey:@"json-sender"];
 }
 
@@ -136,6 +143,27 @@
             handler(error);
         }
         [self.recipesManager refreshConfigWithCompletionHandler:nil];
+    }];
+}
+
+- (void)sendEventWithEvent:(NITEvent *)event completionHandler:(void (^)(NSError * _Nullable))handler {
+    if ([[event pluginName] isEqualToString:NITFeedbackPluginName]) {
+        [self.feedbackReaction sendEventWithFeedbackEvent:(NITFeedbackEvent*)event completionHandler:^(NSError * _Nullable error) {
+            if (handler) {
+                handler(error);
+            }
+        }];
+    } else if (handler) {
+        NSError *newError = [NSError errorWithDomain:NITReactionErrorDomain code:201 userInfo:@{NSLocalizedDescriptionKey:@"Unrecognized event action"}];
+        handler(newError);
+    }
+}
+
+- (void)couponsWithCompletionHandler:(void (^)(NSArray<NITCoupon*>*, NSError*))handler {
+    [self.couponReaction couponsWithCompletionHandler:^(NSArray<NITCoupon *> * coupons, NSError * error) {
+        if (handler) {
+            handler(coupons, error);
+        }
     }];
 }
 

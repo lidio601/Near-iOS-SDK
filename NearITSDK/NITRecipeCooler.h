@@ -17,7 +17,7 @@
 
 - (void)markRecipeAsShownWithId:(NSString* _Nonnull)recipeId;
 - (NSArray<NITRecipe*>* _Nonnull)filterRecipeWithRecipes:(NSArray<NITRecipe*>* _Nonnull)recipes;
-- (NSNumber*)latestLog;
-- (NSMutableDictionary<NSString *,NSNumber *> *)log;
+- (NSNumber* _Nonnull)latestLog;
+- (NSMutableDictionary<NSString *,NSNumber *> * _Nonnull)log;
 
 @end

@@ -6,13 +6,13 @@
 //  Copyright © 2017 NearIT. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "NITEvent.h"
 
 @class NITFeedback;
 @class NITJSONAPI;
 @class NITConfiguration;
 
-@interface NITFeedbackEvent : NSObject
+@interface NITFeedbackEvent : NITEvent
 
 @property (nonatomic, strong) NSString * _Nonnull ID;
 @property (nonatomic, strong) NSString * _Nonnull recipeId;

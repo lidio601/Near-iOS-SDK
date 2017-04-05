@@ -11,6 +11,7 @@
 #import "NITJSONAPI.h"
 #import "NITJSONAPIResource.h"
 #import "NITConfiguration.h"
+#import "NITConstants.h"
 
 @interface NITFeedbackEvent()
 
@@ -49,6 +50,10 @@
     [json setDataWithResourceObject:resource];
     
     return json;
+}
+
+- (NSString *)pluginName {
+    return NITFeedbackPluginName;
 }
 
 @end

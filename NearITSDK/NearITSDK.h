@@ -18,6 +18,7 @@
 #import <NearITSDK/NITFeedback.h>
 #import <NearITSDK/NITFeedbackEvent.h>
 #import <NearITSDK/NITCustomJSON.h>
+#import <NearITSDK/NITEvent.h>
 
 //! Project version number for NearITSDK.
 FOUNDATION_EXPORT double NearITSDKVersionNumber;

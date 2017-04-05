@@ -133,4 +133,8 @@
     }];
 }
 
+- (NSString *)pluginName {
+    return NITFeedbackPluginName;
+}
+
 @end

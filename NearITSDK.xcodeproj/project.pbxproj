@@ -104,6 +104,8 @@
 		135A70921E854F3200D4C9EC /* NITNetworkMock.h in Headers */ = {isa = PBXBuildFile; fileRef = 135A70901E854F3200D4C9EC /* NITNetworkMock.h */; };
 		135A70931E854F3200D4C9EC /* NITNetworkMock.m in Sources */ = {isa = PBXBuildFile; fileRef = 135A70911E854F3200D4C9EC /* NITNetworkMock.m */; };
 		135A70971E8555CB00D4C9EC /* response_content_reaction.json in Resources */ = {isa = PBXBuildFile; fileRef = 135A70961E8555CB00D4C9EC /* response_content_reaction.json */; };
+		135CD7791E94F71E005C75A4 /* NITEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 135CD7771E94F71E005C75A4 /* NITEvent.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		135CD77A1E94F71E005C75A4 /* NITEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD7781E94F71E005C75A4 /* NITEvent.m */; };
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
@@ -250,6 +252,8 @@
 		135A70901E854F3200D4C9EC /* NITNetworkMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITNetworkMock.h; sourceTree = "<group>"; };
 		135A70911E854F3200D4C9EC /* NITNetworkMock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITNetworkMock.m; sourceTree = "<group>"; };
 		135A70961E8555CB00D4C9EC /* response_content_reaction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_content_reaction.json; sourceTree = "<group>"; };
+		135CD7771E94F71E005C75A4 /* NITEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITEvent.h; sourceTree = "<group>"; };
+		135CD7781E94F71E005C75A4 /* NITEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITEvent.m; sourceTree = "<group>"; };
 		137838631E800EC1001C8CDE /* NITRecipesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipesManager.h; sourceTree = "<group>"; };
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
@@ -565,6 +569,8 @@
 				135A707B1E8520E700D4C9EC /* SimpleNotification */,
 				135A70731E8503D900D4C9EC /* NITReaction.h */,
 				135A70741E8503D900D4C9EC /* NITReaction.m */,
+				135CD7771E94F71E005C75A4 /* NITEvent.h */,
+				135CD7781E94F71E005C75A4 /* NITEvent.m */,
 			);
 			name = Reactions;
 			sourceTree = "<group>";
@@ -669,6 +675,7 @@
 			files = (
 				1349EEB31E796511000B0666 /* NITNetworkProvider.h in Headers */,
 				132297161E8E438A00AE6EFC /* NITFeedbackEvent.h in Headers */,
+				135CD7791E94F71E005C75A4 /* NITEvent.h in Headers */,
 				1327D8A81E83BE3100C6689E /* NITInstallation.h in Headers */,
 				1352CA831E78294E00C0E98E /* NITManager.h in Headers */,
 				1327D89F1E82A99600C6689E /* NITPulseBundle.h in Headers */,
@@ -933,6 +940,7 @@
 				1327D8971E82824800C6689E /* NITBeaconProximityManager.m in Sources */,
 				1327D89C1E82A4E700C6689E /* NITRecipe.m in Sources */,
 				1352CA8E1E78313300C0E98E /* NITUserProfile.m in Sources */,
+				135CD77A1E94F71E005C75A4 /* NITEvent.m in Sources */,
 				137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */,
 				1349EEB41E796511000B0666 /* NITNetworkProvider.m in Sources */,
 				135A70761E8503D900D4C9EC /* NITReaction.m in Sources */,

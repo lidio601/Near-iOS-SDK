@@ -24,3 +24,5 @@ extern NSErrorDomain const NITInstallationErrorDomain;
 extern NSErrorDomain const NITReactionErrorDomain;
 
 extern NSString* const ISO8601DateFormatMilliseconds;
+
+extern NSString* const NITFeedbackPluginName;
