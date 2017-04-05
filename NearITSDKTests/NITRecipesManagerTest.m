@@ -73,6 +73,23 @@
     XCTAssertFalse(isScheduled);
 }
 
+- (void)testSchedulingDays {
+    NITRecipe *recipe = [[NITRecipe alloc] init];
+    recipe.scheduling = @{@"days" : @[
+                                  @"Sun",
+                                  @"Thu"
+                                  ]};
+    
+    BOOL isScheduled = [recipe isScheduledNow:[NSDate dateWithTimeIntervalSince1970:1488459686]]; // Thu, 02 Mar 2017 13:01:26 GMT
+    XCTAssertTrue(isScheduled);
+    
+    isScheduled = [recipe isScheduledNow:[NSDate dateWithTimeIntervalSince1970:1488197400]]; // Mon, 27 Feb 2017 12:10:00 +0000
+    XCTAssertFalse(isScheduled);
+    
+    isScheduled = [recipe isScheduledNow:[NSDate dateWithTimeIntervalSince1970:1488756600]]; // Sun, 05 Mar 2017 23:30:00 +0000
+    XCTAssertTrue(isScheduled);
+}
+
 - (void)testOnlineEvaluation {
     self.expectation = [self expectationWithDescription:@"expectation"];
     

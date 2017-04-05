@@ -57,8 +57,8 @@
 }
 
 - (BOOL)isScheduledNow:(NSDate*)now {
-    // TODO: Timetable and Day valid
-    return (self.scheduling == nil || [self.scheduling isEqual:[NSNull null]]) || ([self isDateValid:now]);
+    // TODO: Timetable valid
+    return (self.scheduling == nil || [self.scheduling isEqual:[NSNull null]]) || ([self isDateValid:now] && [self isDaysValid:now]);
 }
 
 - (BOOL)isDateValid:(NSDate*)now {
@@ -85,6 +85,52 @@
     }
     
     return valid;
+}
+
+- (BOOL)isDaysValid:(NSDate*)now {
+    NSArray<NSString*> *days = [self.scheduling objectForKey:@"days"];
+    if (days == nil || [days isEqual:[NSNull null]]) {
+        return YES;
+    }
+    NSString *dayName = [self nameOfDay:now];
+    if ([days containsObject:dayName]) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (NSString*)nameOfDay:(NSDate*)now {
+    NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+    [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    NSDateComponents *nowComponents = [calendar components:NSCalendarUnitWeekday fromDate:now];
+    switch (nowComponents.weekday) {
+        case 1:
+            return @"Sun";
+            break;
+        case 2:
+            return @"Mon";
+            break;
+        case 3:
+            return @"Tue";
+            break;
+        case 4:
+            return @"Wed";
+            break;
+        case 5:
+            return @"Thu";
+            break;
+        case 6:
+            return @"Fri";
+            break;
+        case 7:
+            return @"Sat";
+            break;
+            
+        default:
+            return @"";
+            break;
+    }
 }
 
 - (BOOL)isGreatherOrEqualDMYWithFromDate:(NSDate*)fromDate referenceDate:(NSDate*)refDate {
