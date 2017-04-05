@@ -215,16 +215,33 @@ NSString* const RecipesCacheKey = @"Recipes";
     return jsonApi;
 }
 
-// TODO: Check recipe cooler
 - (NSDictionary*)buildCoreObject {
     NITConfiguration *config = [NITConfiguration defaultConfiguration];
-    NSMutableDictionary<NSString*, NSString*> *core = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary<NSString*, id> *core = [[NSMutableDictionary alloc] init];
     if (config.appId && config.profileId && config.installationId) {
         [core setObject:config.profileId forKey:@"profile_id"];
         [core setObject:config.installationId forKey:@"installation_id"];
         [core setObject:config.appId forKey:@"app_id"];
     }
+    if (self.cooler) {
+        [core setObject:[self buildCooldownBlockWithRecipeCooler:self.cooler] forKey:@"cooldown"];
+    }
     return [NSDictionary dictionaryWithDictionary:core];
+}
+
+- (NSDictionary*)buildCooldownBlockWithRecipeCooler:(NITRecipeCooler*)recipeCooler {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    NSNumber *latestLog = [recipeCooler latestLog];
+    if (latestLog) {
+        [dict setObject:latestLog forKey:@"last_notified_at"];
+    }
+    NSDictionary<NSString*, NSNumber*> *log = [recipeCooler log];
+    if (log) {
+        [dict setObject:log forKey:@"recipes_notified_at"];
+    }
+    
+    return [NSDictionary dictionaryWithDictionary:dict];
 }
 
 @end

@@ -57,7 +57,6 @@
 }
 
 - (BOOL)isScheduledNow:(NSDate*)now {
-    // TODO: Timetable valid
     return (self.scheduling == nil || [self.scheduling isEqual:[NSNull null]]) || ([self isDateValid:now] && [self isTimetableValid:now] && [self isDaysValid:now]);
 }
 
