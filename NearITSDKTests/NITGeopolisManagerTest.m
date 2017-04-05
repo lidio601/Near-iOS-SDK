@@ -42,25 +42,6 @@
     [super tearDown];
 }
 
-- (void)testManager {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
-    CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(45.672349, 9.675623999999999) radius:200 identifier:@"4a15c14b-4c7b-495f-a058-41670bb76595"];
-    
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] init];
-    [manager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
-        XCTAssertNil(error);
-        
-        [manager startForUnitTest];
-        [manager testStepInRegion:region];
-        XCTAssertTrue([manager hasCurrentNode], @"There is not a current node");
-        [manager stop];
-        [expectation fulfill];
-    }];
-    
-    [self waitForExpectationsWithTimeout:4.0 handler:nil];
-    
-}
-
 - (void)testNodesTraverse {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
