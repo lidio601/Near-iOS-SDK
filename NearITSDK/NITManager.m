@@ -130,6 +130,15 @@
     }];
 }
 
+- (void)setBatchUserDataWithDictionary:(NSDictionary<NSString *,id> *)valuesDictiornary completionHandler:(void (^)(NSError * _Nullable))handler {
+    [NITUserProfile setBatchUserDataWithDictionary:valuesDictiornary completionHandler:^(NSError * _Nullable error) {
+        if (handler) {
+            handler(error);
+        }
+        [self.recipesManager refreshConfigWithCompletionHandler:nil];
+    }];
+}
+
 
 // MARK: - NITManaging
 
