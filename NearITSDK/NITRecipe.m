@@ -58,7 +58,7 @@
 
 - (BOOL)isScheduledNow:(NSDate*)now {
     // TODO: Timetable valid
-    return (self.scheduling == nil || [self.scheduling isEqual:[NSNull null]]) || ([self isDateValid:now] && [self isDaysValid:now]);
+    return (self.scheduling == nil || [self.scheduling isEqual:[NSNull null]]) || ([self isDateValid:now] && [self isTimetableValid:now] && [self isDaysValid:now]);
 }
 
 - (BOOL)isDateValid:(NSDate*)now {
@@ -77,11 +77,31 @@
     
     if (from != nil && ![from isEqual:[NSNull null]]) {
         NSDate *fromDate = [dateFormatter dateFromString:from];
-        valid &= [self isGreatherOrEqualDMYWithFromDate:now referenceDate:fromDate];
+        valid &= [self isGreaterOrEqualDMYWithFromDate:now referenceDate:fromDate];
     }
     if (to != nil && ![to isEqual:[NSNull null]]) {
         NSDate *toDate = [dateFormatter dateFromString:to];
-        valid &= [self isGreatherOrEqualDMYWithFromDate:toDate referenceDate:now];
+        valid &= [self isGreaterOrEqualDMYWithFromDate:toDate referenceDate:now];
+    }
+    
+    return valid;
+}
+
+- (BOOL)isTimetableValid:(NSDate*)now {
+    NSDictionary<NSString*, id> *timetable = [self.scheduling objectForKey:@"timetable"];
+    if (timetable == nil || [timetable isEqual:[NSNull null]]) {
+        return YES;
+    }
+    BOOL valid = YES;
+    
+    NSString *fromHour = [timetable objectForKey:@"from"];
+    NSString *toHour = [timetable objectForKey:@"to"];
+    
+    if (fromHour != nil && ![fromHour isEqual:[NSNull null]]) {
+        valid &= [self isGreaterOrEqualHMSWithHour:[self hourComponentsWithDate:now] referenceHour:[self hourComponentsWithString:fromHour]];
+    }
+    if (toHour != nil && ![toHour isEqual:[NSNull null]]) {
+        valid &= [self isGreaterOrEqualHMSWithHour:[self hourComponentsWithString:toHour] referenceHour:[self hourComponentsWithDate:now]];
     }
     
     return valid;
@@ -133,7 +153,7 @@
     }
 }
 
-- (BOOL)isGreatherOrEqualDMYWithFromDate:(NSDate*)fromDate referenceDate:(NSDate*)refDate {
+- (BOOL)isGreaterOrEqualDMYWithFromDate:(NSDate*)fromDate referenceDate:(NSDate*)refDate {
     BOOL valid = YES;
     NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
     [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
@@ -157,6 +177,53 @@
         valid &= NO;
     }
     return valid;
+}
+
+- (BOOL)isGreaterOrEqualHMSWithHour:(NSDateComponents*)hour referenceHour:(NSDateComponents*)refHour {
+    BOOL valid = YES;
+    if (hour.hour == refHour.hour) {
+        if (hour.minute == refHour.minute) {
+            if (hour.second >= refHour.second) {
+                valid &= YES;
+            } else {
+                valid &= NO;
+            }
+        } else if (hour.minute > refHour.minute) {
+            valid &= YES;
+        } else {
+            valid &= NO;
+        }
+    } else if (hour.hour > refHour.hour) {
+        valid &= YES;
+    } else {
+        valid &= NO;
+    }
+    return valid;
+}
+
+- (NSDateComponents*)hourComponentsWithDate:(NSDate*)now {
+    NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+    [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    return [calendar components:NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:now];
+}
+
+- (NSDateComponents*)hourComponentsWithString:(NSString*)hour {
+    NSDateComponents *hourComponents = [[NSDateComponents alloc] init];
+    hourComponents.hour = 0;
+    hourComponents.minute = 0;
+    hourComponents.second = 0;
+    NSArray<NSString*> *items = [hour componentsSeparatedByString:@":"];
+    if ([items count] >= 1) {
+        hourComponents.hour = [[items objectAtIndex:0] integerValue];
+    }
+    if ([items count] >= 2) {
+        hourComponents.minute = [[items objectAtIndex:1] integerValue];
+    }
+    if ([items count] >= 3) {
+        hourComponents.second = [[items objectAtIndex:2] integerValue];
+    }
+    
+    return hourComponents;
 }
 
 // MARK: - NSCoding
