@@ -99,6 +99,10 @@
     [self.resources addObject:resourceObject];
 }
 
+- (void)setDataWithResourcesObject:(NSArray<NITJSONAPIResource*>*)resources {
+    self.resources = [resources mutableCopy];
+}
+
 - (NITJSONAPIResource *)firstResourceObject {
     if ([self.resources count] > 0) {
         return [self.resources objectAtIndex:0];
@@ -297,7 +301,7 @@
     return jsonDataBody;
 }
 
-+ (NITJSONAPI *)jsonApiWithAttributes:(NSDictionary *)attributes type:(NSString *)type {
++ (NITJSONAPI *)jsonApiWithAttributes:(NSDictionary<NSString*, id> *)attributes type:(NSString *)type {
     NITJSONAPI *json = [[NITJSONAPI alloc] init];
     NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
     resource.type = type;
@@ -306,6 +310,22 @@
         [resource addAttributeObject:object forKey:key];
     }
     [json setDataWithResourceObject:resource];
+    return json;
+}
+
++ (NITJSONAPI *)jsonApiWithArray:(NSArray<NSDictionary<NSString*, id>*>*)resources type:(NSString *)type {
+    NSMutableArray *jsonResources = [[NSMutableArray alloc] init];
+    NITJSONAPI *json = [[NITJSONAPI alloc] init];
+    for (NSDictionary *attributes in resources) {
+        NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
+        resource.type = type;
+        for (NSString *key in attributes) {
+            id object = [attributes objectForKey:key];
+            [resource addAttributeObject:object forKey:key];
+        }
+        [jsonResources addObject:resource];
+    }
+    [json setDataWithResourcesObject:jsonResources];
     return json;
 }
 

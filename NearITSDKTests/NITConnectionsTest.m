@@ -235,9 +235,29 @@
 }
 
 - (void)testSetUserData {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    
     [NITUserProfile setUserDataWithKey:@"firstname" value:@"John" completionHandler:^(NSError * _Nullable error) {
         XCTAssertNil(error);
+        [expectation fulfill];
     }];
+    
+    [self waitForExpectationsWithTimeout:WAIT_TIME_EXPECTATION handler:nil];
+}
+
+- (void)testBatchUserData {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
+    
+    NSDictionary<NSString*, id> *map = @{
+        @"firstname" : @"Johnny",
+        @"city" : @"New York"
+    };
+    [NITUserProfile setBatchUserDataWithDictionary:map completionHandler:^(NSError * _Nullable error) {
+        XCTAssertNil(error);
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:WAIT_TIME_EXPECTATION handler:nil];
 }
 
 @end

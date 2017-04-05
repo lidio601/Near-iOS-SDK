@@ -69,4 +69,36 @@
     }];
 }
 
++ (void)setBatchUserDataWithDictionary:(NSDictionary<NSString*, id>*)valuesDictiornary completionHandler:(void (^)(NSError* error))handler {
+    NITConfiguration *config = [NITConfiguration defaultConfiguration];
+    if (config.profileId == nil) {
+        [NITUserProfile createNewProfileWithCompletionHandler:nil];
+        if (handler) {
+            NSError *newError = [[NSError alloc] initWithDomain:NITUserProfileErrorDomain code:3 userInfo:@{NSLocalizedDescriptionKey : @"Profile not found"}];
+            handler(newError);
+        }
+        return;
+    }
+    
+    NSMutableArray *resources = [[NSMutableArray alloc] init];
+    for (NSString *key in valuesDictiornary) {
+        NSDictionary *resourceObj = @{ @"key" : key, @"value" : [valuesDictiornary objectForKey:key]};
+        [resources addObject:resourceObj];
+    }
+    
+    NITJSONAPI *jsonApi = [NITJSONAPI jsonApiWithArray:resources type:@"data_points"];
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider setUserDataWithJsonApi:jsonApi profileId:config.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        if (error) {
+            if (handler) {
+                NSError *newError = [[NSError alloc] initWithDomain:NITUserProfileErrorDomain code:4 userInfo:@{NSLocalizedDescriptionKey : @"Data point error", NSUnderlyingErrorKey:error}];
+                handler(newError);
+            }
+        } else {
+            if (handler) {
+                handler(nil);
+            }
+        }
+    }];
+}
+
 @end
