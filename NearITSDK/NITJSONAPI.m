@@ -291,6 +291,24 @@
     return [NSArray arrayWithArray:self.resources];
 }
 
+- (NSData *)dataValue {
+    NSDictionary *json = [self toDictionary];
+    NSData *jsonDataBody = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    return jsonDataBody;
+}
+
++ (NITJSONAPI *)jsonApiWithAttributes:(NSDictionary *)attributes type:(NSString *)type {
+    NITJSONAPI *json = [[NITJSONAPI alloc] init];
+    NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
+    resource.type = type;
+    for (NSString *key in attributes) {
+        id object = [attributes objectForKey:key];
+        [resource addAttributeObject:object forKey:key];
+    }
+    [json setDataWithResourceObject:resource];
+    return json;
+}
+
 // MARK: - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {

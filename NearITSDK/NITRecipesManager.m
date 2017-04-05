@@ -58,15 +58,21 @@ NSString* const RecipesCacheKey = @"Recipes";
             NSArray<NITRecipe*> *cachedRecipes = [self.cacheManager loadArrayForKey:RecipesCacheKey];
             if (cachedRecipes) {
                 self.recipes = cachedRecipes;
-                completionHandler(nil);
+                if (completionHandler) {
+                    completionHandler(nil);
+                }
             } else {
-                completionHandler(error);
+                if (completionHandler) {
+                    completionHandler(error);
+                }
             }
         } else {
             [json registerClass:[NITRecipe class] forType:@"recipes"];
             self.recipes = [json parseToArrayOfObjects];
             [self.cacheManager saveWithObject:self.recipes forKey:RecipesCacheKey];
-            completionHandler(error);
+            if (completionHandler) {
+                completionHandler(error);
+            }
         }
     }];
 }

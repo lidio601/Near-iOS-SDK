@@ -29,5 +29,6 @@
 + (NSURLRequest*)sendFeedbackEventWithJsonApi:(NITJSONAPI*)jsonApi feedbackId:(NSString*)feedbackId;
 + (NSURLRequest*)customJSONWithBundleId:(NSString*)bundleId;
 + (NSURLRequest*)customJSONs;
++ (NSURLRequest*)setUserDataWithJsonApi:(NITJSONAPI*)jsonApi profileId:(NSString*)profileId;
 
 @end

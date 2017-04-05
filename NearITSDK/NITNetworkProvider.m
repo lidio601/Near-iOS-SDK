@@ -143,6 +143,14 @@
     return [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/json-sender/json_contents?filter[app_id]=%@", config.appId]];
 }
 
++ (NSURLRequest *)setUserDataWithJsonApi:(NITJSONAPI *)jsonApi profileId:(NSString*)profileId {
+    NSMutableURLRequest *request = [NITNetworkProvider requestWithPath:[NSString stringWithFormat:@"/plugins/congrego/profiles/%@/data_points", profileId]];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:[jsonApi dataValue]];
+    
+    return request;
+}
+
 // MARK: - Private functions
 
 + (NSDictionary*)buildCoreObject {

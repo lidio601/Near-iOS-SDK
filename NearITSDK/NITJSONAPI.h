@@ -22,5 +22,7 @@
 - (NSArray* _Nonnull)parseToArrayOfObjects;
 - (NSArray<NITJSONAPIResource*>* _Nonnull)allResources;
 - (NSArray<NITJSONAPIResource*>* _Nonnull)rootResources;
+- (NSData* _Nullable)dataValue;
++ (NITJSONAPI* _Nonnull)jsonApiWithAttributes:(NSDictionary* _Nonnull)attributes type:(NSString* _Nonnull)type;
 
 @end

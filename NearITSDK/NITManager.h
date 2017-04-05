@@ -37,5 +37,6 @@
 - (void)setDeviceToken:(NSString* _Nonnull)deviceToken;
 - (void)processRecipeWithUserInfo:(NSDictionary<NSString*, id> * _Nullable)userInfo;
 - (void)sendTrackingWithRecipeId:(NSString * _Nonnull)recipeId event:(NSString* _Nonnull)event;
+- (void)setUserDataWithKey:(NSString* _Nonnull)key value:(NSString* _Nonnull)value completionHandler:(void (^_Nullable)(NSError* _Nullable error))handler;
 
 @end

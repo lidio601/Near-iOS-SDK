@@ -121,6 +121,15 @@
     [self.recipesManager sendTrackingWithRecipeId:recipeId event:event];
 }
 
+- (void)setUserDataWithKey:(NSString *)key value:(NSString *)value completionHandler:(void (^)(NSError * _Nullable))handler {
+    [NITUserProfile setUserDataWithKey:key value:value completionHandler:^(NSError * _Nullable error) {
+        if (handler) {
+            handler(error);
+        }
+        [self.recipesManager refreshConfigWithCompletionHandler:nil];
+    }];
+}
+
 
 // MARK: - NITManaging
 
