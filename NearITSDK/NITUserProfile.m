@@ -101,4 +101,10 @@
     }];
 }
 
++ (void)resetProfile {
+    NITConfiguration *config = [NITConfiguration defaultConfiguration];
+    config.profileId = nil;
+    [[NITInstallation sharedInstance] registerInstallationWithCompletionHandler:nil];
+}
+
 @end

@@ -18,7 +18,7 @@
 - (NSString* _Nullable)profileId;
 - (void)setApiKey:(NSString * _Nonnull)apiKey;
 - (void)setAppId:(NSString * _Nonnull)appId;
-- (void)setProfileId:(NSString * _Nonnull)profileId;
+- (void)setProfileId:(NSString * _Nullable)profileId;
 - (NSString* _Nullable)installationId;
 - (void)setInstallationId:(NSString* _Nonnull)installationId;
 - (NSString * _Nullable)deviceToken;

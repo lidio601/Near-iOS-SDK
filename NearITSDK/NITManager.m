@@ -205,6 +205,10 @@
     [self.recipesManager processRecipe:recipeId];
 }
 
+- (void)resetProfile {
+    [NITUserProfile resetProfile];
+}
+
 // MARK: - NITManaging
 
 - (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {

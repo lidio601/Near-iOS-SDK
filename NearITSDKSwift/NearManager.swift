@@ -67,6 +67,10 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.coupons(completionHandler: completionHandler)
     }
     
+    public func resetProfile() {
+        manager.resetProfile()
+    }
+    
     public func manager(_ manager: NITManager, eventWithContent content: Any, recipe: NITRecipe) {
         delegate?.manager(self, eventWithContent: content, recipe: recipe)
     }

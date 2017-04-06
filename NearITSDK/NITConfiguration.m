@@ -73,43 +73,47 @@ static NITConfiguration *defaultConfiguration;
 
 - (void)setAppId:(NSString * _Nonnull)appId {
     _appId = appId;
-    [[NSUserDefaults standardUserDefaults] setObject:appId forKey:APPID];
+    [[NSUserDefaults standardUserDefaults] setObject:appId forKey:[self paramKeyWithKey:APPID]];
 }
 
 - (NSString *)profileId {
     if(_profileId == nil) {
-        _profileId = [[NSUserDefaults standardUserDefaults] stringForKey:PROFILE_ID];
+        _profileId = [[NSUserDefaults standardUserDefaults] stringForKey:[self paramKeyWithKey:PROFILE_ID]];
     }
     return _profileId;
 }
 
 - (void)setProfileId:(NSString *)profileId {
     _profileId = profileId;
-    [[NSUserDefaults standardUserDefaults] setObject:profileId forKey:PROFILE_ID];
+    if (profileId) {
+        [[NSUserDefaults standardUserDefaults] setObject:profileId forKey:[self paramKeyWithKey:PROFILE_ID]];
+    } else {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:[self paramKeyWithKey:PROFILE_ID]];
+    }
 }
 
 - (NSString *)installationId {
     if(_installationId == nil) {
-        _installationId = [[NSUserDefaults standardUserDefaults] stringForKey:INSTALLATIONID];
+        _installationId = [[NSUserDefaults standardUserDefaults] stringForKey:[self paramKeyWithKey:INSTALLATIONID]];
     }
     return _installationId;
 }
 
 - (void)setInstallationId:(NSString *)installationId {
     _installationId = installationId;
-    [[NSUserDefaults standardUserDefaults] setObject:installationId forKey:INSTALLATIONID];
+    [[NSUserDefaults standardUserDefaults] setObject:installationId forKey:[self paramKeyWithKey:INSTALLATIONID]];
 }
 
 - (NSString *)deviceToken {
     if(_deviceToken == nil) {
-        _deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:DEVICETOKEN];
+        _deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey:[self paramKeyWithKey:DEVICETOKEN]];
     }
     return _deviceToken;
 }
 
 - (void)setDeviceToken:(NSString *)deviceToken {
     _deviceToken = deviceToken;
-    [[NSUserDefaults standardUserDefaults] setObject:deviceToken forKey:DEVICETOKEN];
+    [[NSUserDefaults standardUserDefaults] setObject:deviceToken forKey:[self paramKeyWithKey:DEVICETOKEN]];
 }
 
 - (void)clear {

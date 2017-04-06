@@ -66,7 +66,9 @@ static NITInstallation *sharedInstallation;
     [resource addAttributeObject:[NSString stringWithFormat:@"%ld.%ld", (long)opVersion.majorVersion, (long)opVersion.minorVersion] forKey:@"platform_version"];
     [resource addAttributeObject:@"0.1.0" forKey:@"sdk_version"];
     [resource addAttributeObject:config.appId forKey:@"app_id"];
-    [resource addAttributeObject:config.profileId forKey:@"profile_id"];
+    if(config.profileId) {
+        [resource addAttributeObject:config.profileId forKey:@"profile_id"];
+    }
     if (config.deviceToken) {
         [resource addAttributeObject:config.deviceToken forKey:@"device_identifier"];
     }
