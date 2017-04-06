@@ -19,6 +19,7 @@ typedef NS_ENUM(NSInteger, NITRegionEvent) {
     NITRegionEventUnknown
 };
 
+extern NSErrorDomain const NITManagerErrorDomain;
 extern NSErrorDomain const NITUserProfileErrorDomain;
 extern NSErrorDomain const NITInstallationErrorDomain;
 extern NSErrorDomain const NITReactionErrorDomain;

@@ -47,7 +47,7 @@
         
         [NITUserProfile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
             if(error == nil) {
-                [self refreshConfig];
+                [self refreshConfigWithCompletionHandler:nil];
             }
         }];
     }
@@ -84,15 +84,41 @@
     [self.reactions setObject:[[NITCustomJSONReaction alloc] init] forKey:@"json-sender"];
 }
 
-- (void)refreshConfig {
+- (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))completionHandler {
+    NSMutableArray *errors = [[NSMutableArray alloc] init];
+    
+    dispatch_group_t group = dispatch_group_create();
+    
+    dispatch_group_enter(group);
     [self.geopolisManager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
-        if(self.started) {
-            [self.geopolisManager start];
+        if (error) {
+            [errors addObject:error];
+        } else {
+            if(self.started) {
+                [self.geopolisManager start];
+            }
         }
+        dispatch_group_leave(group);
     }];
+    
+    dispatch_group_enter(group);
     [self.recipesManager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
-        
+        if (error) {
+            [errors addObject:error];
+        }
+        dispatch_group_leave(group);
     }];
+    
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        if (completionHandler) {
+            if ([errors count] > 0) {
+                NSError *anError = [NSError errorWithDomain:NITManagerErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:@"Refresh config failed for some reason, check the 'errors' key for more detail", @"errors" : errors}];
+                completionHandler(anError);
+            } else {
+                completionHandler(nil);
+            }
+        }
+    });
     
     for(NSString *reactionKey in self.reactions) {
         NITReaction *reaction = [self.reactions objectForKey:reactionKey];

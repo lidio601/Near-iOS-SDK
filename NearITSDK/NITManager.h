@@ -35,7 +35,7 @@
 
 - (void)start;
 - (void)stop;
-- (void)refreshConfig;
+- (void)refreshConfigWithCompletionHandler:(void (^_Nullable)(NSError * _Nullable error))completionHandler;
 - (void)setDeviceToken:(NSString* _Nonnull)deviceToken;
 - (void)processRecipeWithUserInfo:(NSDictionary<NSString*, id> * _Nullable)userInfo;
 - (void)sendTrackingWithRecipeId:(NSString * _Nonnull)recipeId event:(NSString* _Nonnull)event;

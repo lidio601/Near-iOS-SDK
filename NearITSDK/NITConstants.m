@@ -8,6 +8,7 @@
 
 #import "NITConstants.h"
 
+NSErrorDomain const NITManagerErrorDomain = @"com.nearit.manager";
 NSErrorDomain const NITUserProfileErrorDomain = @"com.nearit.profile";
 NSErrorDomain const NITInstallationErrorDomain = @"com.nearit.installation";
 NSErrorDomain const NITReactionErrorDomain = @"com.nearit.reaction";

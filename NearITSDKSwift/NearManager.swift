@@ -37,8 +37,8 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.setDeviceToken(token)
     }
     
-    public func refreshConfig() {
-        manager.refreshConfig()
+    public func refreshConfig(completionHandler: ((Error?) -> Void)?) {
+        manager.refreshConfig(completionHandler: completionHandler)
     }
     
     public func processRecipe(_ userInfo: [AnyHashable : Any]) {
