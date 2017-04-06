@@ -14,7 +14,7 @@
 
 @interface NITNodesManager : NSObject
 
-- (void)setNodesWithJsonApi:(NITJSONAPI* _Nullable)jsonApi;
+- (NSArray<NITNode*>* _Nonnull)setNodesWithJsonApi:(NITJSONAPI* _Nullable)jsonApi;
 - (NSArray<NITNode*>* _Nonnull)roots;
 - (NITNode* _Nullable)nodeWithID:(NSString* _Nonnull)ID;
 - (NSArray<NITNode*>* _Nonnull)siblingsWithNode:(NITNode* _Nonnull)node;

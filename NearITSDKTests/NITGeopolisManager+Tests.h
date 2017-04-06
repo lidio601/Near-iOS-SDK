@@ -10,8 +10,10 @@
 
 @interface NITGeopolisManager (Tests)
 
-- (void)testStepInRegion:(CLRegion* _Nonnull)region;
-- (void)testStepOutRegion:(CLRegion* _Nonnull)region;
-- (void)testAllNodes:(NSError**)anError;
+- (void)stepInRegion:(CLRegion*)region;
+- (void)stepOutRegion:(CLRegion*)region;
+- (NSArray<CLRegion*>*)monitoredRegions;
+- (NSArray<CLRegion*>*)rangedRegions;
+- (BOOL)startForUnitTest;
 
 @end

@@ -97,15 +97,6 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     return YES;
 }
 
-- (BOOL)startForUnitTest {
-    if(self.started) {
-        return YES;
-    }
-    
-    [self startMonitoringRoots];
-    return YES;
-}
-
 - (void)startMonitoringRoots {
     NSArray<NITNode*> *roots = [self.nodesManager roots];
     for (NITNode *node in roots) {
@@ -138,12 +129,6 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         if (region) {
             [self.locationManager stopMonitoringForRegion:region];
             [self.monitoredRegions removeObject:region];
-            
-            if([region isKindOfClass:[CLBeaconRegion class]]) {
-                CLBeaconRegion *beaconRegion = (CLBeaconRegion*)region;
-                [self.locationManager stopRangingBeaconsInRegion:beaconRegion];
-                [self.rangedRegions removeObject:region];
-            }
         }
     }
 }
@@ -232,9 +217,14 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     
     [self.beaconProximity removeRegionWithIdentifier:region.identifier];
     
-    if (![exitedNode.parent.ID isEqualToString:self.currentNode.parent.ID]) {
-        self.currentNode = exitedNode.parent;
+    if (![exitedNode.parent.ID isEqualToString:self.currentNode.parent.ID] || [exitedNode.ID isEqualToString:self.currentNode.ID]) {
+        self.currentNode = exitedNode;
         [self stopMonitoringNodes:self.currentNode.children];
+        if ([self.currentNode isKindOfClass:[NITBeaconNode class]] && self.currentNode.identifier != nil) {
+            CLBeaconRegion *beaconRegion = (CLBeaconRegion*)[self.currentNode createRegion];
+            [self.locationManager stopRangingBeaconsInRegion:beaconRegion];
+            [self.rangedRegions removeObject:region];
+        }
         [self startMonitoringNodes:[self.nodesManager siblingsWithNode:self.currentNode.parent]];
     }
 }

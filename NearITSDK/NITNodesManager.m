@@ -21,15 +21,16 @@
 
 @implementation NITNodesManager
 
-- (void)setNodesWithJsonApi:(NITJSONAPI *)jsonApi {
+- (NSArray<NITNode*>*)setNodesWithJsonApi:(NITJSONAPI *)jsonApi {
     if (jsonApi == nil) {
-        return;
+        return [NSArray array];
     }
     
     [jsonApi registerClass:[NITGeofenceNode class] forType:@"geofence_nodes"];
     [jsonApi registerClass:[NITBeaconNode class] forType:@"beacon_nodes"];
     
     self.nodes = [jsonApi parseToArrayOfObjects];
+    return self.nodes;
 }
 
 - (NSArray<NITNode *> *)roots {
