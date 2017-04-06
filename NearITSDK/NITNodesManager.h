@@ -18,7 +18,6 @@
 - (NSArray<NITNode*>* _Nonnull)roots;
 - (NITNode* _Nullable)nodeWithID:(NSString* _Nonnull)ID;
 - (NSArray<NITNode*>* _Nonnull)siblingsWithNode:(NITNode* _Nonnull)node;
-- (void)traverseNodesWithBlock:(void (^_Nonnull)(NITNode* _Nonnull node))block;
 - (NSArray<NITNode*>* _Nonnull)nodes;
 - (NITBeaconNode* _Nullable)beaconNodeWithBeacon:(CLBeacon* _Nonnull)beacon inChildren:(NSArray<NITNode*>* _Nullable)children;
 - (NSInteger)countSiblingsAndChildrenBeaconNode:(NITNode* _Nonnull)node;
