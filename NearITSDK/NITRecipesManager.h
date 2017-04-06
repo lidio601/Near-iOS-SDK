@@ -29,5 +29,6 @@
 - (void)processRecipe:(NSString* _Nonnull)recipeId;
 - (void)sendTrackingWithRecipeId:(NSString * _Nonnull)recipeId event:(NSString* _Nonnull)event;
 - (NSInteger)recipesCount;
+- (NSArray<NITRecipe *> *)recipes;
 
 @end

@@ -43,5 +43,7 @@
 - (void)setBatchUserDataWithDictionary:(NSDictionary<NSString*, id>* _Nonnull)valuesDictiornary completionHandler:(void (^_Nullable)(NSError* _Nullable error))handler;
 - (void)sendEventWithEvent:(NITEvent* _Nonnull)event completionHandler:(void (^_Nullable)(NSError* _Nullable error))handler;
 - (void)couponsWithCompletionHandler:(void (^ _Nullable)(NSArray<NITCoupon*>* _Nullable, NSError* _Nullable))handler;
+- (NSArray<NITRecipe*>* _Nonnull)recipes;
+- (void)processRecipeWithId:(NSString* _Nonnull)recipeId;
 
 @end

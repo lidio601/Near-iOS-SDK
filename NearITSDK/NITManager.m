@@ -193,6 +193,17 @@
     }];
 }
 
+- (NSArray<NITRecipe *> *)recipes {
+    NSArray<NITRecipe*> *recipes = [self.recipesManager recipes];
+    if (recipes) {
+        return recipes;
+    }
+    return [NSArray array];
+}
+
+- (void)processRecipeWithId:(NSString *)recipeId  {
+    [self.recipesManager processRecipe:recipeId];
+}
 
 // MARK: - NITManaging
 
