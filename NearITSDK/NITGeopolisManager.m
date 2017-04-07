@@ -39,11 +39,6 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 
 @implementation NITGeopolisManager
 
-- (instancetype)init {
-    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
-    return [self initWithNodesManager:nodesManager cachaManager:[NITCacheManager sharedInstance]];
-}
-
 - (instancetype)initWithNodesManager:(NITNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager {
     self = [super init];
     if (self) {

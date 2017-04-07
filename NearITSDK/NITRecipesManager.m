@@ -34,10 +34,6 @@ NSString* const RecipesCacheKey = @"Recipes";
 
 @implementation NITRecipesManager
 
-- (instancetype)init {
-    return [self initWithCacheManager:[NITCacheManager sharedInstance]];
-}
-
 - (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager {
     self = [super init];
     if (self) {

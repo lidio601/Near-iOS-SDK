@@ -21,6 +21,7 @@
 #import "NITInstallation.h"
 #import "NITEvent.h"
 #import "NITConstants.h"
+#import "NITNodesManager.h"
 
 @interface NITManager()<NITManaging>
 
@@ -65,9 +66,11 @@
 }
 
 - (void)pluginSetup {
-    self.recipesManager = [[NITRecipesManager alloc] init];
+    NITCacheManager *cacheManager = [NITCacheManager sharedInstance];
+    self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager];
     self.recipesManager.manager = self;
-    self.geopolisManager = [[NITGeopolisManager alloc] init];
+    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager];
     self.geopolisManager.recipesManager = self.recipesManager;
 }
 
