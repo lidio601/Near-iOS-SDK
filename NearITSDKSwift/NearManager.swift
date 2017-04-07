@@ -71,6 +71,14 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.resetProfile()
     }
     
+    public func recipes() -> [NITRecipe] {
+        return manager.recipes()
+    }
+    
+    public func processRecipe(_ id: String) {
+        manager.processRecipe(withId: id)
+    }
+    
     public func manager(_ manager: NITManager, eventWithContent content: Any, recipe: NITRecipe) {
         delegate?.manager(self, eventWithContent: content, recipe: recipe)
     }

@@ -255,6 +255,15 @@
 		135CD7771E94F71E005C75A4 /* NITEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITEvent.h; sourceTree = "<group>"; };
 		135CD7781E94F71E005C75A4 /* NITEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITEvent.m; sourceTree = "<group>"; };
 		135CD7831E966DE7005C75A4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		135CD7851E9769AB005C75A4 /* mkdocs.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mkdocs.yml; sourceTree = "<group>"; };
+		135CD78B1E976A40005C75A4 /* enable-triggers.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "enable-triggers.md"; sourceTree = "<group>"; };
+		135CD78C1E976A40005C75A4 /* handle-content.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "handle-content.md"; sourceTree = "<group>"; };
+		135CD78D1E976A40005C75A4 /* index.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = index.md; sourceTree = "<group>"; };
+		135CD78E1E976A40005C75A4 /* installation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = installation.md; sourceTree = "<group>"; };
+		135CD78F1E976A40005C75A4 /* testing.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = testing.md; sourceTree = "<group>"; };
+		135CD7901E976A40005C75A4 /* user-profilation.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "user-profilation.md"; sourceTree = "<group>"; };
+		135CD7911E976A4F005C75A4 /* brand-docs.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "brand-docs.svg"; sourceTree = "<group>"; };
+		135CD7921E976A4F005C75A4 /* nearitdocs.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = nearitdocs.css; sourceTree = "<group>"; };
 		137838631E800EC1001C8CDE /* NITRecipesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipesManager.h; sourceTree = "<group>"; };
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
@@ -462,7 +471,9 @@
 		1352CA5A1E7807FD00C0E98E = {
 			isa = PBXGroup;
 			children = (
+				135CD7851E9769AB005C75A4 /* mkdocs.yml */,
 				135CD7831E966DE7005C75A4 /* README.md */,
+				135CD7891E976A02005C75A4 /* docs */,
 				1352CA661E7807FE00C0E98E /* NearITSDK */,
 				1352CA711E7807FE00C0E98E /* NearITSDKTests */,
 				138250151E88F88500264BAC /* NearITSDKSwift */,
@@ -615,6 +626,29 @@
 				135A70871E85328900D4C9EC /* NITContentReaction.m */,
 			);
 			name = Content;
+			sourceTree = "<group>";
+		};
+		135CD7891E976A02005C75A4 /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				135CD78A1E976A23005C75A4 /* css */,
+				135CD78B1E976A40005C75A4 /* enable-triggers.md */,
+				135CD78C1E976A40005C75A4 /* handle-content.md */,
+				135CD78D1E976A40005C75A4 /* index.md */,
+				135CD78E1E976A40005C75A4 /* installation.md */,
+				135CD78F1E976A40005C75A4 /* testing.md */,
+				135CD7901E976A40005C75A4 /* user-profilation.md */,
+			);
+			path = docs;
+			sourceTree = "<group>";
+		};
+		135CD78A1E976A23005C75A4 /* css */ = {
+			isa = PBXGroup;
+			children = (
+				135CD7911E976A4F005C75A4 /* brand-docs.svg */,
+				135CD7921E976A4F005C75A4 /* nearitdocs.css */,
+			);
+			path = css;
 			sourceTree = "<group>";
 		};
 		137838621E800EA8001C8CDE /* Recipes */ = {
