@@ -82,4 +82,14 @@
     XCTAssertNil([[NSUserDefaults standardUserDefaults] stringForKey:@"appid-apiKey2"]);
 }
 
+- (void)testSetWithoutApiKey {
+    NITConfiguration *config = [[NITConfiguration alloc] init];
+    [config setDeviceToken:@"device-token"];
+    
+    XCTAssertNotNil(config.deviceToken);
+    XCTAssertNil([[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"]);
+    [config clear];
+    XCTAssertNil(config.deviceToken);
+}
+
 @end

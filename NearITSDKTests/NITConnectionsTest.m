@@ -70,11 +70,6 @@
 - (void)testListRecipes {
     XCTestExpectation *recipeExpectation = [self expectationWithDescription:@"List recipes"];
     
-    NSURL *url = [NSURL URLWithString:[BASE_URL stringByAppendingString:@"/recipes/process"]];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-    [request setHTTPMethod:@"POST"];
-    [self fillHeadersWithRequest:request];
-    
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
     NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
     resource.type = @"evaluation";
@@ -84,12 +79,8 @@
     [core setObject:APPID forKey:@"app_id"];
     [resource addAttributeObject:core forKey:@"core"];
     [jsonApi setDataWithResourceObject:resource];
-    NSDictionary *json = [jsonApi toDictionary];
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
-    XCTAssertNotNil(jsonData);
-    [request setHTTPBody:jsonData];
     
-    [NITNetworkManager makeRequestWithURLRequest:request jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider recipesProcessListWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         XCTAssertNil(error);
         XCTAssertNotNil(json, @"json is nil");
         
