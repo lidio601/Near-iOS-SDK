@@ -15,12 +15,26 @@
 #import "NITConstants.h"
 #import "NITInstallation.h"
 
+@interface NITUserProfile()
+
+@property (nonatomic, strong) NITConfiguration *configuration;
+@property (nonatomic, strong) NITNetworkManager *networkManager;
+
+@end
+
 @implementation NITUserProfile
 
-+ (void)createNewProfileWithCompletionHandler:(void (^)(NSString *profileId, NSError *error))handler {
-    NITConfiguration *config = [NITConfiguration defaultConfiguration];
-    NITNetworkManager *network = [[NITNetworkManager alloc] init];
-    [network makeRequestWithURLRequest:[NITNetworkProvider newProfileWithAppId:config.appId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+- (instancetype)initWithConfiguration:(NITConfiguration *)configuration networkManager:(id<NITNetworkManaging>)networkManager {
+    self = [super init];
+    if (self) {
+        self.configuration = configuration;
+        self.networkManager = networkManager;
+    }
+    return self;
+}
+
+- (void)createNewProfileWithCompletionHandler:(void (^)(NSString *profileId, NSError *error))handler {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider newProfileWithAppId:self.configuration.appId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if(error) {
             if (handler) {
                 handler(nil, error);
@@ -28,7 +42,7 @@
         } else {
             NITJSONAPIResource *resource = [json firstResourceObject];
             if (resource.ID) {
-                config.profileId = resource.ID;
+                self.configuration.profileId = resource.ID;
                 if (handler) {
                     [[NITInstallation sharedInstance] registerInstallationWithCompletionHandler:nil];
                     handler(resource.ID, nil);
@@ -43,10 +57,10 @@
     }];
 }
 
-+ (void)setUserDataWithKey:(NSString*)key value:(NSString*)value completionHandler:(void (^)(NSError* error))handler {
+- (void)setUserDataWithKey:(NSString*)key value:(NSString*)value completionHandler:(void (^)(NSError* error))handler {
     NITConfiguration *config = [NITConfiguration defaultConfiguration];
     if (config.profileId == nil) {
-        [NITUserProfile createNewProfileWithCompletionHandler:nil];
+        [self createNewProfileWithCompletionHandler:nil];
         if (handler) {
             NSError *newError = [[NSError alloc] initWithDomain:NITUserProfileErrorDomain code:3 userInfo:@{NSLocalizedDescriptionKey : @"Profile not found"}];
             handler(newError);
@@ -56,8 +70,7 @@
     
     NSDictionary *attributes = @{ @"key" : key, @"value" : value };
     NITJSONAPI *jsonApi = [NITJSONAPI jsonApiWithAttributes:attributes type:@"data_points"];
-    NITNetworkManager *network = [[NITNetworkManager alloc] init];
-    [network makeRequestWithURLRequest:[NITNetworkProvider setUserDataWithJsonApi:jsonApi profileId:config.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider setUserDataWithJsonApi:jsonApi profileId:config.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             if (handler) {
                 NSError *newError = [[NSError alloc] initWithDomain:NITUserProfileErrorDomain code:4 userInfo:@{NSLocalizedDescriptionKey : @"Data point error", NSUnderlyingErrorKey:error}];
@@ -71,10 +84,10 @@
     }];
 }
 
-+ (void)setBatchUserDataWithDictionary:(NSDictionary<NSString*, id>*)valuesDictiornary completionHandler:(void (^)(NSError* error))handler {
+- (void)setBatchUserDataWithDictionary:(NSDictionary<NSString*, id>*)valuesDictiornary completionHandler:(void (^)(NSError* error))handler {
     NITConfiguration *config = [NITConfiguration defaultConfiguration];
     if (config.profileId == nil) {
-        [NITUserProfile createNewProfileWithCompletionHandler:nil];
+        [self createNewProfileWithCompletionHandler:nil];
         if (handler) {
             NSError *newError = [[NSError alloc] initWithDomain:NITUserProfileErrorDomain code:3 userInfo:@{NSLocalizedDescriptionKey : @"Profile not found"}];
             handler(newError);
@@ -89,8 +102,7 @@
     }
     
     NITJSONAPI *jsonApi = [NITJSONAPI jsonApiWithArray:resources type:@"data_points"];
-    NITNetworkManager *network = [[NITNetworkManager alloc] init];
-    [network makeRequestWithURLRequest:[NITNetworkProvider setUserDataWithJsonApi:jsonApi profileId:config.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider setUserDataWithJsonApi:jsonApi profileId:config.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             if (handler) {
                 NSError *newError = [[NSError alloc] initWithDomain:NITUserProfileErrorDomain code:4 userInfo:@{NSLocalizedDescriptionKey : @"Data point error", NSUnderlyingErrorKey:error}];
@@ -104,9 +116,8 @@
     }];
 }
 
-+ (void)resetProfile {
-    NITConfiguration *config = [NITConfiguration defaultConfiguration];
-    config.profileId = nil;
+- (void)resetProfile {
+    self.configuration.profileId = nil;
     [[NITInstallation sharedInstance] registerInstallationWithCompletionHandler:nil];
 }
 

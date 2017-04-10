@@ -14,7 +14,7 @@
 
 @interface NITFeedbackReaction : NITReaction
 
-- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager * _Nonnull)cacheManager configuration:(NITConfiguration* _Nonnull)configuration networkManager:(NITNetworkManager*)networkManager;
+- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager * _Nonnull)cacheManager configuration:(NITConfiguration* _Nonnull)configuration networkManager:(NITNetworkManager*_Nonnull)networkManager;
 
 - (void)sendEventWithFeedbackEvent:(NITFeedbackEvent* _Nonnull)event completionHandler:(void (^_Nullable)(NSError* _Nullable error))handler;
 

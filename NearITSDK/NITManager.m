@@ -34,6 +34,7 @@
 @property (nonatomic, strong) NITNetworkManager *networkManager;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) NITConfiguration *configuration;
+@property (nonatomic, strong) NITUserProfile *profile;
 @property (nonatomic) BOOL started;
 
 @end
@@ -48,12 +49,13 @@
         
         self.networkManager = [[NITNetworkManager alloc] init];
         self.cacheManager = [NITCacheManager sharedInstance];
+        self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
         [self.cacheManager setAppId:[[NITConfiguration defaultConfiguration] appId]];
         [self pluginSetup];
         [self reactionsSetup];
         self.started = NO;
         
-        [NITUserProfile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
+        [self.profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
             if(error == nil) {
                 [self refreshConfigWithCompletionHandler:nil];
             }
@@ -164,20 +166,22 @@
 }
 
 - (void)setUserDataWithKey:(NSString *)key value:(NSString *)value completionHandler:(void (^)(NSError * _Nullable))handler {
-    [NITUserProfile setUserDataWithKey:key value:value completionHandler:^(NSError * _Nullable error) {
+    NITRecipesManager *recipesManager = self.recipesManager;
+    [self.profile setUserDataWithKey:key value:value completionHandler:^(NSError * _Nullable error) {
         if (handler) {
             handler(error);
         }
-        [self.recipesManager refreshConfigWithCompletionHandler:nil];
+        [recipesManager refreshConfigWithCompletionHandler:nil];
     }];
 }
 
 - (void)setBatchUserDataWithDictionary:(NSDictionary<NSString *,id> *)valuesDictiornary completionHandler:(void (^)(NSError * _Nullable))handler {
-    [NITUserProfile setBatchUserDataWithDictionary:valuesDictiornary completionHandler:^(NSError * _Nullable error) {
+    NITRecipesManager *recipesManager = self.recipesManager;
+    [self.profile setBatchUserDataWithDictionary:valuesDictiornary completionHandler:^(NSError * _Nullable error) {
         if (handler) {
             handler(error);
         }
-        [self.recipesManager refreshConfigWithCompletionHandler:nil];
+        [recipesManager refreshConfigWithCompletionHandler:nil];
     }];
 }
 
@@ -215,7 +219,7 @@
 }
 
 - (void)resetProfile {
-    [NITUserProfile resetProfile];
+    [self.profile resetProfile];
 }
 
 // MARK: - NITManaging
