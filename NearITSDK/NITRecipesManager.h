@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "NITManager.h"
+#import "NITNetworkManaging.h"
 
 @class NITJSONAPI;
 @class NITCacheManager;
-@class NITNetworkManager;
 
 @protocol NITRecipesManaging <NSObject>
 
@@ -24,7 +24,7 @@
 
 @property (nonatomic, strong) id<NITManaging> _Nullable manager;
 
-- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager* _Nonnull)cacheManager networkManager:(NITNetworkManager* _Nonnull)networkManager;
+- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager* _Nonnull)cacheManager networkManager:(id<NITNetworkManaging> _Nonnull)networkManager;
 
 - (void)refreshConfigWithCompletionHandler:(void (^_Nullable)(NSError * _Nullable error))completionHandler;
 - (void)processRecipe:(NSString* _Nonnull)recipeId;

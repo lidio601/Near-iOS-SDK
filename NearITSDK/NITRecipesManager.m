@@ -7,7 +7,6 @@
 //
 
 #import "NITRecipesManager.h"
-#import "NITNetworkManager.h"
 #import "NITNetworkProvider.h"
 #import "NITJSONAPI.h"
 #import "NITRecipe.h"
@@ -29,13 +28,13 @@ NSString* const RecipesCacheKey = @"Recipes";
 @property (nonatomic, strong) NSArray<NITRecipe*> *recipes;
 @property (nonatomic, strong) NITRecipeCooler *cooler;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
-@property (nonatomic, strong) NITNetworkManager *networkManager;
+@property (nonatomic, strong) id<NITNetworkManaging> networkManager;
 
 @end
 
 @implementation NITRecipesManager
 
-- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(NITNetworkManager *)networkManager {
+- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager {
     self = [super init];
     if (self) {
         self.cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager];

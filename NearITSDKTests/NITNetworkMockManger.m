@@ -16,7 +16,11 @@ NSErrorDomain const NITNetworkMockErrorDomain = @"com.nearit.networkmock";
 - (void)makeRequestWithURLRequest:(NSURLRequest *)request jsonApicompletionHandler:(void (^)(NITJSONAPI * _Nullable, NSError * _Nullable))completionHandler {
     if (self.mock) {
         NITJSONAPI *json = self.mock(request);
-        completionHandler(json, nil);
+        if (json) {
+            completionHandler(json, nil);
+        } else {
+            completionHandler(nil, [NSError errorWithDomain:NITNetworkMockErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"No json api given"}]);
+        }
     } else {
         completionHandler(nil, [NSError errorWithDomain:NITNetworkMockErrorDomain code:100 userInfo:@{NSLocalizedDescriptionKey:@"Invalid mock block"}]);
     }
