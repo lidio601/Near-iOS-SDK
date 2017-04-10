@@ -13,6 +13,7 @@
 #import "NITCacheManager.h"
 #import "NITNetworkManager.h"
 #import "NITNetworkMockManger.h"
+#import "NITConfiguration.h"
 
 @interface NITRecipesManagerTest : NITTestCase<NITManaging>
 
@@ -99,7 +100,7 @@
     
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
-    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
     [recipesManager setRecipesWithJsonApi:recipesJson];
     recipesManager.manager = self;
     
@@ -119,7 +120,7 @@
     
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
-    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
     [recipesManager setRecipesWithJsonApi:recipesJson];
     recipesManager.manager = self;
     
@@ -273,7 +274,7 @@
         return nil;
     };
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
     [cacheManager saveWithObject:[jsonApi parseToArrayOfObjects] forKey:@"Recipes"];
     [NSThread sleepForTimeInterval:0.5];
     

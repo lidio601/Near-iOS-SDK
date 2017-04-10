@@ -29,17 +29,19 @@ NSString* const RecipesCacheKey = @"Recipes";
 @property (nonatomic, strong) NITRecipeCooler *cooler;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) id<NITNetworkManaging> networkManager;
+@property (nonatomic, strong) NITConfiguration *configuration;
 
 @end
 
 @implementation NITRecipesManager
 
-- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager {
+- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration *)configuration {
     self = [super init];
     if (self) {
         self.cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager];
         self.cacheManager = cacheManager;
         self.networkManager = networkManager;
+        self.configuration = configuration;
     }
     return self;
 }
@@ -152,7 +154,7 @@ NSString* const RecipesCacheKey = @"Recipes";
         [self.cooler markRecipeAsShownWithId:recipeId];
     }
     
-    NITConfiguration *config = [NITConfiguration defaultConfiguration];
+    NITConfiguration *config = self.configuration;
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
     NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
     resource.type = @"trackings";
@@ -213,7 +215,7 @@ NSString* const RecipesCacheKey = @"Recipes";
 }
 
 - (NSDictionary*)buildCoreObject {
-    NITConfiguration *config = [NITConfiguration defaultConfiguration];
+    NITConfiguration *config = self.configuration;
     NSMutableDictionary<NSString*, id> *core = [[NSMutableDictionary alloc] init];
     if (config.appId && config.profileId && config.installationId) {
         [core setObject:config.profileId forKey:@"profile_id"];

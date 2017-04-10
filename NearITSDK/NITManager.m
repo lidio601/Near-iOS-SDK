@@ -77,7 +77,7 @@
 }
 
 - (void)pluginSetup {
-    self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager];
+    self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration];
     self.recipesManager.manager = self;
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
     self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager];
