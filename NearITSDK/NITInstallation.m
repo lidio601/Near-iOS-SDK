@@ -40,7 +40,7 @@
     [jsonApi setDataWithResourceObject:[self installationResourceWithInstallationId:realInstallationId]];
     
     if (realInstallationId) {
-        [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider updateInstallationWithJsonApi:jsonApi installationId:realInstallationId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] updateInstallationWithJsonApi:jsonApi installationId:realInstallationId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
             [self handleResponseWithJsonApi:json error:error completionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
                 if (handler) {
                     handler(installationId, error);
@@ -48,7 +48,7 @@
             }];
         }];
     } else {
-        [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider newInstallationWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] newInstallationWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
             [self handleResponseWithJsonApi:json error:error completionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
                 if (handler) {
                     handler(installationId, error);

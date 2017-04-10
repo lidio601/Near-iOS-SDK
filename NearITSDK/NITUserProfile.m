@@ -35,7 +35,7 @@
 }
 
 - (void)createNewProfileWithCompletionHandler:(void (^)(NSString *profileId, NSError *error))handler {
-    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider newProfileWithAppId:self.configuration.appId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] newProfileWithAppId:self.configuration.appId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if(error) {
             if (handler) {
                 handler(nil, error);
@@ -71,7 +71,7 @@
     
     NSDictionary *attributes = @{ @"key" : key, @"value" : value };
     NITJSONAPI *jsonApi = [NITJSONAPI jsonApiWithAttributes:attributes type:@"data_points"];
-    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider setUserDataWithJsonApi:jsonApi profileId:config.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] setUserDataWithJsonApi:jsonApi profileId:config.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             if (handler) {
                 NSError *newError = [[NSError alloc] initWithDomain:NITUserProfileErrorDomain code:4 userInfo:@{NSLocalizedDescriptionKey : @"Data point error", NSUnderlyingErrorKey:error}];
@@ -103,7 +103,7 @@
     }
     
     NITJSONAPI *jsonApi = [NITJSONAPI jsonApiWithArray:resources type:@"data_points"];
-    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider setUserDataWithJsonApi:jsonApi profileId:config.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] setUserDataWithJsonApi:jsonApi profileId:config.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             if (handler) {
                 NSError *newError = [[NSError alloc] initWithDomain:NITUserProfileErrorDomain code:4 userInfo:@{NSLocalizedDescriptionKey : @"Data point error", NSUnderlyingErrorKey:error}];

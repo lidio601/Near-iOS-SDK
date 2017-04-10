@@ -23,6 +23,7 @@
 #import "NITConstants.h"
 #import "NITNodesManager.h"
 #import "NITNetworkManager.h"
+#import "NITNetworkProvider.h"
 
 @interface NITManager()<NITManaging>
 
@@ -46,6 +47,7 @@
     if (self) {
         self.configuration = [NITConfiguration defaultConfiguration];
         [self.configuration setApiKey:apiKey];
+        [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
         
         self.networkManager = [[NITNetworkManager alloc] init];
         self.cacheManager = [NITCacheManager sharedInstance];

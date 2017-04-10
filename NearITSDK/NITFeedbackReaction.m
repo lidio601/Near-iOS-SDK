@@ -55,7 +55,7 @@
 }
 
 - (void)requestSingleReactionWithBundleId:(NSString*)bundleId completionHandler:(void (^)(NITFeedback*, NSError*))handler {
-    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider feedbackWithBundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] feedbackWithBundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:111 userInfo:@{NSLocalizedDescriptionKey:@"Invalid feedback data", NSUnderlyingErrorKey: error}];
             handler(nil, anError);
@@ -75,7 +75,7 @@
 }
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))handler {
-    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider feedbacks] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] feedbacks] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             self.feedbacks = [self.cacheManager loadArrayForKey:CACHE_KEY];
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:112 userInfo:@{NSLocalizedDescriptionKey:@"Invalid feedbacks data", NSUnderlyingErrorKey: error}];
@@ -103,7 +103,7 @@
         }
         return;
     }
-    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider sendFeedbackEventWithJsonApi:jsonApi feedbackId:event.ID] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] sendFeedbackEventWithJsonApi:jsonApi feedbackId:event.ID] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:114 userInfo:@{NSLocalizedDescriptionKey:@"Error sending feedback event", NSUnderlyingErrorKey : error}];
             if (handler) {

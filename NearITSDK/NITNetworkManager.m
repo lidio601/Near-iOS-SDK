@@ -13,9 +13,6 @@
 #define NITNetowkrErrorDomain @"com.nearit.network"
 #define LogResponseOnError YES
 
-static NSURLSession *session;
-static NITNetworkManager *sharedNetwork;
-
 @interface NITNetworkManager()
 
 @property (nonatomic, strong) NSURLSession *session;
@@ -23,13 +20,6 @@ static NITNetworkManager *sharedNetwork;
 @end
 
 @implementation NITNetworkManager
-
-+ (NITNetworkManager *)sharedInstance {
-    if (sharedNetwork == nil) {
-        sharedNetwork = [NITNetworkManager new];
-    }
-    return sharedNetwork;
-}
 
 - (NSURLSession*)defaultSession {
     if (self.session == nil) {

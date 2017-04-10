@@ -34,6 +34,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 @property (nonatomic, strong) NSMutableArray<CLRegion*> *monitoredRegions; //For test purpose
 @property (nonatomic, strong) NSMutableArray<CLRegion*> *rangedRegions; // For test purpose
 @property (nonatomic, strong) NSString *pluginName;
+@property (nonatomic, strong) NITNetworkProvider *provider;
 @property (nonatomic) BOOL started;
 
 @end
@@ -58,7 +59,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 }
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable error))completionHandler {
-    [self.networkManaeger makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManaeger makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] geopolisNodes] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             NITJSONAPI *jsonApi = [self.cacheManager loadObjectForKey:NodeJSONCacheKey];
             if (jsonApi) {
