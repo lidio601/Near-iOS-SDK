@@ -8,17 +8,17 @@
 
 #import <Foundation/Foundation.h>
 #import "NITCacheManager.h"
+#import "NITNetworkManaging.h"
 
 @class NITManager;
 @class NITRecipe;
-@class NITNetworkManager;
 
 @interface NITReaction : NSObject
 
 @property (nonatomic, strong) NITCacheManager * _Nonnull cacheManager;
-@property (nonatomic, strong) NITNetworkManager * _Nonnull networkManager;
+@property (nonatomic, strong) id<NITNetworkManaging> _Nonnull networkManager;
 
-- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager* _Nonnull)cacheManager networkManager:(NITNetworkManager* _Nonnull)networkManager;
+- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager* _Nonnull)cacheManager networkManager:(id<NITNetworkManaging> _Nonnull)networkManager;
 
 - (NSString* _Nonnull)pluginName;
 - (void)contentWithRecipe:(NITRecipe* _Nonnull)recipe completionHandler:(void (^_Nullable)(id _Nullable content, NSError * _Nullable error))handler;

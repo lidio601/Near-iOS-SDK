@@ -26,16 +26,8 @@
 
 @implementation NITCouponReaction
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        self.configuration = [NITConfiguration defaultConfiguration];
-    }
-    return self;
-}
-
-- (instancetype)initWithConfiguration:(NITConfiguration*)configuration {
-    self = [super init];
+- (instancetype)initWithCacheManager:(NITCacheManager *)cacheManager configuration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager {
+    self = [super initWithCacheManager:cacheManager networkManager:networkManager];
     if (self) {
         self.configuration = configuration;
     }

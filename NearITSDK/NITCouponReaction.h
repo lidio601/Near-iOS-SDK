@@ -7,13 +7,15 @@
 //
 
 #import "NITReaction.h"
+#import "NITNetworkManaging.h"
 
 @class NITCoupon;
 @class NITConfiguration;
+@class NITCacheManager;
 
 @interface NITCouponReaction : NITReaction
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration;
+- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager * _Nonnull)cacheManager configuration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager;
 - (void)couponsWithCompletionHandler:(void (^ _Nullable)(NSArray<NITCoupon*>* _Nullable, NSError* _Nullable))handler;
 
 @end

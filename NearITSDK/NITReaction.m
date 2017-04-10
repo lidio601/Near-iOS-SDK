@@ -8,7 +8,6 @@
 
 #import "NITReaction.h"
 #import "NITManager.h"
-#import "NITNetworkManager.h"
 
 @interface NITReaction()
 
@@ -16,7 +15,7 @@
 
 @implementation NITReaction
 
-- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(NITNetworkManager *)networkManager {
+- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager {
     self = [super init];
     if (self) {
         self.cacheManager = cacheManager;
