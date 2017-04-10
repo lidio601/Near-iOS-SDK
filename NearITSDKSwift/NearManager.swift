@@ -75,7 +75,7 @@ public final class NearManager: NSObject, NITManagerDelegate {
         return manager.recipes()
     }
     
-    public func processRecipe(_ id: String) {
+    public func processRecipe(id: String) {
         manager.processRecipe(withId: id)
     }
     
