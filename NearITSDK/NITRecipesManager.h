@@ -11,6 +11,7 @@
 
 @class NITJSONAPI;
 @class NITCacheManager;
+@class NITNetworkManager;
 
 @protocol NITRecipesManaging <NSObject>
 
@@ -23,7 +24,7 @@
 
 @property (nonatomic, strong) id<NITManaging> _Nullable manager;
 
-- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager* _Nonnull)cacheManager;
+- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager* _Nonnull)cacheManager networkManager:(NITNetworkManager*)networkManager;
 
 - (void)refreshConfigWithCompletionHandler:(void (^_Nullable)(NSError * _Nullable error))completionHandler;
 - (void)processRecipe:(NSString* _Nonnull)recipeId;

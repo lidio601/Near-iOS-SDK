@@ -15,23 +15,37 @@
 #define LogResponseOnError YES
 
 static NSURLSession *session;
+static NITNetworkManager *sharedNetwork;
+
+@interface NITNetworkManager()
+
+@property (nonatomic, strong) NSURLSession *session;
+
+@end
 
 @implementation NITNetworkManager
 
-+ (NSURLSession*)defaultSession {
-    if (session == nil) {
-        session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
++ (NITNetworkManager *)sharedInstance {
+    if (sharedNetwork == nil) {
+        sharedNetwork = [NITNetworkManager new];
     }
-    return session;
+    return sharedNetwork;
 }
 
-+ (void)makeRequestWithURLRequest:(NSURLRequest *)request completionHandler:(void (^)(NSData * _Nullable, NSError * _Nullable))completionHandler {
+- (NSURLSession*)defaultSession {
+    if (self.session == nil) {
+        self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    }
+    return self.session;
+}
+
+- (void)makeRequestWithURLRequest:(NSURLRequest *)request completionHandler:(void (^)(NSData * _Nullable, NSError * _Nullable))completionHandler {
     NSData *data = [[NITNetworkMock sharedInstance] dataWithRequest:request];
     if(data) {
         completionHandler(data, nil);
         return;
     }
-    NSURLSessionDataTask *task = [[NITNetworkManager defaultSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSessionDataTask *task = [[self defaultSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if(error) {
             completionHandler(data, error);
         } else {
@@ -65,8 +79,8 @@ static NSURLSession *session;
     [task resume];
 }
 
-+ (void)makeRequestWithURLRequest:(NSURLRequest *)request jsonApicompletionHandler:(void (^)(NITJSONAPI * _Nullable json, NSError * _Nullable error))completionHandler {
-    [NITNetworkManager makeRequestWithURLRequest:request completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
+- (void)makeRequestWithURLRequest:(NSURLRequest *)request jsonApicompletionHandler:(void (^)(NITJSONAPI * _Nullable json, NSError * _Nullable error))completionHandler {
+    [self makeRequestWithURLRequest:request completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
         if(error) {
             completionHandler(nil, error);
         } else {

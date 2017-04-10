@@ -22,6 +22,7 @@
 #import "NITEvent.h"
 #import "NITConstants.h"
 #import "NITNodesManager.h"
+#import "NITNetworkManager.h"
 
 @interface NITManager()<NITManaging>
 
@@ -30,6 +31,9 @@
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NITReaction*> *reactions;
 @property (nonatomic, strong) NITFeedbackReaction *feedbackReaction;
 @property (nonatomic, strong) NITCouponReaction *couponReaction;
+@property (nonatomic, strong) NITNetworkManager *networkManager;
+@property (nonatomic, strong) NITCacheManager *cacheManager;
+@property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic) BOOL started;
 
 @end
@@ -39,9 +43,12 @@
 - (instancetype _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey {
     self = [super init];
     if (self) {
-        [[NITConfiguration defaultConfiguration] setApiKey:apiKey];
-        [[NITCacheManager sharedInstance] setAppId:[[NITConfiguration defaultConfiguration] appId]];
+        self.configuration = [NITConfiguration defaultConfiguration];
+        [self.configuration setApiKey:apiKey];
         
+        self.networkManager = [[NITNetworkManager alloc] init];
+        self.cacheManager = [NITCacheManager sharedInstance];
+        [self.cacheManager setAppId:[[NITConfiguration defaultConfiguration] appId]];
         [self pluginSetup];
         [self reactionsSetup];
         self.started = NO;
@@ -66,11 +73,10 @@
 }
 
 - (void)pluginSetup {
-    NITCacheManager *cacheManager = [NITCacheManager sharedInstance];
-    self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager];
+    self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager];
     self.recipesManager.manager = self;
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
-    self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager];
+    self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager];
     self.geopolisManager.recipesManager = self.recipesManager;
 }
 
@@ -78,13 +84,13 @@
     self.reactions = [[NSMutableDictionary alloc] init];
     
     self.couponReaction = [[NITCouponReaction alloc] init];
-    self.feedbackReaction = [[NITFeedbackReaction alloc] init];
+    self.feedbackReaction = [[NITFeedbackReaction alloc] initWithCacheManager:self.cacheManager configuration:self.configuration networkManager:self.networkManager];
     
-    [self.reactions setObject:[[NITSimpleNotificationReaction alloc] init] forKey:@"simple-notification"];
-    [self.reactions setObject:[[NITContentReaction alloc] init] forKey:@"content-notification"];
+    [self.reactions setObject:[[NITSimpleNotificationReaction alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager] forKey:@"simple-notification"];
+    [self.reactions setObject:[[NITContentReaction alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager] forKey:@"content-notification"];
     [self.reactions setObject:self.couponReaction forKey:@"coupon-blaster"];
     [self.reactions setObject:self.feedbackReaction forKey:@"feedbacks"];
-    [self.reactions setObject:[[NITCustomJSONReaction alloc] init] forKey:@"json-sender"];
+    [self.reactions setObject:[[NITCustomJSONReaction alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager] forKey:@"json-sender"];
 }
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))completionHandler {

@@ -24,6 +24,7 @@
 #import "NITFeedbackEvent.h"
 #import "NITCustomJSON.h"
 #import "NITCustomJSONReaction.h"
+#import "NITNetworkManager.h"
 
 #define APIKEY @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJlMzRhN2Q5MC0xNGQyLTQ2YjgtODFmMC04MWEyYzkzZGQ0ZDAiLCJyb2xlX2tleSI6ImFwcCJ9fX0.2GvA499N8c1Vui9au7NzUWM8B10GWaha6ASCCgPPlR8"
 #define APPID @"e34a7d90-14d2-46b8-81f0-81a2c93dd4d0"
@@ -137,8 +138,9 @@
     NITRecipe *recipe = [[NITRecipe alloc] init];
     recipe.reactionBundleId = @"08b4935a-8ee5-45cd-923e-078a7d35953b";
     
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[NSString stringWithFormat:@"test-%@", recipe.reactionBundleId]];
-    NITFeedbackReaction *feedbackReaction = [[NITFeedbackReaction alloc] initWithCacheManager:cacheManager];
+    NITFeedbackReaction *feedbackReaction = [[NITFeedbackReaction alloc] initWithCacheManager:cacheManager networkManager:networkManager];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     [feedbackReaction contentWithRecipe:recipe completionHandler:^(id  _Nullable content, NSError * _Nullable error) {
@@ -161,8 +163,9 @@
     NITRecipe *recipe = [[NITRecipe alloc] init];
     recipe.reactionBundleId = @"08b4935a-8ee5-45cd-923e-078a7d35953f";
     
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[NSString stringWithFormat:@"test-%@", recipe.reactionBundleId]];
-    NITFeedbackReaction *reaction = [[NITFeedbackReaction alloc] initWithCacheManager:cacheManager];
+    NITFeedbackReaction *reaction = [[NITFeedbackReaction alloc] initWithCacheManager:cacheManager networkManager:networkManager];
     
     NITFeedback *feedback = [self feedbackWithContentsOfFile:@"feedback1"];
     feedback.recipeId = @"7d41504f-99e9-45e0-b272-a6fdd202b688";
@@ -182,8 +185,9 @@
     NITRecipe *recipe = [[NITRecipe alloc] init];
     recipe.reactionBundleId = @"bb40734c-75c2-4ac6-a716-9267f9893baa";
     
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[NSString stringWithFormat:@"test-%@", recipe.reactionBundleId]];
-    NITCustomJSONReaction *reaction = [[NITCustomJSONReaction alloc] initWithCacheManager:cacheManager];
+    NITCustomJSONReaction *reaction = [[NITCustomJSONReaction alloc] initWithCacheManager:cacheManager networkManager:networkManager];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     [reaction contentWithRecipe:recipe completionHandler:^(id  _Nullable content, NSError * _Nullable error) {
@@ -248,7 +252,8 @@
     [NSThread sleepForTimeInterval:0.5];
     NITRecipe *recipe = [[NITRecipe alloc] init];
     recipe.reactionBundleId = @"c66db20c-20c4-4768-98e2-daf24def7722";
-    NITContentReaction *reaction = [[NITContentReaction alloc] initWithCacheManager:cacheManager];
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITContentReaction *reaction = [[NITContentReaction alloc] initWithCacheManager:cacheManager networkManager:networkManager];
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
     [reaction contentWithRecipe:recipe completionHandler:^(id  _Nonnull content, NSError * _Nullable error) {

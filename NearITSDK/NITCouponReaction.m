@@ -56,7 +56,7 @@
 }
 
 - (void)couponsWithCompletionHandler:(void (^)(NSArray<NITCoupon *> * _Nullable, NSError * _Nullable))handler {
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider couponsWithProfileId:self.configuration.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider couponsWithProfileId:self.configuration.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if(error) {
             if (handler) {
                 NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:104 userInfo:@{NSLocalizedDescriptionKey:@"Invalid coupons data", NSUnderlyingErrorKey: error}];

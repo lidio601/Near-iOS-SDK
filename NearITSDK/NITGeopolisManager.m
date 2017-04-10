@@ -27,6 +27,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NITNodesManager *nodesManager;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
+@property (nonatomic, strong) NITNetworkManager *networkManaeger;
 @property (nonatomic, strong) NITBeaconProximityManager *beaconProximity;
 @property (nonatomic, strong) NITNode *currentNode;
 @property (nonatomic, strong) NSMutableArray<NSString*> *enteredRegions;
@@ -39,13 +40,14 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 
 @implementation NITGeopolisManager
 
-- (instancetype)initWithNodesManager:(NITNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager {
+- (instancetype)initWithNodesManager:(NITNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager {
     self = [super init];
     if (self) {
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         self.nodesManager = nodesManager;
         self.cacheManager = cacheManager;
+        self.networkManaeger = networkManager;
         self.enteredRegions = [[NSMutableArray alloc] init];
         self.monitoredRegions = [[NSMutableArray alloc] init];
         self.rangedRegions = [[NSMutableArray alloc] init];
@@ -56,7 +58,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 }
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable error))completionHandler {
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManaeger makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             NITJSONAPI *jsonApi = [self.cacheManager loadObjectForKey:NodeJSONCacheKey];
             if (jsonApi) {

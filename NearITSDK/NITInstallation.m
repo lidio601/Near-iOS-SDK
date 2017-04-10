@@ -16,6 +16,13 @@
 
 static NITInstallation *sharedInstallation;
 
+@interface NITInstallation()
+
+@property (nonatomic, strong) NITConfiguration *configuration;
+@property (nonatomic, strong) NITNetworkManager *networkManager;
+
+@end
+
 @implementation NITInstallation
 
 + (NITInstallation *)sharedInstance {
@@ -23,6 +30,15 @@ static NITInstallation *sharedInstallation;
         sharedInstallation = [NITInstallation new];
     }
     return sharedInstallation;
+}
+
+- (instancetype)initWithConfiguration:(NITConfiguration*)configuration networkManager:(NITNetworkManager*)networkManager {
+    self = [super init];
+    if (self) {
+        self.configuration = configuration;
+        self.networkManager = networkManager;
+    }
+    return self;
 }
 
 - (void)registerInstallationWithCompletionHandler:(void (^)(NSString * _Nullable installationId, NSError * _Nullable error))handler {
@@ -33,7 +49,7 @@ static NITInstallation *sharedInstallation;
     [jsonApi setDataWithResourceObject:[self installationResourceWithInstallationId:realInstallationId]];
     
     if (realInstallationId) {
-        [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider updateInstallationWithJsonApi:jsonApi installationId:realInstallationId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider updateInstallationWithJsonApi:jsonApi installationId:realInstallationId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
             [self handleResponseWithJsonApi:json error:error completionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
                 if (handler) {
                     handler(installationId, error);
@@ -41,7 +57,7 @@ static NITInstallation *sharedInstallation;
             }];
         }];
     } else {
-        [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider newInstallationWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider newInstallationWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
             [self handleResponseWithJsonApi:json error:error completionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
                 if (handler) {
                     handler(installationId, error);
@@ -98,10 +114,6 @@ static NITInstallation *sharedInstallation;
             handler(nil, newError);
         }
     }
-}
-
-- (NITConfiguration*)configuration {
-    return [NITConfiguration defaultConfiguration];
 }
 
 @end

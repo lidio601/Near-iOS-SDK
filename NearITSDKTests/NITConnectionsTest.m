@@ -80,7 +80,8 @@
     [resource addAttributeObject:core forKey:@"core"];
     [jsonApi setDataWithResourceObject:resource];
     
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider recipesProcessListWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    [networkManager makeRequestWithURLRequest:[NITNetworkProvider recipesProcessListWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         XCTAssertNil(error);
         XCTAssertNotNil(json, @"json is nil");
         
@@ -107,7 +108,8 @@
 - (void)testNewProfile {
     XCTestExpectation *profileExpectation = [self expectationWithDescription:@"Profile created"];
     
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider newProfileWithAppId:APPID] completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    [networkManager makeRequestWithURLRequest:[NITNetworkProvider newProfileWithAppId:APPID] completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
         XCTAssertNil(error);
         NSError *jsonError;
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
@@ -126,7 +128,8 @@
 - (void)testGeopolisNode {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    [networkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         XCTAssertNil(error);
         
         [json registerClass:[NITGeofenceNode class] forType:@"geofence_nodes"];
@@ -149,7 +152,8 @@
 - (void)testGeopolisNodeJson {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    [networkManager makeRequestWithURLRequest:[NITNetworkProvider geopolisNodes] completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
         XCTAssertNil(error);
          
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
@@ -180,7 +184,8 @@
 - (void)testContents {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider contents] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    [networkManager makeRequestWithURLRequest:[NITNetworkProvider contents] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         XCTAssertNil(error);
         XCTAssertNotNil(json);
         
@@ -193,7 +198,8 @@
 - (void)testCustomJSONs {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider customJSONs] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    [networkManager makeRequestWithURLRequest:[NITNetworkProvider customJSONs] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         XCTAssertNil(error);
         XCTAssertNotNil(json);
         
@@ -207,7 +213,8 @@
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
     NSString *recipeId = @"1e11aae1-98cc-4f96-af84-1af70f57c5f9";
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider processRecipeWithId:recipeId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    [networkManager makeRequestWithURLRequest:[NITNetworkProvider processRecipeWithId:recipeId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         XCTAssertNil(error);
         XCTAssertNotNil(json);
         if (json) {

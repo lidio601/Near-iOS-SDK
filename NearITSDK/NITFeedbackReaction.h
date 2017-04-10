@@ -10,10 +10,11 @@
 
 @class NITFeedbackEvent;
 @class NITConfiguration;
+@class NITNetworkManager;
 
 @interface NITFeedbackReaction : NITReaction
 
-- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager * _Nonnull)cacheManager configuration:(NITConfiguration* _Nonnull)configuration;
+- (instancetype _Nonnull)initWithCacheManager:(NITCacheManager * _Nonnull)cacheManager configuration:(NITConfiguration* _Nonnull)configuration networkManager:(NITNetworkManager*)networkManager;
 
 - (void)sendEventWithFeedbackEvent:(NITFeedbackEvent* _Nonnull)event completionHandler:(void (^_Nullable)(NSError* _Nullable error))handler;
 

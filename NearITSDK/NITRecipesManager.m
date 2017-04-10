@@ -29,16 +29,18 @@ NSString* const RecipesCacheKey = @"Recipes";
 @property (nonatomic, strong) NSArray<NITRecipe*> *recipes;
 @property (nonatomic, strong) NITRecipeCooler *cooler;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
+@property (nonatomic, strong) NITNetworkManager *networkManager;
 
 @end
 
 @implementation NITRecipesManager
 
-- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager {
+- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(NITNetworkManager *)networkManager {
     self = [super init];
     if (self) {
         self.cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager];
         self.cacheManager = cacheManager;
+        self.networkManager = networkManager;
     }
     return self;
 }
@@ -49,7 +51,7 @@ NSString* const RecipesCacheKey = @"Recipes";
 }
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))completionHandler {
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider recipesProcessListWithJsonApi:[self buildEvaluationBody]] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider recipesProcessListWithJsonApi:[self buildEvaluationBody]] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             NSArray<NITRecipe*> *cachedRecipes = [self.cacheManager loadArrayForKey:RecipesCacheKey];
             if (cachedRecipes) {
@@ -107,7 +109,7 @@ NSString* const RecipesCacheKey = @"Recipes";
 }
 
 - (void)processRecipe:(NSString*)recipeId {
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider processRecipeWithId:recipeId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider processRecipeWithId:recipeId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (json) {
             [self registerClassesWithJsonApi:json];
             NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
@@ -121,7 +123,7 @@ NSString* const RecipesCacheKey = @"Recipes";
 
 - (void)onlinePulseEvaluationWithPlugin:(NSString*)plugin action:(NSString*)action bundle:(NSString*)bundle {
     NITJSONAPI *jsonApi = [self buildEvaluationBodyWithPlugin:plugin action:action bundle:bundle];
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider onlinePulseEvaluationWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider onlinePulseEvaluationWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (json) {
             [self registerClassesWithJsonApi:json];
             NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
@@ -134,7 +136,7 @@ NSString* const RecipesCacheKey = @"Recipes";
 }
 
 - (void)evaluateRecipeWithId:(NSString*)recipeId {
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider evaluateRecipeWithId:recipeId jsonApi:[self buildEvaluationBody]] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider evaluateRecipeWithId:recipeId jsonApi:[self buildEvaluationBody]] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (json) {
             [self registerClassesWithJsonApi:json];
             NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
@@ -167,7 +169,7 @@ NSString* const RecipesCacheKey = @"Recipes";
     
     [jsonApi setDataWithResourceObject:resource];
     
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider sendTrackingsWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider sendTrackingsWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         
     }];
 }

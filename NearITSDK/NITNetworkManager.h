@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NITNetworkManaging.h"
 
 @class NITJSONAPI;
 
-@interface NITNetworkManager : NSObject
+@interface NITNetworkManager : NSObject<NITNetworkManaging>
 
-+ (void)makeRequestWithURLRequest:(NSURLRequest* _Nonnull)request completionHandler:(void (^_Nonnull)(NSData* _Nullable data, NSError* _Nullable error))completionHandler;
-+ (void)makeRequestWithURLRequest:(NSURLRequest* _Nonnull)request jsonApicompletionHandler:(void (^_Nonnull)(NITJSONAPI * _Nullable json, NSError * _Nullable error))completionHandler;
+- (void)makeRequestWithURLRequest:(NSURLRequest * _Nonnull)request completionHandler:(void (^_Nonnull)(NSData * _Nullable, NSError * _Nullable))completionHandler;
 
 @end

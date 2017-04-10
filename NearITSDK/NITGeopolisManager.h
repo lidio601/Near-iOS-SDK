@@ -8,17 +8,19 @@
 
 #import <Foundation/Foundation.h>
 #import "NITRecipesManager.h"
+#import "NITNetworkManaging.h"
 
 @class CLRegion;
 @class NITNode;
 @class NITNodesManager;
 @class NITCacheManager;
+@class NITNetworkManager;
 
 @interface NITGeopolisManager : NSObject
 
 @property (nonatomic, weak) id<NITRecipesManaging> _Nullable recipesManager;
 
-- (instancetype _Nonnull)initWithNodesManager:(NITNodesManager* _Nonnull)nodesManager cachaManager:(NITCacheManager* _Nonnull)cacheManager;
+- (instancetype _Nonnull)initWithNodesManager:(NITNodesManager* _Nonnull)nodesManager cachaManager:(NITCacheManager* _Nonnull)cacheManager networkManager:(id<NITNetworkManaging> _Nonnull)networkManager;
 
 - (void)refreshConfigWithCompletionHandler:(void (^_Nonnull)(NSError * _Nullable error))completionHandler;
 - (BOOL)start;

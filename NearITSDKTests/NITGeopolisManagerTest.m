@@ -57,7 +57,8 @@
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
     NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager];
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager];
     [geopolisManager startForUnitTest];
     
     XCTAssertTrue([nodes count] == 1);
@@ -77,7 +78,8 @@
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
     NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager];
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager];
     [geopolisManager startForUnitTest];
     
     XCTAssertTrue([nodes count] == 4);
@@ -98,7 +100,8 @@
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
     NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager];
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager];
     [geopolisManager startForUnitTest];
     
     XCTAssertTrue([nodes count] == 10);
@@ -122,7 +125,8 @@
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
     NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager];
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager];
     [geopolisManager startForUnitTest];
     
     XCTAssertTrue([nodes count] == 10);
@@ -189,7 +193,8 @@
     
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testGeopolisCache"];
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager];
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager];
     [cacheManager saveWithObject:jsonApi forKey:@"GeopolisNodesJSON"];
     [NSThread sleepForTimeInterval:0.5];
     
@@ -221,7 +226,8 @@
     
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testGeopolisCacheNotEmpty"];
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager];
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
     [manager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
@@ -248,7 +254,8 @@
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testGeopolisCacheSave"];
     XCTAssertTrue([cacheManager numberOfStoredKeys] == 0);
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager];
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
     [manager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
@@ -289,7 +296,8 @@
     [cacheManager saveWithObject:jsonApi forKey:@"GeopolisNodesJSON"];
     [NSThread sleepForTimeInterval:0.5];
     XCTAssertTrue([cacheManager numberOfStoredKeys] == 1);
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager];
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
     [manager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {

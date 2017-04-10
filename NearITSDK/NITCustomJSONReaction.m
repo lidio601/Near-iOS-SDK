@@ -42,7 +42,7 @@
 }
 
 - (void)requestSingleReactionWithBundleId:(NSString*)bundleId completionHandler:(void (^)(id, NSError*))handler {
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider customJSONWithBundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider customJSONWithBundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:121 userInfo:@{NSLocalizedDescriptionKey:@"Invalid json data", NSUnderlyingErrorKey: error}];
             handler(nil, anError);
@@ -62,7 +62,7 @@
 }
 
 - (void)refreshConfigWithCompletionHandler:(void(^)(NSError * _Nullable error))handler {
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider contents] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider contents] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             self.jsons = [self.cacheManager loadArrayForKey:CACHE_KEY];
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:122 userInfo:@{NSLocalizedDescriptionKey:@"Invalid jsons data", NSUnderlyingErrorKey: error}];

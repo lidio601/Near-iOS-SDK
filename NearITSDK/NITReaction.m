@@ -16,15 +16,11 @@
 
 @implementation NITReaction
 
-- (instancetype)init {
-    self = [self initWithCacheManager:[NITCacheManager sharedInstance]];
-    return self;
-}
-
-- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager {
+- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(NITNetworkManager *)networkManager {
     self = [super init];
     if (self) {
         self.cacheManager = cacheManager;
+        self.networkManager = networkManager;
     }
     return self;
 }

@@ -12,6 +12,7 @@
 #import "NITNetworkMock.h"
 #import "NITRecipeCooler.h"
 #import "NITCacheManager.h"
+#import "NITNetworkManager.h"
 
 @interface NITRecipesManagerTest : NITTestCase<NITManaging>
 
@@ -278,8 +279,9 @@
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithContentsOfFile:path error:nil];
     [jsonApi registerClass:[NITRecipe class] forType:@"recipes"];
     
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testRecipesManagerCacheNotEmpty"];
-    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager];
     [cacheManager saveWithObject:[jsonApi parseToArrayOfObjects] forKey:@"Recipes"];
     [NSThread sleepForTimeInterval:0.5];
     

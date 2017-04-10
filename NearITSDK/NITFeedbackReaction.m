@@ -35,16 +35,16 @@
     return self;
 }
 
-- (instancetype)initWithCacheManager:(NITCacheManager *)cacheManager {
-    self = [super initWithCacheManager:cacheManager];
+- (instancetype)initWithCacheManager:(NITCacheManager *)cacheManager networkManager:(NITNetworkManager * _Nonnull)networkManager {
+    self = [super initWithCacheManager:cacheManager networkManager:networkManager];
     if (self) {
         self.configuration = [NITConfiguration defaultConfiguration];
     }
     return self;
 }
 
-- (instancetype)initWithCacheManager:(NITCacheManager *)cacheManager configuration:(NITConfiguration*)configuration {
-    self = [super initWithCacheManager:cacheManager];
+- (instancetype)initWithCacheManager:(NITCacheManager *)cacheManager configuration:(NITConfiguration*)configuration networkManager:(NITNetworkManager *)networkManager {
+    self = [super initWithCacheManager:cacheManager networkManager:networkManager];
     if (self) {
         self.configuration = configuration;
     }
@@ -71,7 +71,7 @@
 }
 
 - (void)requestSingleReactionWithBundleId:(NSString*)bundleId completionHandler:(void (^)(NITFeedback*, NSError*))handler {
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider feedbackWithBundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider feedbackWithBundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:111 userInfo:@{NSLocalizedDescriptionKey:@"Invalid feedback data", NSUnderlyingErrorKey: error}];
             handler(nil, anError);
@@ -91,7 +91,7 @@
 }
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))handler {
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider feedbacks] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider feedbacks] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             self.feedbacks = [self.cacheManager loadArrayForKey:CACHE_KEY];
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:112 userInfo:@{NSLocalizedDescriptionKey:@"Invalid feedbacks data", NSUnderlyingErrorKey: error}];
@@ -119,7 +119,7 @@
         }
         return;
     }
-    [NITNetworkManager makeRequestWithURLRequest:[NITNetworkProvider sendFeedbackEventWithJsonApi:jsonApi feedbackId:event.ID] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManager makeRequestWithURLRequest:[NITNetworkProvider sendFeedbackEventWithJsonApi:jsonApi feedbackId:event.ID] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:114 userInfo:@{NSLocalizedDescriptionKey:@"Error sending feedback event", NSUnderlyingErrorKey : error}];
             if (handler) {
