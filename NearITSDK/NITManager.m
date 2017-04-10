@@ -52,7 +52,7 @@
         self.networkManager = [[NITNetworkManager alloc] init];
         self.cacheManager = [NITCacheManager sharedInstance];
         self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
-        [self.cacheManager setAppId:[[NITConfiguration defaultConfiguration] appId]];
+        [self.cacheManager setAppId:[self.configuration appId]];
         [self pluginSetup];
         [self reactionsSetup];
         self.started = NO;
@@ -144,7 +144,7 @@
  * @param deviceToken The token in string format
  */
 - (void)setDeviceToken:(NSString *)deviceToken {
-    [[NITConfiguration defaultConfiguration] setDeviceToken:deviceToken];
+    [self.configuration setDeviceToken:deviceToken];
     [self.profile.installation registerInstallationWithCompletionHandler:nil];
 }
 

@@ -136,7 +136,7 @@ static NITNetworkProvider *sharedProvider;
 }
 
 - (NSURLRequest *)geopolisNodes {
-    return [self requestWithPath:[NSString stringWithFormat:@"/plugins/geopolis/nodes?filter[app_id]=%@&include=**.children", [[NITConfiguration defaultConfiguration] appId]]];
+    return [self requestWithPath:[NSString stringWithFormat:@"/plugins/geopolis/nodes?filter[app_id]=%@&include=**.children", [self.configuration appId]]];
 }
 
 - (NSURLRequest *)sendTrackingsWithJsonApi:(NITJSONAPI *)jsonApi {
@@ -161,8 +161,7 @@ static NITNetworkProvider *sharedProvider;
 }
 
 - (NSURLRequest *)customJSONs {
-    NITConfiguration *config = [NITConfiguration defaultConfiguration];
-    return [self requestWithPath:[NSString stringWithFormat:@"/plugins/json-sender/json_contents?filter[app_id]=%@", config.appId]];
+    return [self requestWithPath:[NSString stringWithFormat:@"/plugins/json-sender/json_contents?filter[app_id]=%@", self.configuration.appId]];
 }
 
 - (NSURLRequest *)setUserDataWithJsonApi:(NITJSONAPI *)jsonApi profileId:(NSString*)profileId {
