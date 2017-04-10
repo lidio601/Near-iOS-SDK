@@ -24,6 +24,7 @@ static NITConfiguration *defaultConfiguration;
 @property (nonatomic, strong) NSString * _Nonnull profileId;
 @property (nonatomic, strong) NSString * _Nullable installationId;
 @property (nonatomic, strong) NSString * _Nullable deviceToken;
+@property (nonatomic, strong) NSArray<NSString*> *keys;
 
 @end
 
@@ -37,9 +38,17 @@ static NITConfiguration *defaultConfiguration;
 
 + (NITConfiguration * _Nonnull)defaultConfiguration {
     if (defaultConfiguration == nil) {
-        defaultConfiguration = [NITConfiguration new];
+        defaultConfiguration = [[NITConfiguration alloc] init];
     }
     return defaultConfiguration;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.keys = @[APIKEY, APPID, PROFILE_ID, INSTALLATIONID, DEVICETOKEN];
+    }
+    return self;
 }
 
 - (NSString*)paramKeyWithKey:(NSString*)key {
@@ -133,11 +142,12 @@ static NITConfiguration *defaultConfiguration;
 
 - (void)clear {
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    [ud removeObjectForKey:[self paramKeyWithKey:APIKEY]];
-    [ud removeObjectForKey:[self paramKeyWithKey:APPID]];
-    [ud removeObjectForKey:[self paramKeyWithKey:PROFILE_ID]];
-    [ud removeObjectForKey:[self paramKeyWithKey:INSTALLATIONID]];
-    [ud removeObjectForKey:[self paramKeyWithKey:DEVICETOKEN]];
+    for (NSString *key in self.keys) {
+        NSString *realKey = [self paramKeyWithKey:key];
+        if (realKey) {
+            [ud removeObjectForKey:realKey];
+        }
+    }
     [ud synchronize];
     _apiKey = nil;
     _appId = nil;
