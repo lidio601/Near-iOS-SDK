@@ -15,7 +15,6 @@
 #import "NITContentReaction.h"
 #import "NITContent.h"
 #import "NITImage.h"
-#import "NITNetworkMock.h"
 #import "NITRecipesManager.h"
 #import "NITCouponReaction.h"
 #import "NITConfiguration.h"

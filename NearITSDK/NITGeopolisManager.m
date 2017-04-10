@@ -27,7 +27,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NITNodesManager *nodesManager;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
-@property (nonatomic, strong) NITNetworkManager *networkManaeger;
+@property (nonatomic, strong) id<NITNetworkManaging> networkManaeger;
 @property (nonatomic, strong) NITBeaconProximityManager *beaconProximity;
 @property (nonatomic, strong) NITNode *currentNode;
 @property (nonatomic, strong) NSMutableArray<NSString*> *enteredRegions;

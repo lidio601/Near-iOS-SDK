@@ -14,13 +14,13 @@
 #import "NITNodesManager.h"
 #import "NITNetworkManager.h"
 #import "NITNetworkProvider.h"
-#import "NITNetworkMock.h"
 #import "NITJSONAPIResource.h"
 #import "NITJSONAPI.h"
 #import "NITNode.h"
 #import "Constants.h"
 #import "NITBeaconProximityManager.h"
 #import "NITCacheManager.h"
+#import "NITNetworkMockManger.h"
 
 @interface NITGeopolisManagerTest : NITTestCase
 
@@ -33,8 +33,6 @@
     // Put setup code here. This method is called before the invocation of each test method in the class.
     [[NITConfiguration defaultConfiguration] setApiKey:APIKEY];
     [[NITConfiguration defaultConfiguration] setAppId:APPID];
-    
-    [NITNetworkMock sharedInstance].enabled = YES;
 }
 
 - (void)tearDown {
@@ -180,20 +178,16 @@
 }
 
 - (void)testGeopolisCacheNotEmpty {
-    [[NITNetworkMock sharedInstance] registerData:[NSData data] withTest:^BOOL(NSURLRequest * _Nonnull request) {
-        if([request.URL.absoluteString containsString:@"/plugins/geopolis/nodes?filter"]) {
-            return YES;
-        }
-        return NO;
-    }];
-    
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *path = [bundle pathForResource:@"beacon_areas_in_bg" ofType:@"json"];
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithContentsOfFile:path error:nil];
     
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testGeopolisCache"];
-    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return nil;
+    };
     NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager];
     [cacheManager saveWithObject:jsonApi forKey:@"GeopolisNodesJSON"];
     [NSThread sleepForTimeInterval:0.5];
@@ -211,22 +205,16 @@
         [cacheExp fulfill];
     }];
     
-    [[NITNetworkMock sharedInstance] clearTests];
-    
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
 - (void)testGeopolisCacheEmpty {
-    [[NITNetworkMock sharedInstance] registerData:[NSData data] withTest:^BOOL(NSURLRequest * _Nonnull request) {
-        if([request.URL.absoluteString containsString:@"/plugins/geopolis/nodes?filter"]) {
-            return YES;
-        }
-        return NO;
-    }];
-    
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testGeopolisCacheNotEmpty"];
-    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return nil;
+    };
     NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
@@ -235,26 +223,17 @@
         [geopolisExp fulfill];
     }];
     
-    [[NITNetworkMock sharedInstance] clearTests];
-    
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
 - (void)testGeopolisCacheSave {
-    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSString *path = [bundle pathForResource:@"beacon_areas_in_bg" ofType:@"json"];
-    
-    [[NITNetworkMock sharedInstance] registerData:[NSData dataWithContentsOfFile:path] withTest:^BOOL(NSURLRequest * _Nonnull request) {
-        if([request.URL.absoluteString containsString:@"/plugins/geopolis/nodes?filter"]) {
-            return YES;
-        }
-        return NO;
-    }];
-    
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testGeopolisCacheSave"];
     XCTAssertTrue([cacheManager numberOfStoredKeys] == 0);
-    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return [self jsonApiWithContentsOfFile:@"beacon_areas_in_bg"];
+    };
     NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
@@ -273,30 +252,20 @@
         [cacheExp fulfill];
     }];
     
-    [[NITNetworkMock sharedInstance] clearTests];
-    
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
 - (void)testGeopolisCacheSaveOverwrite {
-    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSString *path = [bundle pathForResource:@"beacon_areas_in_bg" ofType:@"json"];
-    
-    [[NITNetworkMock sharedInstance] registerData:[NSData dataWithContentsOfFile:path] withTest:^BOOL(NSURLRequest * _Nonnull request) {
-        if([request.URL.absoluteString containsString:@"/plugins/geopolis/nodes?filter"]) {
-            return YES;
-        }
-        return NO;
-    }];
-    
-    path = [bundle pathForResource:@"gf_array" ofType:@"json"];
-    NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithContentsOfFile:path error:nil];
+    NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"gf_array"];
     NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testGeopolisCacheSaveOverwrite"];
     [cacheManager saveWithObject:jsonApi forKey:@"GeopolisNodesJSON"];
     [NSThread sleepForTimeInterval:0.5];
     XCTAssertTrue([cacheManager numberOfStoredKeys] == 1);
-    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return [self jsonApiWithContentsOfFile:@"beacon_areas_in_bg"];
+    };
     NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
@@ -316,8 +285,6 @@
     [cacheManager removeAllItemsWithCompletionHandler:^{
         [cacheExp fulfill];
     }];
-    
-    [[NITNetworkMock sharedInstance] clearTests];
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
