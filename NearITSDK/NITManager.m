@@ -143,7 +143,7 @@
  */
 - (void)setDeviceToken:(NSString *)deviceToken {
     [[NITConfiguration defaultConfiguration] setDeviceToken:deviceToken];
-    [[NITInstallation sharedInstance] registerInstallationWithCompletionHandler:nil];
+    [self.profile.installation registerInstallationWithCompletionHandler:nil];
 }
 
 /**

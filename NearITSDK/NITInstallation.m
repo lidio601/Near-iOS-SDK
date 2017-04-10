@@ -14,25 +14,16 @@
 #import "NITConfiguration.h"
 #import "NITConstants.h"
 
-static NITInstallation *sharedInstallation;
-
 @interface NITInstallation()
 
 @property (nonatomic, strong) NITConfiguration *configuration;
-@property (nonatomic, strong) NITNetworkManager *networkManager;
+@property (nonatomic, strong) id<NITNetworkManaging> networkManager;
 
 @end
 
 @implementation NITInstallation
 
-+ (NITInstallation *)sharedInstance {
-    if (sharedInstallation == nil) {
-        sharedInstallation = [NITInstallation new];
-    }
-    return sharedInstallation;
-}
-
-- (instancetype)initWithConfiguration:(NITConfiguration*)configuration networkManager:(NITNetworkManager*)networkManager {
+- (instancetype)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager {
     self = [super init];
     if (self) {
         self.configuration = configuration;

@@ -170,7 +170,9 @@
 - (void)testRegisterInstallation {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
-    [[NITInstallation sharedInstance] registerInstallationWithCompletionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:[NITConfiguration defaultConfiguration] networkManager:networkManager];
+    [installation registerInstallationWithCompletionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
         XCTAssertNil(error);
         XCTAssertNotNil(installationId);
         NSLog(@"Installation Id: %@", installationId);
@@ -235,7 +237,9 @@
 - (void)testSetUserData {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
-    [NITUserProfile setUserDataWithKey:@"firstname" value:@"John" completionHandler:^(NSError * _Nullable error) {
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:[NITConfiguration defaultConfiguration] networkManager:networkManager];
+    [profile setUserDataWithKey:@"firstname" value:@"John" completionHandler:^(NSError * _Nullable error) {
         XCTAssertNil(error);
         [expectation fulfill];
     }];
@@ -250,7 +254,10 @@
         @"firstname" : @"Johnny",
         @"city" : @"New York"
     };
-    [NITUserProfile setBatchUserDataWithDictionary:map completionHandler:^(NSError * _Nullable error) {
+    
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:[NITConfiguration defaultConfiguration] networkManager:networkManager];
+    [profile setBatchUserDataWithDictionary:map completionHandler:^(NSError * _Nullable error) {
         XCTAssertNil(error);
         [expectation fulfill];
     }];

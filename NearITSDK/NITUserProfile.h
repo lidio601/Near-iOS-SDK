@@ -11,8 +11,11 @@
 
 @class NITConfiguration;
 @class NITNetworkManager;
+@class NITInstallation;
 
 @interface NITUserProfile : NSObject
+
+@property (nonatomic, strong) NITInstallation * _Nonnull installation;
 
 - (instancetype _Nonnull )initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager;
 

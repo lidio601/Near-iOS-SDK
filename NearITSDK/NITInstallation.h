@@ -7,10 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NITNetworkManaging.h"
+
+@class NITConfiguration;
 
 @interface NITInstallation : NSObject
 
-+ (NITInstallation* _Nonnull)sharedInstance;
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager;
+
 - (void)registerInstallationWithCompletionHandler:(void (^_Nullable)(NSString* _Nullable installationId, NSError* _Nullable error))handler;
 
 @end

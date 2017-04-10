@@ -29,6 +29,7 @@
     if (self) {
         self.configuration = configuration;
         self.networkManager = networkManager;
+        self.installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager];
     }
     return self;
 }
@@ -44,7 +45,7 @@
             if (resource.ID) {
                 self.configuration.profileId = resource.ID;
                 if (handler) {
-                    [[NITInstallation sharedInstance] registerInstallationWithCompletionHandler:nil];
+                    [self.installation registerInstallationWithCompletionHandler:nil];
                     handler(resource.ID, nil);
                 }
             } else {
@@ -118,7 +119,7 @@
 
 - (void)resetProfile {
     self.configuration.profileId = nil;
-    [[NITInstallation sharedInstance] registerInstallationWithCompletionHandler:nil];
+    [self.installation registerInstallationWithCompletionHandler:nil];
 }
 
 @end
