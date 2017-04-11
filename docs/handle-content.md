@@ -91,35 +91,45 @@ NearIT analytics on recipes are built from trackings describing the status of us
 Push notifications recipes track themselves as notified, but you should track it yourself for any other case.
 You should be able to catch the event when `eventWithContent` is called, there you decide to display or not a notification to the user:
 ```swift
-recipe.notified()
+// Swift
+manager.sendTracking(recipe.id(), event: .notified)
+```
+
+```objective-c
+// Objective-C
+[manager sendTrackingWithRecipeId:recipe.ID event:NITRecipeNotified];
 ```
 
 After `eventWithContent` is called and you decided to show a notification and then the user is engaged you can track the event calling:
 ```swift
-recipe.engaged()
+// Swift
+manager.sendTracking(recipe.id(), event: .engaged)
+```
+
+```objective-c
+// Objective-C
+[manager sendTrackingWithRecipeId:recipe.ID event:NITRecipeEngaged];
 ```
 
 ## Recipe objects
 
-When `nearSDKDidEvaluate` gets called you will obtain all the recipe info by the passed argument. This is how a recipe is composed:
+When `eventWithContent` gets called you will obtain all the recipe info by the passed argument. This is how a recipe is composed:
 
+- `ID` returns the id of the recipe
 - `notificationTitle` returns the notification title if any
-- `notificationText` returns the notificaiton text if any
+- `notificationBody` returns the notificaiton text if any
 
-- `reactions` has the accessors to the different WHATs of the recipes with the following getters:
+Content is an object which contains the useful data, it could have several class types:
 
-The recipe reactions contains the actual content, it has different accessors and at most one should be a concrete instance. There is an accessor for each kind of **what**:
+- `NITContent` instance representing the rich content if any
+- `NITCustomJSON` instance representing the custom object if any
+- `NITCoupon` instance representig the coupon if any
+- `NITFeedback` instance representing the feedback request if any
 
-- `content` returns a `Content` instance representing the rich content if any
-- `customObject` returns a `CustomObject` instance representing the custom object if any
-- `poll` returns a `Poll` instance representing the poll if any
-- `coupon` returns a `Coupon` instance representig the coupon if any
-- `feedback` returns a `Feedback` instance representing the feedback request if any
-
-## Recipe Reaction classes
+## Content classes
 
 - `Content` for the notification with content, with the following attributes:
-    - `text` returns the text content, without processing the html
+    - `content` returns the text content, without processing the html
     - `attributedText` accessor to an already processed text 
     - `videoURL` returns the video link
     - `images` returns a list of *Image* object containing the source links for the images
