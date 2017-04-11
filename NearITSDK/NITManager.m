@@ -236,6 +236,10 @@
     }];
 }
 
+- (void)setProfileId:(NSString *)profileId {
+    [self.profile setProfileId:profileId];
+}
+
 // MARK: - NITManaging
 
 - (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {

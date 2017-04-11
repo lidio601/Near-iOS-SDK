@@ -127,4 +127,9 @@
     [self.installation registerInstallationWithCompletionHandler:nil];
 }
 
+- (void)setProfileId:(NSString *)profileId {
+    self.configuration.profileId = profileId;
+    [self.installation registerInstallationWithCompletionHandler:nil];
+}
+
 @end

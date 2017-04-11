@@ -76,6 +76,10 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.resetProfile()
     }
     
+    public func setProfile(id: String) {
+        manager.setProfileId(id)
+    }
+    
     public func createNewProfile(_ completionHandler: ((String?, Error?) -> Void)?) {
         manager.createNewProfile { (profileId, error) in
             if let handler = completionHandler {
