@@ -16,6 +16,8 @@
 #import "NITBeaconProximityManager.h"
 #import "NITUtils.h"
 #import "NITCacheManager.h"
+#import "NITJSONAPIResource.h"
+#import "NITConfiguration.h"
 #import <CoreLocation/CoreLocation.h>
 
 NSErrorDomain const NITGeopolisErrorDomain = @"com.nearit.geopolis";
@@ -27,6 +29,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NITNodesManager *nodesManager;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
+@property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) id<NITNetworkManaging> networkManaeger;
 @property (nonatomic, strong) NITBeaconProximityManager *beaconProximity;
 @property (nonatomic, strong) NITNode *currentNode;
@@ -41,7 +44,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 
 @implementation NITGeopolisManager
 
-- (instancetype)initWithNodesManager:(NITNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager {
+- (instancetype)initWithNodesManager:(NITNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration*)configuration {
     self = [super init];
     if (self) {
         self.locationManager = [[CLLocationManager alloc] init];
@@ -49,6 +52,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         self.nodesManager = nodesManager;
         self.cacheManager = cacheManager;
         self.networkManaeger = networkManager;
+        self.configuration = configuration;
         self.enteredRegions = [[NSMutableArray alloc] init];
         self.monitoredRegions = [[NSMutableArray alloc] init];
         self.rangedRegions = [[NSMutableArray alloc] init];
@@ -229,11 +233,38 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 
 // MARK: - Trigger
 
-- (void)triggerWithEvent:(NITRegionEvent)event node:(NITNode*)node { // It's only a stub for now
+- (void)triggerWithEvent:(NITRegionEvent)event node:(NITNode*)node {
+    if (node == nil || node.identifier == nil) {
+        return;
+    }
+    
+    [self trackEventWithIdentifier:node.identifier event:event];
     if([self.recipesManager respondsToSelector:@selector(gotPulseWithPulsePlugin:pulseAction:pulseBundle:)]) {
         NSString *pulseAction = [NITUtils stringFromRegionEvent:event];
         [self.recipesManager gotPulseWithPulsePlugin:self.pluginName pulseAction:pulseAction pulseBundle:node.identifier];
     }
+}
+
+- (void)trackEventWithIdentifier:(NSString*)identifier event:(NITRegionEvent)event {
+    NITJSONAPI *json = [[NITJSONAPI alloc] init];
+    NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
+    resource.type = @"trackings";
+    [resource addAttributeObject:self.configuration.profileId forKey:@"profile_id"];
+    [resource addAttributeObject:self.configuration.installationId forKey:@"installation_id"];
+    [resource addAttributeObject:self.configuration.appId forKey:@"app_id"];
+    [resource addAttributeObject:identifier forKey:@"identifier"];
+    NSString *eventString = [NITUtils stringFromRegionEvent:event];
+    [resource addAttributeObject:eventString forKey:@"event"];
+    
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = ISO8601DateFormatMilliseconds;
+    [resource addAttributeObject:[dateFormatter stringFromDate:[NSDate date]] forKey:@"tracked_at"];
+    
+    [json setDataWithResourceObject:resource];
+    
+    [self.networkManaeger makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] sendTrackingsWithJsonApi:json] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        
+    }];
 }
 
 // MARK: - Location manager delegate

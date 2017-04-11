@@ -15,12 +15,13 @@
 @class NITNodesManager;
 @class NITCacheManager;
 @class NITNetworkManager;
+@class NITConfiguration;
 
 @interface NITGeopolisManager : NSObject
 
 @property (nonatomic, weak) id<NITRecipesManaging> _Nullable recipesManager;
 
-- (instancetype _Nonnull)initWithNodesManager:(NITNodesManager* _Nonnull)nodesManager cachaManager:(NITCacheManager* _Nonnull)cacheManager networkManager:(id<NITNetworkManaging> _Nonnull)networkManager;
+- (instancetype _Nonnull)initWithNodesManager:(NITNodesManager* _Nonnull)nodesManager cachaManager:(NITCacheManager* _Nonnull)cacheManager networkManager:(id<NITNetworkManaging> _Nonnull)networkManager configuration:(NITConfiguration* _Nonnull)configuration;
 
 - (void)refreshConfigWithCompletionHandler:(void (^_Nonnull)(NSError * _Nullable error))completionHandler;
 - (BOOL)start;
