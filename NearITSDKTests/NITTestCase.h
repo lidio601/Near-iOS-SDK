@@ -13,6 +13,8 @@
 #import "NITCoupon.h"
 #import "NITJSONAPI.h"
 #import "NITFeedback.h"
+#import "NITConfiguration.h"
+#import "NITNetworkMockManger.h"
 
 @interface NITTestCase : XCTestCase
 

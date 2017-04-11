@@ -105,6 +105,8 @@
 		135CD7791E94F71E005C75A4 /* NITEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 135CD7771E94F71E005C75A4 /* NITEvent.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		135CD77A1E94F71E005C75A4 /* NITEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD7781E94F71E005C75A4 /* NITEvent.m */; };
 		135CD7961E9B7621005C75A4 /* NITNetworkMockManger.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD7951E9B7621005C75A4 /* NITNetworkMockManger.m */; };
+		135CD79B1E9D089A005C75A4 /* NITUserProfileTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD79A1E9D089A005C75A4 /* NITUserProfileTest.m */; };
+		135CD79E1E9D0970005C75A4 /* response_create_new_profile.json in Resources */ = {isa = PBXBuildFile; fileRef = 135CD79D1E9D0970005C75A4 /* response_create_new_profile.json */; };
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
@@ -264,6 +266,8 @@
 		135CD7931E9B7493005C75A4 /* NITNetworkManaging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NITNetworkManaging.h; sourceTree = "<group>"; };
 		135CD7941E9B7621005C75A4 /* NITNetworkMockManger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITNetworkMockManger.h; sourceTree = "<group>"; };
 		135CD7951E9B7621005C75A4 /* NITNetworkMockManger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITNetworkMockManger.m; sourceTree = "<group>"; };
+		135CD79A1E9D089A005C75A4 /* NITUserProfileTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITUserProfileTest.m; sourceTree = "<group>"; };
+		135CD79D1E9D0970005C75A4 /* response_create_new_profile.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_create_new_profile.json; sourceTree = "<group>"; };
 		137838631E800EC1001C8CDE /* NITRecipesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipesManager.h; sourceTree = "<group>"; };
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
@@ -426,6 +430,7 @@
 		1349EEAA1E7948CD000B0666 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				135CD79C1E9D0952005C75A4 /* User Profile */,
 				132296E01E8CF12700AE6EFC /* Recipes Manager */,
 				135A70821E85260A00D4C9EC /* Reactions */,
 				1327D8861E8266A600C6689E /* Nodes Manager */,
@@ -532,6 +537,7 @@
 				137E38A61E8A4AA6008E83E6 /* NITCacheManagerTest.m */,
 				137E38B01E8A9569008E83E6 /* NITRecipesManagerTest.m */,
 				132297241E92417200AE6EFC /* NITConfigurationTest.m */,
+				135CD79A1E9D089A005C75A4 /* NITUserProfileTest.m */,
 				1352CA741E7807FE00C0E98E /* Info.plist */,
 			);
 			path = NearITSDKTests;
@@ -648,6 +654,14 @@
 				135CD7921E976A4F005C75A4 /* nearitdocs.css */,
 			);
 			path = css;
+			sourceTree = "<group>";
+		};
+		135CD79C1E9D0952005C75A4 /* User Profile */ = {
+			isa = PBXGroup;
+			children = (
+				135CD79D1E9D0970005C75A4 /* response_create_new_profile.json */,
+			);
+			name = "User Profile";
 			sourceTree = "<group>";
 		};
 		137838621E800EA8001C8CDE /* Recipes */ = {
@@ -907,6 +921,7 @@
 				137E38A91E8A6B16008E83E6 /* contents1.json in Resources */,
 				135A70841E85281F00D4C9EC /* simple_recipe.json in Resources */,
 				1327D8901E8266B700C6689E /* single_gf.json in Resources */,
+				135CD79E1E9D0970005C75A4 /* response_create_new_profile.json in Resources */,
 				132296F11E8D078200AE6EFC /* response_coupon_evaluated_recipe.json in Resources */,
 				1322971F1E923BAE00AE6EFC /* cooldown_recipe.json in Resources */,
 				1327D88D1E8266B700C6689E /* empty_config.json in Resources */,
@@ -994,6 +1009,7 @@
 				1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */,
 				135CD7961E9B7621005C75A4 /* NITNetworkMockManger.m in Sources */,
 				1352CA911E78372B00C0E98E /* NITUtilsTest.m in Sources */,
+				135CD79B1E9D089A005C75A4 /* NITUserProfileTest.m in Sources */,
 				137E38B11E8A9569008E83E6 /* NITRecipesManagerTest.m in Sources */,
 				137E38A71E8A4AA6008E83E6 /* NITCacheManagerTest.m in Sources */,
 				1349EEA91E793834000B0666 /* NITJSONAPITests.m in Sources */,

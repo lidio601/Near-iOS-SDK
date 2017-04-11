@@ -1,0 +1,16 @@
+{
+    "data": {
+        "id": "user-profile-id",
+        "type": "profiles",
+        "attributes": {
+            "app_id": "user-profile-app-id"
+        },
+        "relationships": {
+            "data_points": {
+                "data": [
+                
+                ]
+            }
+        }
+    }
+}
