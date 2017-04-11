@@ -76,6 +76,14 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.resetProfile()
     }
     
+    public func createNewProfile(_ completionHandler: ((String?, Error?) -> Void)?) {
+        manager.createNewProfile { (profileId, error) in
+            if let handler = completionHandler {
+                handler(profileId, error)
+            }
+        }
+    }
+    
     public func recipes() -> [NITRecipe] {
         return manager.recipes()
     }

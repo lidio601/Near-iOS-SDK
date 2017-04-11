@@ -35,6 +35,13 @@
 }
 
 - (void)createNewProfileWithCompletionHandler:(void (^)(NSString *profileId, NSError *error))handler {
+    if (self.configuration.profileId) {
+        if (handler) {
+            handler(self.configuration.profileId, nil);
+        }
+        return;
+    }
+    
     [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] newProfileWithAppId:self.configuration.appId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if(error) {
             if (handler) {

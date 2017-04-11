@@ -228,6 +228,14 @@
     return self.configuration.profileId;
 }
 
+- (void)createNewProfileWithCompletionHandler:(void (^)(NSString * _Nullable, NSError * _Nullable))handler {
+    [self.profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
+        if (handler) {
+            handler(profileId, error);
+        }
+    }];
+}
+
 // MARK: - NITManaging
 
 - (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {
