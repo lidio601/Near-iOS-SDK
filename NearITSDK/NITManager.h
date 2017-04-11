@@ -46,5 +46,6 @@
 - (NSArray<NITRecipe*>* _Nonnull)recipes;
 - (void)processRecipeWithId:(NSString* _Nonnull)recipeId;
 - (void)resetProfile;
+- (NSString* _Nullable)profileId;
 
 @end

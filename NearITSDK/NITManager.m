@@ -224,6 +224,10 @@
     [self.profile resetProfile];
 }
 
+- (NSString *)profileId {
+    return self.configuration.profileId;
+}
+
 // MARK: - NITManaging
 
 - (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {

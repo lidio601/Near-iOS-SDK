@@ -18,6 +18,11 @@ public final class NearManager: NSObject, NITManagerDelegate {
     
     private var manager: NITManager!
     public var delegate: NearManagerDelegate?
+    public var profileId: String? {
+        get {
+            return manager.profileId()
+        }
+    }
     
     public init(apiKey: String) {
         super.init()
