@@ -8,6 +8,9 @@
 
 #import "NITResource.h"
 
+extern NSString* _Nonnull const NITRecipeNotified;
+extern NSString* _Nonnull const NITRecipeEngaged;
+
 @class NITPulseBundle;
 
 @interface NITRecipe : NITResource<NSCoding>

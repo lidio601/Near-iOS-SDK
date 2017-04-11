@@ -9,6 +9,11 @@
 import UIKit
 import NearITSDK
 
+public enum NearRecipeTracking : String {
+    case notified = "notified"
+    case engaged = "engaged"
+}
+
 public protocol NearManagerDelegate {
     func manager(_ manager: NearManager, eventWithContent content: Any, recipe: NITRecipe);
     func manager(_ manager: NearManager, eventFailureWithError error: Error, recipe: NITRecipe);
@@ -52,8 +57,8 @@ public final class NearManager: NSObject, NITManagerDelegate {
         }
     }
     
-    public func sendTracking(_ recipeId: String, event: String) {
-        manager.sendTracking(withRecipeId: recipeId, event: event)
+    public func sendTracking(_ recipeId: String, event: NearRecipeTracking) {
+        manager.sendTracking(withRecipeId: recipeId, event: event.rawValue)
     }
     
     public func setUserData(_ key: String, value: String, completionHandler: ((Error?) -> Void)?) {

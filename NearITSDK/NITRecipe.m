@@ -9,6 +9,9 @@
 #import "NITRecipe.h"
 #import "NITUtils.h"
 
+NSString* const NITRecipeNotified = @"notified";
+NSString* const NITRecipeEngaged = @"engaged";
+
 @implementation NITRecipe
 
 - (NSDictionary *)attributesMap {
