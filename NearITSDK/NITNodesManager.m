@@ -47,7 +47,7 @@
 - (NITNode*)nodeWithID:(NSString *)ID inNodes:(NSArray<NITNode*>*)nodes {
     NITNode *foundNode = nil;
     for (NITNode *node in nodes) {
-        if ([[node ID] isEqualToString:ID]) {
+        if ([[node ID].lowercaseString isEqualToString:ID.lowercaseString]) {
             foundNode = node;
             break;
         } else if ([node.children count] > 0) {

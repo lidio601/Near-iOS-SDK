@@ -1,0 +1,272 @@
+{
+  "data": [
+    {
+      "id": "R1",
+      "type": "geofence_nodes",
+      "attributes": {
+        "latitude": 45,
+        "longiute": 9,
+        "radius": 200,
+        "identifier": "identifier"
+      },
+      "relationships": {
+        "parent": {
+          "data": null
+        },
+        "children": {
+          "data": [
+            {
+              "id": "N1R1",
+              "type": "geofence_nodes"
+            },
+            {
+              "id": "N2R1",
+              "type": "geofence_nodes"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "R2",
+      "type": "geofence_nodes",
+      "attributes": {
+        "latitude": 45,
+        "longiute": 9,
+        "radius": 200,
+        "identifier": "identifier"
+      },
+      "relationships": {
+        "parent": {
+          "data": null
+        },
+        "children": {
+          "data": [
+            {
+              "id": "N1R2",
+              "type": "geofence_nodes"
+            },
+            {
+              "id": "N2R2",
+              "type": "geofence_nodes"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "N1R1",
+      "type": "geofence_nodes",
+      "attributes": {
+        "latitude": 45,
+        "longiute": 9,
+        "radius": 200,
+        "identifier": "identifier"
+      },
+      "relationships": {
+        "parent": {
+          "data": {
+            "id": "R1",
+            "type": "geofence_nodes"
+          }
+        },
+        "children": {
+          "data": [
+            {
+              "id": "N1N1R1",
+              "type": "beacon_nodes"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "N1N1R1",
+      "type": "beacon_nodes",
+      "attributes": {
+        "proximity_uuid": "10D39AE7-020E-4467-9CB2-DD36366F899D",
+        "major": null,
+        "minor": null
+      },
+      "relationships": {
+        "parent": {
+          "data": {
+            "id": "N1R1",
+            "type": "geofence_nodes"
+          }
+        },
+        "children": {
+          "data": [
+            {
+              "id": "N1N1N1R1",
+              "type": "beacon_nodes"
+            },
+            {
+              "id": "N2N1N1R1",
+              "type": "beacon_nodes"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "N1N1N1R1",
+      "type": "beacon_nodes",
+      "attributes": {
+        "proximity_uuid": "10D39AE7-020E-4467-9CB2-DD36366F899D",
+        "major": 200,
+        "minor": null,
+        "identifier": "identifier"
+      },
+      "relationships": {
+        "parent": {
+          "data": {
+            "id": "N1N1R1",
+            "type": "beacon_nodes"
+          }
+        },
+        "children": {
+          "data": [
+            {
+              "id": "N1N1N1N1R1",
+              "type": "beacon_nodes"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "N1N1N1N1R1",
+      "type": "beacon_nodes",
+      "attributes": {
+        "proximity_uuid": "10D39AE7-020E-4467-9CB2-DD36366F899D",
+        "major": 200,
+        "minor": 130,
+        "identifier": null
+      },
+      "relationships": {
+        "parent": {
+          "data": {
+            "id": "N1N1N1R1",
+            "type": "beacon_nodes"
+          }
+        },
+        "children": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "N2N1N1R1",
+      "type": "beacon_nodes",
+      "attributes": {
+        "proximity_uuid": "10D39AE7-020E-4467-9CB2-DD36366F899D",
+        "major": 200,
+        "minor": null,
+        "identifier": "identifier"
+      },
+      "relationships": {
+        "parent": {
+          "data": {
+            "id": "N1N1R1",
+            "type": "beacon_nodes"
+          }
+        },
+        "children": {
+          "data": [
+            {
+              "id": "N1N2N1N1R1",
+              "type": "beacon_nodes"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "N1N2N1N1R1",
+      "type": "beacon_nodes",
+      "attributes": {
+        "proximity_uuid": "10D39AE7-020E-4467-9CB2-DD36366F899D",
+        "major": 200,
+        "minor": 130,
+        "identifier": null
+      },
+      "relationships": {
+        "parent": {
+          "data": {
+            "id": "N2N1N1R1",
+            "type": "beacon_nodes"
+          }
+        },
+        "children": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "N2R1",
+      "type": "geofence_nodes",
+      "attributes": {
+        "latitude": 45,
+        "longiute": 9,
+        "radius": 200,
+        "identifier": "identifier"
+      },
+      "relationships": {
+        "parent": {
+          "data": {
+            "id": "R1",
+            "type": "geofence_nodes"
+          }
+        },
+        "children": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "N1R2",
+      "type": "geofence_nodes",
+      "attributes": {
+        "latitude": 45,
+        "longiute": 9,
+        "radius": 200,
+        "identifier": "identifier"
+      },
+      "relationships": {
+        "parent": {
+          "data": {
+            "id": "R2",
+            "type": "geofence_nodes"
+          }
+        },
+        "children": {
+          "data": []
+        }
+      }
+    },
+    {
+      "id": "N2R2",
+      "type": "geofence_nodes",
+      "attributes": {
+        "latitude": 45,
+        "longiute": 9,
+        "radius": 200,
+        "identifier": "identifier"
+      },
+      "relationships": {
+        "parent": {
+          "data": {
+            "id": "R2",
+            "type": "geofence_nodes"
+          }
+        },
+        "children": {
+          "data": []
+        }
+      }
+    }
+  ]
+}

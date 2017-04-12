@@ -107,6 +107,8 @@
 		135CD7961E9B7621005C75A4 /* NITNetworkMockManger.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD7951E9B7621005C75A4 /* NITNetworkMockManger.m */; };
 		135CD79B1E9D089A005C75A4 /* NITUserProfileTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD79A1E9D089A005C75A4 /* NITUserProfileTest.m */; };
 		135CD79E1E9D0970005C75A4 /* response_create_new_profile.json in Resources */ = {isa = PBXBuildFile; fileRef = 135CD79D1E9D0970005C75A4 /* response_create_new_profile.json */; };
+		135CD7A11E9E4276005C75A4 /* config_22.png in Resources */ = {isa = PBXBuildFile; fileRef = 135CD79F1E9E4276005C75A4 /* config_22.png */; };
+		135CD7A21E9E4276005C75A4 /* config_22.json in Resources */ = {isa = PBXBuildFile; fileRef = 135CD7A01E9E4276005C75A4 /* config_22.json */; };
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
@@ -268,6 +270,8 @@
 		135CD7951E9B7621005C75A4 /* NITNetworkMockManger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITNetworkMockManger.m; sourceTree = "<group>"; };
 		135CD79A1E9D089A005C75A4 /* NITUserProfileTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITUserProfileTest.m; sourceTree = "<group>"; };
 		135CD79D1E9D0970005C75A4 /* response_create_new_profile.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_create_new_profile.json; sourceTree = "<group>"; };
+		135CD79F1E9E4276005C75A4 /* config_22.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = config_22.png; sourceTree = "<group>"; };
+		135CD7A01E9E4276005C75A4 /* config_22.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = config_22.json; sourceTree = "<group>"; };
 		137838631E800EC1001C8CDE /* NITRecipesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipesManager.h; sourceTree = "<group>"; };
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
@@ -383,6 +387,8 @@
 				1327D8891E8266B700C6689E /* gf_array.json */,
 				1327D88A1E8266B700C6689E /* multi_level_gf.json */,
 				1327D88B1E8266B700C6689E /* single_gf.json */,
+				135CD79F1E9E4276005C75A4 /* config_22.png */,
+				135CD7A01E9E4276005C75A4 /* config_22.json */,
 			);
 			name = "Nodes Manager";
 			sourceTree = "<group>";
@@ -928,6 +934,7 @@
 				135A70971E8555CB00D4C9EC /* response_content_reaction.json in Resources */,
 				1349EEAC1E7948FA000B0666 /* jsonapi_sample1.json in Resources */,
 				132297191E8E4DF100AE6EFC /* feedback1.json in Resources */,
+				135CD7A11E9E4276005C75A4 /* config_22.png in Resources */,
 				132297111E8E3BC200AE6EFC /* custom_jsons.json in Resources */,
 				132297061E8D362400AE6EFC /* response_feeback_reaction.json in Resources */,
 				132296E41E8CFA1F00AE6EFC /* recipes.json in Resources */,
@@ -937,6 +944,7 @@
 				132296E21E8CF14600AE6EFC /* online_recipe.json in Resources */,
 				1327D8AB1E83E6A300C6689E /* beacon_areas_in_bg.json in Resources */,
 				1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */,
+				135CD7A21E9E4276005C75A4 /* config_22.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -179,6 +179,52 @@
     XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
 }
 
+- (void)testConfig22 {
+    NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"config_22"];
+    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
+    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
+    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
+    [geopolisManager startForUnitTest];
+    
+    XCTAssertTrue([nodes count] == 2);
+    XCTAssertTrue([[nodesManager roots] count] == 2);
+    XCTAssertNotNil([nodesManager nodeWithID:@"r1"]);
+    XCTAssertNotNil([nodesManager nodeWithID:@"r2"]);
+    XCTAssertNotNil([nodesManager nodeWithID:@"n1r1"]);
+    XCTAssertNotNil([nodesManager nodeWithID:@"n2r1"]);
+    XCTAssertNotNil([nodesManager nodeWithID:@"n1n1r1"]);
+    XCTAssertNotNil([nodesManager nodeWithID:@"n1n1n1r1"]);
+    XCTAssertNil([nodesManager nodeWithID:@"r3r1"]);
+    
+    NITNode *r1 = [nodesManager nodeWithID:@"r1"];
+    CLRegion *regionR1 = [r1 createRegion];
+    [geopolisManager stepInRegion:regionR1];
+    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 4);
+    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
+    
+    NITNode *n1r1 = [nodesManager nodeWithID:@"n1r1"];
+    CLRegion *regionN1r1 = [n1r1 createRegion];
+    [geopolisManager stepInRegion:regionN1r1];
+    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 3);
+    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
+    
+    NITNode *n1n1r1 = [nodesManager nodeWithID:@"n1n1r1"];
+    CLRegion *regionN1n1r1 = [n1n1r1 createRegion];
+    [geopolisManager stepInRegion:regionN1n1r1];
+    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 3);
+    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
+    
+    NITNode *n1n1n1r1 = [nodesManager nodeWithID:@"n1n1n1r1"];
+    CLRegion *regionN1n1n1r1 = [n1n1n1r1 createRegion];
+    [geopolisManager stepInRegion:regionN1n1n1r1];
+    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 2);
+    XCTAssertTrue([[geopolisManager rangedRegions] count] == 1);
+    
+    [geopolisManager stop];
+}
+
 - (void)testGeopolisCacheNotEmpty {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *path = [bundle pathForResource:@"beacon_areas_in_bg" ofType:@"json"];
