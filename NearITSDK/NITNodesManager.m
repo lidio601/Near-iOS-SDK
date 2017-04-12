@@ -104,17 +104,6 @@
     return counter;
 }
 
-- (void)traverseWithNode:(NITNode*)parent array:(NSMutableArray<NITNode*>*)array {
-    if ([parent.children count] == 0) {
-        return;
-    }
-    
-    for (NITNode *node = [parent firstChild]; node != nil; node = [node nextSibling]) {
-        [array addObject:node];
-        [self traverseWithNode:node array:array];
-    }
-}
-
 - (NITBeaconNode *)beaconNodeWithBeacon:(CLBeacon *)beacon inChildren:(NSArray<NITNode *> *)children {
     NITBeaconNode *beaconNode = nil;
     for(NITNode *node in children) {
