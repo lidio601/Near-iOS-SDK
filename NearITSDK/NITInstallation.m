@@ -13,11 +13,13 @@
 #import "NITNetworkProvider.h"
 #import "NITConfiguration.h"
 #import "NITConstants.h"
+#import <CoreBluetooth/CoreBluetooth.h>
 
 @interface NITInstallation()
 
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) id<NITNetworkManaging> networkManager;
+@property (nonatomic, strong) CBCentralManager *bluetoothManager;
 
 @end
 
@@ -28,6 +30,7 @@
     if (self) {
         self.configuration = configuration;
         self.networkManager = networkManager;
+        self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:nil queue:nil];
     }
     return self;
 }
@@ -80,8 +83,13 @@
         [resource addAttributeObject:config.deviceToken forKey:@"device_identifier"];
     }
     
+    if (self.bluetoothManager.state == CBManagerStatePoweredOn) {
+        [resource addAttributeObject:[NSNumber numberWithBool:YES] forKey:@"bluetooth"];
+    } else {
+        [resource addAttributeObject:[NSNumber numberWithBool:NO] forKey:@"bluetooth"];
+    }
+    
     // FIXME: Check real status
-    [resource addAttributeObject:[NSNumber numberWithBool:NO] forKey:@"bluetooth"];
     [resource addAttributeObject:[NSNumber numberWithBool:NO] forKey:@"location"];
     
     return resource;
