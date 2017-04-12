@@ -14,6 +14,7 @@
 #import "NITConfiguration.h"
 #import "NITConstants.h"
 #import <CoreBluetooth/CoreBluetooth.h>
+#import <CoreLocation/CoreLocation.h>
 
 @interface NITInstallation()
 
@@ -89,8 +90,12 @@
         [resource addAttributeObject:[NSNumber numberWithBool:NO] forKey:@"bluetooth"];
     }
     
-    // FIXME: Check real status
-    [resource addAttributeObject:[NSNumber numberWithBool:NO] forKey:@"location"];
+    CLAuthorizationStatus locationStatus = [CLLocationManager authorizationStatus];
+    if (locationStatus == kCLAuthorizationStatusAuthorizedAlways || locationStatus == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        [resource addAttributeObject:[NSNumber numberWithBool:YES] forKey:@"location"];
+    } else {
+        [resource addAttributeObject:[NSNumber numberWithBool:NO] forKey:@"location"];
+    }
     
     return resource;
 }
