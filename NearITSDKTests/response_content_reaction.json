@@ -17,7 +17,10 @@
                           ]
             },
             "upload" : {
-                "data" : null
+                "data": {
+                    "id": "bd756f4d-1c22-4615-9e4c-2361c13a5277",
+                    "type": "uploads"
+                }
             }
         },
         "type" : "contents",
@@ -63,6 +66,20 @@
                   "name": "Audio",
                   "audio": {
                   "url": "audio-url"
+                  },
+                  "app_id": null,
+                  "creator_id": null,
+                  "created_at": null,
+                  "updated_at": null
+                  }
+                  },
+                  {
+                  "id": "bd756f4d-1c22-4615-9e4c-2361c13a5277",
+                  "type": "uploads",
+                  "attributes": {
+                  "name": "PDF",
+                  "upload": {
+                  "url": "upload-url"
                   },
                   "app_id": null,
                   "creator_id": null,

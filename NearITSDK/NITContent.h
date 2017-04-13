@@ -10,6 +10,7 @@
 
 @class NITImage;
 @class NITAudio;
+@class NITUpload;
 
 @interface NITContent : NITResource<NSCoding>
 
@@ -17,5 +18,6 @@
 @property (nonatomic, strong) NSArray<NITImage*> * _Nullable images;
 @property (nonatomic, strong) NSString * _Nullable videoLink;
 @property (nonatomic, strong) NITAudio * _Nullable audio;
+@property (nonatomic, strong) NITUpload * _Nullable upload;
 
 @end

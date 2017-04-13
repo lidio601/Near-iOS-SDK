@@ -18,5 +18,6 @@ framework module NearITSDK {
         header "NITCustomJSON.h"
         header "NITEvent.h"
         header "NITAudio.h"
+        header "NITUpload.h"
     }
 }

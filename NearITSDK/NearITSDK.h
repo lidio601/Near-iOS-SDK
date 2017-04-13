@@ -20,6 +20,7 @@
 #import <NearITSDK/NITCustomJSON.h>
 #import <NearITSDK/NITEvent.h>
 #import <NearITSDK/NITAudio.h>
+#import <NearITSDK/NITUpload.h>
 
 //! Project version number for NearITSDK.
 FOUNDATION_EXPORT double NearITSDKVersionNumber;
