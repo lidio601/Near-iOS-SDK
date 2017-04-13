@@ -12,7 +12,7 @@
 #import "NITJSONAPIResource.h"
 
 #define NITApiVersion @"2"
-#define BASE_URL @"https://dev-api.nearit.com"
+#define BASE_URL @"https://api.nearit.com"
 
 static NITNetworkProvider *sharedProvider;
 
