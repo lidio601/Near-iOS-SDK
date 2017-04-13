@@ -3,7 +3,10 @@
         "id" : "e77d28fc-c6a0-4b9f-a28a-44e776119e25",
         "relationships" : {
             "audio" : {
-                "data" : null
+                "data": {
+                    "id": "bf8ce0ff-c247-49d2-9d1e-1d5451e7f9a3",
+                    "type": "audios"
+                }
             },
             "images" : {
                 "data" : [
@@ -51,6 +54,20 @@
                   }
                   },
                   "creator_id" : "fa71a6e6-b091-48ee-b79e-bd893d673713"
+                  }
+                  },
+                  {
+                  "id": "bf8ce0ff-c247-49d2-9d1e-1d5451e7f9a3",
+                  "type": "audios",
+                  "attributes": {
+                  "name": "Audio",
+                  "audio": {
+                  "url": "audio-url"
+                  },
+                  "app_id": null,
+                  "creator_id": null,
+                  "created_at": null,
+                  "updated_at": null
                   }
                   }
                   ]

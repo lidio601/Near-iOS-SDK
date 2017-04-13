@@ -13,7 +13,7 @@
 @implementation NITContent
 
 - (NSDictionary *)attributesMap {
-    return @{ @"image_ids" : @"imagesIds" };
+    return @{ @"video_link" : @"videoLink"};
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {

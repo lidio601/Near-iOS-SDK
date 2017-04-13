@@ -14,6 +14,7 @@
 #import "NITConstants.h"
 #import "NITRecipe.h"
 #import "NITImage.h"
+#import "NITAudio.h"
 
 #define CACHE_KEY @"ContentReaction"
 
@@ -51,6 +52,7 @@
         } else {
             [json registerClass:[NITContent class] forType:@"contents"];
             [json registerClass:[NITImage class] forType:@"images"];
+            [json registerClass:[NITAudio class] forType:@"audios"];
             
             NSArray<NITContent*> *contents = [json parseToArrayOfObjects];
             if([contents count] > 0) {
@@ -75,6 +77,7 @@
         } else {
             [json registerClass:[NITContent class] forType:@"contents"];
             [json registerClass:[NITImage class] forType:@"images"];
+            [json registerClass:[NITAudio class] forType:@"audios"];
             
             self.contents = [json parseToArrayOfObjects];
             [self.cacheManager saveWithArray:self.contents forKey:CACHE_KEY];

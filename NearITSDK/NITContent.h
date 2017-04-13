@@ -9,10 +9,13 @@
 #import "NITResource.h"
 
 @class NITImage;
+@class NITAudio;
 
 @interface NITContent : NITResource<NSCoding>
 
-@property (nonatomic, strong) NSString *content;
-@property (nonatomic, strong) NSArray<NITImage*> *images;
+@property (nonatomic, strong) NSString * _Nullable content;
+@property (nonatomic, strong) NSArray<NITImage*> * _Nullable images;
+@property (nonatomic, strong) NSString * _Nullable videoLink;
+@property (nonatomic, strong) NITAudio * _Nullable audio;
 
 @end
