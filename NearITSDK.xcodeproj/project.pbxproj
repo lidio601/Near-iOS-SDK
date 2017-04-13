@@ -118,6 +118,7 @@
 		135CD7D11E9F7A1F005C75A4 /* NITLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD7CF1E9F7A1F005C75A4 /* NITLog.m */; };
 		135CD7D41E9F7ACF005C75A4 /* NITDefaultLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 135CD7D21E9F7ACF005C75A4 /* NITDefaultLogger.h */; };
 		135CD7D51E9F7ACF005C75A4 /* NITDefaultLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD7D31E9F7ACF005C75A4 /* NITDefaultLogger.m */; };
+		135CD7D71E9FB266005C75A4 /* NearITSDK.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 135CD7D61E9FB266005C75A4 /* NearITSDK.podspec */; };
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
@@ -290,6 +291,7 @@
 		135CD7CF1E9F7A1F005C75A4 /* NITLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITLog.m; sourceTree = "<group>"; };
 		135CD7D21E9F7ACF005C75A4 /* NITDefaultLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITDefaultLogger.h; sourceTree = "<group>"; };
 		135CD7D31E9F7ACF005C75A4 /* NITDefaultLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITDefaultLogger.m; sourceTree = "<group>"; };
+		135CD7D61E9FB266005C75A4 /* NearITSDK.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NearITSDK.podspec; sourceTree = "<group>"; };
 		137838631E800EC1001C8CDE /* NITRecipesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipesManager.h; sourceTree = "<group>"; };
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
@@ -502,6 +504,7 @@
 			children = (
 				135CD7851E9769AB005C75A4 /* mkdocs.yml */,
 				135CD7831E966DE7005C75A4 /* README.md */,
+				135CD7D61E9FB266005C75A4 /* NearITSDK.podspec */,
 				135CD7891E976A02005C75A4 /* docs */,
 				1352CA661E7807FE00C0E98E /* NearITSDK */,
 				1352CA711E7807FE00C0E98E /* NearITSDKTests */,
@@ -954,6 +957,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				135CD7D71E9FB266005C75A4 /* NearITSDK.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
