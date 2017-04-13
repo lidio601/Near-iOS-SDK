@@ -18,7 +18,10 @@
 #import "NITCacheManager.h"
 #import "NITJSONAPIResource.h"
 #import "NITConfiguration.h"
+#import "NITLog.h"
 #import <CoreLocation/CoreLocation.h>
+
+#define LOGTAG @"GeopolisManager"
 
 NSErrorDomain const NITGeopolisErrorDomain = @"com.nearit.geopolis";
 NSString* const NodeKey = @"node";
@@ -157,6 +160,8 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 // MARK: - Region step
 
 - (void)stepInRegion:(CLRegion*)region {
+    NITLogD(LOGTAG, @"StepInRegion -> %@", region.identifier);
+    
     NITNode * newCurrentNode = [self.nodesManager nodeWithID:region.identifier];
     if (newCurrentNode == nil) {
         return;
@@ -202,6 +207,8 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 }
 
 - (void)stepOutRegion:(CLRegion*)region {
+    NITLogD(LOGTAG, @"StepOutRegion -> %@", region.identifier);
+    
     NITNode * exitedNode = [self.nodesManager nodeWithID:region.identifier];
     if (exitedNode == nil) {
         return;

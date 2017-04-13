@@ -19,5 +19,7 @@ framework module NearITSDK {
         header "NITEvent.h"
         header "NITAudio.h"
         header "NITUpload.h"
+        header "NITLogger.h"
+        header "NITLog.h"
     }
 }

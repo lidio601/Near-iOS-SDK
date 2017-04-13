@@ -21,6 +21,8 @@
 #import <NearITSDK/NITEvent.h>
 #import <NearITSDK/NITAudio.h>
 #import <NearITSDK/NITUpload.h>
+#import <NearITSDK/NITLogger.h>
+#import <NearITSDK/NITLog.h>
 
 //! Project version number for NearITSDK.
 FOUNDATION_EXPORT double NearITSDKVersionNumber;

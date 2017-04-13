@@ -21,6 +21,7 @@
 #import "NITBeaconProximityManager.h"
 #import "NITCacheManager.h"
 #import "NITNetworkMockManger.h"
+#import "NITLog.h"
 
 @interface NITGeopolisManagerTest : NITTestCase
 
