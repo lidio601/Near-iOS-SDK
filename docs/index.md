@@ -1,4 +1,4 @@
-# NearIT iOS SDK // TODO: -
+# NearIT iOS SDK
 
 NearIT allows to engage app users by sending **context-aware targeted content**.
 

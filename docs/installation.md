@@ -4,12 +4,12 @@ Minimum Requirements:
 
 - Deployment target: iOS 9
 
-<!-- To start using the SDK, include this in your app *Podfile*  // TODO: -
+To start using the SDK, include this in your app *Podfile* (Objective-C only)
 
 ```ruby
-pod 'NMSDK'
+pod 'NearITSDK'
 ```
--->
+ 
 In the `application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool` method of your AppDelegate class, set the API token to the SDK a String
 
 
