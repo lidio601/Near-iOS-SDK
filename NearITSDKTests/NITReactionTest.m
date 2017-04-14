@@ -149,7 +149,10 @@
     NITRecipe *recipe = [[NITRecipe alloc] init];
     recipe.reactionBundleId = @"08b4935a-8ee5-45cd-923e-078a7d35953f";
     
-    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return [self jsonApiWithContentsOfFile:@"response_feedback_event"];
+    };
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[NSString stringWithFormat:@"test-%@", recipe.reactionBundleId]];
     NITFeedbackReaction *reaction = [[NITFeedbackReaction alloc] initWithCacheManager:cacheManager configuration:[NITConfiguration defaultConfiguration] networkManager:networkManager];
     

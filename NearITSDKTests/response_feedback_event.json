@@ -1,0 +1,22 @@
+{
+    "data": {
+        "id": "e4de5e1f-e439-4b81-a8ee-2afd498c19e4",
+        "type": "answers",
+        "attributes": {
+            "rating": 4,
+            "comment": "Deleniti natus vel quia voluptates quo minima sed sunt. Repellendus atque voluptatem saepe aliquid quae voluptatibus dolor incidunt. Sit quae sequi aut assumenda accusantium commodi.",
+            "profile_id": "307ccddf-6dea-4aa3-921d-09970de5abdb",
+            "recipe_id": "f8c386cd-aeab-46ac-9bb9-1d6518cc29ce",
+            "created_at": "2017-03-22T09:56:18.656Z",
+            "updated_at": "2017-03-22T09:56:18.656Z"
+        },
+        "relationships": {
+            "feedback": {
+                "data": {
+                    "id": "b77346be-5891-4e6a-a648-2c5d9320c976",
+                    "type": "feedbacks"
+                }
+            }
+        }
+    }
+}

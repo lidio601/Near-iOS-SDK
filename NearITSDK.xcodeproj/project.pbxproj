@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1319CED31EA0ACA0009046C5 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1319CED21EA0ACA0009046C5 /* .travis.yml */; };
+		1319CED51EA0B987009046C5 /* response_feedback_event.json in Resources */ = {isa = PBXBuildFile; fileRef = 1319CED41EA0B987009046C5 /* response_feedback_event.json */; };
 		132296E21E8CF14600AE6EFC /* online_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 132296E11E8CF14600AE6EFC /* online_recipe.json */; };
 		132296E41E8CFA1F00AE6EFC /* recipes.json in Resources */ = {isa = PBXBuildFile; fileRef = 132296E31E8CFA1F00AE6EFC /* recipes.json */; };
 		132296EA1E8CFCAD00AE6EFC /* NITCouponReaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 132296E81E8CFCAD00AE6EFC /* NITCouponReaction.h */; };
@@ -163,6 +164,7 @@
 
 /* Begin PBXFileReference section */
 		1319CED21EA0ACA0009046C5 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
+		1319CED41EA0B987009046C5 /* response_feedback_event.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_feedback_event.json; sourceTree = "<group>"; };
 		132296E11E8CF14600AE6EFC /* online_recipe.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = online_recipe.json; sourceTree = "<group>"; };
 		132296E31E8CFA1F00AE6EFC /* recipes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recipes.json; sourceTree = "<group>"; };
 		132296E81E8CFCAD00AE6EFC /* NITCouponReaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITCouponReaction.h; sourceTree = "<group>"; };
@@ -644,6 +646,7 @@
 				132297101E8E3BC200AE6EFC /* custom_jsons.json */,
 				132297121E8E3C7800AE6EFC /* response_custom_json_reaction.json */,
 				132297181E8E4DF100AE6EFC /* feedback1.json */,
+				1319CED41EA0B987009046C5 /* response_feedback_event.json */,
 			);
 			name = Reactions;
 			sourceTree = "<group>";
@@ -990,6 +993,7 @@
 				1327D8AB1E83E6A300C6689E /* beacon_areas_in_bg.json in Resources */,
 				1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */,
 				135CD7A21E9E4276005C75A4 /* config_22.json in Resources */,
+				1319CED51EA0B987009046C5 /* response_feedback_event.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
