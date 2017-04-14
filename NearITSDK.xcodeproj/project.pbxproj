@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1319CED31EA0ACA0009046C5 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1319CED21EA0ACA0009046C5 /* .travis.yml */; };
 		132296E21E8CF14600AE6EFC /* online_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 132296E11E8CF14600AE6EFC /* online_recipe.json */; };
 		132296E41E8CFA1F00AE6EFC /* recipes.json in Resources */ = {isa = PBXBuildFile; fileRef = 132296E31E8CFA1F00AE6EFC /* recipes.json */; };
 		132296EA1E8CFCAD00AE6EFC /* NITCouponReaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 132296E81E8CFCAD00AE6EFC /* NITCouponReaction.h */; };
@@ -162,6 +163,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1319CED21EA0ACA0009046C5 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		132296E11E8CF14600AE6EFC /* online_recipe.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = online_recipe.json; sourceTree = "<group>"; };
 		132296E31E8CFA1F00AE6EFC /* recipes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recipes.json; sourceTree = "<group>"; };
 		132296E81E8CFCAD00AE6EFC /* NITCouponReaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITCouponReaction.h; sourceTree = "<group>"; };
@@ -502,6 +504,7 @@
 		1352CA5A1E7807FD00C0E98E = {
 			isa = PBXGroup;
 			children = (
+				1319CED21EA0ACA0009046C5 /* .travis.yml */,
 				135CD7851E9769AB005C75A4 /* mkdocs.yml */,
 				135CD7831E966DE7005C75A4 /* README.md */,
 				135CD7D61E9FB266005C75A4 /* NearITSDK.podspec */,
@@ -957,6 +960,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1319CED31EA0ACA0009046C5 /* .travis.yml in Resources */,
 				135CD7D71E9FB266005C75A4 /* NearITSDK.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
