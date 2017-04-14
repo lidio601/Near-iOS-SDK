@@ -22,6 +22,7 @@
 #import "NITCacheManager.h"
 #import "NITNetworkMockManger.h"
 #import "NITLog.h"
+#import "NITGeopolisNodesManager.h"
 
 @interface NITGeopolisManagerTest : NITTestCase
 
@@ -45,7 +46,7 @@
 
 - (void)testHandleEmptyConfig {
     NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"empty_config"];
-    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
     
     XCTAssertTrue([nodes count] == 0);
@@ -55,80 +56,54 @@
 
 - (void)testHandleSingleGFConfig {
     NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"single_gf"];
-    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
-    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
-    [geopolisManager startForUnitTest];
     
     XCTAssertTrue([nodes count] == 1);
     XCTAssertTrue([[nodesManager roots] count] == 1);
-    NITNode *aNode = [nodesManager nodeWithID:@"d7881a25-fc82-49ec-836d-d47276e38a55"];
-    XCTAssertNotNil(aNode);
     XCTAssertNil([nodesManager nodeWithID:@"dummy_id"]);
-    [geopolisManager stepInRegion:[aNode createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 1);
-    [geopolisManager stepOutRegion:[aNode createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 1);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
+    XCTAssertNotNil([nodesManager nodeWithID:@"d7881a25-fc82-49ec-836d-d47276e38a55"]);
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"d7881a25-fc82-49ec-836d-d47276e38a55"] count] == 1);
+    XCTAssertTrue([[nodesManager statelessMonitoredNoesOnExitWithId:@"d7881a25-fc82-49ec-836d-d47276e38a55"] count] == 1);
+    XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"d7881a25-fc82-49ec-836d-d47276e38a55"] count] == 0);
 }
 
 - (void)testHandleMultiGFConfig {
     NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"gf_array"];
-    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
-    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
-    [geopolisManager startForUnitTest];
     
     XCTAssertTrue([nodes count] == 4);
     XCTAssertTrue([[nodesManager roots] count] == 4);
     XCTAssertNotNil([nodesManager nodeWithID:@"f4a62f53-5130-479d-ba6b-151255307dab"]);
     XCTAssertNotNil([nodesManager nodeWithID:@"770fc5ef-fcb3-44e1-945d-a5c9ce16f1e3"]);
     XCTAssertNil([nodesManager nodeWithID:@"dummy_id"]);
-    [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"f4a62f53-5130-479d-ba6b-151255307dab"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 4);
-    [geopolisManager stepOutRegion:[[nodesManager nodeWithID:@"770fc5ef-fcb3-44e1-945d-a5c9ce16f1e3"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 4);
-    [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"770fc5ef-fcb3-44e1-945d-a5c9ce16f1e3"] createRegion]];
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"f4a62f53-5130-479d-ba6b-151255307dab"] count] == 4);
+    XCTAssertTrue([[nodesManager statelessMonitoredNoesOnExitWithId:@"770fc5ef-fcb3-44e1-945d-a5c9ce16f1e3"] count] == 4);
+    XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"770fc5ef-fcb3-44e1-945d-a5c9ce16f1e3"] count] == 0);
 }
 
 - (void)testHandleMultiLevelGFConfig {
     NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"multi_level_gf"];
-    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
-    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
-    [geopolisManager startForUnitTest];
     
     XCTAssertTrue([nodes count] == 10);
     XCTAssertTrue([[nodesManager roots] count] == 10);
     XCTAssertNotNil([nodesManager nodeWithID:@"48d37439-8181-4f4c-8028-584ff6ca79a9"]);
     XCTAssertNotNil([nodesManager nodeWithID:@"214cf1d1-19bb-46fa-aa46-1c8e115db6c1"]);
     XCTAssertNil([nodesManager nodeWithID:@"dummy_id"]);
-    [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"48d37439-8181-4f4c-8028-584ff6ca79a9"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 10);
-    [geopolisManager stepOutRegion:[[nodesManager nodeWithID:@"48d37439-8181-4f4c-8028-584ff6ca79a9"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 10);
-    [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"e5d67e06-57e9-4c97-bf5d-2f7c3c4510f4"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 15);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
-    [geopolisManager stepOutRegion:[[nodesManager nodeWithID:@"e5d67e06-57e9-4c97-bf5d-2f7c3c4510f4"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 10);
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"48d37439-8181-4f4c-8028-584ff6ca79a9"] count] == 10);
+    XCTAssertTrue([[nodesManager statelessMonitoredNoesOnExitWithId:@"48d37439-8181-4f4c-8028-584ff6ca79a9"] count] == 10);
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"e5d67e06-57e9-4c97-bf5d-2f7c3c4510f4"] count] == 15);
+    XCTAssertTrue([[nodesManager statelessMonitoredNoesOnExitWithId:@"e5d67e06-57e9-4c97-bf5d-2f7c3c4510f4"] count] == 10);
+    XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"e5d67e06-57e9-4c97-bf5d-2f7c3c4510f4"] count] == 0);
 }
 
 - (void)testHandleGFAndBeaconConfig {
     NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"beacon_areas_in_bg"];
-    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
-    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
-    [geopolisManager startForUnitTest];
     
     XCTAssertTrue([nodes count] == 10);
     XCTAssertTrue([[nodesManager roots] count] == 10);
@@ -141,53 +116,41 @@
     XCTAssertNotNil([nodesManager nodeWithID:@"1a8613a4-134b-4504-b0c8-62d47422afdf"]);
     
     // entering a root node with no children
-    [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"528ac400-6272-4992-afba-672c037a12a0"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 10);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
-    [geopolisManager stepOutRegion:[[nodesManager nodeWithID:@"528ac400-6272-4992-afba-672c037a12a0"] createRegion]];
-    
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"528ac400-6272-4992-afba-672c037a12a0"] count] == 10);
     // entering a root node with 5 children
-    [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"4435d9fb-c0fe-48a7-811b-87769e38b84d"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 15);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
-    
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"4435d9fb-c0fe-48a7-811b-87769e38b84d"] count] == 15);
     // exiting a root node that had children
-    [geopolisManager stepOutRegion:[[nodesManager nodeWithID:@"4435d9fb-c0fe-48a7-811b-87769e38b84d"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 10);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
-    
+    XCTAssertTrue([[nodesManager statelessMonitoredNoesOnExitWithId:@"4435d9fb-c0fe-48a7-811b-87769e38b84d"] count] == 10);
     // entering a node with 4 sibiligs and 1 child
-    [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"4435d9fb-c0fe-48a7-811b-87769e38b84d"] createRegion]];
-    [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"6e076bcb-f583-4643-a192-122f98138530"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 6);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
-    
-    // entering a node with only beacon region nodes
-    [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"e2c3174c-bfb9-4a16-aa28-b05fe310e8ad"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 8);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
-    
-    // entering a node beacon region with an identifier
-    [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"28160b69-52a8-4f96-8fe2-aaa36c9bd794"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 7);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 1);
-    [geopolisManager stepOutRegion:[[nodesManager nodeWithID:@"28160b69-52a8-4f96-8fe2-aaa36c9bd794"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 8);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
-    
-    [geopolisManager stepOutRegion:[[nodesManager nodeWithID:@"e2c3174c-bfb9-4a16-aa28-b05fe310e8ad"] createRegion]];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 6);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"6e076bcb-f583-4643-a192-122f98138530"] count] == 6);
+    // exiting from that node
+    XCTAssertTrue([[nodesManager statelessMonitoredNoesOnExitWithId:@"6e076bcb-f583-4643-a192-122f98138530"] count] == 15);
+    // entering a node with no sibilings and 7 children
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"e2c3174c-bfb9-4a16-aa28-b05fe310e8ad"] count] == 8);
+    // exiting from that node
+    XCTAssertTrue([[nodesManager statelessMonitoredNoesOnExitWithId:@"e2c3174c-bfb9-4a16-aa28-b05fe310e8ad"] count] == 6);
+    // entering a node with 6 sibilings and beacon children
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"28160b69-52a8-4f96-8fe2-aaa36c9bd794"] count] == 7);
+    // exiting from that node
+    XCTAssertTrue([[nodesManager statelessMonitoredNoesOnExitWithId:@"28160b69-52a8-4f96-8fe2-aaa36c9bd794"] count] == 8);
+    // entering a beacon node, special case
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"ca7bb03e-beef-4554-bd9e-035f06374d4b"] count] == 0);
+    // exiting from that node
+    XCTAssertTrue([[nodesManager statelessMonitoredNoesOnExitWithId:@"ca7bb03e-beef-4554-bd9e-035f06374d4b"] count] == 0);
+    // ranging nodes of nodes with no beacon chidren
+    XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"4435d9fb-c0fe-48a7-811b-87769e38b84d"] count] == 0);
+    XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"6e076bcb-f583-4643-a192-122f98138530"] count] == 0);
+    XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"e2c3174c-bfb9-4a16-aa28-b05fe310e8ad"] count] == 0);
+    // ranging nodes of a node with 2 beacon children
+    XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"28160b69-52a8-4f96-8fe2-aaa36c9bd794"] count] == 1);
+    // ranging nodes of a beacon, special case
+    XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"ca7bb03e-beef-4554-bd9e-035f06374d4b"] count] == 1);
 }
 
 - (void)testConfig22 {
     NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"config_22"];
-    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
-    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
-    [geopolisManager startForUnitTest];
     
     XCTAssertTrue([nodes count] == 2);
     XCTAssertTrue([[nodesManager roots] count] == 2);
@@ -199,31 +162,25 @@
     XCTAssertNotNil([nodesManager nodeWithID:@"n1n1n1r1"]);
     XCTAssertNil([nodesManager nodeWithID:@"r3r1"]);
     
-    NITNode *r1 = [nodesManager nodeWithID:@"r1"];
-    CLRegion *regionR1 = [r1 createRegion];
-    [geopolisManager stepInRegion:regionR1];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 4);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"r1"] count] == 4);
+    XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"r1"] count] == 0);
     
-    NITNode *n1r1 = [nodesManager nodeWithID:@"n1r1"];
-    CLRegion *regionN1r1 = [n1r1 createRegion];
-    [geopolisManager stepInRegion:regionN1r1];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 3);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"n1r1"] count] == 3);
+    XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"n1r1"] count] == 0);
     
-    NITNode *n1n1r1 = [nodesManager nodeWithID:@"n1n1r1"];
-    CLRegion *regionN1n1r1 = [n1n1r1 createRegion];
-    [geopolisManager stepInRegion:regionN1n1r1];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 3);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 0);
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"n1n1r1"] count] == 3);
+    XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"n1n1r1"] count] == 0);
     
-    NITNode *n1n1n1r1 = [nodesManager nodeWithID:@"n1n1n1r1"];
-    CLRegion *regionN1n1n1r1 = [n1n1n1r1 createRegion];
-    [geopolisManager stepInRegion:regionN1n1n1r1];
-    XCTAssertTrue([[geopolisManager monitoredRegions] count] == 2);
-    XCTAssertTrue([[geopolisManager rangedRegions] count] == 1);
-    
-    [geopolisManager stop];
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"n1n1n1r1"] count] == 2);
+    XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"n1n1n1r1"] count] == 1);
+}
+
+- (void)testGeopolisNodesManager {
+    NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"config_22"];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
+    NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
+    XCTAssertTrue([nodes count] == 2);
+    XCTAssertTrue([[nodesManager roots] count] == 2);
 }
 
 - (void)testGeopolisCacheNotEmpty {
