@@ -27,6 +27,10 @@
     return self;
 }
 
+- (NSArray<NITNode*>*)currentNodes {
+    return [NSArray arrayWithArray:self.enteredNodes];
+}
+
 - (NSArray<NITNode *> *)monitoredNodesOnEnterWithId:(NSString *)nodeId {
     NITNode *node = [self nodeWithID:nodeId];
     if (node != nil) {
@@ -72,6 +76,10 @@
         }
     }
     return [NSArray array];
+}
+
+- (NSArray<NITNode *> *)rangedNodesOnEnterWithId:(NSString*)nodeId {
+    return [self statelessRangedNodesOnEnterWithId:nodeId];
 }
 
 - (NSArray<NITNode*>*)sibilingsAreEntered:(NITNode*)node {
