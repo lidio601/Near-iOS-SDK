@@ -245,6 +245,9 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         return;
     }
     
+    NSString *eventString = [NITUtils stringFromRegionEvent:event];
+    NITLogD(LOGTAG, @"Trigger for event -> %@ - node -> %", eventString, node);
+    
     [self trackEventWithIdentifier:node.identifier event:event];
     if([self.recipesManager respondsToSelector:@selector(gotPulseWithPulsePlugin:pulseAction:pulseBundle:)]) {
         NSString *pulseAction = [NITUtils stringFromRegionEvent:event];

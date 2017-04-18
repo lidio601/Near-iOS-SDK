@@ -30,4 +30,15 @@
     }
 }
 
+- (NSString *)description {
+    if (self.proximityUUID && self.major && self.minor) {
+        return [NSString stringWithFormat:@"Node (Beacon) ID: %@ - ProxID: %@ - Major: %@ - Minor: %@", self.identifier, self.proximityUUID, self.major, self.minor];
+    } else if(self.proximityUUID && self.major) {
+        return [NSString stringWithFormat:@"Node (Beacon) ID: %@ - ProxID: %@ - Major: %@", self.identifier, self.proximityUUID, self.major];
+    } else if(self.proximityUUID) {
+        return [NSString stringWithFormat:@"Node (Beacon) ID: %@ - ProxID: %@", self.identifier, self.proximityUUID];
+    }
+    return [NSString stringWithFormat:@"Node (Beacon) ID: %@", self.identifier];
+}
+
 @end
