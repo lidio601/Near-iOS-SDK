@@ -4,10 +4,14 @@ Minimum Requirements:
 
 - Deployment target: iOS 9
 
-To start using the SDK, include this in your app *Podfile* (Objective-C only)
+To start using the SDK, include this in your app *Podfile*
 
 ```ruby
-pod 'NearITSDK'
+pod 'NearITSDKSwift' // For Swift
+```
+
+```ruby
+pod 'NearITSDK' // For Objective-C
 ```
  
 In the `application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool` method of your AppDelegate class, set the API token to the SDK a String

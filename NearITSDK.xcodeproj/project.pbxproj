@@ -122,6 +122,8 @@
 		135CD7D41E9F7ACF005C75A4 /* NITDefaultLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 135CD7D21E9F7ACF005C75A4 /* NITDefaultLogger.h */; };
 		135CD7D51E9F7ACF005C75A4 /* NITDefaultLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD7D31E9F7ACF005C75A4 /* NITDefaultLogger.m */; };
 		135CD7D71E9FB266005C75A4 /* NearITSDK.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 135CD7D61E9FB266005C75A4 /* NearITSDK.podspec */; };
+		1374E09A1EA5F4FA00D613A5 /* NearITSDKSwift.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 1374E0991EA5F4FA00D613A5 /* NearITSDKSwift.podspec */; };
+		1374E09C1EA5F5C500D613A5 /* CHANGELOG.md in Sources */ = {isa = PBXBuildFile; fileRef = 1374E09B1EA5F5C500D613A5 /* CHANGELOG.md */; };
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
@@ -298,6 +300,8 @@
 		135CD7D21E9F7ACF005C75A4 /* NITDefaultLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITDefaultLogger.h; sourceTree = "<group>"; };
 		135CD7D31E9F7ACF005C75A4 /* NITDefaultLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITDefaultLogger.m; sourceTree = "<group>"; };
 		135CD7D61E9FB266005C75A4 /* NearITSDK.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NearITSDK.podspec; sourceTree = "<group>"; };
+		1374E0991EA5F4FA00D613A5 /* NearITSDKSwift.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NearITSDKSwift.podspec; sourceTree = "<group>"; };
+		1374E09B1EA5F5C500D613A5 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		137838631E800EC1001C8CDE /* NITRecipesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipesManager.h; sourceTree = "<group>"; };
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
@@ -513,7 +517,9 @@
 				1319CED21EA0ACA0009046C5 /* .travis.yml */,
 				135CD7851E9769AB005C75A4 /* mkdocs.yml */,
 				135CD7831E966DE7005C75A4 /* README.md */,
+				1374E09B1EA5F5C500D613A5 /* CHANGELOG.md */,
 				135CD7D61E9FB266005C75A4 /* NearITSDK.podspec */,
+				1374E0991EA5F4FA00D613A5 /* NearITSDKSwift.podspec */,
 				135CD7891E976A02005C75A4 /* docs */,
 				1352CA661E7807FE00C0E98E /* NearITSDK */,
 				1352CA711E7807FE00C0E98E /* NearITSDKTests */,
@@ -969,6 +975,7 @@
 			files = (
 				1319CED31EA0ACA0009046C5 /* .travis.yml in Resources */,
 				135CD7D71E9FB266005C75A4 /* NearITSDK.podspec in Resources */,
+				1374E09A1EA5F4FA00D613A5 /* NearITSDKSwift.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1055,6 +1062,7 @@
 				132297001E8D2F6400AE6EFC /* NITFeedbackReaction.m in Sources */,
 				137E38A51E8A4464008E83E6 /* NITCacheManager.m in Sources */,
 				1327D8971E82824800C6689E /* NITBeaconProximityManager.m in Sources */,
+				1374E09C1EA5F5C500D613A5 /* CHANGELOG.md in Sources */,
 				1327D89C1E82A4E700C6689E /* NITRecipe.m in Sources */,
 				1352CA8E1E78313300C0E98E /* NITUserProfile.m in Sources */,
 				135CD77A1E94F71E005C75A4 /* NITEvent.m in Sources */,
