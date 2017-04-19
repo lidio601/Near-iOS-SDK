@@ -14,8 +14,6 @@
 
 - (void)stepInRegion:(CLRegion*)region;
 - (void)stepOutRegion:(CLRegion*)region;
-- (NSArray<CLRegion*>*)monitoredRegions;
-- (NSArray<CLRegion*>*)rangedRegions;
 - (BOOL)startForUnitTest;
 - (NITBeaconProximityManager *)beaconProximity;
 

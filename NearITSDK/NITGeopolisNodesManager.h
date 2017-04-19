@@ -20,5 +20,6 @@
 - (NSArray<NITNode*>* _Nonnull)statelessMonitoredNodesOnEnterWithId:(NSString* _Nonnull)nodeId;
 - (NSArray<NITNode*>* _Nonnull)statelessMonitoredNoesOnExitWithId:(NSString* _Nonnull)nodeId;
 - (NSArray<NITNode*>* _Nonnull)statelessRangedNodesOnEnterWithId:(NSString* _Nonnull)nodeId;
+- (void)clear;
 
 @end

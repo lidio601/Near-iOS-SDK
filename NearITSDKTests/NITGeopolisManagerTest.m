@@ -11,7 +11,7 @@
 #import "NITConfiguration.h"
 #import "NITGeopolisManager.h"
 #import "NITGeopolisManager+Tests.h"
-#import "NITNodesManager.h"
+#import "NITGeopolisNodesManager.h"
 #import "NITNetworkManager.h"
 #import "NITNetworkProvider.h"
 #import "NITJSONAPIResource.h"
@@ -351,6 +351,116 @@
     XCTAssertTrue([[nodesManager currentNodes] count] == 0);
 }
 
+// MARK: - Geopolis monitored/ranged regions test
+
+- (void)testGeopolisRegionsConfig22 {
+    NITFakeLocationManager *fakeLocationManager = [[NITFakeLocationManager alloc] init];
+    
+    NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"config_22"];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
+    [nodesManager setNodesWithJsonApi:jsonApi];
+    
+    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
+    XCTAssertTrue([cacheManager numberOfStoredKeys] == 0);
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return nil;
+    };
+    
+    NSArray<CLRegion*> *monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
+    NSArray<CLRegion*> *rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
+    XCTAssertTrue([monitoredRegions count] == 0);
+    XCTAssertTrue([rangedRegions count] == 0);
+    
+    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration] locationManager:fakeLocationManager];
+    [geopolisManager startForUnitTest];
+    
+    monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
+    rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
+    XCTAssertTrue([monitoredRegions count] == 2);
+    XCTAssertTrue([rangedRegions count] == 0);
+    BOOL check = [self checkIfArrayOfRegionsContainsIds:@[@"r1", @"r2"] array:monitoredRegions];
+    XCTAssertTrue(check);
+    
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"r1"] createRegion] state:CLRegionStateInside];
+    monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
+    rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
+    XCTAssertTrue([monitoredRegions count] == 4);
+    XCTAssertTrue([rangedRegions count] == 0);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"r1", @"r2", @"n1r1", @"n2r1"] array:monitoredRegions];
+    XCTAssertTrue(check);
+    
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n2r1"] createRegion] state:CLRegionStateInside];
+    monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
+    rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
+    XCTAssertTrue([monitoredRegions count] == 2);
+    XCTAssertTrue([rangedRegions count] == 0);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1r1", @"n2r1"] array:monitoredRegions];
+    XCTAssertTrue(check);
+    
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n1r1"] createRegion] state:CLRegionStateInside];
+    monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
+    rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
+    XCTAssertTrue([monitoredRegions count] == 3);
+    XCTAssertTrue([rangedRegions count] == 0);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1r1", @"n2r1",@"n1n1r1"] array:monitoredRegions];
+    XCTAssertTrue(check);
+    
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n2r1"] createRegion] state:CLRegionStateOutside];
+    monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
+    rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
+    XCTAssertTrue([monitoredRegions count] == 3);
+    XCTAssertTrue([rangedRegions count] == 0);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1r1", @"n2r1",@"n1n1r1"] array:monitoredRegions];
+    XCTAssertTrue(check);
+    
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n1n1r1"] createRegion] state:CLRegionStateInside];
+    monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
+    rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
+    XCTAssertTrue([monitoredRegions count] == 3);
+    XCTAssertTrue([rangedRegions count] == 0);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1r1", @"n1n1n1r1", @"n2n1n1r1"] array:monitoredRegions];
+    XCTAssertTrue(check);
+    
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n1n1n1r1"] createRegion] state:CLRegionStateInside];
+    monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
+    rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
+    XCTAssertTrue([monitoredRegions count] == 2);
+    XCTAssertTrue([rangedRegions count] == 1);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1", @"n2n1n1r1"] array:monitoredRegions];
+    XCTAssertTrue(check);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1"] array:rangedRegions];
+    XCTAssertTrue(check);
+    
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n2n1n1r1"] createRegion] state:CLRegionStateInside];
+    monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
+    rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
+    XCTAssertTrue([monitoredRegions count] == 2);
+    XCTAssertTrue([rangedRegions count] == 2);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1", @"n2n1n1r1"] array:monitoredRegions];
+    XCTAssertTrue(check);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1", @"n2n1n1r1"] array:rangedRegions];
+    XCTAssertTrue(check);
+    
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n2n1n1r1"] createRegion] state:CLRegionStateOutside];
+    monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
+    rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
+    XCTAssertTrue([monitoredRegions count] == 2);
+    XCTAssertTrue([rangedRegions count] == 1);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1", @"n2n1n1r1"] array:monitoredRegions];
+    XCTAssertTrue(check);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1"] array:rangedRegions];
+    XCTAssertTrue(check);
+    
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n1n1n1r1"] createRegion] state:CLRegionStateOutside];
+    monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
+    rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
+    XCTAssertTrue([monitoredRegions count] == 3);
+    XCTAssertTrue([rangedRegions count] == 0);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1r1", @"n1n1n1r1", @"n2n1n1r1"] array:monitoredRegions];
+    XCTAssertTrue(check);
+}
+
 // MARK: - Other tests
 
 - (void)testGeopolisNodesManager {
@@ -366,7 +476,7 @@
     NSString *path = [bundle pathForResource:@"beacon_areas_in_bg" ofType:@"json"];
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithContentsOfFile:path error:nil];
     
-    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testGeopolisCache"];
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
@@ -393,7 +503,7 @@
 }
 
 - (void)testGeopolisCacheEmpty {
-    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testGeopolisCacheNotEmpty"];
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
@@ -411,7 +521,7 @@
 }
 
 - (void)testGeopolisCacheSave {
-    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testGeopolisCacheSave"];
     XCTAssertTrue([cacheManager numberOfStoredKeys] == 0);
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
@@ -441,7 +551,7 @@
 
 - (void)testGeopolisCacheSaveOverwrite {
     NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"gf_array"];
-    NITNodesManager *nodesManager = [[NITNodesManager alloc] init];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testGeopolisCacheSaveOverwrite"];
     [cacheManager saveWithObject:jsonApi forKey:@"GeopolisNodesJSON"];
     [NSThread sleepForTimeInterval:0.5];

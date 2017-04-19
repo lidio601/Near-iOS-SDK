@@ -168,4 +168,9 @@
     return [NSArray arrayWithArray:nodes];
 }
 
+- (void)clear {
+    self.lastEnteredNode = nil;
+    [self.enteredNodes removeAllObjects];
+}
+
 @end

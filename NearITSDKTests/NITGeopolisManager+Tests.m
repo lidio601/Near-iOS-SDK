@@ -7,7 +7,7 @@
 //
 
 #import "NITGeopolisManager+Tests.h"
-#import "NITNodesManager.h"
+#import "NITGeopolisNodesManager.h"
 #import "NITNode.h"
 #import <CoreLocation/CoreLocation.h>
 
@@ -16,11 +16,9 @@ NSString* const NodeKey = @"node";
 
 @interface NITGeopolisManager()
 
-- (NITNodesManager*)nodesManager;
+- (NITGeopolisNodesManager*)nodesManager;
 - (void)stepInRegion:(CLRegion*)region;
 - (void)stepOutRegion:(CLRegion*)region;
-- (NSArray<CLRegion*>*)monitoredRegions;
-- (NSArray<CLRegion*>*)rangedRegions;
 - (void)startMonitoringRoots;
 - (BOOL)started;
 

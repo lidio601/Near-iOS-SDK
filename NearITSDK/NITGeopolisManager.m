@@ -19,6 +19,7 @@
 #import "NITJSONAPIResource.h"
 #import "NITConfiguration.h"
 #import "NITLog.h"
+#import "NITGeopolisNodesManager.h"
 #import <CoreLocation/CoreLocation.h>
 
 #define LOGTAG @"GeopolisManager"
@@ -30,15 +31,13 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 @interface NITGeopolisManager()<CLLocationManagerDelegate>
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, strong) NITNodesManager *nodesManager;
+@property (nonatomic, strong) NITGeopolisNodesManager *nodesManager;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) id<NITNetworkManaging> networkManaeger;
 @property (nonatomic, strong) NITBeaconProximityManager *beaconProximity;
 @property (nonatomic, strong) NITNode *currentNode;
 @property (nonatomic, strong) NSMutableArray<NSString*> *enteredRegions;
-@property (nonatomic, strong) NSMutableArray<CLRegion*> *monitoredRegions; //For test purpose
-@property (nonatomic, strong) NSMutableArray<CLRegion*> *rangedRegions; // For test purpose
 @property (nonatomic, strong) NSString *pluginName;
 @property (nonatomic, strong) NITNetworkProvider *provider;
 @property (nonatomic) BOOL started;
@@ -47,7 +46,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 
 @implementation NITGeopolisManager
 
-- (instancetype)initWithNodesManager:(NITNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration*)configuration locationManager:(CLLocationManager *)locationManager {
+- (instancetype)initWithNodesManager:(NITGeopolisNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration*)configuration locationManager:(CLLocationManager *)locationManager {
     self = [super init];
     if (self) {
         if (locationManager) {
@@ -61,8 +60,6 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         self.networkManaeger = networkManager;
         self.configuration = configuration;
         self.enteredRegions = [[NSMutableArray alloc] init];
-        self.monitoredRegions = [[NSMutableArray alloc] init];
-        self.rangedRegions = [[NSMutableArray alloc] init];
         self.pluginName = @"geopolis";
         self.started = NO;
         self.beaconProximity = [[NITBeaconProximityManager alloc] init];
@@ -112,9 +109,6 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     for (NITNode *node in roots) {
         CLRegion *region = [node createRegion];
         [self.locationManager startMonitoringForRegion:region];
-        if (![self.monitoredRegions containsObject:region]) {
-            [self.monitoredRegions addObject:region];
-        }
     }
     
     self.started = YES;
@@ -123,36 +117,13 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 - (void)stop {
     for (CLRegion *region in self.locationManager.monitoredRegions) {
         [self.locationManager stopMonitoringForRegion:region];
-        [self.monitoredRegions removeObject:region];
         if ([region isKindOfClass:[CLBeaconRegion class]]) {
             CLBeaconRegion *beaconRegion = (CLBeaconRegion*)region;
             [self.locationManager stopRangingBeaconsInRegion:beaconRegion];
-            [self.rangedRegions removeObject:region];
         }
     }
+    [self.nodesManager clear];
     self.started = NO;
-}
-
-- (void)stopMonitoringNodes:(NSArray<NITNode*>*)nodes {
-    for (NITNode *node in nodes) {
-        CLRegion *region = [node createRegion];
-        if (region) {
-            [self.locationManager stopMonitoringForRegion:region];
-            [self.monitoredRegions removeObject:region];
-        }
-    }
-}
-
-- (void)startMonitoringNodes:(NSArray<NITNode*>*)nodes {
-    for (NITNode *node in nodes) {
-        CLRegion *region = [node createRegion];
-        if (region) {
-            [self.locationManager startMonitoringForRegion:region];
-            if (![self.monitoredRegions containsObject:region]) {
-                [self.monitoredRegions addObject:region];
-            }
-        }
-    }
 }
 
 - (BOOL)hasCurrentNode {
@@ -167,79 +138,75 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 - (void)stepInRegion:(CLRegion*)region {
     NITLogD(LOGTAG, @"StepInRegion -> %@", region.identifier);
     
-    NITNode * newCurrentNode = [self.nodesManager nodeWithID:region.identifier];
-    if (newCurrentNode == nil) {
-        return;
-    }
+    NSArray<NITNode*> *monitoredNodes = [self.nodesManager monitoredNodesOnEnterWithId:region.identifier];
+    NSArray<NITNode*> *rangedNodes = [self.nodesManager rangedNodesOnEnterWithId:region.identifier];
     
-    NITNode *previousNode = self.currentNode;
-    self.currentNode = newCurrentNode;
-    
-    if (previousNode != nil && [previousNode.parent.ID isEqualToString:self.currentNode.parent.ID]) {
-        [self stopMonitoringNodes:previousNode.children];
-    } else {
-        NSArray<NITNode*> *siblings = [self.nodesManager siblingsWithNode:self.currentNode.parent];
-        [self stopMonitoringNodes:siblings];
-    }
-    
-    if ([self.enteredRegions containsObject:region.identifier]) {
-        //Entered in a region already entered
-    } else {
-        [self.enteredRegions addObject:region.identifier];
-        
-        if ([region isKindOfClass:[CLBeaconRegion class]]) {
-            [self triggerWithEvent:NITRegionEventEnterArea node:self.currentNode];
-        } else {
-            [self triggerWithEvent:NITRegionEventEnterPlace node:self.currentNode];
-        }
-    }
-    
-    NSArray<NITNode*> *children = self.currentNode.children;
-    if ([children count] == 0) {
-        return;
-    }
-    
-    CLRegion *currentRegion = [self.currentNode createRegion];
-    if ([currentRegion isKindOfClass:[CLBeaconRegion class]] && self.currentNode.identifier != nil) {
-        [self.beaconProximity addRegionWithIdentifier:currentRegion.identifier];
-        [self.locationManager startRangingBeaconsInRegion:(CLBeaconRegion*)currentRegion];
-        if (![self.rangedRegions containsObject:currentRegion]) {
-            [self.rangedRegions addObject:currentRegion];
-        }
-    } else {
-        [self startMonitoringNodes:children];
-    }
+    [self setMonitoringWithNodes:monitoredNodes];
+    [self setRangingWithNodes:rangedNodes];
 }
 
 - (void)stepOutRegion:(CLRegion*)region {
     NITLogD(LOGTAG, @"StepOutRegion -> %@", region.identifier);
     
-    NITNode * exitedNode = [self.nodesManager nodeWithID:region.identifier];
-    if (exitedNode == nil) {
-        return;
+    NSArray<NITNode*> *monitoredNodes = [self.nodesManager monitoredNodesOnExitWithId:region.identifier];
+    NSArray<NITNode*> *rangedNodes = [self.nodesManager rangedNodesOnExitWithId:region.identifier];
+    
+    [self setMonitoringWithNodes:monitoredNodes];
+    [self setRangingWithNodes:rangedNodes];
+}
+
+- (BOOL)stillExistsWithRegionIdentifier:(NSString*)identifier nodes:(NSArray<NITNode*>*)nodes {
+    BOOL exists = NO;
+    for(NITNode *node in nodes) {
+        if ([node.ID.lowercaseString isEqualToString:identifier.lowercaseString]) {
+            exists = YES;
+            break;
+        }
+    }
+    return exists;
+}
+
+- (BOOL)existsWithRegionIdentifier:(NSString*)identifier regions:(NSArray<CLRegion*>*)regions {
+    BOOL exists = NO;
+    for (CLRegion *region in regions) {
+        if ([region.identifier.lowercaseString isEqualToString:identifier.lowercaseString]) {
+            exists = YES;
+            break;
+        }
+    }
+    return exists;
+}
+
+- (void)setMonitoringWithNodes:(NSArray<NITNode*>*)nodes {
+    for(CLRegion *region in self.locationManager.monitoredRegions) {
+        if (![self stillExistsWithRegionIdentifier:region.identifier nodes:nodes]) {
+            [self.locationManager stopMonitoringForRegion:region];
+        }
     }
     
-    if ([self.enteredRegions containsObject:region.identifier]) {
-        if ([region isKindOfClass:[CLBeaconRegion class]]) {
-            [self triggerWithEvent:NITRegionEventLeaveArea node:exitedNode];
-        } else {
-            [self triggerWithEvent:NITRegionEventLeavePlace node:exitedNode];
+    for(NITNode *node in nodes) {
+        if (![self existsWithRegionIdentifier:node.ID regions:[self.locationManager.monitoredRegions allObjects]]) {
+            [self.locationManager startMonitoringForRegion:[node createRegion]];
         }
-    } else {
-        return;
+    }
+}
+
+- (void)setRangingWithNodes:(NSArray<NITNode*>*)nodes {
+    for(CLBeaconRegion *region in self.locationManager.rangedRegions) {
+        if (![self stillExistsWithRegionIdentifier:region.identifier nodes:nodes]) {
+            [self.locationManager stopRangingBeaconsInRegion:region];
+            [self.beaconProximity removeRegionWithIdentifier:region.identifier];
+        }
     }
     
-    [self.beaconProximity removeRegionWithIdentifier:region.identifier];
-    
-    if (![exitedNode.parent.ID isEqualToString:self.currentNode.parent.ID] || [exitedNode.ID isEqualToString:self.currentNode.ID]) {
-        self.currentNode = exitedNode;
-        [self stopMonitoringNodes:self.currentNode.children];
-        if ([self.currentNode isKindOfClass:[NITBeaconNode class]] && self.currentNode.identifier != nil) {
-            CLBeaconRegion *beaconRegion = (CLBeaconRegion*)[self.currentNode createRegion];
-            [self.locationManager stopRangingBeaconsInRegion:beaconRegion];
-            [self.rangedRegions removeObject:region];
+    for(NITNode *node in nodes) {
+        if (![self existsWithRegionIdentifier:node.ID regions:[self.locationManager.rangedRegions allObjects]]) {
+            CLRegion *region = [node createRegion];
+            if ([region isKindOfClass:[CLBeaconRegion class]]) {
+                [self.locationManager startRangingBeaconsInRegion:(CLBeaconRegion*)region];
+                [self.beaconProximity addRegionWithIdentifier:region.identifier];
+            }
         }
-        [self startMonitoringNodes:[self.nodesManager siblingsWithNode:self.currentNode.parent]];
     }
 }
 
