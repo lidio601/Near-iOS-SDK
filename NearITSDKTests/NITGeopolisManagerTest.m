@@ -224,9 +224,7 @@
     
     // Enter a simple beacon
     monitoredNodes = [nodesManager monitoredNodesOnEnterWithId:@"n1n1n1n1r1"];
-    XCTAssertTrue([monitoredNodes count] == 2);
-    check = [self checkIfArrayOfNodesContainsIds:@[@"n1n1n1r1", @"n2n1n1r1"] array:monitoredNodes];
-    XCTAssertTrue(check);
+    XCTAssertTrue([monitoredNodes count] == 0);
     
     rangedNodes = [nodesManager rangedNodesOnExitWithId:@"n1n1n1r1"];
     XCTAssertTrue([rangedNodes count] == 0);
