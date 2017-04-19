@@ -630,7 +630,7 @@
     
     NITBeaconProximityManager *beaconProximity = geopolisManager.beaconProximity;
     XCTAssertTrue([beaconProximity beaconItemsCountWithRegionIdentifier:region.identifier] == 1);
-    XCTAssertTrue([beaconProximity proximityWithBeaconIdentifier:@"n1n1n1n1r1" regionIdentifier:region.identifier] == CLProximityImmediate);
+    XCTAssertTrue([beaconProximity proximityWithBeaconIdentifier:@"bbb-fff-ccc" regionIdentifier:region.identifier] == CLProximityImmediate);
 }
 
 // MARK: - Utils

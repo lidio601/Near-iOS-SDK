@@ -323,7 +323,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         
         NITBeaconNode *minorNode = [self.nodesManager beaconNodeWithBeacon:beacon inChildren:beaconNode.children];
         NITRegionEvent beaconEvent = [self regionEventFromProximity:proximity];
-        NSString *beaconIdentifier = minorNode.ID;
+        NSString *beaconIdentifier = minorNode.identifier;
         
         if (minorNode != nil && beaconIdentifier != nil) {
             [appeared addObject:beaconIdentifier];

@@ -144,7 +144,7 @@
         "proximity_uuid": "10D39AE7-020E-4467-9CB2-DD36366F899D",
         "major": 300,
         "minor": 101,
-        "identifier": null
+        "identifier": "bbb-fff-ccc"
       },
       "relationships": {
         "parent": {
