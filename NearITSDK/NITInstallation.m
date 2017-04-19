@@ -75,7 +75,12 @@
     [resource addAttributeObject:@"ios" forKey:@"platform"];
     NSOperatingSystemVersion opVersion = [[NSProcessInfo processInfo] operatingSystemVersion];
     [resource addAttributeObject:[NSString stringWithFormat:@"%ld.%ld", (long)opVersion.majorVersion, (long)opVersion.minorVersion] forKey:@"platform_version"];
-    [resource addAttributeObject:@"0.1.0" forKey:@"sdk_version"];
+    NSString *sdkVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    if (sdkVersion) {
+        [resource addAttributeObject:sdkVersion forKey:@"sdk_version"];
+    } else {
+        [resource addAttributeObject:@"0.0.0" forKey:@"sdk_version"];
+    }
     [resource addAttributeObject:config.appId forKey:@"app_id"];
     if(config.profileId) {
         [resource addAttributeObject:config.profileId forKey:@"profile_id"];
