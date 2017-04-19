@@ -28,6 +28,7 @@
 - (NSURLRequest* _Nonnull)contentWithBundleId:(NSString* _Nonnull)bundleId;
 - (NSURLRequest* _Nonnull)contents;
 - (NSURLRequest* _Nonnull)sendTrackingsWithJsonApi:(NITJSONAPI* _Nonnull)jsonApi;
+- (NSURLRequest* _Nonnull)sendGeopolisTrackingsWithJsonApi:(NITJSONAPI * _Nonnull)jsonApi;
 - (NSURLRequest* _Nonnull)couponsWithProfileId:(NSString* _Nonnull)profileId;
 - (NSURLRequest* _Nonnull)feedbackWithBundleId:(NSString* _Nonnull)bundleId;
 - (NSURLRequest* _Nonnull)feedbacks;

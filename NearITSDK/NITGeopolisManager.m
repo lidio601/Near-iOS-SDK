@@ -276,7 +276,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     
     [json setDataWithResourceObject:resource];
     
-    [self.networkManaeger makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] sendTrackingsWithJsonApi:json] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+    [self.networkManaeger makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] sendGeopolisTrackingsWithJsonApi:json] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         
     }];
 }

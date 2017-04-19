@@ -148,6 +148,15 @@ static NITNetworkProvider *sharedProvider;
     return request;
 }
 
+- (NSURLRequest *)sendGeopolisTrackingsWithJsonApi:(NITJSONAPI *)jsonApi {
+    NSMutableURLRequest *request = [self requestWithPath:@"/plugins/geopolis/trackings"];
+    [request setHTTPMethod:@"POST"];
+    NSDictionary *json = [jsonApi toDictionary];
+    NSData *jsonDataBody = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    [request setHTTPBody:jsonDataBody];
+    return request;
+}
+
 - (NSURLRequest *)couponsWithProfileId:(NSString *)profileId {
     return [self requestWithPath:[NSString stringWithFormat:@"/plugins/coupon-blaster/coupons?filter[claims.profile_id]=%@&include=claims,icon", profileId]];
 }

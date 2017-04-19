@@ -32,4 +32,8 @@
     XCTAssertGreaterThan([appId length], 0, @"appId is empty");
 }
 
+- (void)testBundleIdenfitier {
+    XCTAssertNotNil([NSBundle bundleWithIdentifier:@"com.nearit.NearITSDK"]);
+}
+
 @end

@@ -75,7 +75,7 @@
     [resource addAttributeObject:@"ios" forKey:@"platform"];
     NSOperatingSystemVersion opVersion = [[NSProcessInfo processInfo] operatingSystemVersion];
     [resource addAttributeObject:[NSString stringWithFormat:@"%ld.%ld", (long)opVersion.majorVersion, (long)opVersion.minorVersion] forKey:@"platform_version"];
-    NSString *sdkVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    NSString *sdkVersion = [[NSBundle bundleWithIdentifier:@"com.nearit.NearITSDK"] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     if (sdkVersion) {
         [resource addAttributeObject:sdkVersion forKey:@"sdk_version"];
     } else {
