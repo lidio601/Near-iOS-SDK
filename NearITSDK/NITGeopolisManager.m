@@ -65,6 +65,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         self.rangedRegions = [[NSMutableArray alloc] init];
         self.pluginName = @"geopolis";
         self.started = NO;
+        self.beaconProximity = [[NITBeaconProximityManager alloc] init];
     }
     return self;
 }
@@ -322,7 +323,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         
         NITBeaconNode *minorNode = [self.nodesManager beaconNodeWithBeacon:beacon inChildren:beaconNode.children];
         NITRegionEvent beaconEvent = [self regionEventFromProximity:proximity];
-        NSString *beaconIdentifier = minorNode.identifier;
+        NSString *beaconIdentifier = minorNode.ID;
         
         if (minorNode != nil && beaconIdentifier != nil) {
             [appeared addObject:beaconIdentifier];

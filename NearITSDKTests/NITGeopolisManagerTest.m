@@ -24,6 +24,7 @@
 #import "NITLog.h"
 #import "NITGeopolisNodesManager.h"
 #import "NITFakeLocationManager.h"
+#import "NITTestBeacon.h"
 
 @interface NITGeopolisManagerTest : NITTestCase
 
@@ -611,12 +612,25 @@
     [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"r1"] createRegion]];
     [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"n1r1"] createRegion]];
     [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"n1n1r1"] createRegion]];
-    [geopolisManager stepInRegion:[[nodesManager nodeWithID:@"n1n1n1r1"] createRegion]];
+    CLBeaconRegion *region = (CLBeaconRegion*)[[nodesManager nodeWithID:@"n1n1n1r1"] createRegion];
+    [geopolisManager stepInRegion:region];
     
     NSSet<CLRegion*> *rangedRegions = [fakeLocationManager rangedRegions];
     XCTAssertTrue([rangedRegions count] == 1);
     BOOL check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1"] array:[rangedRegions allObjects]];
     XCTAssertTrue(check);
+    
+    NITTestBeacon *beacon = [[NITTestBeacon alloc] init];
+    beacon.testProximityUUID = [[NSUUID alloc] initWithUUIDString:@"10D39AE7-020E-4467-9CB2-DD36366F899D"];
+    beacon.testMajor = [NSNumber numberWithInt:300];
+    beacon.testMinor = [NSNumber numberWithInt:101];
+    beacon.testProximity = CLProximityImmediate;
+    
+    [fakeLocationManager simulateDidRangeBeacons:@[beacon] region:region];
+    
+    NITBeaconProximityManager *beaconProximity = geopolisManager.beaconProximity;
+    XCTAssertTrue([beaconProximity beaconItemsCountWithRegionIdentifier:region.identifier] == 1);
+    XCTAssertTrue([beaconProximity proximityWithBeaconIdentifier:@"n1n1n1n1r1" regionIdentifier:region.identifier] == CLProximityImmediate);
 }
 
 // MARK: - Utils

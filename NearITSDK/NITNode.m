@@ -38,4 +38,14 @@
     return [NSString stringWithFormat:@"Node ID: %@", self.ID];
 }
 
+- (BOOL)isEqual:(id)object {
+    if ([object isKindOfClass:[NITNode class]]) {
+        NITNode *otherNode = (NITNode*)object;
+        if ([self.ID.lowercaseString isEqual:otherNode.ID.lowercaseString]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 @end

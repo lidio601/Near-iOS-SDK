@@ -104,7 +104,7 @@
 - (BOOL)isEqual:(id)object {
     if ([object isKindOfClass:[NITBeaconProximityItem class]]) {
         NITBeaconProximityItem *item = (NITBeaconProximityItem*)object;
-        if ([item.identifier isEqualToString:self.identifier]) {
+        if ([item.identifier.lowercaseString isEqualToString:self.identifier.lowercaseString]) {
             return YES;
         }
     }
