@@ -50,4 +50,16 @@
     [self.fakeRangedRegions removeObject:region];
 }
 
+- (void)simulateDidDetermineStateWithRegion:(CLRegion *)region state:(CLRegionState)state {
+    if ([self.delegate respondsToSelector:@selector(locationManager:didDetermineState:forRegion:)]) {
+        [self.delegate locationManager:self didDetermineState:state forRegion:region];
+    }
+}
+
+- (void)simulateDidRangeBeacons:(NSArray<CLBeacon*>*)beacons region:(CLBeaconRegion*)region {
+    if ([self.delegate respondsToSelector:@selector(locationManager:didRangeBeacons:inRegion:)]) {
+        [self.delegate locationManager:self didRangeBeacons:beacons inRegion:region];
+    }
+}
+
 @end

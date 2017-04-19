@@ -10,4 +10,7 @@
 
 @interface NITFakeLocationManager : CLLocationManager
 
+- (void)simulateDidDetermineStateWithRegion:(CLRegion* _Nonnull)region state:(CLRegionState)state;
+- (void)simulateDidRangeBeacons:(NSArray<CLBeacon*>* _Nonnull)beacons region:(CLBeaconRegion* _Nonnull)region;
+
 @end

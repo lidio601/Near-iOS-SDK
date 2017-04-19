@@ -8,6 +8,8 @@
 
 #import "NITGeopolisManager.h"
 
+@class NITBeaconProximityManager;
+
 @interface NITGeopolisManager (Tests)
 
 - (void)stepInRegion:(CLRegion*)region;
@@ -15,5 +17,6 @@
 - (NSArray<CLRegion*>*)monitoredRegions;
 - (NSArray<CLRegion*>*)rangedRegions;
 - (BOOL)startForUnitTest;
+- (NITBeaconProximityManager *)beaconProximity;
 
 @end

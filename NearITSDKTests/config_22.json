@@ -116,7 +116,7 @@
       "type": "beacon_nodes",
       "attributes": {
         "proximity_uuid": "10D39AE7-020E-4467-9CB2-DD36366F899D",
-        "major": 200,
+        "major": 300,
         "minor": null,
         "identifier": "identifier"
       },
@@ -142,8 +142,8 @@
       "type": "beacon_nodes",
       "attributes": {
         "proximity_uuid": "10D39AE7-020E-4467-9CB2-DD36366F899D",
-        "major": 200,
-        "minor": 130,
+        "major": 300,
+        "minor": 101,
         "identifier": null
       },
       "relationships": {
