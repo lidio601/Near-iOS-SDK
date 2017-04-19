@@ -16,6 +16,7 @@
 - (NSArray<NITNode*>* _Nonnull)monitoredNodesOnEnterWithId:(NSString* _Nonnull)nodeId;
 - (NSArray<NITNode*>* _Nonnull)monitoredNodesOnExitWithId:(NSString* _Nonnull)nodeId;
 - (NSArray<NITNode*>* _Nonnull)rangedNodesOnEnterWithId:(NSString* _Nonnull)nodeId;
+- (NSArray<NITNode*>* _Nonnull)rangedNodesOnExitWithId:(NSString* _Nonnull)nodeId;
 - (NSArray<NITNode*>* _Nonnull)statelessMonitoredNodesOnEnterWithId:(NSString* _Nonnull)nodeId;
 - (NSArray<NITNode*>* _Nonnull)statelessMonitoredNoesOnExitWithId:(NSString* _Nonnull)nodeId;
 - (NSArray<NITNode*>* _Nonnull)statelessRangedNodesOnEnterWithId:(NSString* _Nonnull)nodeId;

@@ -78,8 +78,33 @@
     return [NSArray array];
 }
 
-- (NSArray<NITNode *> *)rangedNodesOnEnterWithId:(NSString*)nodeId {
-    return [self statelessRangedNodesOnEnterWithId:nodeId];
+- (NSArray<NITNode*>*)rangedNodesOnEnterWithId:(NSString*)nodeId {
+    NITNode *node = [self nodeWithID:nodeId];
+    if (node && [node isKindOfClass:[NITBeaconNode class]]) {
+        [self.enteredNodes addObject:node];
+        NSMutableArray<NITNode*> *rangers = [[NSMutableArray alloc] init];
+        NSArray<NITNode*> *siblings = [self sibilingsAreEntered:node];
+        for(NITNode *sibling in siblings) {
+            [rangers addObjectsFromArray:[self statelessRangedNodesOnEnterWithId:sibling.ID]];
+        }
+        [rangers addObjectsFromArray:[self statelessRangedNodesOnEnterWithId:nodeId]];
+        return [NSArray arrayWithArray:rangers];
+    }
+    return [NSArray array];
+}
+
+- (NSArray<NITNode*>*)rangedNodesOnExitWithId:(NSString*)nodeId {
+    NITNode *node = [self nodeWithID:nodeId];
+    if (node && [node isKindOfClass:[NITBeaconNode class]]) {
+        [self.enteredNodes removeObject:node];
+        NSMutableArray<NITNode*> *rangers = [[NSMutableArray alloc] init];
+        NSArray<NITNode*> *siblings = [self sibilingsAreEntered:node];
+        for(NITNode *sibling in siblings) {
+            [rangers addObjectsFromArray:[self statelessRangedNodesOnEnterWithId:sibling.ID]];
+        }
+        return [NSArray arrayWithArray:rangers];
+    }
+    return [NSArray array];
 }
 
 - (NSArray<NITNode*>*)sibilingsAreEntered:(NITNode*)node {
