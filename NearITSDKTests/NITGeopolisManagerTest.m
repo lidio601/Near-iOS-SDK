@@ -23,6 +23,7 @@
 #import "NITNetworkMockManger.h"
 #import "NITLog.h"
 #import "NITGeopolisNodesManager.h"
+#import "NITFakeLocationManager.h"
 
 @interface NITGeopolisManagerTest : NITTestCase
 
@@ -372,7 +373,7 @@
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return nil;
     };
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration] locationManager:nil];
     [cacheManager saveWithObject:jsonApi forKey:@"GeopolisNodesJSON"];
     [NSThread sleepForTimeInterval:0.5];
     
@@ -399,7 +400,7 @@
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return nil;
     };
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration] locationManager:nil];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
     [manager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
@@ -418,7 +419,7 @@
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return [self jsonApiWithContentsOfFile:@"beacon_areas_in_bg"];
     };
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration] locationManager:nil];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
     [manager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
@@ -450,7 +451,7 @@
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return [self jsonApiWithContentsOfFile:@"beacon_areas_in_bg"];
     };
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration] locationManager:nil];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
     [manager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
@@ -503,6 +504,66 @@
     XCTAssertTrue([beaconProximity proximityWithBeaconIdentifier:@"beacon4" regionIdentifier:region1] == CLProximityFar);
 }
 
+// MARK: - Fake Location Manager test
+
+- (void)testFakeLocationManager {
+    NITFakeLocationManager *fakeLocationManager = [[NITFakeLocationManager alloc] init];
+    
+    CLCircularRegion *regionCircular1 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(45.2, 9.0) radius:200 identifier:@"regionCircular1"];
+    [fakeLocationManager startMonitoringForRegion:regionCircular1];
+    XCTAssertTrue([[fakeLocationManager monitoredRegions] count] == 1);
+    
+    CLBeaconRegion *beaconRegion1 = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:@"ffffffff-1234-aaaa-1a2b-a1b2c3d4e5f6"] major:520 identifier:@"beaconRegion1"];
+    [fakeLocationManager startRangingBeaconsInRegion:beaconRegion1];
+    XCTAssertTrue([[fakeLocationManager rangedRegions] count] == 1);
+    
+    [fakeLocationManager stopMonitoringForRegion:regionCircular1];
+    XCTAssertTrue([[fakeLocationManager monitoredRegions] count] == 0);
+    
+    [fakeLocationManager stopRangingBeaconsInRegion:beaconRegion1];
+    XCTAssertTrue([[fakeLocationManager rangedRegions] count] == 0);
+}
+
+- (void)testFakeLocationManagerInGeopolis {
+    NITFakeLocationManager *fakeLocationManager = [[NITFakeLocationManager alloc] init];
+    
+    NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"config_22"];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
+    [nodesManager setNodesWithJsonApi:jsonApi];
+    
+    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
+    XCTAssertTrue([cacheManager numberOfStoredKeys] == 0);
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return nil;
+    };
+    
+    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration] locationManager:fakeLocationManager];
+    [geopolisManager startForUnitTest];
+    
+    NSSet<CLRegion*> *regions = [fakeLocationManager monitoredRegions];
+    XCTAssertTrue([regions count] == 2);
+    BOOL check = [self checkIfArrayOfRegionsContainsIds:@[@"r1", @"r2"] array:[regions allObjects]];
+    XCTAssertTrue(check);
+    
+    CLRegion *region = [[nodesManager nodeWithID:@"r1"] createRegion];
+    [geopolisManager stepInRegion:region];
+    regions = [fakeLocationManager monitoredRegions];
+    XCTAssertTrue([regions count] == 4);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"r1", @"r2", @"n1r1", @"n2r1"] array:[regions allObjects]];
+    XCTAssertTrue(check);
+    
+    [geopolisManager stepOutRegion:region];
+    regions = [fakeLocationManager monitoredRegions];
+    XCTAssertTrue([regions count] == 2);
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"r1", @"r2"] array:[regions allObjects]];
+    XCTAssertTrue(check);
+    
+    [geopolisManager stop];
+    regions = [fakeLocationManager monitoredRegions];
+    XCTAssertTrue([regions count] == 0);
+}
+
 // MARK: - Utils
 
 - (BOOL)checkIfArrayOfNodesContainsIds:(NSArray<NSString*>*)ids array:(NSArray<NITNode*>*)nodes {
@@ -510,6 +571,19 @@
     for (NITNode *node in nodes) {
         for(NSString *ID in ids) {
             if ([node.ID.lowercaseString isEqualToString:ID.lowercaseString]) {
+                trueCount++;
+                break;
+            }
+        }
+    }
+    return trueCount == [ids count];
+}
+
+- (BOOL)checkIfArrayOfRegionsContainsIds:(NSArray<NSString*>*)ids array:(NSArray<CLRegion*>*)regions {
+    NSInteger trueCount = 0;
+    for (CLRegion *region in regions) {
+        for(NSString *ID in ids) {
+            if ([region.identifier.lowercaseString isEqualToString:ID.lowercaseString]) {
                 trueCount++;
                 break;
             }

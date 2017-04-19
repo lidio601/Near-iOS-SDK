@@ -47,10 +47,14 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 
 @implementation NITGeopolisManager
 
-- (instancetype)initWithNodesManager:(NITNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration*)configuration {
+- (instancetype)initWithNodesManager:(NITNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration*)configuration locationManager:(CLLocationManager *)locationManager {
     self = [super init];
     if (self) {
-        self.locationManager = [[CLLocationManager alloc] init];
+        if (locationManager) {
+            self.locationManager = locationManager;
+        } else {
+            self.locationManager = [[CLLocationManager alloc] init];
+        }
         self.locationManager.delegate = self;
         self.nodesManager = nodesManager;
         self.cacheManager = cacheManager;
