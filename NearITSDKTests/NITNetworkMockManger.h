@@ -17,4 +17,7 @@ typedef NITJSONAPI* (^NITMockBlock)(NSURLRequest *request);
 
 @property (nonatomic, strong) NITMockBlock mock;
 
+- (void)setMock:(NITMockBlock)mock forKey:(NSString*)key;
+- (void)removeMockForKey:(NSString*)key;
+
 @end

@@ -129,6 +129,10 @@
 		1374E0D71EA8C00200D613A5 /* NITLogTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0D61EA8C00200D613A5 /* NITLogTest.m */; };
 		1374E0DA1EA8C03B00D613A5 /* NITTestLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0D91EA8C03B00D613A5 /* NITTestLogger.m */; };
 		1374E0DC1EA8C67400D613A5 /* logging.md in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0DB1EA8C67400D613A5 /* logging.md */; };
+		1374E0E11EA8F0D500D613A5 /* fake_new_profile.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374E0E01EA8F0D500D613A5 /* fake_new_profile.json */; };
+		1374E0E31EA8F4AC00D613A5 /* fake_installation.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374E0E21EA8F4AC00D613A5 /* fake_installation.json */; };
+		1374E0E51EA8F5F600D613A5 /* manager_config_22.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374E0E41EA8F5F600D613A5 /* manager_config_22.json */; };
+		1374E0E71EA8FDC500D613A5 /* manager_recipes.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374E0E61EA8FDC500D613A5 /* manager_recipes.json */; };
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
@@ -317,6 +321,10 @@
 		1374E0D81EA8C03B00D613A5 /* NITTestLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITTestLogger.h; sourceTree = "<group>"; };
 		1374E0D91EA8C03B00D613A5 /* NITTestLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTestLogger.m; sourceTree = "<group>"; };
 		1374E0DB1EA8C67400D613A5 /* logging.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = logging.md; sourceTree = "<group>"; };
+		1374E0E01EA8F0D500D613A5 /* fake_new_profile.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fake_new_profile.json; sourceTree = "<group>"; };
+		1374E0E21EA8F4AC00D613A5 /* fake_installation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fake_installation.json; sourceTree = "<group>"; };
+		1374E0E41EA8F5F600D613A5 /* manager_config_22.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manager_config_22.json; sourceTree = "<group>"; };
+		1374E0E61EA8FDC500D613A5 /* manager_recipes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manager_recipes.json; sourceTree = "<group>"; };
 		137838631E800EC1001C8CDE /* NITRecipesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipesManager.h; sourceTree = "<group>"; };
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
@@ -481,6 +489,7 @@
 		1349EEAA1E7948CD000B0666 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				1374E0DF1EA8F0B500D613A5 /* Manager */,
 				135CD79C1E9D0952005C75A4 /* User Profile */,
 				132296E01E8CF12700AE6EFC /* Recipes Manager */,
 				135A70821E85260A00D4C9EC /* Reactions */,
@@ -739,6 +748,17 @@
 				135CD7D31E9F7ACF005C75A4 /* NITDefaultLogger.m */,
 			);
 			name = Logging;
+			sourceTree = "<group>";
+		};
+		1374E0DF1EA8F0B500D613A5 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				1374E0E41EA8F5F600D613A5 /* manager_config_22.json */,
+				1374E0E01EA8F0D500D613A5 /* fake_new_profile.json */,
+				1374E0E21EA8F4AC00D613A5 /* fake_installation.json */,
+				1374E0E61EA8FDC500D613A5 /* manager_recipes.json */,
+			);
+			name = Manager;
 			sourceTree = "<group>";
 		};
 		137838621E800EA8001C8CDE /* Recipes */ = {
@@ -1010,7 +1030,9 @@
 			files = (
 				1322971D1E9238AB00AE6EFC /* response_pulse_evaluation.json in Resources */,
 				1327D88E1E8266B700C6689E /* gf_array.json in Resources */,
+				1374E0E71EA8FDC500D613A5 /* manager_recipes.json in Resources */,
 				132296FB1E8D2BA300AE6EFC /* coupons.json in Resources */,
+				1374E0E31EA8F4AC00D613A5 /* fake_installation.json in Resources */,
 				137E38A91E8A6B16008E83E6 /* contents1.json in Resources */,
 				135A70841E85281F00D4C9EC /* simple_recipe.json in Resources */,
 				1327D8901E8266B700C6689E /* single_gf.json in Resources */,
@@ -1023,10 +1045,12 @@
 				132297191E8E4DF100AE6EFC /* feedback1.json in Resources */,
 				135CD7A11E9E4276005C75A4 /* config_22.png in Resources */,
 				132297111E8E3BC200AE6EFC /* custom_jsons.json in Resources */,
+				1374E0E11EA8F0D500D613A5 /* fake_new_profile.json in Resources */,
 				132297061E8D362400AE6EFC /* response_feeback_reaction.json in Resources */,
 				132296E41E8CFA1F00AE6EFC /* recipes.json in Resources */,
 				132296ED1E8D046500AE6EFC /* response_online_recipe.json in Resources */,
 				135A708F1E8547AF00D4C9EC /* content_recipe.json in Resources */,
+				1374E0E51EA8F5F600D613A5 /* manager_config_22.json in Resources */,
 				132297131E8E3C7800AE6EFC /* response_custom_json_reaction.json in Resources */,
 				132296E21E8CF14600AE6EFC /* online_recipe.json in Resources */,
 				1327D8AB1E83E6A300C6689E /* beacon_areas_in_bg.json in Resources */,

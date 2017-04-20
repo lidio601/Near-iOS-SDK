@@ -1,0 +1,16 @@
+{
+    "data": {
+        "id": "manager-installation",
+        "type": "installations",
+        "attributes": {
+            "platform": "ios",
+            "platform_version": "3",
+            "sdk_version": "3",
+            "device_identifier": "manager-device",
+            "app_id": "testManager",
+            "profile_id": "manager-profile",
+            "bluetooth": false,
+            "location": false
+        }
+    }
+}

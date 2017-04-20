@@ -47,12 +47,23 @@
     
     NITConfiguration *configuration = [NITConfiguration defaultConfiguration];
     id<NITNetworkManaging> networkManager = [[NITNetworkManager alloc] init];
+    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:self.configuration.appId];
     
-    self = [self initWithApiKey:apiKey configuration:configuration networkManager:networkManager locationManager:nil];
+    self = [self initWithApiKey:apiKey configuration:configuration networkManager:networkManager cacheManager:cacheManager locationManager:nil];
+    return self;
+}
+
+- (instancetype _Nonnull)initWithApiKey:(NSString *)apiKey configuration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager locationManager:(CLLocationManager*)locationManager {
+    self = [super init];
     if (self) {
+        self.configuration = configuration;
+        [self.configuration setApiKey:apiKey];
+        self.networkManager = networkManager;
+        self.cacheManager = cacheManager;
+        self.locationManager = locationManager;
+        
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
         
-        self.cacheManager = [[NITCacheManager alloc] initWithAppId:self.configuration.appId];
         self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
         [self.cacheManager setAppId:[self.configuration appId]];
         [self pluginSetup];
@@ -64,17 +75,6 @@
                 [self refreshConfigWithCompletionHandler:nil];
             }
         }];
-    }
-    return self;
-}
-
-- (instancetype _Nonnull)initWithApiKey:(NSString *)apiKey configuration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager locationManager:(CLLocationManager*)locationManager {
-    self = [super init];
-    if (self) {
-        self.configuration = configuration;
-        [self.configuration setApiKey:apiKey];
-        self.networkManager = networkManager;
-        self.locationManager = locationManager;
     }
     return self;
 }
