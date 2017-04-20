@@ -84,7 +84,7 @@ class AppDelegate {
 
 After the process the `eventWithContent` method will be called with the actual recipe, otherwise `eventFailureWithError` will.
 
-## Trackings // TODO: -
+## Trackings
 
 NearIT analytics on recipes are built from trackings describing the status of user engagement with a recipe. The two recipe states are "Notified" and "Engaged" to represent a recipe delivered to the user and a recipe that the user responded to.
 
@@ -111,9 +111,9 @@ manager.sendTracking(recipe.id(), event: .engaged)
 [manager sendTrackingWithRecipeId:recipe.ID event:NITRecipeEngaged];
 ```
 
-## Recipe objects
+## Recipe and content objects
 
-When `eventWithContent` gets called you will obtain all the recipe info by the passed argument. This is how a recipe is composed:
+When `eventWithContent` gets called you will obtain the recipe and the content by the passed arguments. This is how a recipe is composed:
 
 - `ID` returns the id of the recipe
 - `notificationTitle` returns the notification title if any
@@ -128,16 +128,14 @@ Content is an object which contains the useful data, it could have several class
 
 ## Content classes
 
-- `Content` for the notification with content, with the following attributes:
+- `NITContent` for the notification with content, with the following attributes:
     - `content` returns the text content, without processing the html
-    - `attributedText` accessor to an already processed text 
-    - `videoURL` returns the video link
+    - `videoLink` returns the video link
     - `images` returns a list of *Image* object containing the source links for the images
     - `upload` returns an *Upload* object containing a link to a file uploaded on NearIT if any
     - `audio` returns an *Audio* object containing a link to an audio file uploaded on NearIT if any
     
-- `Feedback` with the following getters:
-    - `id` returns the feedback request id
+- `NITFeedback` with the following getters:
     - `question` returns the feedback request string
 To give a feedback call this method:
 ```swift
@@ -156,23 +154,21 @@ manager.sendEvent(feedbackEvent, completionHandler: { (error) in
 }];
 ```
     
-- `Coupon` with the following getters:
+- `NITCoupon` with the following getters:
     - `name` returns the coupon name
-    - `details` returns the coupon details
+    - `couponDescription` returns the description
     - `value` returns the value string
     - `expiresAt` returns the expiring date
     - `icon` returns an *Image* object containing the source links for the icon
-    - `claims` returns a list of *Claim* which are the actual instances for the current profile
-    - `claim` utility that returns the first *Claim* available for the profile.
-    - a `Claim` is composed by:
-        - `profileId` the profile id who owns the coupon instance
+    - `claims` returns a list of *NITClaim* which are the actual instances for the current profile
+    - a `NITClaim` is composed by:
         - `serialNumber` the unique number assigned to the coupon instance
-        - `claimedAt` a date representing when the coupon has been claimed
-        - `redeemedAt` a date representing when the coupon has ben used
+        - `claimed` a date representing when the coupon has been claimed
+        - `redeemed` a date representing when the coupon has ben used
 
     
-- `CustomObject` with the following getters:
-    - `content` returns the json content as a *[String: AnyObject]*
+- `NITCustomJSON` with the following getters:
+    - `content` returns the json content as a *[String: AnyObject]* (*[NSString**, id] in Objective-C)
 
 
 
