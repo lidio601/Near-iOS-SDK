@@ -16,11 +16,9 @@ NSString* const NodeKey = @"node";
 
 @interface NITGeopolisManager()
 
-- (NITGeopolisNodesManager*)nodesManager;
 - (void)stepInRegion:(CLRegion*)region;
 - (void)stepOutRegion:(CLRegion*)region;
 - (void)startMonitoringRoots;
-- (BOOL)started;
 
 @end
 

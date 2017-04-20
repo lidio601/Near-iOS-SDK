@@ -32,10 +32,11 @@
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NITReaction*> *reactions;
 @property (nonatomic, strong) NITFeedbackReaction *feedbackReaction;
 @property (nonatomic, strong) NITCouponReaction *couponReaction;
-@property (nonatomic, strong) NITNetworkManager *networkManager;
+@property (nonatomic, strong) id<NITNetworkManaging> networkManager;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) NITUserProfile *profile;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic) BOOL started;
 
 @end
@@ -43,14 +44,15 @@
 @implementation NITManager
 
 - (instancetype _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey {
-    self = [super init];
+    
+    NITConfiguration *configuration = [NITConfiguration defaultConfiguration];
+    id<NITNetworkManaging> networkManager = [[NITNetworkManager alloc] init];
+    
+    self = [self initWithApiKey:apiKey configuration:configuration networkManager:networkManager locationManager:nil];
     if (self) {
-        self.configuration = [NITConfiguration defaultConfiguration];
-        [self.configuration setApiKey:apiKey];
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
         
-        self.networkManager = [[NITNetworkManager alloc] init];
-        self.cacheManager = [NITCacheManager sharedInstance];
+        self.cacheManager = [[NITCacheManager alloc] initWithAppId:self.configuration.appId];
         self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
         [self.cacheManager setAppId:[self.configuration appId]];
         [self pluginSetup];
@@ -62,6 +64,17 @@
                 [self refreshConfigWithCompletionHandler:nil];
             }
         }];
+    }
+    return self;
+}
+
+- (instancetype _Nonnull)initWithApiKey:(NSString *)apiKey configuration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager locationManager:(CLLocationManager*)locationManager {
+    self = [super init];
+    if (self) {
+        self.configuration = configuration;
+        [self.configuration setApiKey:apiKey];
+        self.networkManager = networkManager;
+        self.locationManager = locationManager;
     }
     return self;
 }
@@ -80,7 +93,7 @@
     self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration];
     self.recipesManager.manager = self;
     NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
-    self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration locationManager:nil];
+    self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration locationManager:self.locationManager];
     self.geopolisManager.recipesManager = self.recipesManager;
 }
 

@@ -16,5 +16,7 @@
 - (void)stepOutRegion:(CLRegion*)region;
 - (BOOL)startForUnitTest;
 - (NITBeaconProximityManager *)beaconProximity;
+- (NITGeopolisNodesManager*)nodesManager;
+- (BOOL)started;
 
 @end
