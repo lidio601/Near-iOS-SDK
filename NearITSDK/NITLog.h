@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, NITLogLevel) {
 
 + (void)setLogger:(id<NITLogger> _Nonnull)logger;
 + (void)setLevel:(NITLogLevel)level;
++ (void)setLogEnabled:(BOOL)enabled;
 
 @end
 

@@ -11,6 +11,7 @@
 
 static id<NITLogger> loggerInstance;
 static NITLogLevel logLevel = NITLogLevelDebug;
+static BOOL logEnabled = NO;
 
 @implementation NITLog
 
@@ -29,8 +30,12 @@ static NITLogLevel logLevel = NITLogLevelDebug;
     loggerInstance = logger;
 }
 
++ (void)setLogEnabled:(BOOL)enabled {
+    logEnabled = enabled;
+}
+
 + (BOOL)canLogWithLevel:(NITLogLevel)level {
-    if (level >= logLevel) {
+    if (logEnabled && level >= logLevel) {
         return YES;
     }
     return NO;

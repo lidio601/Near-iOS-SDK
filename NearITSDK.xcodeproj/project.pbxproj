@@ -125,6 +125,8 @@
 		1374E09A1EA5F4FA00D613A5 /* NearITSDKSwift.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 1374E0991EA5F4FA00D613A5 /* NearITSDKSwift.podspec */; };
 		1374E0C11EA744FB00D613A5 /* NITFakeLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0C01EA744FB00D613A5 /* NITFakeLocationManager.m */; };
 		1374E0D21EA76B7400D613A5 /* NITTestBeacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0D11EA76B7400D613A5 /* NITTestBeacon.m */; };
+		1374E0D71EA8C00200D613A5 /* NITLogTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0D61EA8C00200D613A5 /* NITLogTest.m */; };
+		1374E0DA1EA8C03B00D613A5 /* NITTestLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0D91EA8C03B00D613A5 /* NITTestLogger.m */; };
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
@@ -307,6 +309,9 @@
 		1374E0C01EA744FB00D613A5 /* NITFakeLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITFakeLocationManager.m; sourceTree = "<group>"; };
 		1374E0D01EA76B7400D613A5 /* NITTestBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITTestBeacon.h; sourceTree = "<group>"; };
 		1374E0D11EA76B7400D613A5 /* NITTestBeacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTestBeacon.m; sourceTree = "<group>"; };
+		1374E0D61EA8C00200D613A5 /* NITLogTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITLogTest.m; sourceTree = "<group>"; };
+		1374E0D81EA8C03B00D613A5 /* NITTestLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITTestLogger.h; sourceTree = "<group>"; };
+		1374E0D91EA8C03B00D613A5 /* NITTestLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTestLogger.m; sourceTree = "<group>"; };
 		137838631E800EC1001C8CDE /* NITRecipesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipesManager.h; sourceTree = "<group>"; };
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
@@ -585,6 +590,7 @@
 				137E38B01E8A9569008E83E6 /* NITRecipesManagerTest.m */,
 				132297241E92417200AE6EFC /* NITConfigurationTest.m */,
 				135CD79A1E9D089A005C75A4 /* NITUserProfileTest.m */,
+				1374E0D61EA8C00200D613A5 /* NITLogTest.m */,
 				1352CA741E7807FE00C0E98E /* Info.plist */,
 			);
 			path = NearITSDKTests;
@@ -753,6 +759,8 @@
 				1374E0C01EA744FB00D613A5 /* NITFakeLocationManager.m */,
 				1374E0D01EA76B7400D613A5 /* NITTestBeacon.h */,
 				1374E0D11EA76B7400D613A5 /* NITTestBeacon.m */,
+				1374E0D81EA8C03B00D613A5 /* NITTestLogger.h */,
+				1374E0D91EA8C03B00D613A5 /* NITTestLogger.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1095,9 +1103,11 @@
 				1374E0C11EA744FB00D613A5 /* NITFakeLocationManager.m in Sources */,
 				135CD7961E9B7621005C75A4 /* NITNetworkMockManger.m in Sources */,
 				1352CA911E78372B00C0E98E /* NITUtilsTest.m in Sources */,
+				1374E0DA1EA8C03B00D613A5 /* NITTestLogger.m in Sources */,
 				135CD79B1E9D089A005C75A4 /* NITUserProfileTest.m in Sources */,
 				137E38B11E8A9569008E83E6 /* NITRecipesManagerTest.m in Sources */,
 				137E38A71E8A4AA6008E83E6 /* NITCacheManagerTest.m in Sources */,
+				1374E0D71EA8C00200D613A5 /* NITLogTest.m in Sources */,
 				1349EEA91E793834000B0666 /* NITJSONAPITests.m in Sources */,
 				1374E0D21EA76B7400D613A5 /* NITTestBeacon.m in Sources */,
 				132297251E92417200AE6EFC /* NITConfigurationTest.m in Sources */,
