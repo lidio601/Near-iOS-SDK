@@ -1,3 +1,18 @@
+0.9.5 Release notes (2017-04-20)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* Enable/Disable logging method (NITLog).
+
+### Bugfixes
+
+* Fix an issue for beacons ranging where you could have several notifications for the same beacon.
+
 0.9.4 Release notes (2017-04-19)
 =============================================================
 
