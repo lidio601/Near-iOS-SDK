@@ -10,3 +10,4 @@ pages:
         - 'User profiling' : 'user-profilation.md'
     - 'Advanced topics' :
         - 'Testing' : 'testing.md'
+        - 'Logging' : 'logging.md'
