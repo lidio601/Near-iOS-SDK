@@ -1,0 +1,19 @@
+{
+    "data": {
+        "id": "b5e6427a-6427-4e9d-b3fd-385167f71a37",
+        "type": "trackings",
+        "attributes": {
+            "app_id": "69a02ef5-4cfd-433e-b37a-60ca89c0a235",
+            "recipe_id": "d57f78d0-8dbe-4bb1-b341-3eec935f277b",
+            "installation_id": "f753fca1-043d-444c-85df-ecfaa6f9faf2",
+            "profile_id": "f7f95aab-b0d0-4c79-a1ce-04e43253393b",
+            "event": "answered",
+            "metadata": null,
+            "tracked_at": "2013-12-26T07:40:00.000Z",
+            "converted": true
+        },
+        "meta": {
+            "weight": 10
+        }
+    }
+}

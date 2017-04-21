@@ -133,6 +133,15 @@
 		1374E0E31EA8F4AC00D613A5 /* fake_installation.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374E0E21EA8F4AC00D613A5 /* fake_installation.json */; };
 		1374E0E51EA8F5F600D613A5 /* manager_config_22.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374E0E41EA8F5F600D613A5 /* manager_config_22.json */; };
 		1374E0E71EA8FDC500D613A5 /* manager_recipes.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374E0E61EA8FDC500D613A5 /* manager_recipes.json */; };
+		1374E0ED1EA9FBFF00D613A5 /* NITTrackManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1374E0EB1EA9FBFF00D613A5 /* NITTrackManager.h */; };
+		1374E0EE1EA9FBFF00D613A5 /* NITTrackManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0EC1EA9FBFF00D613A5 /* NITTrackManager.m */; };
+		1374E0F11EA9FE1D00D613A5 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 1374E0EF1EA9FE1D00D613A5 /* Reachability.h */; };
+		1374E0F21EA9FE1D00D613A5 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0F01EA9FE1D00D613A5 /* Reachability.m */; };
+		1374E0F91EAA194800D613A5 /* NITTrackRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 1374E0F71EAA194800D613A5 /* NITTrackRequest.h */; };
+		1374E0FA1EAA194800D613A5 /* NITTrackRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0F81EAA194800D613A5 /* NITTrackRequest.m */; };
+		1374E0FC1EAA305A00D613A5 /* NITTrackManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0FB1EAA305A00D613A5 /* NITTrackManagerTest.m */; };
+		1374E1001EAA31C800D613A5 /* TestReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0FF1EAA31C800D613A5 /* TestReachability.m */; };
+		1374E1031EAA338900D613A5 /* track_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374E1021EAA338900D613A5 /* track_response.json */; };
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
@@ -325,6 +334,17 @@
 		1374E0E21EA8F4AC00D613A5 /* fake_installation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fake_installation.json; sourceTree = "<group>"; };
 		1374E0E41EA8F5F600D613A5 /* manager_config_22.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manager_config_22.json; sourceTree = "<group>"; };
 		1374E0E61EA8FDC500D613A5 /* manager_recipes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manager_recipes.json; sourceTree = "<group>"; };
+		1374E0EB1EA9FBFF00D613A5 /* NITTrackManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITTrackManager.h; sourceTree = "<group>"; };
+		1374E0EC1EA9FBFF00D613A5 /* NITTrackManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTrackManager.m; sourceTree = "<group>"; };
+		1374E0EF1EA9FE1D00D613A5 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		1374E0F01EA9FE1D00D613A5 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		1374E0F71EAA194800D613A5 /* NITTrackRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITTrackRequest.h; sourceTree = "<group>"; };
+		1374E0F81EAA194800D613A5 /* NITTrackRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTrackRequest.m; sourceTree = "<group>"; };
+		1374E0FB1EAA305A00D613A5 /* NITTrackManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTrackManagerTest.m; sourceTree = "<group>"; };
+		1374E0FE1EAA31C800D613A5 /* TestReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestReachability.h; sourceTree = "<group>"; };
+		1374E0FF1EAA31C800D613A5 /* TestReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestReachability.m; sourceTree = "<group>"; };
+		1374E1021EAA338900D613A5 /* track_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = track_response.json; sourceTree = "<group>"; };
+		1374E1041EAA34D800D613A5 /* NITTrackManager+Tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NITTrackManager+Tests.h"; sourceTree = "<group>"; };
 		137838631E800EC1001C8CDE /* NITRecipesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipesManager.h; sourceTree = "<group>"; };
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
@@ -489,6 +509,7 @@
 		1349EEAA1E7948CD000B0666 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				1374E1011EAA333E00D613A5 /* Track */,
 				1374E0DF1EA8F0B500D613A5 /* Manager */,
 				135CD79C1E9D0952005C75A4 /* User Profile */,
 				132296E01E8CF12700AE6EFC /* Recipes Manager */,
@@ -568,6 +589,7 @@
 		1352CA661E7807FE00C0E98E /* NearITSDK */ = {
 			isa = PBXGroup;
 			children = (
+				1374E0EA1EA9FBBF00D613A5 /* Track */,
 				135CD7C91E9F753E005C75A4 /* Logging */,
 				137E389F1E8A4436008E83E6 /* Cache */,
 				135A70721E85039200D4C9EC /* Reactions */,
@@ -606,6 +628,7 @@
 				135CD79A1E9D089A005C75A4 /* NITUserProfileTest.m */,
 				1374E0D41EA89DDF00D613A5 /* NITManagerTest.m */,
 				1374E0D61EA8C00200D613A5 /* NITLogTest.m */,
+				1374E0FB1EAA305A00D613A5 /* NITTrackManagerTest.m */,
 				1352CA741E7807FE00C0E98E /* Info.plist */,
 			);
 			path = NearITSDKTests;
@@ -619,6 +642,8 @@
 				135CD7931E9B7493005C75A4 /* NITNetworkManaging.h */,
 				1349EEAD1E795030000B0666 /* NITNetworkManager.h */,
 				1349EEAE1E795030000B0666 /* NITNetworkManager.m */,
+				1374E0EF1EA9FE1D00D613A5 /* Reachability.h */,
+				1374E0F01EA9FE1D00D613A5 /* Reachability.m */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -761,6 +786,25 @@
 			name = Manager;
 			sourceTree = "<group>";
 		};
+		1374E0EA1EA9FBBF00D613A5 /* Track */ = {
+			isa = PBXGroup;
+			children = (
+				1374E0EB1EA9FBFF00D613A5 /* NITTrackManager.h */,
+				1374E0EC1EA9FBFF00D613A5 /* NITTrackManager.m */,
+				1374E0F71EAA194800D613A5 /* NITTrackRequest.h */,
+				1374E0F81EAA194800D613A5 /* NITTrackRequest.m */,
+			);
+			name = Track;
+			sourceTree = "<group>";
+		};
+		1374E1011EAA333E00D613A5 /* Track */ = {
+			isa = PBXGroup;
+			children = (
+				1374E1021EAA338900D613A5 /* track_response.json */,
+			);
+			name = Track;
+			sourceTree = "<group>";
+		};
 		137838621E800EA8001C8CDE /* Recipes */ = {
 			isa = PBXGroup;
 			children = (
@@ -789,6 +833,9 @@
 				1374E0D31EA89D2000D613A5 /* NITManager+Tests.h */,
 				1374E0D81EA8C03B00D613A5 /* NITTestLogger.h */,
 				1374E0D91EA8C03B00D613A5 /* NITTestLogger.m */,
+				1374E0FE1EAA31C800D613A5 /* TestReachability.h */,
+				1374E0FF1EAA31C800D613A5 /* TestReachability.m */,
+				1374E1041EAA34D800D613A5 /* NITTrackManager+Tests.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -836,6 +883,7 @@
 				1327D8A81E83BE3100C6689E /* NITInstallation.h in Headers */,
 				1352CA831E78294E00C0E98E /* NITManager.h in Headers */,
 				1327D89F1E82A99600C6689E /* NITPulseBundle.h in Headers */,
+				1374E0ED1EA9FBFF00D613A5 /* NITTrackManager.h in Headers */,
 				132296F41E8D09D400AE6EFC /* NITCoupon.h in Headers */,
 				1349EEC41E7A95E3000B0666 /* NITNodesManager.h in Headers */,
 				13423EE31E7BCB07008CAAC8 /* NITGeofenceNode.h in Headers */,
@@ -864,10 +912,12 @@
 				13423EDF1E7BC89D008CAAC8 /* NITBeaconNode.h in Headers */,
 				137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */,
 				1349EEC91E7AA1E3000B0666 /* NITResource.h in Headers */,
+				1374E0F91EAA194800D613A5 /* NITTrackRequest.h in Headers */,
 				135A707E1E85210300D4C9EC /* NITSimpleNotification.h in Headers */,
 				135A70751E8503D900D4C9EC /* NITReaction.h in Headers */,
 				1349EE9D1E7927A1000B0666 /* NITUtils.h in Headers */,
 				1352CA881E782B1600C0E98E /* NITConfiguration.h in Headers */,
+				1374E0F11EA9FE1D00D613A5 /* Reachability.h in Headers */,
 				135CD7CB1E9F7582005C75A4 /* NITLogger.h in Headers */,
 				1349EEC01E7A9272000B0666 /* NITNode.h in Headers */,
 				135A70791E851F1F00D4C9EC /* NITSimpleNotificationReaction.h in Headers */,
@@ -1044,6 +1094,7 @@
 				1349EEAC1E7948FA000B0666 /* jsonapi_sample1.json in Resources */,
 				132297191E8E4DF100AE6EFC /* feedback1.json in Resources */,
 				135CD7A11E9E4276005C75A4 /* config_22.png in Resources */,
+				1374E1031EAA338900D613A5 /* track_response.json in Resources */,
 				132297111E8E3BC200AE6EFC /* custom_jsons.json in Resources */,
 				1374E0E11EA8F0D500D613A5 /* fake_new_profile.json in Resources */,
 				132297061E8D362400AE6EFC /* response_feeback_reaction.json in Resources */,
@@ -1095,6 +1146,7 @@
 				1327D8A91E83BE3100C6689E /* NITInstallation.m in Sources */,
 				135CD7D51E9F7ACF005C75A4 /* NITDefaultLogger.m in Sources */,
 				132296EB1E8CFCAD00AE6EFC /* NITCouponReaction.m in Sources */,
+				1374E0F21EA9FE1D00D613A5 /* Reachability.m in Sources */,
 				1352CA841E78294E00C0E98E /* NITManager.m in Sources */,
 				135A707A1E851F1F00D4C9EC /* NITSimpleNotificationReaction.m in Sources */,
 				13423EE41E7BCB07008CAAC8 /* NITGeofenceNode.m in Sources */,
@@ -1103,6 +1155,7 @@
 				132296F91E8D140B00AE6EFC /* NITClaim.m in Sources */,
 				135A708D1E85448E00D4C9EC /* NITContent.m in Sources */,
 				1322970F1E8E351C00AE6EFC /* NITCustomJSON.m in Sources */,
+				1374E0EE1EA9FBFF00D613A5 /* NITTrackManager.m in Sources */,
 				1349EEB01E795030000B0666 /* NITNetworkManager.m in Sources */,
 				1327D8A41E83B7C400C6689E /* NITConstants.m in Sources */,
 				132296F51E8D09D400AE6EFC /* NITCoupon.m in Sources */,
@@ -1116,6 +1169,7 @@
 				135CD77A1E94F71E005C75A4 /* NITEvent.m in Sources */,
 				137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */,
 				1349EEB41E796511000B0666 /* NITNetworkProvider.m in Sources */,
+				1374E0FA1EAA194800D613A5 /* NITTrackRequest.m in Sources */,
 				135A70761E8503D900D4C9EC /* NITReaction.m in Sources */,
 				1349EEC11E7A9272000B0666 /* NITNode.m in Sources */,
 				1349EEC51E7A95E3000B0666 /* NITNodesManager.m in Sources */,
@@ -1140,7 +1194,9 @@
 				1374E0DA1EA8C03B00D613A5 /* NITTestLogger.m in Sources */,
 				135CD79B1E9D089A005C75A4 /* NITUserProfileTest.m in Sources */,
 				137E38B11E8A9569008E83E6 /* NITRecipesManagerTest.m in Sources */,
+				1374E1001EAA31C800D613A5 /* TestReachability.m in Sources */,
 				137E38A71E8A4AA6008E83E6 /* NITCacheManagerTest.m in Sources */,
+				1374E0FC1EAA305A00D613A5 /* NITTrackManagerTest.m in Sources */,
 				1374E0D71EA8C00200D613A5 /* NITLogTest.m in Sources */,
 				1349EEA91E793834000B0666 /* NITJSONAPITests.m in Sources */,
 				1374E0D21EA76B7400D613A5 /* NITTestBeacon.m in Sources */,
