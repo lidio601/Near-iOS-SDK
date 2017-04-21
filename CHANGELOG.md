@@ -1,3 +1,18 @@
+0.9.6 Release notes (2017-04-21)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fix an issue for Geofence events: the SDK couldn't dispatch events.
+
 0.9.5 Release notes (2017-04-20)
 =============================================================
 
