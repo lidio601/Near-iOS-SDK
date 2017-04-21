@@ -7,7 +7,7 @@
         "latitude": 45,
         "longiute": 9,
         "radius": 200,
-        "identifier": "identifier"
+        "identifier": "R1-identifier"
       },
       "relationships": {
         "parent": {

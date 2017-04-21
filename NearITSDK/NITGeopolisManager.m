@@ -13,6 +13,7 @@
 #import "NITJSONAPI.h"
 #import "NITNode.h"
 #import "NITBeaconNode.h"
+#import "NITGeofenceNode.h"
 #import "NITBeaconProximityManager.h"
 #import "NITUtils.h"
 #import "NITCacheManager.h"
@@ -137,22 +138,42 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 
 - (void)stepInRegion:(CLRegion*)region {
     NITLogD(LOGTAG, @"StepInRegion -> %@", region.identifier);
+    NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+    if (node == nil) {
+        return;
+    }
     
     NSArray<NITNode*> *monitoredNodes = [self.nodesManager monitoredNodesOnEnterWithId:region.identifier];
     NSArray<NITNode*> *rangedNodes = [self.nodesManager rangedNodesOnEnterWithId:region.identifier];
     
     [self setMonitoringWithNodes:monitoredNodes];
     [self setRangingWithNodes:rangedNodes];
+    
+    if ([node isKindOfClass:[NITGeofenceNode class]]) {
+        [self triggerWithEvent:NITRegionEventEnterPlace node:node];
+    } else {
+        [self triggerWithEvent:NITRegionEventEnterArea node:node];
+    }
 }
 
 - (void)stepOutRegion:(CLRegion*)region {
     NITLogD(LOGTAG, @"StepOutRegion -> %@", region.identifier);
+    NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+    if (node == nil) {
+        return;
+    }
     
     NSArray<NITNode*> *monitoredNodes = [self.nodesManager monitoredNodesOnExitWithId:region.identifier];
     NSArray<NITNode*> *rangedNodes = [self.nodesManager rangedNodesOnExitWithId:region.identifier];
     
     [self setMonitoringWithNodes:monitoredNodes];
     [self setRangingWithNodes:rangedNodes];
+    
+    if ([node isKindOfClass:[NITGeofenceNode class]]) {
+        [self triggerWithEvent:NITRegionEventLeavePlace node:node];
+    } else {
+        [self triggerWithEvent:NITRegionEventLeaveArea node:node];
+    }
 }
 
 - (BOOL)stillExistsWithRegionIdentifier:(NSString*)identifier nodes:(NSArray<NITNode*>*)nodes {
