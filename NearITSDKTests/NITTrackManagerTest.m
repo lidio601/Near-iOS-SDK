@@ -141,6 +141,39 @@
     XCTAssertTrue([cachedRequests count] == 0);
 }
 
+- (void)testTrackManagerCachePrefilled {
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return [self jsonApiWithContentsOfFile:@"track_response"];
+    };
+    
+    TestReachability *reachability = [[TestReachability alloc] init];
+    reachability.testNetworkStatus = ReachableViaWiFi;
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
+    NSDate *now = [NSDate date];
+    NITTrackRequest *req1 = [[NITTrackRequest alloc] init];
+    req1.request = [self simpleTrackRequest];
+    req1.date = now;
+    NITTrackRequest *req2 = [[NITTrackRequest alloc] init];
+    req2.request = [self simpleTrackRequest];
+    req2.date = now;
+    NSArray<NITTrackRequest*> *requests = @[req1, req2];
+    [self.cacheManager saveWithObject:requests forKey:@"Trackings"];
+    
+    [NSThread sleepForTimeInterval:0.5];
+    
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue];
+    XCTAssertTrue([trackManager.requests count] == 2);
+    XCTAssertTrue([[[[[trackManager.requests firstObject] request] URL] absoluteString] isEqualToString:REQUEST_URL]);
+    
+    [trackManager addTrackWithRequest:[self simpleTrackRequest]];
+    [queue waitUntilAllOperationsAreFinished];
+    
+    XCTAssertTrue([trackManager.requests count] == 0);
+}
+
 - (void)testTrackManagerCache {
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
@@ -158,7 +191,7 @@
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [queue waitUntilAllOperationsAreFinished];
     
-    [NSThread sleepForTimeInterval:2.0];
+    [NSThread sleepForTimeInterval:1.0];
     
     NSArray<NITTrackRequest*> *cachedRequests = [self.cacheManager loadArrayForKey:@"Trackings"];
     XCTAssertTrue([cachedRequests count] == 2);
