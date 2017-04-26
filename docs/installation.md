@@ -37,7 +37,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     ...
 
-    NITManager *manager = [NITManager initWithApiKey:"<your API token here>"];
+    NITManager *manager = [[NITManager alloc] initWithApiKey:"<your API token here>"];
 
     ...
 }
