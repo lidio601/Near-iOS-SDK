@@ -13,4 +13,7 @@
 @property (nonatomic, strong) NSURLRequest *request;
 @property (nonatomic, strong) NSDate *date;
 
+- (void)increaseRetryWithTimeInterval:(NSTimeInterval)interval;
+- (BOOL)availableForNextRetryWithDate:(NSDate*)date;
+
 @end

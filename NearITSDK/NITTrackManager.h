@@ -12,11 +12,11 @@
 @class NITCacheManager;
 @class Reachability;
 @class NSNotificationCenter;
+@class NITDateManager;
 
 @interface NITTrackManager : NSObject
 
-- (instancetype)initWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager reachability:(Reachability*)reachability notificationCenter:(NSNotificationCenter*)notificationCenter operationQueue:(NSOperationQueue*)queue;
+- (instancetype)initWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager reachability:(Reachability*)reachability notificationCenter:(NSNotificationCenter*)notificationCenter operationQueue:(NSOperationQueue*)queue dateManager:(NITDateManager*)dateManager;
 - (void)addTrackWithRequest:(NSURLRequest*)request;
-- (void)sendTrackings;
 
 @end

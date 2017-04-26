@@ -11,12 +11,14 @@
 #import "NITTrackRequest.h"
 #import "NITCacheManager.h"
 #import "TestReachability.h"
+#import "NITTestDateManager.h"
 
 #define REQUEST_URL @"http//my.trackings"
 
 @interface NITTrackManagerTest : NITTestCase
 
 @property (nonatomic, strong) NITCacheManager *cacheManager;
+@property (nonatomic, strong) NITTestDateManager *dateManager;
 
 @end
 
@@ -31,6 +33,8 @@
         dispatch_semaphore_signal(semaphore);
     }];
     dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC));
+    
+    self.dateManager = [[NITTestDateManager alloc] init];
 }
 
 - (void)tearDown {
@@ -54,7 +58,7 @@
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     
@@ -75,7 +79,7 @@
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
@@ -97,7 +101,7 @@
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     
@@ -123,7 +127,7 @@
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
@@ -164,9 +168,10 @@
     
     [NSThread sleepForTimeInterval:0.5];
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     XCTAssertTrue([trackManager.requests count] == 2);
     XCTAssertTrue([[[[[trackManager.requests firstObject] request] URL] absoluteString] isEqualToString:REQUEST_URL]);
+    XCTAssertTrue([[[trackManager.requests firstObject] date] compare:now] == NSOrderedSame);
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [queue waitUntilAllOperationsAreFinished];
@@ -185,7 +190,10 @@
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue];
+    NSDate *now = [NSDate date];
+    self.dateManager.testCurrentDate = now;
+    
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
@@ -195,6 +203,76 @@
     
     NSArray<NITTrackRequest*> *cachedRequests = [self.cacheManager loadArrayForKey:@"Trackings"];
     XCTAssertTrue([cachedRequests count] == 2);
+    NITTrackRequest *trackRequest = [cachedRequests firstObject];
+    XCTAssertTrue([trackRequest.request.URL.absoluteString isEqualToString:REQUEST_URL]);
+    XCTAssertTrue([trackRequest.date compare:now] == NSOrderedSame);
+}
+
+- (void)testTrackRequestRetry {
+    NSDate *now = [NSDate date];
+    
+    NITTrackRequest *request = [[NITTrackRequest alloc] init];
+    request.request = [self simpleTrackRequest];
+    request.date = now;
+    [request increaseRetryWithTimeInterval:5.0]; // X1
+    
+    XCTAssertTrue([request availableForNextRetryWithDate:now] == NO);
+    XCTAssertTrue([request availableForNextRetryWithDate:[now dateByAddingTimeInterval:7]] == YES);
+    
+    [request increaseRetryWithTimeInterval:5.0]; // X2
+    XCTAssertTrue([request availableForNextRetryWithDate:[now dateByAddingTimeInterval:9]] == NO);
+    XCTAssertTrue([request availableForNextRetryWithDate:[now dateByAddingTimeInterval:12]] == YES);
+    
+    [request increaseRetryWithTimeInterval:5.0]; // X3
+    [request increaseRetryWithTimeInterval:5.0]; // X4
+    [request increaseRetryWithTimeInterval:5.0]; // X5
+    XCTAssertTrue([request availableForNextRetryWithDate:[now dateByAddingTimeInterval:78]] == NO);
+    XCTAssertTrue([request availableForNextRetryWithDate:[now dateByAddingTimeInterval:82]] == YES);
+}
+
+- (void)testTrackManagerRetry {
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return nil;
+    };
+    
+    TestReachability *reachability = [[TestReachability alloc] init];
+    reachability.testNetworkStatus = ReachableViaWWAN;
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
+    NSDate *now = [NSDate date];
+    self.dateManager.testCurrentDate = now;
+    
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
+    
+    [trackManager addTrackWithRequest:[self simpleTrackRequest]];
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager busy] == NO);
+    
+    NSArray<NITTrackRequest*> *availableRequests = [trackManager availableRequests];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    XCTAssertTrue([availableRequests count] == 0);
+    
+    self.dateManager.testCurrentDate = [now dateByAddingTimeInterval:3];
+    
+    availableRequests = [trackManager availableRequests];
+    XCTAssertTrue([availableRequests count] == 0);
+    
+    self.dateManager.testCurrentDate = [now dateByAddingTimeInterval:20];
+    
+    availableRequests = [trackManager availableRequests];
+    XCTAssertTrue([availableRequests count] == 1);
+    
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return [self jsonApiWithContentsOfFile:@"track_response"];
+    };
+    
+    [trackManager sendTrackings];
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager busy] == NO);
+    
+    XCTAssertTrue([trackManager.requests count] == 0);
 }
 
 // MARK: - Utility

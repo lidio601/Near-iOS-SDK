@@ -142,6 +142,9 @@
 		1374E0FC1EAA305A00D613A5 /* NITTrackManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0FB1EAA305A00D613A5 /* NITTrackManagerTest.m */; };
 		1374E1001EAA31C800D613A5 /* TestReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0FF1EAA31C800D613A5 /* TestReachability.m */; };
 		1374E1031EAA338900D613A5 /* track_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374E1021EAA338900D613A5 /* track_response.json */; };
+		1374E1101EB0D23A00D613A5 /* NITDateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1374E10E1EB0D23A00D613A5 /* NITDateManager.h */; };
+		1374E1111EB0D23A00D613A5 /* NITDateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E10F1EB0D23A00D613A5 /* NITDateManager.m */; };
+		1374E1141EB0D2CE00D613A5 /* NITTestDateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E1131EB0D2CE00D613A5 /* NITTestDateManager.m */; };
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
@@ -345,6 +348,10 @@
 		1374E0FF1EAA31C800D613A5 /* TestReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestReachability.m; sourceTree = "<group>"; };
 		1374E1021EAA338900D613A5 /* track_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = track_response.json; sourceTree = "<group>"; };
 		1374E1041EAA34D800D613A5 /* NITTrackManager+Tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NITTrackManager+Tests.h"; sourceTree = "<group>"; };
+		1374E10E1EB0D23A00D613A5 /* NITDateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITDateManager.h; sourceTree = "<group>"; };
+		1374E10F1EB0D23A00D613A5 /* NITDateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITDateManager.m; sourceTree = "<group>"; };
+		1374E1121EB0D2CE00D613A5 /* NITTestDateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITTestDateManager.h; sourceTree = "<group>"; };
+		1374E1131EB0D2CE00D613A5 /* NITTestDateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTestDateManager.m; sourceTree = "<group>"; };
 		137838631E800EC1001C8CDE /* NITRecipesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipesManager.h; sourceTree = "<group>"; };
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
@@ -502,6 +509,8 @@
 				1349EE9C1E7927A1000B0666 /* NITUtils.m */,
 				1327D8A11E83B7C400C6689E /* NITConstants.h */,
 				1327D8A21E83B7C400C6689E /* NITConstants.m */,
+				1374E10E1EB0D23A00D613A5 /* NITDateManager.h */,
+				1374E10F1EB0D23A00D613A5 /* NITDateManager.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -836,6 +845,8 @@
 				1374E0FE1EAA31C800D613A5 /* TestReachability.h */,
 				1374E0FF1EAA31C800D613A5 /* TestReachability.m */,
 				1374E1041EAA34D800D613A5 /* NITTrackManager+Tests.h */,
+				1374E1121EB0D2CE00D613A5 /* NITTestDateManager.h */,
+				1374E1131EB0D2CE00D613A5 /* NITTestDateManager.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -901,6 +912,7 @@
 				1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */,
 				1322970E1E8E351C00AE6EFC /* NITCustomJSON.h in Headers */,
 				1319CED81EA0BDA0009046C5 /* NITGeopolisNodesManager.h in Headers */,
+				1374E1101EB0D23A00D613A5 /* NITDateManager.h in Headers */,
 				1349EEA21E79325E000B0666 /* NITJSONAPI.h in Headers */,
 				135A708C1E85448E00D4C9EC /* NITContent.h in Headers */,
 				132296F81E8D140B00AE6EFC /* NITClaim.h in Headers */,
@@ -1153,6 +1165,7 @@
 				135CD7D11E9F7A1F005C75A4 /* NITLog.m in Sources */,
 				1349EEA31E79325E000B0666 /* NITJSONAPI.m in Sources */,
 				132296F91E8D140B00AE6EFC /* NITClaim.m in Sources */,
+				1374E1111EB0D23A00D613A5 /* NITDateManager.m in Sources */,
 				135A708D1E85448E00D4C9EC /* NITContent.m in Sources */,
 				1322970F1E8E351C00AE6EFC /* NITCustomJSON.m in Sources */,
 				1374E0EE1EA9FBFF00D613A5 /* NITTrackManager.m in Sources */,
@@ -1184,6 +1197,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1374E1141EB0D2CE00D613A5 /* NITTestDateManager.m in Sources */,
 				137E38AC1E8A94E4008E83E6 /* NITTestCase.m in Sources */,
 				1374E0DC1EA8C67400D613A5 /* logging.md in Sources */,
 				1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */,

@@ -8,8 +8,14 @@
 
 #import "NITTrackManager.h"
 
+@class NITTrackRequest;
+
 @interface NITTrackManager (Tests)
 
 - (NSMutableArray *)requests;
+- (NSDate*)currentDate;
+- (void)sendTrackings;
+- (NSArray<NITTrackRequest*>*)availableRequests;
+- (BOOL)busy;
 
 @end
