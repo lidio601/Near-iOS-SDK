@@ -21,20 +21,31 @@ NSString* const TrackCacheKey = @"Trackings";
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) Reachability *reachability;
 @property (nonatomic, strong) NSNotificationCenter *notificationCenter;
-@property (nonatomic, strong) NSMutableArray<NITTrackRequest*> *requests;
+@property (nonatomic, strong) NSOperationQueue *queue;
+@property (atomic, strong) NSMutableArray<NITTrackRequest*> *requests;
+@property (atomic) BOOL busy;
+@property (nonatomic) NSInteger maxRetry;
 
 @end
 
 @implementation NITTrackManager
 
-- (instancetype)initWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager *)cacheManager reachability:(Reachability *)reachability notificationCenter:(NSNotificationCenter *)notificationCenter {
+- (instancetype)initWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager *)cacheManager reachability:(Reachability *)reachability notificationCenter:(NSNotificationCenter *)notificationCenter operationQueue:(NSOperationQueue *)queue {
     self = [super init];
     if (self) {
         self.networkManager = networkManager;
         self.cacheManager = cacheManager;
         self.reachability = reachability;
         self.notificationCenter = notificationCenter;
-        self.requests = [[NSMutableArray alloc] init];
+        self.queue = queue;
+        NSArray<NITTrackRequest*> *cachedRequests = [self.cacheManager loadArrayForKey:TrackCacheKey];
+        if (cachedRequests) {
+            self.requests = [[NSMutableArray alloc] initWithArray:cachedRequests];
+        } else {
+            self.requests = [[NSMutableArray alloc] init];
+        }
+        self.busy = NO;
+        self.maxRetry = 2;
         
         [self.notificationCenter addObserver:self selector:@selector(applicationDidBeacomActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     }
@@ -55,22 +66,49 @@ NSString* const TrackCacheKey = @"Trackings";
 }
 
 - (void)sendTrackings {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    if ([self.requests count] == 0) {
+        return;
+    } else if (!self.busy) {
+        self.busy = YES;
+    }
+    [self.queue addOperationWithBlock:^{
         if (self.reachability.currentReachabilityStatus != NotReachable) {
-            for (NITTrackRequest *request in self.requests) {
-                [self.networkManager makeRequestWithURLRequest:request.request jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
-                    if (error == nil) {
-                        [self.requests removeObject:request];
-                    }
-                }];
+            NSArray<NITTrackRequest*> *requestsCopy = [self.requests copy];
+            NSMutableArray<NITTrackRequest*> *requestsToRemove = [[NSMutableArray alloc] init];
+            
+            dispatch_group_t group = dispatch_group_create();
+            for (NITTrackRequest *request in requestsCopy) {
+                if (self.reachability.currentReachabilityStatus != NotReachable) {
+                    dispatch_group_enter(group);
+                    [self.networkManager makeRequestWithURLRequest:request.request jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+                        if (error == nil) {
+                            [requestsToRemove addObject:request];
+                        }
+                        dispatch_group_leave(group);
+                    }];
+                }
             }
-            [self persistTrackings];
+            dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                for(NITTrackRequest *request in requestsToRemove) {
+                    [self.requests removeObject:request];
+                }
+                [self persistTrackings];
+                self.busy = NO;
+            });
+        } else {
+            self.busy = NO;
         }
-    });
+    }];
+    [self.queue waitUntilAllOperationsAreFinished];
+    if (self.reachability.currentReachabilityStatus != NotReachable) {
+        if ([self.requests count] > 0) {
+            [self sendTrackings];
+        }
+    }
 }
 
 - (void)persistTrackings {
-    [self.cacheManager saveWithObject:self.requests forKey:TrackCacheKey];
+    [self.cacheManager saveWithObject:[NSArray arrayWithArray:self.requests] forKey:TrackCacheKey];
 }
 
 - (void)applicationDidBeacomActive:(NSNotification*)notification {

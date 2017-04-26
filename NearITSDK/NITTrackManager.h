@@ -15,7 +15,7 @@
 
 @interface NITTrackManager : NSObject
 
-- (instancetype)initWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager reachability:(Reachability*)reachability notificationCenter:(NSNotificationCenter*)notificationCenter;
+- (instancetype)initWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager reachability:(Reachability*)reachability notificationCenter:(NSNotificationCenter*)notificationCenter operationQueue:(NSOperationQueue*)queue;
 - (void)addTrackWithRequest:(NSURLRequest*)request;
 - (void)sendTrackings;
 
