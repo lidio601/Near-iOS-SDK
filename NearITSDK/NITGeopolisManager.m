@@ -21,6 +21,7 @@
 #import "NITConfiguration.h"
 #import "NITLog.h"
 #import "NITGeopolisNodesManager.h"
+#import "NITTrackManager.h"
 #import <CoreLocation/CoreLocation.h>
 
 #define LOGTAG @"GeopolisManager"
@@ -36,6 +37,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) id<NITNetworkManaging> networkManaeger;
+@property (nonatomic, strong) NITTrackManager *trackManager;
 @property (nonatomic, strong) NITBeaconProximityManager *beaconProximity;
 @property (nonatomic, strong) NITNode *currentNode;
 @property (nonatomic, strong) NSMutableArray<NSString*> *enteredRegions;
@@ -47,7 +49,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 
 @implementation NITGeopolisManager
 
-- (instancetype)initWithNodesManager:(NITGeopolisNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration*)configuration locationManager:(CLLocationManager *)locationManager {
+- (instancetype)initWithNodesManager:(NITGeopolisNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration*)configuration locationManager:(CLLocationManager *)locationManager trackManager:(NITTrackManager *)trackManager {
     self = [super init];
     if (self) {
         if (locationManager) {
@@ -59,6 +61,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         self.nodesManager = nodesManager;
         self.cacheManager = cacheManager;
         self.networkManaeger = networkManager;
+        self.trackManager = trackManager;
         self.configuration = configuration;
         self.enteredRegions = [[NSMutableArray alloc] init];
         self.pluginName = @"geopolis";
@@ -265,9 +268,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     
     [json setDataWithResourceObject:resource];
     
-    [self.networkManaeger makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] sendGeopolisTrackingsWithJsonApi:json] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
-        
-    }];
+    [self.trackManager addTrackWithRequest:[[NITNetworkProvider sharedInstance] sendGeopolisTrackingsWithJsonApi:json]];
 }
 
 // MARK: - Location manager delegate

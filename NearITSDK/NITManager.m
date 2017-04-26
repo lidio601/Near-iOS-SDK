@@ -24,6 +24,9 @@
 #import "NITGeopolisNodesManager.h"
 #import "NITNetworkManager.h"
 #import "NITNetworkProvider.h"
+#import "NITTrackManager.h"
+#import "NITDateManager.h"
+#import "Reachability.h"
 
 @interface NITManager()<NITManaging>
 
@@ -36,6 +39,7 @@
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) NITUserProfile *profile;
+@property (nonatomic, strong) NITTrackManager *trackManager;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic) BOOL started;
 
@@ -90,10 +94,13 @@
 }
 
 - (void)pluginSetup {
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    NITDateManager *dateManager = [[NITDateManager alloc] init];
+    self.trackManager = [[NITTrackManager alloc] initWithNetworkManager:self.networkManager cacheManager:self.cacheManager reachability:[Reachability reachabilityForInternetConnection] notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:dateManager];
     self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration];
     self.recipesManager.manager = self;
     NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
-    self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration locationManager:self.locationManager];
+    self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration locationManager:self.locationManager trackManager:self.trackManager];
     self.geopolisManager.recipesManager = self.recipesManager;
 }
 
