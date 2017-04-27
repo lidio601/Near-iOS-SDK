@@ -73,6 +73,8 @@ NSString* const TrackCacheKey = @"Trackings";
         return;
     } else if (!self.busy) {
         self.busy = YES;
+    } else {
+        return;
     }
     NITLogD(LOGTAG, @"Available trackings to send (%d)", [availableRequests count]);
     [self.queue addOperationWithBlock:^{
@@ -126,7 +128,8 @@ NSString* const TrackCacheKey = @"Trackings";
 
 - (NSArray<NITTrackRequest*>*)availableRequests {
     NSMutableArray<NITTrackRequest*> *availableRequests = [[NSMutableArray alloc] init];
-    for(NITTrackRequest *request in self.requests) {
+    NSArray<NITTrackRequest*> *requests = [self.requests copy];
+    for(NITTrackRequest *request in requests) {
         if ([request availableForNextRetryWithDate:[self currentDate]]) {
             [availableRequests addObject:request];
         }
