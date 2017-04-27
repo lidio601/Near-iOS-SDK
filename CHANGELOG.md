@@ -1,3 +1,20 @@
+0.9.8 Release notes (2017-04-27)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fix an important issue where you could have sevaral different profiles for the same device.
+* Fix an issue about too many trackings logs.
+* Fixes push notification tracking (notified, engaged).
+
 0.9.7 Release notes (2017-04-27)
 =============================================================
 
