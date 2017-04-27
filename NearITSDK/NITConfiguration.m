@@ -129,13 +129,14 @@ static NITConfiguration *defaultConfiguration;
     NSString *realKey = [self paramKeyWithKey:key];
     if (realKey) {
         [[NSUserDefaults standardUserDefaults] setObject:object forKey:realKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
 - (id)objectWithKey:(NSString*)key {
     NSString *realKey = [self paramKeyWithKey:key];
     if (realKey) {
-        return [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        return [[NSUserDefaults standardUserDefaults] objectForKey:realKey];
     }
     return nil;
 }
