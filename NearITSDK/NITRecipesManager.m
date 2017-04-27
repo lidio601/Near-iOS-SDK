@@ -18,6 +18,7 @@
 #import "NITClaim.h"
 #import "NITRecipeCooler.h"
 #import "NITCacheManager.h"
+#import "NITTrackManager.h"
 
 NSString* const RecipesCacheKey = @"Recipes";
 
@@ -28,18 +29,20 @@ NSString* const RecipesCacheKey = @"Recipes";
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) id<NITNetworkManaging> networkManager;
 @property (nonatomic, strong) NITConfiguration *configuration;
+@property (nonatomic, strong) NITTrackManager *trackManager;
 
 @end
 
 @implementation NITRecipesManager
 
-- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration *)configuration {
+- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration *)configuration trackManager:(NITTrackManager * _Nonnull)trackManager {
     self = [super init];
     if (self) {
         self.cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager];
         self.cacheManager = cacheManager;
         self.networkManager = networkManager;
         self.configuration = configuration;
+        self.trackManager = trackManager;
     }
     return self;
 }
@@ -173,9 +176,7 @@ NSString* const RecipesCacheKey = @"Recipes";
     
     [jsonApi setDataWithResourceObject:resource];
     
-    [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] sendTrackingsWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
-        
-    }];
+    [self.trackManager addTrackWithRequest:[[NITNetworkProvider sharedInstance] sendTrackingsWithJsonApi:jsonApi]];
 }
 
 - (void)gotRecipe:(NITRecipe*)recipe {

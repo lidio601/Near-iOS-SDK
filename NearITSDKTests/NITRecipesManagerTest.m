@@ -14,10 +14,14 @@
 #import "NITNetworkManager.h"
 #import "NITNetworkMockManger.h"
 #import "NITConfiguration.h"
+#import "TestReachability.h"
+#import "NITTrackManager.h"
+#import "NITDateManager.h"
 
 @interface NITRecipesManagerTest : NITTestCase<NITManaging>
 
 @property (nonatomic, strong) XCTestExpectation *expectation;
+@property (nonatomic, strong) TestReachability *reachability;
 
 @end
 
@@ -26,6 +30,8 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
+    self.reachability = [[TestReachability alloc] init];
+    self.reachability.testNetworkStatus = NotReachable;
 }
 
 - (void)tearDown {
@@ -100,7 +106,8 @@
     
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
-    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:[[NSOperationQueue alloc] init] dateManager:[[NITDateManager alloc] init]];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration] trackManager:trackManager];
     [recipesManager setRecipesWithJsonApi:recipesJson];
     recipesManager.manager = self;
     
@@ -120,7 +127,8 @@
     
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
-    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:[[NSOperationQueue alloc] init] dateManager:[[NITDateManager alloc] init]];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration] trackManager:trackManager];
     [recipesManager setRecipesWithJsonApi:recipesJson];
     recipesManager.manager = self;
     
@@ -274,7 +282,8 @@
         return nil;
     };
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration]];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:[[NSOperationQueue alloc] init] dateManager:[[NITDateManager alloc] init]];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration] trackManager:trackManager];
     [cacheManager saveWithObject:[jsonApi parseToArrayOfObjects] forKey:@"Recipes"];
     [NSThread sleepForTimeInterval:0.5];
     

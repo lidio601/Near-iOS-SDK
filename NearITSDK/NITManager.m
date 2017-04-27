@@ -97,7 +97,7 @@
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     NITDateManager *dateManager = [[NITDateManager alloc] init];
     self.trackManager = [[NITTrackManager alloc] initWithNetworkManager:self.networkManager cacheManager:self.cacheManager reachability:[Reachability reachabilityForInternetConnection] notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:dateManager];
-    self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration];
+    self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration trackManager:self.trackManager];
     self.recipesManager.manager = self;
     NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration locationManager:self.locationManager trackManager:self.trackManager];
