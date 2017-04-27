@@ -275,6 +275,33 @@
     XCTAssertTrue([trackManager.requests count] == 0);
 }
 
+- (void)testTrackManagerApplicationDidBecomeActive {
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return [self jsonApiWithContentsOfFile:@"track_response"];
+    };
+    
+    TestReachability *reachability = [[TestReachability alloc] init];
+    reachability.testNetworkStatus = NotReachable;
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
+    NSDate *now = [NSDate date];
+    self.dateManager.testCurrentDate = now;
+    
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
+    [trackManager addTrackWithRequest:[self simpleTrackRequest]];
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    
+    self.dateManager.testCurrentDate = [now dateByAddingTimeInterval:30];
+    reachability.testNetworkStatus = ReachableViaWiFi;
+    [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 0);
+}
+
 // MARK: - Utility
 
 - (NSURLRequest*)simpleTrackRequest {
