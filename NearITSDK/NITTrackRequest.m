@@ -55,7 +55,11 @@
 
 - (void)increaseRetryWithTimeInterval:(NSTimeInterval)interval {
     self.retry += 1;
-    self.nextRetry = [self.date dateByAddingTimeInterval:interval * pow(2, self.retry >= 1 ? self.retry -1 : 0)];
+    if (self.nextRetry) {
+        self.nextRetry = [self.nextRetry dateByAddingTimeInterval:interval * pow(2, self.retry >= 1 ? self.retry -1 : 0)];
+    } else {
+        self.nextRetry = [self.date dateByAddingTimeInterval:interval * pow(2, self.retry >= 1 ? self.retry -1 : 0)];
+    }
 }
 
 - (BOOL)availableForNextRetryWithDate:(NSDate *)date {

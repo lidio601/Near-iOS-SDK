@@ -221,13 +221,13 @@
     
     [request increaseRetryWithTimeInterval:5.0]; // X2
     XCTAssertTrue([request availableForNextRetryWithDate:[now dateByAddingTimeInterval:9]] == NO);
-    XCTAssertTrue([request availableForNextRetryWithDate:[now dateByAddingTimeInterval:12]] == YES);
+    XCTAssertTrue([request availableForNextRetryWithDate:[now dateByAddingTimeInterval:18]] == YES);
     
     [request increaseRetryWithTimeInterval:5.0]; // X3
     [request increaseRetryWithTimeInterval:5.0]; // X4
     [request increaseRetryWithTimeInterval:5.0]; // X5
-    XCTAssertTrue([request availableForNextRetryWithDate:[now dateByAddingTimeInterval:78]] == NO);
-    XCTAssertTrue([request availableForNextRetryWithDate:[now dateByAddingTimeInterval:82]] == YES);
+    XCTAssertTrue([request availableForNextRetryWithDate:[now dateByAddingTimeInterval:132]] == NO);
+    XCTAssertTrue([request availableForNextRetryWithDate:[now dateByAddingTimeInterval:160]] == YES);
 }
 
 - (void)testTrackManagerRetry {
@@ -270,6 +270,104 @@
     [trackManager sendTrackings];
     [queue waitUntilAllOperationsAreFinished];
     
+    XCTAssertTrue([trackManager.requests count] == 0);
+}
+
+- (void)testTrackManagerMaxRetry {
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return nil;
+    };
+    
+    TestReachability *reachability = [[TestReachability alloc] init];
+    reachability.testNetworkStatus = ReachableViaWWAN;
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
+    NSDate *now = [NSDate date];
+    self.dateManager.testCurrentDate = now;
+    
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
+    
+    [trackManager addTrackWithRequest:[self simpleTrackRequest]];
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    
+    now = [now dateByAddingTimeInterval:6 * pow(2,1)];
+    self.dateManager.testCurrentDate = now;
+    
+    [trackManager sendTrackings]; // X2
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    
+    now = [now dateByAddingTimeInterval:6 * pow(2,2)];
+    self.dateManager.testCurrentDate = now;
+    
+    [trackManager sendTrackings]; // X3
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    
+    now = [now dateByAddingTimeInterval:6 * pow(2,3)];
+    self.dateManager.testCurrentDate = now;
+    
+    [trackManager sendTrackings]; // X4
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    
+    now = [now dateByAddingTimeInterval:6 * pow(2,4)];
+    self.dateManager.testCurrentDate = now;
+    
+    [trackManager sendTrackings]; // X5
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    
+    now = [now dateByAddingTimeInterval:6 * pow(2,5)];
+    self.dateManager.testCurrentDate = now;
+    
+    [trackManager sendTrackings]; // X6
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    
+    now = [now dateByAddingTimeInterval:6 * pow(2,6)];
+    self.dateManager.testCurrentDate = now;
+    
+    [trackManager sendTrackings]; // X7
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    
+    now = [now dateByAddingTimeInterval:6 * pow(2,7)];
+    self.dateManager.testCurrentDate = now;
+    
+    [trackManager sendTrackings]; // X8
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    
+    now = [now dateByAddingTimeInterval:6 * pow(2,8)];
+    self.dateManager.testCurrentDate = now;
+    
+    [trackManager sendTrackings]; // X9
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    
+    now = [now dateByAddingTimeInterval:6 * pow(2,9)];
+    self.dateManager.testCurrentDate = now;
+    
+    [trackManager sendTrackings]; // X10
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    
+    now = [now dateByAddingTimeInterval:6 * pow(2,10)];
+    self.dateManager.testCurrentDate = now;
+    
+    [trackManager sendTrackings]; // X11
+    [queue waitUntilAllOperationsAreFinished];
+    XCTAssertTrue([trackManager.requests count] == 1);
+    
+    now = [now dateByAddingTimeInterval:6 * pow(2,11)];
+    self.dateManager.testCurrentDate = now;
+    
+    [trackManager sendTrackings]; // X12
+    [queue waitUntilAllOperationsAreFinished];
     XCTAssertTrue([trackManager.requests count] == 0);
 }
 

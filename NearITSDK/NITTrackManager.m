@@ -16,6 +16,7 @@
 
 NSString* const TrackCacheKey = @"Trackings";
 #define LOGTAG @"TrackManager"
+#define MAX_RETRY 10
 
 @interface NITTrackManager()
 
@@ -83,8 +84,12 @@ NSString* const TrackCacheKey = @"Trackings";
                             [self.requests removeObject:request];
                         } else {
                             NITLogD(LOGTAG, @"Tracking failure");
-                            [request increaseRetryWithTimeInterval:5.0];
-                            request.sending = NO;
+                            if (request.retry > MAX_RETRY) {
+                                [self.requests removeObject:request];
+                            } else {
+                                [request increaseRetryWithTimeInterval:5.0];
+                                request.sending = NO;
+                            }
                         }
                         dispatch_group_leave(group);
                     }];
