@@ -180,6 +180,11 @@
     NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
     if(recipeId) {
         [self.recipesManager processRecipe:recipeId];
+        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+            [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
+        } else {
+            [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeNotified];
+        }
     }
 }
 
