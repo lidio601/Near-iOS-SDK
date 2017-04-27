@@ -15,6 +15,7 @@
 #import <UIKit/UIKit.h>
 
 NSString* const TrackCacheKey = @"Trackings";
+#define LOGTAG @"TrackManager"
 
 @interface NITTrackManager()
 
@@ -67,14 +68,15 @@ NSString* const TrackCacheKey = @"Trackings";
 }
 
 - (void)sendTrackings {
-    if ([self.requests count] == 0) {
+    NSArray<NITTrackRequest*> *availableRequests = [self availableRequests];
+    if ([availableRequests count] == 0) {
         return;
     } else if (!self.busy) {
         self.busy = YES;
     }
+    NITLogD(LOGTAG, @"Available trackings to send (%d)", [availableRequests count]);
     [self.queue addOperationWithBlock:^{
         if (self.reachability.currentReachabilityStatus != NotReachable) {
-            NSArray<NITTrackRequest*> *availableRequests = [self availableRequests];
             NSMutableArray<NITTrackRequest*> *requestsToRemove = [[NSMutableArray alloc] init];
             NSMutableArray<NITTrackRequest*> *requestsToRetry = [[NSMutableArray alloc] init];
             
@@ -84,8 +86,10 @@ NSString* const TrackCacheKey = @"Trackings";
                     dispatch_group_enter(group);
                     [self.networkManager makeRequestWithURLRequest:request.request jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
                         if (error == nil) {
+                            NITLogD(LOGTAG, @"Tracking sended");
                             [requestsToRemove addObject:request];
                         } else {
+                            NITLogD(LOGTAG, @"Tracking failure");
                             [requestsToRetry addObject:request];
                         }
                         dispatch_group_leave(group);
