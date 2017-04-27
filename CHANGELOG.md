@@ -1,3 +1,18 @@
+0.9.7 Release notes (2017-04-27)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* The SDK trackings now have a retry system.
+
+### Bugfixes
+
+* Fix an issue for manager delegate where it was on a background thread, therefore the UI was locked.
+
 0.9.6 Release notes (2017-04-21)
 =============================================================
 
