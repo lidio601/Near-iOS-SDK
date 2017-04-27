@@ -154,9 +154,7 @@ static NITCacheManager *defaultCache;
             [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
         }
         if (handler) {
-            //dispatch_async(dispatch_get_main_queue(), ^{
-                handler();
-            //});
+            handler();
         }
     });
 }
