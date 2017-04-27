@@ -8,19 +8,13 @@
 
 #import "NITTrackRequest.h"
 
-@interface NITTrackRequest()
-
-@property (nonatomic, strong) NSDate *nextRetry;
-@property (nonatomic) NSInteger retry;
-
-@end
-
 @implementation NITTrackRequest
 
 - (instancetype)init {
     self = [super init];
     if (self) {
         self.retry = 0;
+        self.sending = NO;
     }
     return self;
 }
@@ -43,6 +37,7 @@
         self.retry = 0;
     }
     self.nextRetry = [aDecoder decodeObjectForKey:@"nextRetry"];
+    self.sending = NO;
     return self;
 }
 

@@ -16,6 +16,5 @@
 - (NSDate*)currentDate;
 - (void)sendTrackings;
 - (NSArray<NITTrackRequest*>*)availableRequests;
-- (BOOL)busy;
 
 @end

@@ -26,7 +26,6 @@ NSString* const TrackCacheKey = @"Trackings";
 @property (nonatomic, strong) NSOperationQueue *queue;
 @property (nonatomic, strong) NITDateManager *dateManager;
 @property (atomic, strong) NSMutableArray<NITTrackRequest*> *requests;
-@property (atomic) BOOL busy;
 
 @end
 
@@ -47,7 +46,6 @@ NSString* const TrackCacheKey = @"Trackings";
         } else {
             self.requests = [[NSMutableArray alloc] init];
         }
-        self.busy = NO;
         
         [self.notificationCenter addObserver:self selector:@selector(applicationDidBeacomActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     }
@@ -71,17 +69,10 @@ NSString* const TrackCacheKey = @"Trackings";
     NSArray<NITTrackRequest*> *availableRequests = [self availableRequests];
     if ([availableRequests count] == 0) {
         return;
-    } else if (!self.busy) {
-        self.busy = YES;
-    } else {
-        return;
     }
     NITLogD(LOGTAG, @"Available trackings to send (%d)", [availableRequests count]);
     [self.queue addOperationWithBlock:^{
         if (self.reachability.currentReachabilityStatus != NotReachable) {
-            NSMutableArray<NITTrackRequest*> *requestsToRemove = [[NSMutableArray alloc] init];
-            NSMutableArray<NITTrackRequest*> *requestsToRetry = [[NSMutableArray alloc] init];
-            
             dispatch_group_t group = dispatch_group_create();
             for (NITTrackRequest *request in availableRequests) {
                 if (self.reachability.currentReachabilityStatus != NotReachable) {
@@ -89,48 +80,28 @@ NSString* const TrackCacheKey = @"Trackings";
                     [self.networkManager makeRequestWithURLRequest:request.request jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
                         if (error == nil) {
                             NITLogD(LOGTAG, @"Tracking sended");
-                            [requestsToRemove addObject:request];
+                            [self.requests removeObject:request];
                         } else {
                             NITLogD(LOGTAG, @"Tracking failure");
-                            [requestsToRetry addObject:request];
+                            [request increaseRetryWithTimeInterval:5.0];
+                            request.sending = NO;
                         }
                         dispatch_group_leave(group);
                     }];
                 }
             }
             dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                for(NITTrackRequest *request in requestsToRemove) {
-                    [self.requests removeObject:request];
-                }
-                for(NITTrackRequest *request in requestsToRetry) {
-                    NSUInteger index = [self.requests indexOfObject:request];
-                    if (index != NSNotFound) {
-                        NITTrackRequest *request = [self.requests objectAtIndex:index];
-                        if (request) {
-                            [request increaseRetryWithTimeInterval:5.0];
-                        }
-                    }
-                }
                 [self persistTrackings];
-                self.busy = NO;
             });
-        } else {
-            self.busy = NO;
         }
     }];
-    [self.queue waitUntilAllOperationsAreFinished];
-    if (self.reachability.currentReachabilityStatus != NotReachable) {
-        if ([[self availableRequests] count] > 0) {
-            [self sendTrackings];
-        }
-    }
 }
 
 - (NSArray<NITTrackRequest*>*)availableRequests {
     NSMutableArray<NITTrackRequest*> *availableRequests = [[NSMutableArray alloc] init];
     NSArray<NITTrackRequest*> *requests = [self.requests copy];
     for(NITTrackRequest *request in requests) {
-        if ([request availableForNextRetryWithDate:[self currentDate]]) {
+        if ([request availableForNextRetryWithDate:[self currentDate]] && !request.sending) {
             [availableRequests addObject:request];
         }
     }

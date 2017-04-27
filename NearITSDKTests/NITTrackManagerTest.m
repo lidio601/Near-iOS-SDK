@@ -249,10 +249,6 @@
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [queue waitUntilAllOperationsAreFinished];
     
-    [NSThread sleepForTimeInterval:0.5];
-    
-    XCTAssertTrue([trackManager busy] == NO);
-    
     NSArray<NITTrackRequest*> *availableRequests = [trackManager availableRequests];
     XCTAssertTrue([trackManager.requests count] == 1);
     XCTAssertTrue([availableRequests count] == 0);
@@ -273,10 +269,6 @@
     
     [trackManager sendTrackings];
     [queue waitUntilAllOperationsAreFinished];
-    
-    [NSThread sleepForTimeInterval:0.5];
-    
-    XCTAssertTrue([trackManager busy] == NO);
     
     XCTAssertTrue([trackManager.requests count] == 0);
 }
