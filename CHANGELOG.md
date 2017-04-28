@@ -1,3 +1,18 @@
+0.9.10 Release notes (2017-04-28)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* Removed message "Turn on Bluetooth to allow app to connect to accessories".
+
+### Bugfixes
+
+* None.
+
 0.9.9 Release notes (2017-04-28)
 =============================================================
 
