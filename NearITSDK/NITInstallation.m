@@ -31,7 +31,7 @@
     if (self) {
         self.configuration = configuration;
         self.networkManager = networkManager;
-        self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:nil queue:nil];
+        self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:nil queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey : [NSNumber numberWithBool:NO]}];
     }
     return self;
 }
