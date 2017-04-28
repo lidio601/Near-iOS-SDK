@@ -1,3 +1,19 @@
+0.9.9 Release notes (2017-04-28)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* Thread safety and performance improvements for trackings manager.
+* Removed "Reachability" logs.
+
+### Bugfixes
+
+* None.
+
 0.9.8 Release notes (2017-04-27)
 =============================================================
 
