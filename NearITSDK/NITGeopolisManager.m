@@ -151,6 +151,14 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     
     [self setMonitoringWithNodes:monitoredNodes];
     [self setRangingWithNodes:rangedNodes];
+}
+
+- (void)triggerInRegion:(CLRegion*)region {
+    NITLogD(LOGTAG, @"TriggerInRegion -> %@", region.identifier);
+    NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+    if (node == nil) {
+        return;
+    }
     
     if ([node isKindOfClass:[NITGeofenceNode class]]) {
         [self triggerWithEvent:NITRegionEventEnterPlace node:node];
@@ -171,6 +179,14 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     
     [self setMonitoringWithNodes:monitoredNodes];
     [self setRangingWithNodes:rangedNodes];
+}
+
+- (void)triggerOutRegion:(CLRegion*)region {
+    NITLogD(LOGTAG, @"TriggerOutRegion -> %@", region.identifier);
+    NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+    if (node == nil) {
+        return;
+    }
     
     if ([node isKindOfClass:[NITGeofenceNode class]]) {
         [self triggerWithEvent:NITRegionEventLeavePlace node:node];
@@ -290,6 +306,14 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         case CLRegionStateUnknown:
             break;
     }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
+    [self triggerInRegion:region];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
+    [self triggerOutRegion:region];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray<CLBeacon *> *)beacons inRegion:(CLBeaconRegion *)region {

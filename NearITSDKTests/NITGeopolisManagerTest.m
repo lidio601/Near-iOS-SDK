@@ -369,6 +369,14 @@
     [nodesManager setNodesWithJsonApi:jsonApi];
     
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    [cacheManager removeAllItemsWithCompletionHandler:^{
+        dispatch_semaphore_signal(semaphore);
+    }];
+    
+    dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC));
+    
     XCTAssertTrue([cacheManager numberOfStoredKeys] == 0);
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
@@ -663,6 +671,13 @@
     [nodesManager setNodesWithJsonApi:jsonApi];
     
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    [cacheManager removeAllItemsWithCompletionHandler:^{
+        dispatch_semaphore_signal(semaphore);
+    }];
+    
+    dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC));
     XCTAssertTrue([cacheManager numberOfStoredKeys] == 0);
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
@@ -705,6 +720,14 @@
     [nodesManager setNodesWithJsonApi:jsonApi];
     
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    [cacheManager removeAllItemsWithCompletionHandler:^{
+        dispatch_semaphore_signal(semaphore);
+    }];
+    
+    dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC));
+    
     XCTAssertTrue([cacheManager numberOfStoredKeys] == 0);
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
@@ -734,6 +757,13 @@
     [nodesManager setNodesWithJsonApi:jsonApi];
     
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    [cacheManager removeAllItemsWithCompletionHandler:^{
+        dispatch_semaphore_signal(semaphore);
+    }];
+    
+    dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC));
     XCTAssertTrue([cacheManager numberOfStoredKeys] == 0);
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {

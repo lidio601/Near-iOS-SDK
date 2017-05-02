@@ -54,6 +54,11 @@
     if ([self.delegate respondsToSelector:@selector(locationManager:didDetermineState:forRegion:)]) {
         [self.delegate locationManager:self didDetermineState:state forRegion:region];
     }
+    if ([self.delegate respondsToSelector:@selector(locationManager:didEnterRegion:)] && state == CLRegionStateInside) {
+        [self.delegate locationManager:self didEnterRegion:region];
+    } else if ([self.delegate respondsToSelector:@selector(locationManager:didExitRegion:)] && state == CLRegionStateOutside) {
+        [self.delegate locationManager:self didExitRegion:region];
+    }
 }
 
 - (void)simulateDidRangeBeacons:(NSArray<CLBeacon*>*)beacons region:(CLBeaconRegion*)region {
