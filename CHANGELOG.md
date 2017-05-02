@@ -1,3 +1,18 @@
+0.9.11 Release notes (2017-05-02)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* Geopolis region trigger improvements.
+
+### Bugfixes
+
+* None.
+
 0.9.10 Release notes (2017-04-28)
 =============================================================
 
