@@ -34,7 +34,7 @@
         "latitude": 45,
         "longiute": 9,
         "radius": 200,
-        "identifier": "identifier"
+        "identifier": "R2-identifier"
       },
       "relationships": {
         "parent": {
@@ -63,7 +63,7 @@
         "latitude": 45,
         "longiute": 9,
         "radius": 200,
-        "identifier": "identifier"
+        "identifier": "N1R1-identifier"
       },
       "relationships": {
         "parent": {

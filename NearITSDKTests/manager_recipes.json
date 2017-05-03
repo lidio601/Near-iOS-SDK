@@ -83,7 +83,7 @@
              },
              "pulse_action": {
              "data": {
-             "id": "ranging.near",
+             "id": "enter_place",
              "type": "pulse_actions"
              }
              },
@@ -95,7 +95,7 @@
              },
              "pulse_bundle": {
              "data": {
-             "id": "8373e68b-7c5d-411c-9a9c-3cc7ebf039e4",
+             "id": "N1R1-identifier",
              "type": "pulse_bundles"
              }
              },
@@ -128,8 +128,8 @@
              "body": "Ci sono tanti bei contenuti che ti aspettano"
              },
              "updated_at": "2017-03-24T10:41:55.139Z",
-             "reaction_bundle_id": "e77d28fc-c6a0-4b9f-a28a-44e776119e25",
-             "pulse_bundle_id": "8373e68b-7c5d-411c-9a9c-3cc7ebf039e4",
+             "reaction_bundle_id": "n1r1",
+             "pulse_bundle_id": "N1R1-identifier",
              "kind": "passive",
              "name": "Contenuto Spiderman",
              "cooldown": null
@@ -164,13 +164,13 @@
              },
              "pulse_bundle": {
              "data": {
-             "id": "1cb0d78b-0299-4800-b781-59c4c37d8b3a",
+             "id": "X-identifier",
              "type": "pulse_bundles"
              }
              },
              "reaction_bundle": {
              "data": {
-             "id": "a2219054-6a9f-4764-aa7f-6763c076d5ec",
+             "id": "n1r1",
              "type": "reaction_bundles"
              }
              }

@@ -74,6 +74,14 @@
     NITFakeLocationManager *locationManager = [[NITFakeLocationManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:APPID];
     
+    __weak NITManagerTest *weakSelf = self;
+    [self.networkManager setMock:^NITJSONAPI *(NSURLRequest *request) {
+        if ([request.URL.absoluteString containsString:@"/plugins/content-notification/contents/n1r1"]) {
+            return [weakSelf jsonApiWithContentsOfFile:@"content_reaction_mgr_22"];
+        }
+        return nil;
+    } forKey:@"content-reaction"];
+    
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
     [cacheManager removeAllItemsWithCompletionHandler:^{
@@ -93,6 +101,10 @@
     [self.expectations setObject:[self expectationWithDescription:@"r1_notification"] forKey:@"r1_notification"];
     [locationManager simulateDidDetermineStateWithRegion:[[[geopolis nodesManager] nodeWithID:@"r1"] createRegion] state:CLRegionStateInside];
     XCTAssertTrue([[locationManager monitoredRegions] count] == 4);
+    
+    [self.expectations setObject:[self expectationWithDescription:@"n1r1_notification"] forKey:@"n1r1_notification"];
+    [locationManager simulateDidDetermineStateWithRegion:[[[geopolis nodesManager] nodeWithID:@"n1r1"] createRegion] state:CLRegionStateInside];
+    XCTAssertTrue([[locationManager monitoredRegions] count] == 3);
     
     [configuration clear];
     
@@ -122,12 +134,21 @@
             }
             self.contentIndex++;
             [expectation fulfill];
+        } else if (self.contentIndex == 1) {
+            XCTestExpectation *expectation = [self.expectations objectForKey:@"n1r1_notification"];
+            XCTAssertTrue([content isKindOfClass:[NITContent class]]);
+            if ([content isKindOfClass:[NITContent class]]) {
+                NITContent *ctnt = (NITContent*)content;
+                XCTAssertTrue([ctnt.content containsString:@"<h2>​Benvenuto</h2>"]);
+            }
+            self.contentIndex++;
+            [expectation fulfill];
         }
     }
 }
 
 - (void)manager:(NITManager *)manager eventFailureWithError:(NSError *)error recipe:(NITRecipe *)recipe {
-    
+    XCTAssertNil(error);
 }
 
 @end

@@ -148,6 +148,7 @@
 		137838651E800EC1001C8CDE /* NITRecipesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137838631E800EC1001C8CDE /* NITRecipesManager.h */; };
 		137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838641E800EC1001C8CDE /* NITRecipesManager.m */; };
 		137838691E816AD5001C8CDE /* NITGeopolisManager+Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */; };
+		137857A81EB9D33500B2D73A /* content_reaction_mgr_22.json in Resources */ = {isa = PBXBuildFile; fileRef = 137857A71EB9D33500B2D73A /* content_reaction_mgr_22.json */; };
 		137E38A41E8A4464008E83E6 /* NITCacheManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 137E38A21E8A4464008E83E6 /* NITCacheManager.h */; };
 		137E38A51E8A4464008E83E6 /* NITCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 137E38A31E8A4464008E83E6 /* NITCacheManager.m */; };
 		137E38A71E8A4AA6008E83E6 /* NITCacheManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 137E38A61E8A4AA6008E83E6 /* NITCacheManagerTest.m */; };
@@ -356,6 +357,7 @@
 		137838641E800EC1001C8CDE /* NITRecipesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipesManager.m; sourceTree = "<group>"; };
 		137838671E816AD5001C8CDE /* NITGeopolisManager+Tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NITGeopolisManager+Tests.h"; sourceTree = "<group>"; };
 		137838681E816AD5001C8CDE /* NITGeopolisManager+Tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NITGeopolisManager+Tests.m"; sourceTree = "<group>"; };
+		137857A71EB9D33500B2D73A /* content_reaction_mgr_22.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = content_reaction_mgr_22.json; sourceTree = "<group>"; };
 		137E38A21E8A4464008E83E6 /* NITCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITCacheManager.h; sourceTree = "<group>"; };
 		137E38A31E8A4464008E83E6 /* NITCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITCacheManager.m; sourceTree = "<group>"; };
 		137E38A61E8A4AA6008E83E6 /* NITCacheManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITCacheManagerTest.m; sourceTree = "<group>"; };
@@ -787,6 +789,7 @@
 		1374E0DF1EA8F0B500D613A5 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				137857A71EB9D33500B2D73A /* content_reaction_mgr_22.json */,
 				1374E0E41EA8F5F600D613A5 /* manager_config_22.json */,
 				1374E0E01EA8F0D500D613A5 /* fake_new_profile.json */,
 				1374E0E21EA8F4AC00D613A5 /* fake_installation.json */,
@@ -1115,6 +1118,7 @@
 				135A708F1E8547AF00D4C9EC /* content_recipe.json in Resources */,
 				1374E0E51EA8F5F600D613A5 /* manager_config_22.json in Resources */,
 				132297131E8E3C7800AE6EFC /* response_custom_json_reaction.json in Resources */,
+				137857A81EB9D33500B2D73A /* content_reaction_mgr_22.json in Resources */,
 				132296E21E8CF14600AE6EFC /* online_recipe.json in Resources */,
 				1327D8AB1E83E6A300C6689E /* beacon_areas_in_bg.json in Resources */,
 				1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */,
