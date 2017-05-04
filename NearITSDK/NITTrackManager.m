@@ -80,7 +80,7 @@ NSString* const TrackCacheKey = @"Trackings";
                     dispatch_group_enter(group);
                     [self.networkManager makeRequestWithURLRequest:request.request jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
                         if (error == nil) {
-                            NITLogD(LOGTAG, @"Tracking sended");
+                            NITLogD(LOGTAG, @"Tracking sent");
                             [self.requests removeObject:request];
                         } else {
                             NITLogD(LOGTAG, @"Tracking failure");
