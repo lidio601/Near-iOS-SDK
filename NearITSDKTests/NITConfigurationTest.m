@@ -92,4 +92,30 @@
     XCTAssertNil(config.deviceToken);
 }
 
+- (void)testProfileId {
+    NSString *apiKey1 = @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJhcGlLZXkxIiwicm9sZV9rZXkiOiJhcHAifX19.ibOb_wrTd-r5lehDv-G0-h9CBkI6nf_icE9Rbp5r938";
+    
+    NITConfiguration *config = [[NITConfiguration alloc] init];
+    config.apiKey = apiKey1;
+    config.profileId = @"test-profile-id";
+    XCTAssertNotNil(config.profileId);
+    XCTAssertTrue([config.profileId isEqualToString:@"test-profile-id"]);
+    XCTAssertNil([[NSUserDefaults standardUserDefaults] stringForKey:@"profileId"]);
+    XCTAssertNotNil([[NSUserDefaults standardUserDefaults] stringForKey:@"profileId-apiKey1"]);
+    [config clear];
+}
+
+- (void)testInstallationId {
+    NSString *apiKey1 = @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJhcGlLZXkxIiwicm9sZV9rZXkiOiJhcHAifX19.ibOb_wrTd-r5lehDv-G0-h9CBkI6nf_icE9Rbp5r938";
+    
+    NITConfiguration *config = [[NITConfiguration alloc] init];
+    config.apiKey = apiKey1;
+    config.installationId = @"test-installation-id";
+    XCTAssertNotNil(config.installationId);
+    XCTAssertTrue([config.installationId isEqualToString:@"test-installation-id"]);
+    XCTAssertNil([[NSUserDefaults standardUserDefaults] stringForKey:@"installationid"]);
+    XCTAssertNotNil([[NSUserDefaults standardUserDefaults] stringForKey:@"installationid-apiKey1"]);
+    [config clear];
+}
+
 @end
