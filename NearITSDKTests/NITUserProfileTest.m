@@ -9,6 +9,8 @@
 #import "NITTestCase.h"
 #import "NITUserProfile.h"
 #import "NITInstallation.h"
+#import <OCMockitoIOS/OCMockitoIOS.h>
+#import <OCHamcrestIOS/OCHamcrestIOS.h>
 
 #define PROFILEID @"user-profile-id"
 
@@ -16,6 +18,7 @@
 
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) NITNetworkMockManger *networkManager;
+@property (nonatomic, strong) NITInstallation *installation;
 
 @end
 
@@ -24,8 +27,9 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    self.configuration = [[NITConfiguration alloc] init];
-    self.configuration.apiKey = @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJ1c2VyLXByb2ZpbGUtYXBwLWlkIiwicm9sZV9rZXkiOiJhcHAifX19.Y-NMi7bRqKE1S8MCI7sEyXEEg2Yjz6-UXh2vZ01S6GU";
+    self.configuration = mock([NITConfiguration class]);
+    [given([self.configuration appId]) willReturn:@"app-id"];
+    [given([self.configuration profileId]) willReturn:nil];
     self.networkManager = [[NITNetworkMockManger alloc] init];
     
     __weak NITUserProfileTest *weakSelf = self;
@@ -35,12 +39,16 @@
         }
         return [[NITJSONAPI alloc] init];
     };
+    
+    self.installation = mock([NITInstallation class]);
+    [givenVoid([self.installation registerInstallationWithCompletionHandler:anything()]) willDo:^id _Nonnull(NSInvocation * _Nonnull invocation) {
+        return nil;
+    }];
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
-    [self.configuration clear];
 }
 
 - (void)testNewProfile {
@@ -48,12 +56,11 @@
     
     XCTAssertNil(self.configuration.profileId);
     
-    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
     [profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
+        [verifyCount(self.installation, times(1)) registerInstallationWithCompletionHandler:anything()];
         XCTAssertNil(error);
-        XCTAssertTrue([self.configuration.profileId isEqualToString:PROFILEID]);
-        XCTAssertNil(self.configuration.installationId);
+        [verifyCount(self.configuration, times(1)) setProfileId:@"user-profile-id"];
         
         [expectation fulfill];
     }];
@@ -63,18 +70,18 @@
 
 - (void)testResetProfile {
     self.configuration.profileId = PROFILEID;
-    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
     [profile resetProfile];
-    XCTAssertNil(self.configuration.profileId);
+    [verifyCount(self.installation, times(1)) registerInstallationWithCompletionHandler:anything()];
+    [verifyCount(self.configuration, times(1)) setProfileId:nilValue()];
 }
 
 - (void)testSetProfile {
     XCTAssertNil(self.configuration.profileId);
-    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
     [profile setProfileId:PROFILEID];
-    XCTAssertTrue([self.configuration.profileId isEqualToString:PROFILEID]);
+    [verifyCount(self.installation, times(1)) registerInstallationWithCompletionHandler:anything()];
+    [verifyCount(self.configuration, times(1)) setProfileId:PROFILEID];
 }
 
 @end

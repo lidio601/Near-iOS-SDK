@@ -81,6 +81,8 @@
 		1349EEC51E7A95E3000B0666 /* NITNodesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEC31E7A95E3000B0666 /* NITNodesManager.m */; };
 		1349EEC91E7AA1E3000B0666 /* NITResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 1349EEC71E7AA1E3000B0666 /* NITResource.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		1349EECA1E7AA1E3000B0666 /* NITResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEC81E7AA1E3000B0666 /* NITResource.m */; };
+		134E43AD1EBB5AB70099014C /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 134E43AC1EBB5AB70099014C /* OCHamcrestIOS.framework */; };
+		134E43AF1EBB5AC80099014C /* OCMockitoIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 134E43AE1EBB5AC80099014C /* OCMockitoIOS.framework */; };
 		1352CA6E1E7807FE00C0E98E /* NearITSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1352CA641E7807FE00C0E98E /* NearITSDK.framework */; };
 		1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1352CA721E7807FE00C0E98E /* NearITSDKTests.m */; };
 		1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 1352CA671E7807FE00C0E98E /* NearITSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -266,6 +268,8 @@
 		1349EEC31E7A95E3000B0666 /* NITNodesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITNodesManager.m; sourceTree = "<group>"; };
 		1349EEC71E7AA1E3000B0666 /* NITResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITResource.h; sourceTree = "<group>"; };
 		1349EEC81E7AA1E3000B0666 /* NITResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITResource.m; sourceTree = "<group>"; };
+		134E43AC1EBB5AB70099014C /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCHamcrestIOS.framework; sourceTree = "<group>"; };
+		134E43AE1EBB5AC80099014C /* OCMockitoIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCMockitoIOS.framework; sourceTree = "<group>"; };
 		1352CA641E7807FE00C0E98E /* NearITSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NearITSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1352CA671E7807FE00C0E98E /* NearITSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NearITSDK.h; sourceTree = "<group>"; };
 		1352CA681E7807FE00C0E98E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -389,6 +393,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1352CA6E1E7807FE00C0E98E /* NearITSDK.framework in Frameworks */,
+				134E43AD1EBB5AB70099014C /* OCHamcrestIOS.framework in Frameworks */,
+				134E43AF1EBB5AC80099014C /* OCMockitoIOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -567,6 +573,15 @@
 			name = Nodes;
 			sourceTree = "<group>";
 		};
+		134E43AB1EBB5A9F0099014C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				134E43AE1EBB5AC80099014C /* OCMockitoIOS.framework */,
+				134E43AC1EBB5AB70099014C /* OCHamcrestIOS.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		1352CA5A1E7807FD00C0E98E = {
 			isa = PBXGroup;
 			children = (
@@ -625,6 +640,7 @@
 		1352CA711E7807FE00C0E98E /* NearITSDKTests */ = {
 			isa = PBXGroup;
 			children = (
+				134E43AB1EBB5A9F0099014C /* Frameworks */,
 				1378386A1E816ADF001C8CDE /* Classes */,
 				1349EEAA1E7948CD000B0666 /* Fixtures */,
 				13423EE71E7BE15D008CAAC8 /* Constants.h */,
@@ -1409,8 +1425,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = H673MARJ2R;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/NearITSDKTests",
+				);
 				INFOPLIST_FILE = NearITSDKTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nearit.NearITSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1420,8 +1441,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = H673MARJ2R;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/NearITSDKTests",
+				);
 				INFOPLIST_FILE = NearITSDKTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nearit.NearITSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
