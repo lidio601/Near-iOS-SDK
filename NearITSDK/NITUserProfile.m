@@ -24,12 +24,12 @@
 
 @implementation NITUserProfile
 
-- (instancetype)initWithConfiguration:(NITConfiguration *)configuration networkManager:(id<NITNetworkManaging>)networkManager {
+- (instancetype)initWithConfiguration:(NITConfiguration *)configuration networkManager:(id<NITNetworkManaging>)networkManager installation:(NITInstallation*)installation {
     self = [super init];
     if (self) {
         self.configuration = configuration;
         self.networkManager = networkManager;
-        self.installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager];
+        self.installation = installation;
     }
     return self;
 }

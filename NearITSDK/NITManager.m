@@ -68,7 +68,8 @@
         
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
         
-        self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
+        NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager];
+        self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation];
         [self.cacheManager setAppId:[self.configuration appId]];
         [self pluginSetup];
         [self reactionsSetup];

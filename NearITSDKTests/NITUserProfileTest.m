@@ -8,6 +8,7 @@
 
 #import "NITTestCase.h"
 #import "NITUserProfile.h"
+#import "NITInstallation.h"
 
 #define PROFILEID @"user-profile-id"
 
@@ -43,25 +44,35 @@
 }
 
 - (void)testNewProfile {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"newProfile"];
+    
     XCTAssertNil(self.configuration.profileId);
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
+    
+    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation];
     [profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
         XCTAssertNil(error);
         XCTAssertTrue([self.configuration.profileId isEqualToString:PROFILEID]);
         XCTAssertNil(self.configuration.installationId);
+        
+        [expectation fulfill];
     }];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
 - (void)testResetProfile {
     self.configuration.profileId = PROFILEID;
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
+    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation];
     [profile resetProfile];
     XCTAssertNil(self.configuration.profileId);
 }
 
 - (void)testSetProfile {
     XCTAssertNil(self.configuration.profileId);
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
+    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:self.configuration networkManager:self.networkManager];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation];
     [profile setProfileId:PROFILEID];
     XCTAssertTrue([self.configuration.profileId isEqualToString:PROFILEID]);
 }
