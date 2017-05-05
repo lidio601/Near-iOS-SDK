@@ -7,6 +7,8 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <OCMockitoIOS/OCMockitoIOS.h>
+#import <OCHamcrestIOS/OCHamcrestIOS.h>
 #import "NITTestCase.h"
 #import "NITJSONAPI.h"
 #import "NITRecipe.h"
@@ -79,7 +81,8 @@
 
 - (void)testContentNotification {
     NITRecipe *recipe = [self recipeWithContentsOfFile:@"content_recipe"];
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     NITContentReaction *reaction = [[NITContentReaction alloc] initWithCacheManager:cacheManager networkManager:networkManager];
     
@@ -90,6 +93,8 @@
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
     [reaction contentWithRecipe:recipe completionHandler:^(id _Nonnull content, NSError * _Nullable error) {
+        [verifyCount(cacheManager, times(1)) loadArrayForKey:@"ContentReaction"];
+        XCTAssertTrue([networkManager isMockCalled]);
         XCTAssertNil(error);
         XCTAssertNotNil(content);
         XCTAssertTrue([content isKindOfClass:[NITContent class]]);
@@ -122,7 +127,8 @@
     recipe.reactionBundleId = @"08b4935a-8ee5-45cd-923e-078a7d35953b";
     
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[NSString stringWithFormat:@"test-%@", recipe.reactionBundleId]];
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
     NITFeedbackReaction *feedbackReaction = [[NITFeedbackReaction alloc] initWithCacheManager:cacheManager networkManager:networkManager];
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return [self jsonApiWithContentsOfFile:@"response_feeback_reaction"];
@@ -130,6 +136,8 @@
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     [feedbackReaction contentWithRecipe:recipe completionHandler:^(id  _Nullable content, NSError * _Nullable error) {
+        [verifyCount(cacheManager, times(1)) loadArrayForKey:@"FeedbackReaction"];
+        XCTAssertTrue([networkManager isMockCalled]);
         XCTAssertNil(error);
         XCTAssertNotNil(content);
         XCTAssertTrue([content isKindOfClass:[NITFeedback class]]);
@@ -153,7 +161,8 @@
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return [self jsonApiWithContentsOfFile:@"response_feedback_event"];
     };
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[NSString stringWithFormat:@"test-%@", recipe.reactionBundleId]];
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
     NITFeedbackReaction *reaction = [[NITFeedbackReaction alloc] initWithCacheManager:cacheManager configuration:[NITConfiguration defaultConfiguration] networkManager:networkManager];
     
     NITFeedback *feedback = [self feedbackWithContentsOfFile:@"feedback1"];
@@ -163,6 +172,7 @@
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     [reaction sendEventWithFeedbackEvent:event completionHandler:^(NSError * _Nullable error) {
         XCTAssertNil(error);
+        XCTAssertTrue([networkManager isMockCalled]);
         
         [expectation fulfill];
     }];
@@ -175,7 +185,8 @@
     recipe.reactionBundleId = @"bb40734c-75c2-4ac6-a716-9267f9893baa";
     
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[NSString stringWithFormat:@"test-%@", recipe.reactionBundleId]];
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
     NITCustomJSONReaction *reaction = [[NITCustomJSONReaction alloc] initWithCacheManager:cacheManager networkManager:networkManager];
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return [self jsonApiWithContentsOfFile:@"response_custom_json_reaction"];
@@ -183,6 +194,8 @@
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     [reaction contentWithRecipe:recipe completionHandler:^(id  _Nullable content, NSError * _Nullable error) {
+        [verifyCount(cacheManager, times(1)) loadArrayForKey:@"CustomJSONReaction"];
+        XCTAssertTrue([networkManager isMockCalled]);
         XCTAssertNil(error);
         XCTAssertNotNil(content);
         XCTAssertTrue([content isKindOfClass:[NITCustomJSON class]]);
@@ -201,8 +214,9 @@
 - (void)testCouponReaction {
     NITRecipe *couponRecipe = [self recipeWithContentsOfFile:@"response_coupon_evaluated_recipe"];
     
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITNetworkManager *networkManager = [[NITNetworkManager alloc] init];
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     NITCouponReaction *reaction = [[NITCouponReaction alloc] initWithCacheManager:cacheManager configuration:[NITConfiguration defaultConfiguration] networkManager:networkManager];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
@@ -220,7 +234,8 @@
 - (void)testCoupons {
     NITConfiguration *config = [[NITConfiguration alloc] init];
     config.profileId = @"6a2490f4-28b9-4e36-b0f6-2c97c86b0002";
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     NITCouponReaction *reaction = [[NITCouponReaction alloc] initWithCacheManager:cacheManager configuration:config networkManager:networkManager];
     
@@ -230,6 +245,7 @@
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     [reaction couponsWithCompletionHandler:^(NSArray<NITCoupon *> * _Nullable coupons, NSError * _Nullable error) {
+        XCTAssertTrue([networkManager isMockCalled]);
         XCTAssertNil(error);
         XCTAssertNotNil(coupons);
         XCTAssertTrue([coupons count] > 0);
@@ -247,9 +263,8 @@
 
 - (void)testCachedContentNotification {
     NSArray<NITContent*> *contents = [self contentsWithContentsOfFile:@"contents1"];
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"content-test"];
-    [cacheManager saveWithArray:contents forKey:@"ContentReaction"];
-    [NSThread sleepForTimeInterval:0.5];
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    [given([cacheManager loadArrayForKey:@"ContentReaction"]) willReturn:contents];
     NITRecipe *recipe = [[NITRecipe alloc] init];
     
     recipe.reactionBundleId = @"c66db20c-20c4-4768-98e2-daf24def7722";
@@ -261,6 +276,8 @@
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     
     [reaction contentWithRecipe:recipe completionHandler:^(id  _Nonnull content, NSError * _Nullable error) {
+        [verifyCount(cacheManager, times(1)) loadArrayForKey:@"ContentReaction"];
+        XCTAssertFalse([networkManager isMockCalled]);
         XCTAssertNil(error);
         XCTAssertNotNil(content);
         

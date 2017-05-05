@@ -14,6 +14,8 @@ NSErrorDomain const NITNetworkMockErrorDomain = @"com.nearit.networkmock";
 @interface NITNetworkMockManger()
 
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NITMockBlock> *mockBlocks;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, NSNumber*> *mockCalls;
+@property (nonatomic) BOOL isMockCalled;
 
 @end
 
@@ -23,6 +25,8 @@ NSErrorDomain const NITNetworkMockErrorDomain = @"com.nearit.networkmock";
     self = [super init];
     if (self) {
         self.mockBlocks = [[NSMutableDictionary alloc] init];
+        self.mockCalls = [[NSMutableDictionary alloc] init];
+        self.isMockCalled = NO;
     }
     return self;
 }
@@ -31,6 +35,7 @@ NSErrorDomain const NITNetworkMockErrorDomain = @"com.nearit.networkmock";
     if (self.mock) {
         NITJSONAPI *json = self.mock(request);
         if (json) {
+            self.isMockCalled = YES;
             completionHandler(json, nil);
         } else {
             completionHandler(nil, [NSError errorWithDomain:NITNetworkMockErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"No json api given"}]);
@@ -41,6 +46,7 @@ NSErrorDomain const NITNetworkMockErrorDomain = @"com.nearit.networkmock";
             NITMockBlock block = [self.mockBlocks objectForKey:key];
             json = block(request);
             if (json) {
+                [self.mockCalls setObject:[NSNumber numberWithBool:YES] forKey:key];
                 break;
             }
         }
@@ -60,6 +66,14 @@ NSErrorDomain const NITNetworkMockErrorDomain = @"com.nearit.networkmock";
 
 - (void)removeMockForKey:(NSString *)key {
     [self.mockBlocks removeObjectForKey:key];
+}
+
+- (BOOL)isMockCalledForKey:(NSString *)key {
+    NSNumber *called = [self.mockCalls objectForKey:key];
+    if (called && [called boolValue]) {
+        return YES;
+    }
+    return NO;
 }
 
 @end

@@ -16,7 +16,7 @@
 #import "NITFeedbackEvent.h"
 #import "NITConfiguration.h"
 
-#define CACHE_KEY @"ContentReaction"
+#define CACHE_KEY @"FeedbackReaction"
 
 @interface NITFeedbackReaction()
 
