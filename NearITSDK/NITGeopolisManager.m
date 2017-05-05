@@ -94,12 +94,15 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         return YES;
     }
     
+    NITLogD(LOGTAG, @"Geopolis start");
+    
     if([[self.nodesManager roots] count] == 0) {
         return NO;
     }
     
     CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
     if (authorizationStatus != kCLAuthorizationStatusAuthorizedWhenInUse && authorizationStatus != kCLAuthorizationStatusAuthorizedAlways) {
+        NITLogE(LOGTAG, @"Geopolis couldn't start: CLLocationManager authorizationStatus is wrong");
         return false;
     }
     
@@ -109,6 +112,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 }
 
 - (void)startMonitoringRoots {
+    NITLogD(LOGTAG, @"Geopolis start monitoring roots");
     NSArray<NITNode*> *roots = [self.nodesManager roots];
     for (NITNode *node in roots) {
         CLRegion *region = [node createRegion];
@@ -258,7 +262,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     }
     
     NSString *eventString = [NITUtils stringFromRegionEvent:event];
-    NITLogD(LOGTAG, @"Trigger for event -> %@ - node -> %", eventString, node);
+    NITLogD(LOGTAG, @"Trigger for event -> %@ - node -> %@", eventString, node);
     
     [self trackEventWithIdentifier:node.identifier event:event];
     if([self.recipesManager respondsToSelector:@selector(gotPulseWithPulsePlugin:pulseAction:pulseBundle:)]) {
@@ -304,6 +308,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
             [self stepOutRegion:region];
             break;
         case CLRegionStateUnknown:
+            NITLogE(LOGTAG, @"Undefined status for region in node: %@", [self.nodesManager nodeWithID:region.identifier]);
             break;
     }
 }

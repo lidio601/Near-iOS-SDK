@@ -20,6 +20,7 @@
 #import "NITCacheManager.h"
 #import "NITTrackManager.h"
 
+#define LOGTAG @"RecipesManager"
 NSString* const RecipesCacheKey = @"Recipes";
 
 @interface NITRecipesManager()
@@ -180,6 +181,7 @@ NSString* const RecipesCacheKey = @"Recipes";
 }
 
 - (void)gotRecipe:(NITRecipe*)recipe {
+    NITLogD(LOGTAG, @"Got a recipe: %@", recipe.ID);
     if ([self.manager respondsToSelector:@selector(recipesManager:gotRecipe:)]) {
         [self.manager recipesManager:self gotRecipe:recipe];
     }

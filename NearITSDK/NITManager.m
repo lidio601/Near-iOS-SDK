@@ -28,6 +28,8 @@
 #import "NITDateManager.h"
 #import "Reachability.h"
 
+#define LOGTAG @"Manager"
+
 @interface NITManager()<NITManaging>
 
 @property (nonatomic, strong) NITGeopolisManager *geopolisManager;
@@ -77,7 +79,10 @@
         
         [self.profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
             if(error == nil) {
+                NITLogD(LOGTAG, @"Profile creation successful: %@", profileId);
                 [self refreshConfigWithCompletionHandler:nil];
+            } else {
+                NITLogE(LOGTAG, @"Profile creation error");
             }
         }];
     }
@@ -146,9 +151,11 @@
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{
         if (completionHandler) {
             if ([errors count] > 0) {
+                NITLogE(LOGTAG, @"Config download error");
                 NSError *anError = [NSError errorWithDomain:NITManagerErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:@"Refresh config failed for some reason, check the 'errors' key for more detail", @"errors" : errors}];
                 completionHandler(anError);
             } else {
+                NITLogD(LOGTAG, @"Config downloaded");
                 completionHandler(nil);
             }
         }
