@@ -26,8 +26,8 @@
 - (NSDate *)redeemed {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = ISO8601DateFormatMilliseconds;
-    if (self.redeemed) {
-        return [dateFormatter dateFromString:(NSString * _Nonnull)self.redeemed];
+    if (self.redeemedAt) {
+        return [dateFormatter dateFromString:(NSString * _Nonnull)self.redeemedAt];
     }
     return nil;
 }

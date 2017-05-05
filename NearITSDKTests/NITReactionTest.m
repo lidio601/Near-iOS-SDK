@@ -289,4 +289,41 @@
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
+// MARK: - Objects
+
+- (void)testCouponDates {
+    NITCoupon *coupon = [[NITCoupon alloc] init];
+    coupon.expiresAt = @"2017-04-12T23:59:59.999Z";
+    NSDate *expires = coupon.expires;
+    XCTAssertNotNil(expires);
+    NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+    [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    NSDateComponents *expiresComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:expires];
+    XCTAssertTrue([expiresComponents day] == 12);
+    XCTAssertTrue([expiresComponents month] == 4);
+    XCTAssertTrue([expiresComponents year] == 2017);
+}
+
+- (void)testClaimDates {
+    NITClaim *claim = [[NITClaim alloc] init];
+    claim.claimedAt = @"2017-01-10T23:59:59.999Z";
+    NSDate *claimed = claim.claimed;
+    XCTAssertNotNil(claimed);
+    NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+    [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    NSDateComponents *claimedComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:claimed];
+    XCTAssertTrue([claimedComponents day] == 10);
+    XCTAssertTrue([claimedComponents month] == 1);
+    XCTAssertTrue([claimedComponents year] == 2017);
+    
+    XCTAssertNil(claim.redeemed);
+    claim.redeemedAt = @"2017-02-11T23:59:59.999Z";
+    NSDate *redeemed = claim.redeemed;
+    NSDateComponents *redeemedComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:redeemed];
+    XCTAssertTrue([redeemedComponents day] == 11);
+    XCTAssertTrue([redeemedComponents month] == 2);
+    XCTAssertTrue([redeemedComponents year] == 2017);
+    
+}
+
 @end

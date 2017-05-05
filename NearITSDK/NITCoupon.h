@@ -19,5 +19,6 @@
 @property (nonatomic, strong) NSString *expiresAt;
 @property (nonatomic, strong) NSArray<NITClaim*> *claims;
 @property (nonatomic, strong) NITImage *icon;
+@property (nonatomic, readonly) NSDate *expires;
 
 @end
