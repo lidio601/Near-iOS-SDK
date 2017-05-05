@@ -17,8 +17,10 @@
 @property (nonatomic, strong) NSString *couponDescription;
 @property (nonatomic, strong) NSString *value;
 @property (nonatomic, strong) NSString *expiresAt;
+@property (nonatomic, strong) NSString *redeemableFrom;
 @property (nonatomic, strong) NSArray<NITClaim*> *claims;
 @property (nonatomic, strong) NITImage *icon;
 @property (nonatomic, readonly) NSDate *expires;
+@property (nonatomic, readonly) NSDate *redeemable;
 
 @end

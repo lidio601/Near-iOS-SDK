@@ -158,7 +158,8 @@ manager.sendEvent(feedbackEvent, completionHandler: { (error) in
     - `name` returns the coupon name
     - `couponDescription` returns the description
     - `value` returns the value string
-    - `expiresAt` returns the expiring date
+    - `expires` returns the expiring date
+    - `redeemable` returns the redeemable date, it's a start date of when you can reedem the coupon
     - `icon` returns an *Image* object containing the source links for the icon
     - `claims` returns a list of *NITClaim* which are the actual instances for the current profile
     - a `NITClaim` is composed by:

@@ -302,6 +302,14 @@
     XCTAssertTrue([expiresComponents day] == 12);
     XCTAssertTrue([expiresComponents month] == 4);
     XCTAssertTrue([expiresComponents year] == 2017);
+    
+    XCTAssertNil(coupon.redeemable);
+    coupon.redeemableFrom = @"2016-03-22T23:59:59.999Z";
+    NSDate *redeemable = coupon.redeemable;
+    NSDateComponents *redeemableComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:redeemable];
+    XCTAssertTrue([redeemableComponents day] == 22);
+    XCTAssertTrue([redeemableComponents month] == 3);
+    XCTAssertTrue([redeemableComponents year] == 2016);
 }
 
 - (void)testClaimDates {

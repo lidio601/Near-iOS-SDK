@@ -13,7 +13,8 @@
 
 - (NSDictionary *)attributesMap {
     return @{ @"description" : @"couponDescription",
-              @"expires_at" : @"expiresAt" };
+              @"expires_at" : @"expiresAt",
+              @"redeemable_from" : @"redeemableFrom" };
 }
 
 - (NSDate *)expires {
@@ -21,6 +22,15 @@
     dateFormatter.dateFormat = ISO8601DateFormatMilliseconds;
     if (self.expiresAt) {
         return [dateFormatter dateFromString:self.expiresAt];
+    }
+    return nil;
+}
+
+- (NSDate *)redeemable {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = ISO8601DateFormatMilliseconds;
+    if (self.redeemableFrom) {
+        return [dateFormatter dateFromString:self.redeemableFrom];
     }
     return nil;
 }
