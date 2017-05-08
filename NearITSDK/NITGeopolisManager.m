@@ -167,6 +167,8 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     }
     NITLogD(LOGTAG, @"TriggerInNode -> %@", node);
     
+    [self stepInRegion:region];
+    
     if ([node isKindOfClass:[NITGeofenceNode class]]) {
         [self triggerWithEvent:NITRegionEventEnterPlace node:node];
     } else {
@@ -196,6 +198,8 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         return;
     }
     NITLogD(LOGTAG, @"TriggerOutNode -> %@", node);
+    
+    [self stepOutRegion:region];
     
     if ([node isKindOfClass:[NITGeofenceNode class]]) {
         [self triggerWithEvent:NITRegionEventLeavePlace node:node];
