@@ -117,6 +117,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     for (NITNode *node in roots) {
         CLRegion *region = [node createRegion];
         [self.locationManager startMonitoringForRegion:region];
+        [self.locationManager requestStateForRegion:region];
     }
     
     self.started = YES;
@@ -234,7 +235,9 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     
     for(NITNode *node in nodes) {
         if (![self existsWithRegionIdentifier:node.ID regions:[self.locationManager.monitoredRegions allObjects]]) {
-            [self.locationManager startMonitoringForRegion:[node createRegion]];
+            CLRegion *region = [node createRegion];
+            [self.locationManager startMonitoringForRegion:region];
+            [self.locationManager requestStateForRegion:region];
         }
     }
 }
@@ -296,12 +299,6 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 }
 
 // MARK: - Location manager delegate
-
-- (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region {
-    if ([region isKindOfClass:[CLCircularRegion class]]) {
-        [manager requestStateForRegion:region];
-    }
-}
 
 - (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region {
     switch (state) {
