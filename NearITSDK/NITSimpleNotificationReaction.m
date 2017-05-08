@@ -10,6 +10,9 @@
 #import "NITRecipe.h"
 #import "NITSimpleNotification.h"
 #import "NITConstants.h"
+#import "NITLog.h"
+
+#define LOGTAG @"SimpleNotificationReaction"
 
 @implementation NITSimpleNotificationReaction
 
@@ -17,8 +20,10 @@
     if (handler) {
         NITSimpleNotification *notification = [self contentWithRecipe:recipe];
         if(notification) {
+            NITLogD(LOGTAG, @"Notification extracted from recipe (%@): title -> %@", recipe.ID, notification.notificationTitle);
             handler(notification, nil);
         } else {
+            NITLogE(LOGTAG, @"Notification failure: recipeId -> %@", recipe.ID);
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:100 userInfo:@{NSLocalizedDescriptionKey:@"Invalid notification in recipe"}];
             handler(nil, anError);
         }

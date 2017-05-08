@@ -16,8 +16,10 @@
 #import "NITImage.h"
 #import "NITAudio.h"
 #import "NITUpload.h"
+#import "NITLog.h"
 
 #define CACHE_KEY @"ContentReaction"
+#define LOGTAG @"ContentReaction"
 
 @interface NITContentReaction()
 
@@ -33,6 +35,7 @@
     }
     for(NITContent *content in self.contents) {
         if([content.ID isEqualToString:recipe.reactionBundleId]) {
+            NITLogD(LOGTAG, @"Content found in cache");
             handler(content, nil);
             return;
         }
@@ -48,6 +51,7 @@
     [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] contentWithBundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         
         if (error) {
+            NITLogE(LOGTAG, @"Invalid content data from network error");
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"Invalid content data", NSUnderlyingErrorKey: error}];
             handler(nil, anError);
         } else {
@@ -58,9 +62,11 @@
             
             NSArray<NITContent*> *contents = [json parseToArrayOfObjects];
             if([contents count] > 0) {
+                NITLogD(LOGTAG, @"Content found");
                 NITContent *content = [contents objectAtIndex:0];
                 handler(content, nil);
             } else {
+                NITLogE(LOGTAG, @"Invalid content data from empty or invalid type of json");
                 NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"Invalid content data"}];
                 handler(nil, anError);
             }
