@@ -19,6 +19,7 @@
 #import "NITRecipeCooler.h"
 #import "NITCacheManager.h"
 #import "NITTrackManager.h"
+#import "NITDateManager.h"
 
 #define LOGTAG @"RecipesManager"
 NSString* const RecipesCacheKey = @"Recipes";
@@ -39,7 +40,7 @@ NSString* const RecipesCacheKey = @"Recipes";
 - (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration *)configuration trackManager:(NITTrackManager * _Nonnull)trackManager {
     self = [super init];
     if (self) {
-        self.cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager];
+        self.cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager dateManager:[[NITDateManager alloc] init]];
         self.cacheManager = cacheManager;
         self.networkManager = networkManager;
         self.configuration = configuration;

@@ -9,6 +9,7 @@
 #import "NITRecipeCooler.h"
 #import "NITRecipe.h"
 #import "NITCacheManager.h"
+#import "NITDateManager.h"
 
 #define LOGMAP_CACHE_KEY @"CoolerLogMap"
 #define LATESTLOG_CACHE_KEY @"CoolerLatestLog"
@@ -18,6 +19,7 @@
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NSNumber*> *log;
 @property (nonatomic, strong) NSNumber *latestLog;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
+@property (nonatomic, strong) NITDateManager *dateManager;
 
 @end
 
@@ -26,16 +28,17 @@
 @synthesize log = _log;
 @synthesize latestLog = _latestLog;
 
-- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager {
+- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager dateManager:(NITDateManager*)dateManager {
     self = [super init];
     if (self) {
         self.cacheManager = cacheManager;
+        self.dateManager = dateManager;
     }
     return self;
 }
 
 - (void)markRecipeAsShownWithId:(NSString *)recipeId {
-    NSDate *now = [NSDate date];
+    NSDate *now = [self.dateManager currentDate];
     NSTimeInterval timestamp = now.timeIntervalSince1970;
     [self.log setObject:[NSNumber numberWithDouble:timestamp] forKey:recipeId];
     self.latestLog = [NSNumber numberWithDouble:timestamp];
@@ -65,7 +68,7 @@
         return YES;
     }
     
-    NSDate *now = [NSDate date];
+    NSDate *now = [self.dateManager currentDate];
     NSTimeInterval expiredSeconds = now.timeIntervalSince1970 - [self.latestLog doubleValue];
     return expiredSeconds >= [globalCooldown doubleValue];
 }
@@ -76,7 +79,11 @@
         return YES;
     }
     
-    NSDate *now = [NSDate date];
+    if ([selfCooldown intValue] == [kRecipeNeverRepeat intValue] && [self.log objectForKey:recipe.ID] != nil) {
+        return NO;
+    }
+    
+    NSDate *now = [self.dateManager currentDate];
     NSTimeInterval recipeLatestLog = [[self.log objectForKey:recipe.ID] doubleValue];
     NSTimeInterval expiredSeconds = now.timeIntervalSince1970 - recipeLatestLog;
     return expiredSeconds >= [selfCooldown doubleValue];

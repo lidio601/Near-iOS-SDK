@@ -17,11 +17,14 @@
 #import "TestReachability.h"
 #import "NITTrackManager.h"
 #import "NITDateManager.h"
+#import <OCMockitoIOS/OCMockitoIOS.h>
+#import <OCHamcrestIOS/OCHamcrestIOS.h>
 
 @interface NITRecipesManagerTest : NITTestCase<NITManaging>
 
 @property (nonatomic, strong) XCTestExpectation *expectation;
 @property (nonatomic, strong) TestReachability *reachability;
+@property (nonatomic, strong) NITDateManager *dateManager;
 
 @end
 
@@ -32,6 +35,7 @@
     // Put setup code here. This method is called before the invocation of each test method in the class.
     self.reachability = [[TestReachability alloc] init];
     self.reachability.testNetworkStatus = NotReachable;
+    self.dateManager = [[NITDateManager alloc] init];
 }
 
 - (void)tearDown {
@@ -153,7 +157,7 @@
     NSArray<NITRecipe*> *recipes = @[recipe1, recipe2];
     
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testRecipeCooler"];
-    NITRecipeCooler *cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager];
+    NITRecipeCooler *cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager dateManager:self.dateManager];
     [cooler markRecipeAsShownWithId:recipe1.ID];
     
     [NSThread sleepForTimeInterval:0.2];
@@ -194,7 +198,7 @@
     recipe2.cooldown = @{@"global_cooldown" : [NSNumber numberWithDouble:1.0], @"self_cooldown" : [NSNumber numberWithDouble:3.0]};
     
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:@"testRecipeCoolerCacheEmpty"];
-    NITRecipeCooler *cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager];
+    NITRecipeCooler *cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager dateManager:self.dateManager];
     [cooler markRecipeAsShownWithId:recipe1.ID];
     
     NSDate *now = [NSDate date];
@@ -245,7 +249,7 @@
     [cacheManager saveWithObject:cachedLatestLog forKey:@"CoolerLatestLog"];
     [NSThread sleepForTimeInterval:0.2];
     
-    NITRecipeCooler *cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager];
+    NITRecipeCooler *cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager dateManager:self.dateManager];
     NSArray<NITRecipe*> *filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
     XCTAssertTrue([filteredRecipes count] == 0);
     
@@ -269,6 +273,34 @@
         [expectation fulfill];
     }];
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
+}
+
+- (void)testRecipeCoolerNeverRepeat {
+    NITDateManager *dateManager = mock([NITDateManager class]);
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    [given([cacheManager loadDictionaryForKey:anything()]) willReturn:nil];
+    [given([cacheManager loadNumberForKey:anything()]) willReturn:nil];
+    NSDate *now = [NSDate date];
+    [given([dateManager currentDate]) willReturn:now];
+    
+    NITRecipeCooler *cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager dateManager:self.dateManager];
+    
+    NITRecipe *onlyOnceRecipe = [[NITRecipe alloc] init];
+    onlyOnceRecipe.ID = @"once";
+    onlyOnceRecipe.cooldown = @{@"global_cooldown" : [NSNumber numberWithDouble:0.0], @"self_cooldown" : kRecipeNeverRepeat};
+    
+    NSArray<NITRecipe*> *recipes = [NSArray arrayWithObjects:onlyOnceRecipe, nil];
+    
+    NSArray<NITRecipe*> *filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
+    XCTAssertTrue([filteredRecipes count] == 1);
+    
+    [cooler markRecipeAsShownWithId:onlyOnceRecipe.ID];
+    filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
+    XCTAssertTrue([filteredRecipes count] == 0);
+    
+    [given([dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:31622400 * 4]]; // 4 Years
+    filteredRecipes = [cooler filterRecipeWithRecipes:recipes];
+    XCTAssertTrue([filteredRecipes count] == 0);
 }
 
 - (void)testRecipesManagerCacheNotEmpty {
