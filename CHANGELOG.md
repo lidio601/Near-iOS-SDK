@@ -1,3 +1,20 @@
+0.9.12 Release notes (2017-05-08)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* More logs available for analysis.
+* Added "redeemable" date for coupons
+
+### Bugfixes
+
+* "expires" date fix in NITCoupon.
+* Fix for feedback reaction cache.
+
 0.9.11 Release notes (2017-05-02)
 =============================================================
 
