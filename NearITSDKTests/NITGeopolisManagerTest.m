@@ -28,6 +28,8 @@
 #import "NITTrackManager.h"
 #import "TestReachability.h"
 #import "NITDateManager.h"
+#import <OCMockitoIOS/OCMockitoIOS.h>
+#import <OCHamcrestIOS/OCHamcrestIOS.h>
 
 @interface NITGeopolisManagerTest : NITTestCase
 
@@ -368,16 +370,9 @@
     NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     [nodesManager setNodesWithJsonApi:jsonApi];
     
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    
-    [cacheManager removeAllItemsWithCompletionHandler:^{
-        dispatch_semaphore_signal(semaphore);
-    }];
-    
-    dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC));
-    
-    XCTAssertTrue([cacheManager numberOfStoredKeys] == 0);
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
+
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return nil;
@@ -388,7 +383,7 @@
     XCTAssertTrue([monitoredRegions count] == 0);
     XCTAssertTrue([rangedRegions count] == 0);
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:[[NSOperationQueue alloc] init] dateManager:[[NITDateManager alloc] init]];
+    NITTrackManager *trackManager = mock([NITTrackManager class]);
     
     NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration] locationManager:fakeLocationManager trackManager:trackManager];
     [geopolisManager startForUnitTest];
@@ -401,6 +396,7 @@
     XCTAssertTrue(check);
     
     [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"r1"] createRegion] state:CLRegionStateInside];
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"r2"] createRegion] state:CLRegionStateOutside];
     monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
     rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
     XCTAssertTrue([monitoredRegions count] == 4);

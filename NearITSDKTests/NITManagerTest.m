@@ -16,6 +16,8 @@
 #import "NITRecipesManager.h"
 #import "NITNode.h"
 #import "NITSimpleNotification.h"
+#import <OCMockitoIOS/OCMockitoIOS.h>
+#import <OCHamcrestIOS/OCHamcrestIOS.h>
 
 #define APIKEY @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJ0ZXN0TWFuYWdlciIsInJvbGVfa2V5IjoiYXBwIn19fQ.2-xxd79pAtxJ648T9i_3HJzHRaQdZt0JEIHG5Fmiidg"
 #define APPID @"testManager"
@@ -72,7 +74,8 @@
 - (void)testManagerID1 {
     NITConfiguration *configuration = [[NITConfiguration alloc] init];
     NITFakeLocationManager *locationManager = [[NITFakeLocationManager alloc] init];
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:APPID];
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
     
     __weak NITManagerTest *weakSelf = self;
     [self.networkManager setMock:^NITJSONAPI *(NSURLRequest *request) {
@@ -81,14 +84,6 @@
         }
         return nil;
     } forKey:@"content-reaction"];
-    
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    
-    [cacheManager removeAllItemsWithCompletionHandler:^{
-        dispatch_semaphore_signal(semaphore);
-    }];
-    
-    dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC));
     
     NITManager *manager = [[NITManager alloc] initWithApiKey:APIKEY configuration:configuration networkManager:self.networkManager cacheManager:cacheManager locationManager:locationManager];
     manager.delegate = self;
@@ -99,22 +94,20 @@
     
     // Enter R1 geofence node, should be a simple-notification
     [self.expectations setObject:[self expectationWithDescription:@"r1_notification"] forKey:@"r1_notification"];
-    [locationManager simulateDidDetermineStateWithRegion:[[[geopolis nodesManager] nodeWithID:@"r1"] createRegion] state:CLRegionStateInside];
+    CLRegion *r1 = [[[geopolis nodesManager] nodeWithID:@"r1"] createRegion];
+    CLRegion *r2 = [[[geopolis nodesManager] nodeWithID:@"r2"] createRegion];
+    [locationManager simulateDidDetermineStateWithRegion:r1 state:CLRegionStateInside];
+    [locationManager simulateDidDetermineStateWithRegion:r2 state:CLRegionStateOutside];
+    [locationManager simulateDidEnterRegion:r1];
     XCTAssertTrue([[locationManager monitoredRegions] count] == 4);
     
     [self.expectations setObject:[self expectationWithDescription:@"n1r1_notification"] forKey:@"n1r1_notification"];
-    [locationManager simulateDidDetermineStateWithRegion:[[[geopolis nodesManager] nodeWithID:@"n1r1"] createRegion] state:CLRegionStateInside];
+    CLRegion *n1r1 = [[[geopolis nodesManager] nodeWithID:@"n1r1"] createRegion];
+    [locationManager simulateDidDetermineStateWithRegion:n1r1 state:CLRegionStateInside];
+    [locationManager simulateDidEnterRegion:n1r1];
     XCTAssertTrue([[locationManager monitoredRegions] count] == 3);
     
     [configuration clear];
-    
-    dispatch_semaphore_t semaphore2 = dispatch_semaphore_create(0);
-    
-    [cacheManager removeAllItemsWithCompletionHandler:^{
-        dispatch_semaphore_signal(semaphore2);
-    }];
-    
-    dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC));
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }

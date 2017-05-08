@@ -72,7 +72,12 @@
                 }
             }
         } else if (node && node.parent == nil) {
-            return [self statelessMonitoredNoesOnExitWithId:node.ID];
+            NSArray<NITNode*> *rootsEntered = [self rootsEntered:node];
+            if ([rootsEntered count] > 0) {
+                return [self statelessMonitoredNodesOnEnterWithId:[rootsEntered lastObject].ID];
+            } else {
+                return [self statelessMonitoredNoesOnExitWithId:node.ID];
+            }
         }
     }
     return [NSArray array];
@@ -115,6 +120,16 @@
         }
     }
     return [NSArray arrayWithArray:siblings];
+}
+    
+- (NSArray<NITNode*>*)rootsEntered:(NITNode*)node {
+    NSMutableArray<NITNode*> *rootsEntered = [[NSMutableArray alloc] init];
+    for (NITNode *bro in self.enteredNodes) {
+        if (bro.parent == nil && ![node isEqual:bro]) {
+            [rootsEntered addObject:bro];
+        }
+    }
+    return [NSArray arrayWithArray:rootsEntered];
 }
 
 - (NSArray<NITNode *> *)statelessMonitoredNodesOnEnterWithId:(NSString *)nodeId {

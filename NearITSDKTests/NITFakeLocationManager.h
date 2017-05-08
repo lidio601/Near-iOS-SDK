@@ -12,5 +12,7 @@
 
 - (void)simulateDidDetermineStateWithRegion:(CLRegion* _Nonnull)region state:(CLRegionState)state;
 - (void)simulateDidRangeBeacons:(NSArray<CLBeacon*>* _Nonnull)beacons region:(CLBeaconRegion* _Nonnull)region;
+- (void)simulateDidEnterRegion:(CLRegion* _Nonnull)region;
+- (void)simulateDidExitRegion:(CLRegion* _Nonnull)region;
 
 @end
