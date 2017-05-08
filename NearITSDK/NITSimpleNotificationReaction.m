@@ -33,7 +33,7 @@
 - (NITSimpleNotification*)contentWithRecipe:(NITRecipe*)recipe {
     NSString *title = [recipe notificationTitle];
     NSString *body = [recipe notificationBody];
-    if (title && body) {
+    if (body) {
         NITSimpleNotification *notification = [[NITSimpleNotification alloc] init];
         notification.notificationTitle = title;
         notification.message = body;

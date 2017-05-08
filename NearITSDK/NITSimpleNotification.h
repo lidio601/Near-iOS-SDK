@@ -10,7 +10,7 @@
 
 @interface NITSimpleNotification : NSObject
 
-@property (nonatomic, strong) NSString *notificationTitle;
-@property (nonatomic, strong) NSString *message;
+@property (nonatomic, strong) NSString * _Nullable notificationTitle;
+@property (nonatomic, strong) NSString * _Nonnull message;
 
 @end
