@@ -18,5 +18,9 @@
 - (CLLocationCoordinate2D)center {
     return CLLocationCoordinate2DMake([self.latitude doubleValue], [self.longitude doubleValue]);
 }
+    
+- (NSString *)description {
+    return [NSString stringWithFormat:@"Node (Geofence) - lat:lng (%.4f, %.4f)", self.latitude.floatValue, self.longitude.floatValue];
+}
 
 @end

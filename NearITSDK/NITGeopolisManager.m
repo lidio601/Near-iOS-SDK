@@ -149,6 +149,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     if (node == nil) {
         return;
     }
+    NITLogD(LOGTAG, @"StepInNode -> %@", node);
     
     NSArray<NITNode*> *monitoredNodes = [self.nodesManager monitoredNodesOnEnterWithId:region.identifier];
     NSArray<NITNode*> *rangedNodes = [self.nodesManager rangedNodesOnEnterWithId:region.identifier];
@@ -163,6 +164,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     if (node == nil) {
         return;
     }
+    NITLogD(LOGTAG, @"TriggerInNode -> %@", node);
     
     if ([node isKindOfClass:[NITGeofenceNode class]]) {
         [self triggerWithEvent:NITRegionEventEnterPlace node:node];
@@ -177,6 +179,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     if (node == nil) {
         return;
     }
+    NITLogD(LOGTAG, @"StepOutNode -> %@", node);
     
     NSArray<NITNode*> *monitoredNodes = [self.nodesManager monitoredNodesOnExitWithId:region.identifier];
     NSArray<NITNode*> *rangedNodes = [self.nodesManager rangedNodesOnExitWithId:region.identifier];
@@ -191,6 +194,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     if (node == nil) {
         return;
     }
+    NITLogD(LOGTAG, @"TriggerOutNode -> %@", node);
     
     if ([node isKindOfClass:[NITGeofenceNode class]]) {
         [self triggerWithEvent:NITRegionEventLeavePlace node:node];
