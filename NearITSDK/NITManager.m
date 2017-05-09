@@ -113,7 +113,7 @@
 - (void)reactionsSetup {
     self.reactions = [[NSMutableDictionary alloc] init];
     
-    self.couponReaction = [[NITCouponReaction alloc] init];
+    self.couponReaction = [[NITCouponReaction alloc] initWithCacheManager:self.cacheManager configuration:self.configuration networkManager:self.networkManager];
     self.feedbackReaction = [[NITFeedbackReaction alloc] initWithCacheManager:self.cacheManager configuration:self.configuration networkManager:self.networkManager];
     
     [self.reactions setObject:[[NITSimpleNotificationReaction alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager] forKey:@"simple-notification"];

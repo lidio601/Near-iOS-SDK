@@ -232,15 +232,18 @@
 }
 
 - (void)testCoupons {
-    NITConfiguration *config = [[NITConfiguration alloc] init];
-    config.profileId = @"6a2490f4-28b9-4e36-b0f6-2c97c86b0002";
+    NITConfiguration *config = mock([NITConfiguration class]);
+    [given([config profileId]) willReturn:@"6a2490f4-28b9-4e36-b0f6-2c97c86b0002"];
     NITCacheManager *cacheManager = mock([NITCacheManager class]);
     [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     NITCouponReaction *reaction = [[NITCouponReaction alloc] initWithCacheManager:cacheManager configuration:config networkManager:networkManager];
     
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
-        return [self jsonApiWithContentsOfFile:@"coupons"];
+        if ([request.URL.absoluteString containsString:@"/plugins/coupon-blaster/coupons?filter%5Bclaims.profile_id%5D=6a2490f4-28b9-4e36-b0f6-2c97c86b0002&include=claims,icon"]) {
+            return [self jsonApiWithContentsOfFile:@"coupons"];
+        }
+        return nil;
     };
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
