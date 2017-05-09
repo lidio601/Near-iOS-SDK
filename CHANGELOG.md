@@ -1,3 +1,19 @@
+0.9.13 Release notes (2017-05-09)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Coupons request fix, profileId was missing.
+* "title" for SimpleNotification now isn't mandatory.
+
 0.9.12 Release notes (2017-05-08)
 =============================================================
 
