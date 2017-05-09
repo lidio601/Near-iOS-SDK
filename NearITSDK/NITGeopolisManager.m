@@ -106,6 +106,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         return false;
     }
     
+    [self stop];
     [self startMonitoringRoots];
     
     return YES;
@@ -126,10 +127,9 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 - (void)stop {
     for (CLRegion *region in self.locationManager.monitoredRegions) {
         [self.locationManager stopMonitoringForRegion:region];
-        if ([region isKindOfClass:[CLBeaconRegion class]]) {
-            CLBeaconRegion *beaconRegion = (CLBeaconRegion*)region;
-            [self.locationManager stopRangingBeaconsInRegion:beaconRegion];
-        }
+    }
+    for (CLRegion *region in self.locationManager.rangedRegions) {
+        [self.locationManager stopRangingBeaconsInRegion:region];
     }
     [self.nodesManager clear];
     self.started = NO;

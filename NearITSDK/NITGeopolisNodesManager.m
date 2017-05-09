@@ -80,6 +80,13 @@
             } else {
                 return [self statelessMonitoredNoesOnExitWithId:node.ID];
             }
+        } else if ([node.parent isEqual:self.lastEnteredNode] && self.lastEnteredNode.parent == nil) {
+            NSArray<NITNode*> *siblingsEntered = [self sibilingsAreEntered:node];
+            if ([siblingsEntered count] > 0) {
+                return [self statelessMonitoredNodesOnEnterWithId:[siblingsEntered lastObject].ID];
+            } else {
+                return [self statelessMonitoredNoesOnExitWithId:node.ID];
+            }
         }
     }
     return [NSArray array];
@@ -143,7 +150,7 @@
             NSArray<NITNode*> *siblings = [self siblingsWithNode:node];
             [nodes addObjectsFromArray:siblings];
             if ([node isKindOfClass:[NITBeaconNode class]] && node.identifier) {
-                // The child must not be monitored
+                [nodes addObject:node.parent];
             } else if (node.children != nil && [node.children count] > 0) {
                 [nodes addObjectsFromArray:node.children];
             }

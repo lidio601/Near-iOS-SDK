@@ -144,7 +144,7 @@
     // exiting from that node
     XCTAssertTrue([[nodesManager statelessMonitoredNoesOnExitWithId:@"e2c3174c-bfb9-4a16-aa28-b05fe310e8ad"] count] == 6);
     // entering a node with 6 sibilings and beacon children
-    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"28160b69-52a8-4f96-8fe2-aaa36c9bd794"] count] == 7);
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"28160b69-52a8-4f96-8fe2-aaa36c9bd794"] count] == 8);
     // exiting from that node
     XCTAssertTrue([[nodesManager statelessMonitoredNoesOnExitWithId:@"28160b69-52a8-4f96-8fe2-aaa36c9bd794"] count] == 8);
     // entering a beacon node, special case
@@ -185,7 +185,7 @@
     XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"n1n1r1"] count] == 3);
     XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"n1n1r1"] count] == 0);
     
-    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"n1n1n1r1"] count] == 2);
+    XCTAssertTrue([[nodesManager statelessMonitoredNodesOnEnterWithId:@"n1n1n1r1"] count] == 3);
     XCTAssertTrue([[nodesManager statelessRangedNodesOnEnterWithId:@"n1n1n1r1"] count] == 1);
 }
 
@@ -223,8 +223,8 @@
     XCTAssertTrue([rangedNodes count] == 0);
     
     monitoredNodes = [nodesManager monitoredNodesOnEnterWithId:@"n1n1n1r1"];
-    XCTAssertTrue([monitoredNodes count] == 2);
-    check = [self checkIfArrayOfNodesContainsIds:@[@"n1n1n1r1", @"n2n1n1r1"] array:monitoredNodes];
+    XCTAssertTrue([monitoredNodes count] == 3);
+    check = [self checkIfArrayOfNodesContainsIds:@[@"n1n1n1r1", @"n2n1n1r1", @"n1n1r1"] array:monitoredNodes];
     XCTAssertTrue(check);
     
     rangedNodes = [nodesManager rangedNodesOnEnterWithId:@"n1n1n1r1"];
@@ -442,9 +442,9 @@
     [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n1n1n1r1"] createRegion] state:CLRegionStateInside];
     monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
     rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
-    XCTAssertTrue([monitoredRegions count] == 2);
+    XCTAssertTrue([monitoredRegions count] == 3);
     XCTAssertTrue([rangedRegions count] == 1);
-    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1", @"n2n1n1r1"] array:monitoredRegions];
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1", @"n2n1n1r1", @"n1n1r1"] array:monitoredRegions];
     XCTAssertTrue(check);
     check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1"] array:rangedRegions];
     XCTAssertTrue(check);
@@ -452,9 +452,9 @@
     [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n2n1n1r1"] createRegion] state:CLRegionStateInside];
     monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
     rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
-    XCTAssertTrue([monitoredRegions count] == 2);
+    XCTAssertTrue([monitoredRegions count] == 3);
     XCTAssertTrue([rangedRegions count] == 2);
-    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1", @"n2n1n1r1"] array:monitoredRegions];
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1", @"n2n1n1r1", @"n1n1r1"] array:monitoredRegions];
     XCTAssertTrue(check);
     check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1", @"n2n1n1r1"] array:rangedRegions];
     XCTAssertTrue(check);
@@ -462,9 +462,9 @@
     [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n2n1n1r1"] createRegion] state:CLRegionStateOutside];
     monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
     rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
-    XCTAssertTrue([monitoredRegions count] == 2);
+    XCTAssertTrue([monitoredRegions count] == 3);
     XCTAssertTrue([rangedRegions count] == 1);
-    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1", @"n2n1n1r1"] array:monitoredRegions];
+    check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1", @"n2n1n1r1", @"n1n1r1"] array:monitoredRegions];
     XCTAssertTrue(check);
     check = [self checkIfArrayOfRegionsContainsIds:@[@"n1n1n1r1"] array:rangedRegions];
     XCTAssertTrue(check);
