@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) NSMutableArray<NITNode*> *enteredNodes;
 @property (nonatomic, strong) NITNode *lastEnteredNode;
+@property (nonatomic, strong) NSArray<NITNode*> *lastExitedNodes;
 
 @end
 

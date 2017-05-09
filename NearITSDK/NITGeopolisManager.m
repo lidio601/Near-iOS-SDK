@@ -183,6 +183,18 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     }
     NITLogD(LOGTAG, @"StepOutNode -> %@", node);
     
+    BOOL isMonitored = NO;
+    for (CLRegion *monitoredRegion in self.locationManager.monitoredRegions) {
+        if ([monitoredRegion.identifier isEqualToString:region.identifier]) {
+            isMonitored = YES;
+        }
+    }
+    
+    if (!isMonitored) {
+        NITLogD(LOGTAG, @"StepOutNode ignored because is not monitored -> %@", node);
+        return;
+    }
+    
     NSArray<NITNode*> *monitoredNodes = [self.nodesManager monitoredNodesOnExitWithId:region.identifier];
     NSArray<NITNode*> *rangedNodes = [self.nodesManager rangedNodesOnExitWithId:region.identifier];
     NITLogD(LOGTAG, @"Regions state stepOut MR -> %d, RR -> %d", [monitoredNodes count], [rangedNodes count]);
