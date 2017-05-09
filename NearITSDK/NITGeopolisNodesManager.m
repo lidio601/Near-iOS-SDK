@@ -70,6 +70,8 @@
                 } else {
                     return [self statelessMonitoredNoesOnExitWithId:node.ID];
                 }
+            } else if ([node.parent isEqual:self.lastEnteredNode]) {
+                return [self statelessMonitoredNodesOnEnterWithId:self.lastEnteredNode.ID];
             }
         } else if (node && node.parent == nil) {
             NSArray<NITNode*> *rootsEntered = [self rootsEntered:node];

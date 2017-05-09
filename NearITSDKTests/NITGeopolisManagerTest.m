@@ -413,6 +413,7 @@
     XCTAssertTrue(check);
     
     [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n1r1"] createRegion] state:CLRegionStateInside];
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n1n1r1"] createRegion] state:CLRegionStateOutside];
     monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
     rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
     XCTAssertTrue([monitoredRegions count] == 3);
@@ -429,6 +430,8 @@
     XCTAssertTrue(check);
     
     [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n1n1r1"] createRegion] state:CLRegionStateInside];
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n1n1n1r1"] createRegion] state:CLRegionStateOutside];
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"n2n1n1r1"] createRegion] state:CLRegionStateOutside];
     monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
     rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
     XCTAssertTrue([monitoredRegions count] == 3);
