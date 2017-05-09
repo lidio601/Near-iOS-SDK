@@ -154,6 +154,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     
     NSArray<NITNode*> *monitoredNodes = [self.nodesManager monitoredNodesOnEnterWithId:region.identifier];
     NSArray<NITNode*> *rangedNodes = [self.nodesManager rangedNodesOnEnterWithId:region.identifier];
+    NITLogD(LOGTAG, @"Regions state stepIn MR -> %d, RR -> %d", [monitoredNodes count], [rangedNodes count]);
     
     [self setMonitoringWithNodes:monitoredNodes];
     [self setRangingWithNodes:rangedNodes];
@@ -166,8 +167,6 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         return;
     }
     NITLogD(LOGTAG, @"TriggerInNode -> %@", node);
-    
-    [self stepInRegion:region];
     
     if ([node isKindOfClass:[NITGeofenceNode class]]) {
         [self triggerWithEvent:NITRegionEventEnterPlace node:node];
@@ -186,6 +185,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     
     NSArray<NITNode*> *monitoredNodes = [self.nodesManager monitoredNodesOnExitWithId:region.identifier];
     NSArray<NITNode*> *rangedNodes = [self.nodesManager rangedNodesOnExitWithId:region.identifier];
+    NITLogD(LOGTAG, @"Regions state stepOut MR -> %d, RR -> %d", [monitoredNodes count], [rangedNodes count]);
     
     [self setMonitoringWithNodes:monitoredNodes];
     [self setRangingWithNodes:rangedNodes];
@@ -198,8 +198,6 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         return;
     }
     NITLogD(LOGTAG, @"TriggerOutNode -> %@", node);
-    
-    [self stepOutRegion:region];
     
     if ([node isKindOfClass:[NITGeofenceNode class]]) {
         [self triggerWithEvent:NITRegionEventLeavePlace node:node];
@@ -240,6 +238,8 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     for(NITNode *node in nodes) {
         if (![self existsWithRegionIdentifier:node.ID regions:[self.locationManager.monitoredRegions allObjects]]) {
             CLRegion *region = [node createRegion];
+            region.notifyOnEntry = YES;
+            region.notifyOnExit = YES;
             [self.locationManager startMonitoringForRegion:region];
             [self.locationManager requestStateForRegion:region];
         }
