@@ -1,3 +1,18 @@
+0.9.14 Release notes (2017-05-10)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Various locations fixes.
+
 0.9.13 Release notes (2017-05-09)
 =============================================================
 
