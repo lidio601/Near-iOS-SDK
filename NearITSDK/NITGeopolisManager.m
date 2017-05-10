@@ -43,7 +43,9 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 @property (nonatomic, strong) NSMutableArray<NSString*> *enteredRegions;
 @property (nonatomic, strong) NSString *pluginName;
 @property (nonatomic, strong) NITNetworkProvider *provider;
+@property (nonatomic, strong) NSTimer *locationTimer;
 @property (nonatomic) BOOL started;
+@property (nonatomic) BOOL stepResponse;
 
 @end
 
@@ -57,8 +59,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         } else {
             self.locationManager = [[CLLocationManager alloc] init];
         }
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-        self.locationManager.distanceFilter = 400;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
         self.locationManager.delegate = self;
         [self.locationManager requestLocation];
         self.nodesManager = nodesManager;
@@ -69,7 +70,18 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         self.enteredRegions = [[NSMutableArray alloc] init];
         self.pluginName = @"geopolis";
         self.started = NO;
+        self.stepResponse = NO;
         self.beaconProximity = [[NITBeaconProximityManager alloc] init];
+        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            if (!self.stepResponse) {
+                NITLogD(@"LocationTimer", @"Request step response by timer");
+                [self.locationManager requestLocation];
+                [self requestStateForRoots];
+            } else {
+                [self.locationTimer invalidate];
+            }
+            
+        }];
     }
     return self;
 }
@@ -127,6 +139,14 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     self.started = YES;
 }
 
+- (void)requestStateForRoots {
+    NSArray<NITNode*> *roots = [self.nodesManager roots];
+    for (NITNode *node in roots) {
+        CLRegion *region = [node createRegion];
+        [self.locationManager requestStateForRegion:region];
+    }
+}
+
 - (void)stop {
     for (CLRegion *region in self.locationManager.monitoredRegions) {
         [self.locationManager stopMonitoringForRegion:region];
@@ -134,6 +154,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     for (CLBeaconRegion *region in self.locationManager.rangedRegions) {
         [self.locationManager stopRangingBeaconsInRegion:region];
     }
+    [self.locationManager stopUpdatingLocation];
     [self.nodesManager clear];
     self.started = NO;
 }
@@ -148,6 +169,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 // MARK: - Region step
 
 - (void)stepInRegion:(CLRegion*)region {
+    self.stepResponse = YES;
     NITLogD(LOGTAG, @"StepInRegion -> %@", region.identifier);
     NITNode *node = [self.nodesManager nodeWithID:region.identifier];
     if (node == nil) {
@@ -164,6 +186,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 }
 
 - (void)triggerInRegion:(CLRegion*)region {
+    self.stepResponse = YES;
     NITLogD(LOGTAG, @"TriggerInRegion -> %@", region.identifier);
     NITNode *node = [self.nodesManager nodeWithID:region.identifier];
     if (node == nil) {
@@ -179,6 +202,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 }
 
 - (void)stepOutRegion:(CLRegion*)region {
+    self.stepResponse = YES;
     NITLogD(LOGTAG, @"StepOutRegion -> %@", region.identifier);
     NITNode *node = [self.nodesManager nodeWithID:region.identifier];
     if (node == nil) {
@@ -207,6 +231,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 }
 
 - (void)triggerOutRegion:(CLRegion*)region {
+    self.stepResponse = YES;
     NITLogD(LOGTAG, @"TriggerOutRegion -> %@", region.identifier);
     NITNode *node = [self.nodesManager nodeWithID:region.identifier];
     if (node == nil) {
@@ -405,6 +430,10 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         default:
             return NITRegionEventUnknown;
     }
+}
+
+- (void)fireLocationTimer:(NSTimer*)timer {
+    
 }
 
 @end
