@@ -57,9 +57,10 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         } else {
             self.locationManager = [[CLLocationManager alloc] init];
         }
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
-        self.locationManager.distanceFilter = 200;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+        self.locationManager.distanceFilter = 400;
         self.locationManager.delegate = self;
+        [self.locationManager requestLocation];
         self.nodesManager = nodesManager;
         self.cacheManager = cacheManager;
         self.networkManaeger = networkManager;
@@ -130,7 +131,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     for (CLRegion *region in self.locationManager.monitoredRegions) {
         [self.locationManager stopMonitoringForRegion:region];
     }
-    for (CLRegion *region in self.locationManager.rangedRegions) {
+    for (CLBeaconRegion *region in self.locationManager.rangedRegions) {
         [self.locationManager stopRangingBeaconsInRegion:region];
     }
     [self.nodesManager clear];
@@ -374,6 +375,17 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     }
     
     [self.beaconProximity evaluateDisappearedWithBeaconIdentifiers:appeared regionIdentifier:region.identifier];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    CLLocation *location = [locations lastObject];
+    NSDate *eventDate = location.timestamp;
+    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+    NITLogD(LOGTAG, @"Location update (%.4f,%.4f) %.1f seconds ago", location.coordinate.latitude, location.coordinate.longitude, fabs(howRecent));
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    NITLogW(LOGTAG, @"Location manager error: %@", error);
 }
 
 // MARK: - Utils
