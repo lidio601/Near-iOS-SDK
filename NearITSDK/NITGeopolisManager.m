@@ -25,6 +25,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 #define LOGTAG @"GeopolisManager"
+#define MAX_LOCATION_TIMER_RETRY 3
 
 NSErrorDomain const NITGeopolisErrorDomain = @"com.nearit.geopolis";
 NSString* const NodeKey = @"node";
@@ -44,6 +45,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 @property (nonatomic, strong) NSString *pluginName;
 @property (nonatomic, strong) NITNetworkProvider *provider;
 @property (nonatomic, strong) NSTimer *locationTimer;
+@property (nonatomic) NSInteger locationTimerRetry;
 @property (nonatomic) BOOL started;
 @property (nonatomic) BOOL stepResponse;
 
@@ -72,16 +74,6 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         self.started = NO;
         self.stepResponse = NO;
         self.beaconProximity = [[NITBeaconProximityManager alloc] init];
-        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
-            if (!self.stepResponse) {
-                NITLogD(@"LocationTimer", @"Request step response by timer");
-                [self.locationManager requestLocation];
-                [self requestStateForRoots];
-            } else {
-                [self.locationTimer invalidate];
-            }
-            
-        }];
     }
     return self;
 }
@@ -122,6 +114,27 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     }
     
     [self stop];
+    
+    self.locationTimerRetry = 0;
+    [NSOperationQueue.mainQueue addOperationWithBlock:^{
+        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            self.locationTimerRetry++;
+            NITLogD(@"LocationTimer", @"Entered in timer: retry %d", self.locationTimerRetry);
+            if (!self.stepResponse) {
+                NITLogW(@"LocationTimer", @"Request step response by timer");
+                [self.locationManager requestLocation];
+                [self requestStateForRoots];
+            } else {
+                [self.locationTimer invalidate];
+                NITLogD(@"LocationTimer", @"Invalidate timer due to a successful state");
+            }
+            if (self.locationTimerRetry >= MAX_LOCATION_TIMER_RETRY) {
+                NITLogW(@"LocationTimer", @"MAX_LOCATION_TIMER_RETRY reached");
+                [self.locationTimer invalidate];
+            }
+        }];
+    }];
+    
     [self startMonitoringRoots];
     
     return YES;
@@ -157,6 +170,9 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     [self.locationManager stopUpdatingLocation];
     [self.nodesManager clear];
     self.started = NO;
+    [self.locationTimer invalidate];
+    self.locationTimer = nil;
+    self.locationTimerRetry = 0;
 }
 
 - (BOOL)hasCurrentNode {
@@ -430,10 +446,6 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         default:
             return NITRegionEventUnknown;
     }
-}
-
-- (void)fireLocationTimer:(NSTimer*)timer {
-    
 }
 
 @end
