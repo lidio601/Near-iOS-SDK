@@ -1,3 +1,18 @@
+0.9.15 Release notes (2017-05-12)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Bug fix for the location timer in Geopolis.
+
 0.9.14 Release notes (2017-05-10)
 =============================================================
 
