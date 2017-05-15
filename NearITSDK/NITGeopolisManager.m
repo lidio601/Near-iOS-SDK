@@ -45,6 +45,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 @property (nonatomic, strong) NSString *pluginName;
 @property (nonatomic, strong) NITNetworkProvider *provider;
 @property (nonatomic, strong) NSTimer *locationTimer;
+@property (nonatomic, strong) NSMutableArray<NITNode*> *visitedNodes;
 @property (nonatomic) NSInteger locationTimerRetry;
 @property (nonatomic) BOOL started;
 @property (nonatomic) BOOL stepResponse;
@@ -70,6 +71,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         self.trackManager = trackManager;
         self.configuration = configuration;
         self.enteredRegions = [[NSMutableArray alloc] init];
+        self.visitedNodes = [[NSMutableArray alloc] init];
         self.pluginName = @"geopolis";
         self.started = NO;
         self.stepResponse = NO;
@@ -173,6 +175,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     [self.locationTimer invalidate];
     self.locationTimer = nil;
     self.locationTimerRetry = 0;
+    [self.visitedNodes removeAllObjects];
 }
 
 - (BOOL)hasCurrentNode {
@@ -192,7 +195,11 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         return;
     }
     NITLogD(LOGTAG, @"StepInNode -> %@", node);
+    if (![self isAlreadyVisitedWithNode:node]) {
+        [self triggerInRegion:region];
+    }
     
+    [self setVisitedWithNode:node];
     NSArray<NITNode*> *monitoredNodes = [self.nodesManager monitoredNodesOnEnterWithId:region.identifier];
     NSArray<NITNode*> *rangedNodes = [self.nodesManager rangedNodesOnEnterWithId:region.identifier];
     NITLogD(LOGTAG, @"Regions state stepIn MR -> %d, RR -> %d", [monitoredNodes count], [rangedNodes count]);
@@ -210,6 +217,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     }
     NITLogD(LOGTAG, @"TriggerInNode -> %@", node);
     
+    [self setVisitedWithNode:node];
     if ([node isKindOfClass:[NITGeofenceNode class]]) {
         [self triggerWithEvent:NITRegionEventEnterPlace node:node];
     } else {
@@ -319,6 +327,18 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
             }
         }
     }
+}
+
+- (void)setVisitedWithNode:(NITNode*)node {
+    [self.visitedNodes addObject:node];
+}
+
+- (BOOL)isAlreadyVisitedWithNode:(NITNode*)node {
+    NSUInteger index = [self.visitedNodes indexOfObject:node];
+    if (index != NSNotFound) {
+        return YES;
+    }
+    return NO;
 }
 
 // MARK: - Trigger

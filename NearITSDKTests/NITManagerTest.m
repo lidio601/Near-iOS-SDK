@@ -98,13 +98,11 @@
     CLRegion *r2 = [[[geopolis nodesManager] nodeWithID:@"r2"] createRegion];
     [locationManager simulateDidDetermineStateWithRegion:r1 state:CLRegionStateInside];
     [locationManager simulateDidDetermineStateWithRegion:r2 state:CLRegionStateOutside];
-    [locationManager simulateDidEnterRegion:r1];
     XCTAssertTrue([[locationManager monitoredRegions] count] == 4);
     
     [self.expectations setObject:[self expectationWithDescription:@"n1r1_notification"] forKey:@"n1r1_notification"];
     CLRegion *n1r1 = [[[geopolis nodesManager] nodeWithID:@"n1r1"] createRegion];
     [locationManager simulateDidDetermineStateWithRegion:n1r1 state:CLRegionStateInside];
-    [locationManager simulateDidEnterRegion:n1r1];
     XCTAssertTrue([[locationManager monitoredRegions] count] == 3);
     
     [configuration clear];

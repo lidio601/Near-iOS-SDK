@@ -31,9 +31,11 @@
 #import <OCMockitoIOS/OCMockitoIOS.h>
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
 
-@interface NITGeopolisManagerTest : NITTestCase
+@interface NITGeopolisManagerTest : NITTestCase<NITRecipesManaging>
 
 @property (nonatomic, strong) TestReachability *reachability;
+@property (nonatomic, strong) NSString *recipesManagingId;
+@property (nonatomic, strong) XCTestExpectation *recipesManagingExpectation;
 
 @end
 
@@ -49,6 +51,8 @@
     
     self.reachability = [[TestReachability alloc] init];
     self.reachability.testNetworkStatus = NotReachable;
+    self.recipesManagingId = nil;
+    self.recipesManagingExpectation = nil;
 }
 
 - (void)tearDown {
@@ -478,6 +482,40 @@
     XCTAssertTrue(check);
 }
 
+- (void)testGeopolisVisitedNodes {
+    self.recipesManagingId = @"visitedNodes";
+    NITFakeLocationManager *fakeLocationManager = [[NITFakeLocationManager alloc] init];
+    
+    NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"config_22"];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
+    [nodesManager setNodesWithJsonApi:jsonApi];
+    
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
+    
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return nil;
+    };
+    
+    NSArray<CLRegion*> *monitoredRegions = [[fakeLocationManager monitoredRegions] allObjects];
+    NSArray<CLRegion*> *rangedRegions = [[fakeLocationManager rangedRegions] allObjects];
+    XCTAssertTrue([monitoredRegions count] == 0);
+    XCTAssertTrue([rangedRegions count] == 0);
+    
+    NITTrackManager *trackManager = mock([NITTrackManager class]);
+    
+    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:[NITConfiguration defaultConfiguration] locationManager:fakeLocationManager trackManager:trackManager];
+    [geopolisManager startForUnitTest];
+    geopolisManager.recipesManager = self;
+    
+    self.recipesManagingExpectation = [self expectationWithDescription:@"recipesManaging"];
+    
+    [fakeLocationManager simulateDidDetermineStateWithRegion:[[nodesManager nodeWithID:@"r1"] createRegion] state:CLRegionStateInside];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
 // MARK: - Other tests
 
 - (void)testGeopolisNodesManager {
@@ -824,6 +862,14 @@
         }
     }
     return trueCount == [ids count];
+}
+
+// MARK: - RecipesManaging
+
+- (void)gotPulseWithPulsePlugin:(NSString *)pulsePlugin pulseAction:(NSString *)pulseAction pulseBundle:(NSString *)pulseBundle {
+    if ([self.recipesManagingId isEqualToString:@"visitedNodes"]) {
+        [self.recipesManagingExpectation fulfill];
+    }
 }
 
 @end
