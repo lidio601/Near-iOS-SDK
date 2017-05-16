@@ -1,3 +1,18 @@
+0.9.16 Release notes (2017-05-16)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* Now if you are inside a geofences for the first time the sdk acts like it's a geofence enter, so it gives you a content if available.
+
+### Bugfixes
+
+* None.
+
 0.9.15 Release notes (2017-05-12)
 =============================================================
 
