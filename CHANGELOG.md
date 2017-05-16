@@ -1,3 +1,18 @@
+0.9.17 Release notes (2017-05-16)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fix for unvisited nodes.
+
 0.9.16 Release notes (2017-05-16)
 =============================================================
 
