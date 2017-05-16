@@ -296,6 +296,10 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     for(CLRegion *region in self.locationManager.monitoredRegions) {
         if (![self stillExistsWithRegionIdentifier:region.identifier nodes:nodes]) {
             [self.locationManager stopMonitoringForRegion:region];
+            NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+            if (node) {
+                [self setNotVisitedWithNode:node];
+            }
         }
     }
     
@@ -315,6 +319,10 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         if (![self stillExistsWithRegionIdentifier:region.identifier nodes:nodes]) {
             [self.locationManager stopRangingBeaconsInRegion:region];
             [self.beaconProximity removeRegionWithIdentifier:region.identifier];
+            NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+            if (node) {
+                [self setNotVisitedWithNode:node];
+            }
         }
     }
     
@@ -331,6 +339,10 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 
 - (void)setVisitedWithNode:(NITNode*)node {
     [self.visitedNodes addObject:node];
+}
+
+- (void)setNotVisitedWithNode:(NITNode*)node {
+    [self.visitedNodes removeObject:node];
 }
 
 - (BOOL)isAlreadyVisitedWithNode:(NITNode*)node {
