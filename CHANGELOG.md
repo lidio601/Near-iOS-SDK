@@ -1,3 +1,18 @@
+0.9.18 Release notes (2017-05-17)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* You can process a recipe from a push and have the response in the completion block (processRecipeWithUserInfo:completion:).
+
+### Bugfixes
+
+* None.
+
 0.9.17 Release notes (2017-05-16)
 =============================================================
 
