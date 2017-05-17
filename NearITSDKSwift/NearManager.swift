@@ -57,6 +57,16 @@ public final class NearManager: NSObject, NITManagerDelegate {
         }
     }
     
+    public func processRecipe(_ userInfo: [AnyHashable : Any], completion: ((Any?, NITRecipe?, Error?) -> Void)?) {
+        if let ui = userInfo as? [String : Any] {
+            manager.processRecipe(userInfo: ui, completion: { (content, recipe, error) in
+                if completion != nil {
+                    completion!(content, recipe, error)
+                }
+            })
+        }
+    }
+    
     public func sendTracking(_ recipeId: String, event: NearRecipeTracking) {
         manager.sendTracking(withRecipeId: recipeId, event: event.rawValue)
     }

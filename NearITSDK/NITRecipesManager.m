@@ -113,15 +113,28 @@ NSString* const RecipesCacheKey = @"Recipes";
 }
 
 - (void)processRecipe:(NSString*)recipeId {
+    [self processRecipe:recipeId completion:^(NITRecipe * _Nullable recipe, NSError * _Nullable error) {
+        if (recipe) {
+            [self gotRecipe:recipe];
+        }
+    }];
+}
+
+- (void)processRecipe:(NSString*)recipeId completion:(void (^_Nullable)(NITRecipe * _Nullable recipe, NSError * _Nullable error))completionHandler {
     [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] processRecipeWithId:recipeId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (json) {
             [self registerClassesWithJsonApi:json];
             NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
             if ([recipes count] > 0) {
                 NITRecipe *recipe = [recipes objectAtIndex:0];
-                [self gotRecipe:recipe];
+                if (completionHandler) {
+                    completionHandler(recipe, nil);
+                    return;
+                }
             }
         }
+        NSError *anError = [NSError errorWithDomain:NITRecipeErrorDomain code:151 userInfo:@{NSLocalizedDescriptionKey:@"Invalid recipe data", NSUnderlyingErrorKey: error}];
+        completionHandler(nil, anError);
     }];
 }
 

@@ -196,6 +196,49 @@
     }
 }
 
+- (void)processRecipeWithUserInfo:(NSDictionary<NSString *,id> *)userInfo completion:(void (^_Nullable)(id _Nullable object, NITRecipe* _Nullable recipe, NSError* _Nullable error))completionHandler {
+    if(userInfo == nil) {
+        return;
+    }
+    
+    NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
+    if(recipeId) {
+        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+            [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
+        } else {
+            [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeNotified];
+        }
+        [self.recipesManager processRecipe:recipeId completion:^(NITRecipe * _Nullable recipe, NSError * _Nullable error) {
+            if (recipe) {
+                NITReaction *reaction = [self.reactions objectForKey:recipe.reactionPluginId];
+                if(reaction) {
+                    [reaction contentWithRecipe:recipe completionHandler:^(id _Nonnull content, NSError * _Nullable error) {
+                        if(error) {
+                            if (completionHandler) {
+                                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                    completionHandler(nil, nil, error);
+                                }];
+                            }
+                        } else {
+                            if (completionHandler) {
+                                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                    completionHandler(content, recipe, nil);
+                                }];
+                            }
+                        }
+                    }];
+                }
+            } else {
+                if (completionHandler) {
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        completionHandler(nil, nil, error);
+                    }];
+                }
+            }
+        }];
+    }
+}
+
 - (void)sendTrackingWithRecipeId:(NSString *)recipeId event:(NSString *)event {
     [self.recipesManager sendTrackingWithRecipeId:recipeId event:event];
 }

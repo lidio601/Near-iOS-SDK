@@ -45,6 +45,7 @@
 - (void)couponsWithCompletionHandler:(void (^ _Nullable)(NSArray<NITCoupon*>* _Nullable, NSError* _Nullable))handler;
 - (NSArray<NITRecipe*>* _Nonnull)recipes;
 - (void)processRecipeWithId:(NSString* _Nonnull)recipeId;
+- (void)processRecipeWithUserInfo:(NSDictionary<NSString *,id> * _Nonnull)userInfo completion:(void (^_Nullable)(id _Nullable object, NITRecipe* _Nullable recipe, NSError* _Nullable error))completionHandler;
 - (void)resetProfile;
 - (NSString* _Nullable)profileId;
 - (void)createNewProfileWithCompletionHandler:(void (^ _Nullable)(NSString* _Nullable profileId, NSError* _Nullable error))handler;
