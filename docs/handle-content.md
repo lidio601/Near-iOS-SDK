@@ -92,7 +92,7 @@ Push notifications recipes track themselves as notified, but you should track it
 You should be able to catch the event when `eventWithContent` is called, there you decide to display or not a notification to the user:
 ```swift
 // Swift
-manager.sendTracking(recipe.id(), event: .notified)
+manager.sendTracking(recipe.id(), event: NITRecipeNotified)
 ```
 
 ```objective-c
@@ -103,7 +103,7 @@ manager.sendTracking(recipe.id(), event: .notified)
 After `eventWithContent` is called and you decided to show a notification and then the user is engaged you can track the event calling:
 ```swift
 // Swift
-manager.sendTracking(recipe.id(), event: .engaged)
+manager.sendTracking(recipe.id(), event: NITRecipeEngaged)
 ```
 
 ```objective-c
