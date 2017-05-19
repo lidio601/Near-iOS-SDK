@@ -14,7 +14,8 @@
 - (NSDictionary *)attributesMap {
     return @{ @"serial_number" : @"serialNumber",
               @"claimed_at" : @"claimedAt",
-              @"redeemed_at" : @"redeemedAt" };
+              @"redeemed_at" : @"redeemedAt",
+              @"recipe_id" : @"recipeId" };
 }
 
 - (NSDate *)claimed {

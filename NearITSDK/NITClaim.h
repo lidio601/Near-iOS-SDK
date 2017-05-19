@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSString * _Nonnull serialNumber;
 @property (nonatomic, strong) NSString * _Nonnull claimedAt;
 @property (nonatomic, strong) NSString * _Nullable redeemedAt;
+@property (nonatomic, strong) NSString * _Nonnull recipeId;
 @property (nonatomic, strong) NITCoupon * _Nonnull coupon;
 @property (nonatomic, readonly) NSDate * _Nonnull claimed;
 @property (nonatomic, readonly) NSDate * _Nullable redeemed;

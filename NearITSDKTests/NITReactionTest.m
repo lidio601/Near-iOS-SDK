@@ -256,6 +256,11 @@
             NITCoupon *coupon = [coupons objectAtIndex:0];
             XCTAssertTrue([coupon.name isEqualToString:@"Le Coupon"]);
             XCTAssertTrue([coupon.value isEqualToString:@"50 €"]);
+            XCTAssertTrue(coupon.claims.count > 0);
+            if (coupon.claims.count > 0) {
+                NITClaim *claim = [coupon.claims objectAtIndex:0];
+                XCTAssertTrue([claim.recipeId isEqualToString:@"fe92307e-a3b8-4637-86d8-922bf7a53b5f"]);
+            }
         }
         
         [expectation fulfill];
