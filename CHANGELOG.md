@@ -1,3 +1,18 @@
+0.9.19 Release notes (2017-05-19)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* "recipeId" field for coupon claim.
+
+### Bugfixes
+
+* None.
+
 0.9.18 Release notes (2017-05-17)
 =============================================================
 
