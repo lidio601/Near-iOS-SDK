@@ -111,11 +111,15 @@ NSString* const NITRecipeEngaged = @"engaged";
 
 - (BOOL)isDaysValid:(NSDate*)now {
     NSArray<NSString*> *days = [self.scheduling objectForKey:@"days"];
+    NSMutableArray<NSString*> *lowercaseDays = [[NSMutableArray alloc] initWithCapacity:[days count]];
+    for(NSString *day in days) {
+        [lowercaseDays addObject:[day lowercaseString]];
+    }
     if (days == nil || [days isEqual:[NSNull null]]) {
         return YES;
     }
     NSString *dayName = [self nameOfDay:now];
-    if ([days containsObject:dayName]) {
+    if ([lowercaseDays containsObject:dayName]) {
         return YES;
     }
     
@@ -128,25 +132,25 @@ NSString* const NITRecipeEngaged = @"engaged";
     NSDateComponents *nowComponents = [calendar components:NSCalendarUnitWeekday fromDate:now];
     switch (nowComponents.weekday) {
         case 1:
-            return @"Sun";
+            return @"sun";
             break;
         case 2:
-            return @"Mon";
+            return @"mon";
             break;
         case 3:
-            return @"Tue";
+            return @"tue";
             break;
         case 4:
-            return @"Wed";
+            return @"wed";
             break;
         case 5:
-            return @"Thu";
+            return @"thu";
             break;
         case 6:
-            return @"Fri";
+            return @"fri";
             break;
         case 7:
-            return @"Sat";
+            return @"sat";
             break;
             
         default:
