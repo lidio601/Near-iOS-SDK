@@ -1,3 +1,18 @@
+0.9.20 Release notes (2017-05-22)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes recipe scheduling with days.
+
 0.9.19 Release notes (2017-05-19)
 =============================================================
 
