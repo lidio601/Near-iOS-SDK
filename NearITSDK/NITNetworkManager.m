@@ -23,7 +23,9 @@
 
 - (NSURLSession*)defaultSession {
     if (self.session == nil) {
-        self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+        config.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+        self.session = [NSURLSession sessionWithConfiguration:config];
     }
     return self.session;
 }
