@@ -18,6 +18,7 @@
 #import "NITSimpleNotification.h"
 #import <OCMockitoIOS/OCMockitoIOS.h>
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 
 #define APIKEY @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJ0ZXN0TWFuYWdlciIsInJvbGVfa2V5IjoiYXBwIn19fQ.2-xxd79pAtxJ648T9i_3HJzHRaQdZt0JEIHG5Fmiidg"
 #define APPID @"testManager"
@@ -76,6 +77,8 @@
     NITFakeLocationManager *locationManager = [[NITFakeLocationManager alloc] init];
     NITCacheManager *cacheManager = mock([NITCacheManager class]);
     [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
+    CBCentralManager *bluetoothManager = mock([CBCentralManager class]);
+    [given([bluetoothManager state]) willReturnInteger:CBManagerStatePoweredOn];
     
     __weak NITManagerTest *weakSelf = self;
     [self.networkManager setMock:^NITJSONAPI *(NSURLRequest *request) {
@@ -85,7 +88,7 @@
         return nil;
     } forKey:@"content-reaction"];
     
-    NITManager *manager = [[NITManager alloc] initWithApiKey:APIKEY configuration:configuration networkManager:self.networkManager cacheManager:cacheManager locationManager:locationManager];
+    NITManager *manager = [[NITManager alloc] initWithApiKey:APIKEY configuration:configuration networkManager:self.networkManager cacheManager:cacheManager locationManager:locationManager bluetoothManager:bluetoothManager];
     manager.delegate = self;
     
     NITGeopolisManager *geopolis = [manager geopolisManager];

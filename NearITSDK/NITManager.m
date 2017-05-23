@@ -57,12 +57,13 @@
     NITConfiguration *configuration = [NITConfiguration defaultConfiguration];
     id<NITNetworkManaging> networkManager = [[NITNetworkManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:self.configuration.appId];
+    CBCentralManager *bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey : [NSNumber numberWithBool:NO]}];
     
-    self = [self initWithApiKey:apiKey configuration:configuration networkManager:networkManager cacheManager:cacheManager locationManager:nil];
+    self = [self initWithApiKey:apiKey configuration:configuration networkManager:networkManager cacheManager:cacheManager locationManager:nil bluetoothManager:bluetoothManager];
     return self;
 }
 
-- (instancetype _Nonnull)initWithApiKey:(NSString *)apiKey configuration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager locationManager:(CLLocationManager*)locationManager {
+- (instancetype _Nonnull)initWithApiKey:(NSString *)apiKey configuration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager locationManager:(CLLocationManager*)locationManager bluetoothManager:(CBCentralManager*)bluetoothManager {
     self = [super init];
     if (self) {
         self.configuration = configuration;
@@ -70,7 +71,7 @@
         self.networkManager = networkManager;
         self.cacheManager = cacheManager;
         self.locationManager = locationManager;
-        self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey : [NSNumber numberWithBool:NO]}];
+        self.bluetoothManager = bluetoothManager;
         self.lastBluetoothState = self.bluetoothManager.state;
         
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
