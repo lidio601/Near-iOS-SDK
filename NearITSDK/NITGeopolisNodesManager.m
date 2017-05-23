@@ -86,7 +86,7 @@
             if ([siblingsEntered count] > 0) {
                 return [self statelessMonitoredNodesOnEnterWithId:[siblingsEntered lastObject].ID];
             } else {
-                return [self statelessMonitoredNoesOnExitWithId:node.ID];
+                return [self statelessMonitoredNodesOnEnterWithId:self.lastEnteredNode.ID];
             }
         }
     }
