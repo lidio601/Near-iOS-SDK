@@ -1,3 +1,19 @@
+0.9.21 Release notes (2017-05-23)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes an issue with the bluetooth state change.
+* Fixes a node management issue.
+
 0.9.20 Release notes (2017-05-22)
 =============================================================
 
