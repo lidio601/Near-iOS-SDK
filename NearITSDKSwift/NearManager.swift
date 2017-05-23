@@ -43,8 +43,8 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.stop()
     }
     
-    public func setDeviceToken(_ token: String) {
-        manager.setDeviceToken(token)
+    public func setDeviceToken(_ token: Data) {
+        manager.setDeviceTokenWith(token)
     }
     
     public func refreshConfig(completionHandler: ((Error?) -> Void)?) {

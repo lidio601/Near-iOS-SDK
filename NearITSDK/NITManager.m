@@ -181,10 +181,11 @@
 
 /**
  * Set the APN token for push.
- * @param deviceToken The token in string format
+ * @param token The token received from Apple
  */
-- (void)setDeviceToken:(NSString *)deviceToken {
-    [self.configuration setDeviceToken:deviceToken];
+- (void)setDeviceTokenWithData:(NSData *)token {
+    NSString *tokenString = [[[[token description] stringByReplacingOccurrencesOfString: @"<" withString: @""] stringByReplacingOccurrencesOfString: @">" withString: @""] stringByReplacingOccurrencesOfString: @" " withString: @""];
+    [self.configuration setDeviceToken:tokenString];
     [self.profile.installation registerInstallationWithCompletionHandler:nil];
 }
 
