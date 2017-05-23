@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 #import "NITConstants.h"
 
 @interface NITUtils : NSObject
 
 + (NSString* _Nonnull)fetchAppIdFromApiKey:(NSString* _Nonnull)apiKey;
 + (NSString* _Nonnull)stringFromRegionEvent:(NITRegionEvent)event;
++ (NSString* _Nonnull)stringFromBluetoothState:(CBManagerState)state;
 
 @end

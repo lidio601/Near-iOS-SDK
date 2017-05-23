@@ -27,10 +27,11 @@
 #import "NITTrackManager.h"
 #import "NITDateManager.h"
 #import "Reachability.h"
+#import <CoreBluetooth/CoreBluetooth.h>
 
 #define LOGTAG @"Manager"
 
-@interface NITManager()<NITManaging>
+@interface NITManager()<NITManaging, CBCentralManagerDelegate>
 
 @property (nonatomic, strong) NITGeopolisManager *geopolisManager;
 @property (nonatomic, strong) NITRecipesManager *recipesManager;
@@ -43,6 +44,8 @@
 @property (nonatomic, strong) NITUserProfile *profile;
 @property (nonatomic, strong) NITTrackManager *trackManager;
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) CBCentralManager *bluetoothManager;
+@property (nonatomic) CBManagerState lastBluetoothState;
 @property (nonatomic) BOOL started;
 
 @end
@@ -67,6 +70,8 @@
         self.networkManager = networkManager;
         self.cacheManager = cacheManager;
         self.locationManager = locationManager;
+        self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey : [NSNumber numberWithBool:NO]}];
+        self.lastBluetoothState = self.bluetoothManager.state;
         
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
         
@@ -85,8 +90,14 @@
                 NITLogE(LOGTAG, @"Profile creation error");
             }
         }];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBeacomActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     }
     return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)start {
@@ -336,6 +347,36 @@
                         [self.delegate manager:self eventWithContent:content recipe:recipe];
                     }];
                 }
+            }
+        }];
+    }
+}
+
+// MARK: - Application state
+
+- (void)applicationDidBeacomActive:(NSNotification*)notification {
+    if (self.lastBluetoothState != self.bluetoothManager.state) {
+        [self.profile.installation registerInstallationWithCompletionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
+            if (error) {
+                NITLogE(LOGTAG, @"Failed to register installation due to bluetooth state change (didBecomeActive)");
+            } else {
+                NITLogD(LOGTAG, @"Successful register installation due to bluetooth state change (didBecomeActive)");
+            }
+        }];
+    }
+}
+
+// MARK: - Bluetooth manager delegate
+
+- (void)centralManagerDidUpdateState:(CBCentralManager *)central {
+    NITLogD(LOGTAG, @"Bluetooth state change: %@", [NITUtils stringFromBluetoothState:central.state]);
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive || [[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
+        self.lastBluetoothState = central.state;
+        [self.profile.installation registerInstallationWithCompletionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
+            if (error) {
+                NITLogE(LOGTAG, @"Failed to register installation due to bluetooth state change");
+            } else {
+                NITLogD(LOGTAG, @"Successful register installation due to bluetooth state change");
             }
         }];
     }

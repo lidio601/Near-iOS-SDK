@@ -68,4 +68,20 @@
     }
 }
 
++ (NSString *)stringFromBluetoothState:(CBManagerState)state {
+    switch (state) {
+        case CBManagerStatePoweredOn:
+            return @"PoweredOn";
+            break;
+            
+        case CBManagerStatePoweredOff:
+            return @"PoweredOff";
+            break;
+            
+        default:
+            return @"Undefined";
+            break;
+    }
+}
+
 @end
