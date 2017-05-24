@@ -695,6 +695,34 @@
     XCTAssertTrue([currentNodes count] == 3);
 }
 
+- (void)testGeopolisCurrentNodesConfig22ExitFromFather {
+    NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"config_22"];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
+    [nodesManager setNodesWithJsonApi:jsonApi];
+    
+    NSArray<NITNode*> *monitoredNodes = [nodesManager monitoredNodesOnEnterWithId:@"n1n1r1"];
+    NSArray<NITNode*> *currentNodes = [nodesManager currentNodes];
+    BOOL check = [self checkIfArrayOfNodesContainsIds:@[@"n1n1r1", @"n1n1n1r1", @"n2n1n1r1"] array:monitoredNodes];
+    XCTAssertTrue(check);
+    check = [self checkIfArrayOfNodesContainsIds:@[@"n1n1r1"] array:currentNodes];
+    XCTAssertTrue(check);
+    XCTAssertTrue([currentNodes count] == 1);
+    
+    monitoredNodes = [nodesManager monitoredNodesOnEnterWithId:@"n1n1n1r1"];
+    currentNodes = [nodesManager currentNodes];
+    check = [self checkIfArrayOfNodesContainsIds:@[@"n1n1r1", @"n1n1n1r1", @"n2n1n1r1"] array:monitoredNodes];
+    XCTAssertTrue(check);
+    check = [self checkIfArrayOfNodesContainsIds:@[@"n1n1r1", @"n1n1n1r1"] array:currentNodes];
+    XCTAssertTrue(check);
+    XCTAssertTrue([currentNodes count] == 2);
+    
+    monitoredNodes = [nodesManager monitoredNodesOnExitWithId:@"n1n1r1"];
+    currentNodes = [nodesManager currentNodes];
+    check = [self checkIfArrayOfNodesContainsIds:@[@"n1n1r1", @"n1r1", @"n2r1"] array:monitoredNodes];
+    XCTAssertTrue(check);
+    XCTAssertTrue([currentNodes count] == 0);
+}
+
 - (void)testGeopolisCurrentNodesConfig22FromProximityChild {
     NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"config_22"];
     NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
@@ -706,6 +734,7 @@
     XCTAssertTrue(check);
     check = [self checkIfArrayOfNodesContainsIds:@[@"n1n1n1r1"] array:currentNodes];
     XCTAssertTrue(check);
+    XCTAssertTrue([currentNodes count] == 1);
 }
 
 - (void)testBeaconProximity {
