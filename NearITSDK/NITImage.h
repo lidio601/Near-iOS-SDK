@@ -13,5 +13,6 @@
 @property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable image;
 
 - (NSURL* _Nullable)smallSizeURL;
+- (NSURL* _Nullable)url;
 
 @end

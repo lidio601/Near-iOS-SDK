@@ -21,6 +21,14 @@
     return nil;
 }
 
+- (NSURL *)url {
+    NSString *imageUrl = [self.image objectForKey:@"url"];
+    if (imageUrl != nil) {
+        return [NSURL URLWithString:imageUrl];
+    }
+    return nil;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
