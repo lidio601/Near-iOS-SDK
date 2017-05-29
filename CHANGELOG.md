@@ -1,3 +1,18 @@
+0.9.23 Release notes (2017-05-29)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* Removed tracking event check, you can now send custom tracking event.
+
+### Bugfixes
+
+* None.
+
 0.9.22 Release notes (2017-05-29)
 =============================================================
 
