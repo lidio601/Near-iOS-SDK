@@ -166,11 +166,6 @@ NSString* const RecipesCacheKey = @"Recipes";
 }
 
 - (void)sendTrackingWithRecipeId:(NSString *)recipeId event:(NSString*)event {
-    if (![event isEqualToString:NITRecipeNotified] && ![event isEqualToString:NITRecipeEngaged]) {
-        // Event invalid
-        return;
-    }
-    
     if ([event isEqualToString:NITRecipeNotified]) {
         [self.cooler markRecipeAsShownWithId:recipeId];
     }
