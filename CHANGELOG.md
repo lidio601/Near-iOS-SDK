@@ -1,3 +1,18 @@
+0.9.22 Release notes (2017-05-29)
+=============================================================
+
+### API Breaking Changes
+
+* NITManager setDeviceToken: changed in setDeviceTokenWithData:.
+
+### Enhancements
+
+* Added "url" method for NITImage type.
+
+### Bugfixes
+
+* None.
+
 0.9.21 Release notes (2017-05-23)
 =============================================================
 
