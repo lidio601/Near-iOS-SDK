@@ -12,22 +12,30 @@
 #import "NITJSONAPIResource.h"
 
 #define NITApiVersion @"2"
-#define BASE_URL @"https://api.nearit.com"
 
 static NITNetworkProvider *sharedProvider;
 
 @interface NITNetworkProvider()
 
 @property (nonatomic, strong) NITConfiguration *configuration;
+@property (nonatomic, strong) NSString *baseUrl;
 
 @end
 
 @implementation NITNetworkProvider
 
 - (instancetype)initWithConfiguration:(NITConfiguration *)configuration {
-    self = [super init];
+    self = [self init];
     if (self) {
         self.configuration = configuration;
+    }
+    return self;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.baseUrl = @"https://api.nearit.com";
     }
     return self;
 }
@@ -195,7 +203,7 @@ static NITNetworkProvider *sharedProvider;
 }
 
 - (NSMutableURLRequest*)requestWithPath:(NSString*)path {
-    NSURL *url = [NSURL URLWithString:[BASE_URL stringByAppendingString:path]];
+    NSURL *url = [NSURL URLWithString:[self.baseUrl stringByAppendingString:path]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     [self setNearITHeaders:request];
     return request;
