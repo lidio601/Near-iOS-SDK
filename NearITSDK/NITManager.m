@@ -280,12 +280,18 @@
     if ([[event pluginName] isEqualToString:NITFeedbackPluginName]) {
         [self.feedbackReaction sendEventWithFeedbackEvent:(NITFeedbackEvent*)event completionHandler:^(NSError * _Nullable error) {
             if (handler) {
-                handler(error);
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    handler(error);
+                }];
             }
         }];
     } else if (handler) {
         NSError *newError = [NSError errorWithDomain:NITReactionErrorDomain code:201 userInfo:@{NSLocalizedDescriptionKey:@"Unrecognized event action"}];
-        handler(newError);
+        if (handler) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                handler(newError);
+            }];
+        }
     }
 }
 
