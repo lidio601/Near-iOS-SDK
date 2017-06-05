@@ -113,6 +113,36 @@
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
+- (void)testManagerDataPoint {
+    NITConfiguration *configuration = [[NITConfiguration alloc] init];
+    NITFakeLocationManager *locationManager = [[NITFakeLocationManager alloc] init];
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
+    CBCentralManager *bluetoothManager = mock([CBCentralManager class]);
+    [given([bluetoothManager state]) willReturnInteger:CBManagerStatePoweredOn];
+    
+    __weak NITManagerTest *weakSelf = self;
+    [self.networkManager setMock:^NITJSONAPI *(NSURLRequest *request) {
+        if ([request.URL.absoluteString containsString:@"/data_points"]) {
+            return [weakSelf jsonApiWithContentsOfFile:@"manager_datapoint"];
+        }
+        return nil;
+    } forKey:@"dataPoint"];
+    
+    NITManager *manager = [[NITManager alloc] initWithApiKey:APIKEY configuration:configuration networkManager:self.networkManager cacheManager:cacheManager locationManager:locationManager bluetoothManager:bluetoothManager];
+    manager.delegate = self;
+    
+    XCTestExpectation *expOne = [self expectationWithDescription:@"One"];
+    
+    [manager setUserDataWithKey:@"test" value:@"test-value" completionHandler:^(NSError * _Nullable error) {
+        XCTAssertNil(error);
+        
+        [expOne fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
 // MARK: - NITManager delegate
 
 - (void)manager:(NITManager *)manager eventWithContent:(id)content recipe:(NITRecipe *)recipe {

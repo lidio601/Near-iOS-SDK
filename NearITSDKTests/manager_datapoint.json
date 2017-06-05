@@ -1,0 +1,29 @@
+{
+    "data": {
+        "id": "d8964e7b-ee10-43d1-b470-ae69aaa8568b",
+        "type": "profiles",
+        "attributes": {
+            "app_id": "6e5f0e1e-e06f-4e64-bbcd-c947c9723bec"
+        },
+        "relationships": {
+            "data_points": {
+                "data": [
+                         {
+                         "id": "d8964e7b-ee10-43d1-b470-ae69aaa8568b,colors",
+                         "type": "data_points"
+                         }
+                         ]
+            }
+        }
+    },
+    "included": [
+                 {
+                 "id": "d8964e7b-ee10-43d1-b470-ae69aaa8568b,colors",
+                 "type": "data_points",
+                 "attributes": {
+                 "key": "colors",
+                 "value": "accusantium"
+                 }
+                 }
+                 ]
+}
