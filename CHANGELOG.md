@@ -1,3 +1,18 @@
+0.9.24 Release notes (2017-06-05)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Manager "Send event" callback is now received on the main thread.
+
 0.9.23 Release notes (2017-05-29)
 =============================================================
 
