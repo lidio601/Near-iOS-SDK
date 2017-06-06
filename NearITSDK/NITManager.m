@@ -260,7 +260,9 @@
     NITRecipesManager *recipesManager = self.recipesManager;
     [self.profile setUserDataWithKey:key value:value completionHandler:^(NSError * _Nullable error) {
         if (handler) {
-            handler(error);
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                handler(error);
+            }];
         }
         [recipesManager refreshConfigWithCompletionHandler:nil];
     }];
@@ -270,7 +272,9 @@
     NITRecipesManager *recipesManager = self.recipesManager;
     [self.profile setBatchUserDataWithDictionary:valuesDictiornary completionHandler:^(NSError * _Nullable error) {
         if (handler) {
-            handler(error);
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                handler(error);
+            }];
         }
         [recipesManager refreshConfigWithCompletionHandler:nil];
     }];
