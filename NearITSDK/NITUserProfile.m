@@ -75,7 +75,13 @@
         return;
     }
     
-    NSDictionary *attributes = @{ @"key" : key, @"value" : value };
+    NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
+    [attributes setObject:key forKey:@"key"];
+    if (value) {
+        [attributes setObject:value forKey:@"value"];
+    } else {
+        [attributes setObject:[NSNull null] forKey:@"value"];
+    }
     NITJSONAPI *jsonApi = [NITJSONAPI jsonApiWithAttributes:attributes type:@"data_points"];
     [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] setUserDataWithJsonApi:jsonApi profileId:self.configuration.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {

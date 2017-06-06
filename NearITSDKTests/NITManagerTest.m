@@ -140,6 +140,14 @@
         [expOne fulfill];
     }];
     
+    XCTestExpectation *expTwo = [self expectationWithDescription:@"Two"];
+    
+    [manager setUserDataWithKey:@"test-null" value:nil completionHandler:^(NSError * _Nullable error) {
+        XCTAssertNil(error);
+        
+        [expTwo fulfill];
+    }];
+    
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
