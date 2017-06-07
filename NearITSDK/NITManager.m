@@ -200,12 +200,8 @@
     
     NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
     if(recipeId) {
+        [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
         [self.recipesManager processRecipe:recipeId];
-        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-            [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
-        } else {
-            [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeNotified];
-        }
     }
 }
 
@@ -216,11 +212,7 @@
     
     NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
     if(recipeId) {
-        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
-            [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
-        } else {
-            [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeNotified];
-        }
+        [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
         [self.recipesManager processRecipe:recipeId completion:^(NITRecipe * _Nullable recipe, NSError * _Nullable error) {
             if (recipe) {
                 NITReaction *reaction = [self.reactions objectForKey:recipe.reactionPluginId];
