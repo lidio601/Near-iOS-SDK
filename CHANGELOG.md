@@ -1,3 +1,18 @@
+0.9.25 Release notes (2017-06-07)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* User data point can receive a nil value.
+
+### Bugfixes
+
+* Fixes push recipe notification state (engaged).
+
 0.9.24 Release notes (2017-06-05)
 =============================================================
 
