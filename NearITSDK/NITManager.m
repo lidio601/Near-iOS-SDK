@@ -331,6 +331,11 @@
     [self.profile setProfileId:profileId];
 }
 
+- (void)setSuiteName:(NSString *)suiteName {
+    NSUserDefaults *suiteUserDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
+    [self.configuration setSuiteUserDefaults:suiteUserDefaults];
+}
+
 // MARK: - NITManaging
 
 - (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {

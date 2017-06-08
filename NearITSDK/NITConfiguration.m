@@ -26,6 +26,7 @@ static NITConfiguration *defaultConfiguration;
 @property (nonatomic, strong) NSString * _Nullable deviceToken;
 @property (nonatomic, strong) NSArray<NSString*> *keys;
 @property (nonatomic, strong) NSUserDefaults *userDefaults;
+@property (nonatomic, strong) NSUserDefaults *suiteUserDefaults;
 
 @end
 
@@ -36,6 +37,7 @@ static NITConfiguration *defaultConfiguration;
 @synthesize profileId = _profileId;
 @synthesize installationId = _installationId;
 @synthesize deviceToken = _deviceToken;
+@synthesize suiteUserDefaults = _suiteUserDefaults;
 
 + (NITConfiguration * _Nonnull)defaultConfiguration {
     if (defaultConfiguration == nil) {
@@ -137,6 +139,8 @@ static NITConfiguration *defaultConfiguration;
     if (realKey) {
         [self.userDefaults setObject:object forKey:realKey];
         [self.userDefaults synchronize];
+        [self.suiteUserDefaults setObject:object forKey:key];
+        [self.suiteUserDefaults synchronize];
     }
 }
 
@@ -153,6 +157,7 @@ static NITConfiguration *defaultConfiguration;
         NSString *realKey = [self paramKeyWithKey:key];
         if (realKey) {
             [self.userDefaults removeObjectForKey:realKey];
+            [self.suiteUserDefaults removeObjectForKey:key];
         }
     }
     [self.userDefaults synchronize];
@@ -161,6 +166,26 @@ static NITConfiguration *defaultConfiguration;
     _profileId = nil;
     _installationId = nil;
     _deviceToken = nil;
+}
+
+- (void)setSuiteUserDefaults:(NSUserDefaults *)suiteUserDefaults {
+    if (suiteUserDefaults == nil) {
+        NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+        [_suiteUserDefaults removePersistentDomainForName:appDomain];
+        _suiteUserDefaults = nil;
+    } else {
+        if (_suiteUserDefaults == nil) {
+            NSString *apiKey = self.apiKey;
+            NSString *profileId = self.profileId;
+            if (apiKey) {
+                [suiteUserDefaults setObject:apiKey forKey:APIKEY];
+            }
+            if (profileId) {
+                [suiteUserDefaults setObject:profileId forKey:PROFILE_ID];
+            }
+        }
+        _suiteUserDefaults = suiteUserDefaults;
+    }
 }
 
 @end

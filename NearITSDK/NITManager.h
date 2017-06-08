@@ -50,5 +50,6 @@
 - (NSString* _Nullable)profileId;
 - (void)createNewProfileWithCompletionHandler:(void (^ _Nullable)(NSString* _Nullable profileId, NSError* _Nullable error))handler;
 - (void)setProfileId:(NSString * _Nonnull)profileId;
+- (void)setSuiteName:(NSString * _Nonnull)suiteName;
 
 @end
