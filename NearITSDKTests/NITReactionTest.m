@@ -38,6 +38,8 @@
 
 @interface NITReactionTest : NITTestCase
 
+@property (nonatomic, strong) NITConfiguration *configuration;
+
 @end
 
 @implementation NITReactionTest
@@ -46,11 +48,12 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
-    [[NITConfiguration defaultConfiguration] setApiKey:APIKEY];
-    [[NITConfiguration defaultConfiguration] setAppId:APPID];
-    [[NITConfiguration defaultConfiguration] setProfileId:PROFILEID];
-    [[NITConfiguration defaultConfiguration] setInstallationId:INSTALLATIONID];
-    [[NITNetworkProvider sharedInstance] setConfiguration:[NITConfiguration defaultConfiguration]];
+    self.configuration = [[NITConfiguration alloc] init];
+    [self.configuration setApiKey:APIKEY];
+    [self.configuration setAppId:APPID];
+    [self.configuration setProfileId:PROFILEID];
+    [self.configuration setInstallationId:INSTALLATIONID];
+    [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
 }
 
 - (void)tearDown {
@@ -163,7 +166,7 @@
     };
     NITCacheManager *cacheManager = mock([NITCacheManager class]);
     [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
-    NITFeedbackReaction *reaction = [[NITFeedbackReaction alloc] initWithCacheManager:cacheManager configuration:[NITConfiguration defaultConfiguration] networkManager:networkManager];
+    NITFeedbackReaction *reaction = [[NITFeedbackReaction alloc] initWithCacheManager:cacheManager configuration:self.configuration networkManager:networkManager];
     
     NITFeedback *feedback = [self feedbackWithContentsOfFile:@"feedback1"];
     feedback.recipeId = @"7d41504f-99e9-45e0-b272-a6fdd202b688";
@@ -217,7 +220,7 @@
     NITCacheManager *cacheManager = mock([NITCacheManager class]);
     [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
-    NITCouponReaction *reaction = [[NITCouponReaction alloc] initWithCacheManager:cacheManager configuration:[NITConfiguration defaultConfiguration] networkManager:networkManager];
+    NITCouponReaction *reaction = [[NITCouponReaction alloc] initWithCacheManager:cacheManager configuration:self.configuration networkManager:networkManager];
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"Expectation"];
     [reaction contentWithRecipe:couponRecipe completionHandler:^(id  _Nullable content, NSError * _Nullable error) {

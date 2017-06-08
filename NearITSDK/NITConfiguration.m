@@ -15,8 +15,6 @@
 #define INSTALLATIONID @"installationid"
 #define DEVICETOKEN @"devicetoken"
 
-static NITConfiguration *defaultConfiguration;
-
 @interface NITConfiguration()
 
 @property (nonatomic, strong) NSString * _Nonnull apiKey;
@@ -39,13 +37,6 @@ static NITConfiguration *defaultConfiguration;
 @synthesize deviceToken = _deviceToken;
 @synthesize suiteUserDefaults = _suiteUserDefaults;
 
-+ (NITConfiguration * _Nonnull)defaultConfiguration {
-    if (defaultConfiguration == nil) {
-        defaultConfiguration = [[NITConfiguration alloc] init];
-    }
-    return defaultConfiguration;
-}
-
 - (instancetype)init {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     return [self initWithUserDefaults:userDefaults];
@@ -58,11 +49,15 @@ static NITConfiguration *defaultConfiguration;
         self.userDefaults = userDefaults;
         NSString *apiKey = [userDefaults objectForKey:APIKEY];
         NSString *profileId = [userDefaults objectForKey:PROFILE_ID];
+        NSString *installationId = [userDefaults objectForKey:INSTALLATIONID];
         if (apiKey) {
             self.apiKey = apiKey;
         }
         if (profileId) {
             self.profileId = profileId;
+        }
+        if (installationId) {
+            self.installationId = installationId;
         }
     }
     return self;
@@ -185,11 +180,15 @@ static NITConfiguration *defaultConfiguration;
         if (_suiteUserDefaults == nil) {
             NSString *apiKey = self.apiKey;
             NSString *profileId = self.profileId;
+            NSString *installationId = self.installationId;
             if (apiKey) {
                 [suiteUserDefaults setObject:apiKey forKey:APIKEY];
             }
             if (profileId) {
                 [suiteUserDefaults setObject:profileId forKey:PROFILE_ID];
+            }
+            if (installationId) {
+                [suiteUserDefaults setObject:installationId forKey:INSTALLATIONID];
             }
         }
         _suiteUserDefaults = suiteUserDefaults;
