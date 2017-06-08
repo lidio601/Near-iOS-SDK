@@ -56,6 +56,14 @@ static NITConfiguration *defaultConfiguration;
     if (self) {
         self.keys = @[APIKEY, APPID, PROFILE_ID, INSTALLATIONID, DEVICETOKEN];
         self.userDefaults = userDefaults;
+        NSString *apiKey = [userDefaults objectForKey:APIKEY];
+        NSString *profileId = [userDefaults objectForKey:PROFILE_ID];
+        if (apiKey) {
+            self.apiKey = apiKey;
+        }
+        if (profileId) {
+            self.profileId = profileId;
+        }
     }
     return self;
 }

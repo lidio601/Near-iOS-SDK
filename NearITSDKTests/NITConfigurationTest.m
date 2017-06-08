@@ -150,4 +150,18 @@
     [verify(suiteUserDefaults) setObject:profileId forKey:@"profileId"];
 }
 
+- (void)testInitUserDefaultsPrefilled {
+    NSString *apiKey = @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJNeUFwcElkIiwicm9sZV9rZXkiOiJhcHAifX19.AalMftx-rJa-6O3ZzMdjSod4LzBfdvp2G7uT5sFx1Xg";
+    NSString *profileId = @"profile-id";
+    
+    NSUserDefaults *userDefaults = mock([NSUserDefaults class]);
+    [given([userDefaults objectForKey:@"apikey"]) willReturn:apiKey];
+    [given([userDefaults objectForKey:@"profileId"]) willReturn:profileId];
+    
+    NITConfiguration *config = [[NITConfiguration alloc] initWithUserDefaults:userDefaults];
+    XCTAssertTrue([config.apiKey isEqualToString:apiKey]);
+    XCTAssertTrue([config.appId isEqualToString:@"MyAppId"]);
+    XCTAssertTrue([config.profileId isEqualToString:profileId]);
+}
+
 @end
