@@ -74,6 +74,7 @@
 
 - (void)testManagerID1 {
     NITConfiguration *configuration = [[NITConfiguration alloc] init];
+    [configuration setApiKey:APIKEY];
     NITFakeLocationManager *locationManager = [[NITFakeLocationManager alloc] init];
     NITCacheManager *cacheManager = mock([NITCacheManager class]);
     [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
@@ -88,7 +89,7 @@
         return nil;
     } forKey:@"content-reaction"];
     
-    NITManager *manager = [[NITManager alloc] initWithApiKey:APIKEY configuration:configuration networkManager:self.networkManager cacheManager:cacheManager locationManager:locationManager bluetoothManager:bluetoothManager];
+    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager locationManager:locationManager bluetoothManager:bluetoothManager];
     manager.delegate = self;
     
     NITGeopolisManager *geopolis = [manager geopolisManager];
@@ -115,6 +116,7 @@
 
 - (void)testManagerDataPoint {
     NITConfiguration *configuration = [[NITConfiguration alloc] init];
+    [configuration setApiKey:APIKEY];
     NITFakeLocationManager *locationManager = [[NITFakeLocationManager alloc] init];
     NITCacheManager *cacheManager = mock([NITCacheManager class]);
     [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
@@ -129,7 +131,7 @@
         return nil;
     } forKey:@"dataPoint"];
     
-    NITManager *manager = [[NITManager alloc] initWithApiKey:APIKEY configuration:configuration networkManager:self.networkManager cacheManager:cacheManager locationManager:locationManager bluetoothManager:bluetoothManager];
+    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager locationManager:locationManager bluetoothManager:bluetoothManager];
     manager.delegate = self;
     
     XCTestExpectation *expOne = [self expectationWithDescription:@"One"];
