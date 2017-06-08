@@ -35,6 +35,12 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.delegate = self
     }
     
+    public init(suiteName: String) {
+        super.init()
+        manager = NITManager(suiteName: suiteName)
+        manager.delegate = self
+    }
+    
     public func start() {
         manager.start()
     }
@@ -93,6 +99,10 @@ public final class NearManager: NSObject, NITManagerDelegate {
     
     public func setProfile(id: String) {
         manager.setProfileId(id)
+    }
+    
+    public func setSuiteName(_ name: String) {
+        manager.setSuiteName(name)
     }
     
     public func createNewProfile(_ completionHandler: ((String?, Error?) -> Void)?) {
