@@ -25,6 +25,7 @@ static NITConfiguration *defaultConfiguration;
 @property (nonatomic, strong) NSString * _Nullable installationId;
 @property (nonatomic, strong) NSString * _Nullable deviceToken;
 @property (nonatomic, strong) NSArray<NSString*> *keys;
+@property (nonatomic, strong) NSUserDefaults *userDefaults;
 
 @end
 
@@ -44,9 +45,15 @@ static NITConfiguration *defaultConfiguration;
 }
 
 - (instancetype)init {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    return [self initWithUserDefaults:userDefaults];
+}
+
+- (instancetype)initWithUserDefaults:(NSUserDefaults*)userDefaults {
     self = [super init];
     if (self) {
         self.keys = @[APIKEY, APPID, PROFILE_ID, INSTALLATIONID, DEVICETOKEN];
+        self.userDefaults = userDefaults;
     }
     return self;
 }
@@ -97,7 +104,7 @@ static NITConfiguration *defaultConfiguration;
     if (profileId) {
         [self saveParamWithKey:PROFILE_ID value:profileId];
     } else {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:[self paramKeyWithKey:PROFILE_ID]];
+        [self.userDefaults removeObjectForKey:[self paramKeyWithKey:PROFILE_ID]];
     }
 }
 
@@ -128,28 +135,27 @@ static NITConfiguration *defaultConfiguration;
 - (void)saveParamWithKey:(NSString*)key value:(id)object {
     NSString *realKey = [self paramKeyWithKey:key];
     if (realKey) {
-        [[NSUserDefaults standardUserDefaults] setObject:object forKey:realKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self.userDefaults setObject:object forKey:realKey];
+        [self.userDefaults synchronize];
     }
 }
 
 - (id)objectWithKey:(NSString*)key {
     NSString *realKey = [self paramKeyWithKey:key];
     if (realKey) {
-        return [[NSUserDefaults standardUserDefaults] objectForKey:realKey];
+        return [self.userDefaults objectForKey:realKey];
     }
     return nil;
 }
 
 - (void)clear {
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     for (NSString *key in self.keys) {
         NSString *realKey = [self paramKeyWithKey:key];
         if (realKey) {
-            [ud removeObjectForKey:realKey];
+            [self.userDefaults removeObjectForKey:realKey];
         }
     }
-    [ud synchronize];
+    [self.userDefaults synchronize];
     _apiKey = nil;
     _appId = nil;
     _profileId = nil;

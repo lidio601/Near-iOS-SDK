@@ -9,6 +9,9 @@
 #import <XCTest/XCTest.h>
 #import "NITTestCase.h"
 #import "NITConfiguration.h"
+#import "NITUtils.h"
+#import <OCMockitoIOS/OCMockitoIOS.h>
+#import <OCHamcrestIOS/OCHamcrestIOS.h>
 
 @interface NITConfigurationTest : NITTestCase
 
@@ -28,9 +31,11 @@
 
 - (void)testApiKey {
     NSString *apiKey = @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJNeUFwcElkIiwicm9sZV9rZXkiOiJhcHAifX19.AalMftx-rJa-6O3ZzMdjSod4LzBfdvp2G7uT5sFx1Xg";
-    NITConfiguration *config = [[NITConfiguration alloc] init];
+    NSUserDefaults *userDefaults = mock([NSUserDefaults class]);
+    NITConfiguration *config = [[NITConfiguration alloc] initWithUserDefaults:userDefaults];
     
     [config setApiKey:apiKey];
+    [verify(userDefaults) setObject:apiKey forKey:@"apikey-MyAppId"];
     
     XCTAssertNotNil(config.apiKey);
     XCTAssertTrue([config.apiKey isEqualToString:apiKey]);
@@ -38,9 +43,20 @@
     XCTAssertTrue([config.appId isEqualToString:@"MyAppId"]);
     
     [config clear];
+    [verify(userDefaults) removeObjectForKey:@"apikey-MyAppId"];
     
     XCTAssertNil(config.apiKey);
     XCTAssertNil(config.appId);
+}
+
+- (void)testLoadApiKeyFromUserDefaults {
+    NSString *apiKey = @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJNeUFwcElkIiwicm9sZV9rZXkiOiJhcHAifX19.AalMftx-rJa-6O3ZzMdjSod4LzBfdvp2G7uT5sFx1Xg";
+    NSUserDefaults *userDefaults = mock([NSUserDefaults class]);
+    NITConfiguration *config = [[NITConfiguration alloc] initWithUserDefaults:userDefaults];
+    
+    config.appId = @"MyAppId";
+    [given([userDefaults objectForKey:@"apikey-MyAppId"]) willReturn:apiKey];
+    XCTAssertTrue([config.apiKey isEqualToString:apiKey]);
 }
 
 - (void)testMultiConfiguration {
