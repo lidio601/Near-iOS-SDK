@@ -1,3 +1,18 @@
+0.9.26 Release notes (2017-06-12)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* Support for iOS Notification Service Extension.
+
+### Bugfixes
+
+* None.
+
 0.9.25 Release notes (2017-06-07)
 =============================================================
 
