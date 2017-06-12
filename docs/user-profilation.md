@@ -74,7 +74,7 @@ manager.setProfile(id: "<your profile id>")
 
 ```objective-c
 // Objective-C
-[self setProfileId:@"<your profile id>"];
+[manager setProfileId:@"<your profile id>"];
 ```
 
 You can then set the relevant user-data to this profile with the aforementioned methods.
