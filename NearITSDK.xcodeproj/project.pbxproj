@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		130FB3791EEE7375008B24C1 /* notification-service.md in Sources */ = {isa = PBXBuildFile; fileRef = 130FB3781EEE7375008B24C1 /* notification-service.md */; };
+		130FB37E1EEE8E78008B24C1 /* NITRecipeHistory.h in Headers */ = {isa = PBXBuildFile; fileRef = 130FB37C1EEE8E78008B24C1 /* NITRecipeHistory.h */; };
+		130FB37F1EEE8E78008B24C1 /* NITRecipeHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 130FB37D1EEE8E78008B24C1 /* NITRecipeHistory.m */; };
+		130FB3811EEE9309008B24C1 /* NITRecipeHistoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 130FB3801EEE9309008B24C1 /* NITRecipeHistoryTest.m */; };
 		1319CED31EA0ACA0009046C5 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1319CED21EA0ACA0009046C5 /* .travis.yml */; };
 		1319CED51EA0B987009046C5 /* response_feedback_event.json in Resources */ = {isa = PBXBuildFile; fileRef = 1319CED41EA0B987009046C5 /* response_feedback_event.json */; };
 		1319CED81EA0BDA0009046C5 /* NITGeopolisNodesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1319CED61EA0BDA0009046C5 /* NITGeopolisNodesManager.h */; };
@@ -194,6 +197,9 @@
 
 /* Begin PBXFileReference section */
 		130FB3781EEE7375008B24C1 /* notification-service.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "notification-service.md"; sourceTree = "<group>"; };
+		130FB37C1EEE8E78008B24C1 /* NITRecipeHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipeHistory.h; sourceTree = "<group>"; };
+		130FB37D1EEE8E78008B24C1 /* NITRecipeHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipeHistory.m; sourceTree = "<group>"; };
+		130FB3801EEE9309008B24C1 /* NITRecipeHistoryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipeHistoryTest.m; sourceTree = "<group>"; };
 		1319CED21EA0ACA0009046C5 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		1319CED41EA0B987009046C5 /* response_feedback_event.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_feedback_event.json; sourceTree = "<group>"; };
 		1319CED61EA0BDA0009046C5 /* NITGeopolisNodesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITGeopolisNodesManager.h; sourceTree = "<group>"; };
@@ -660,6 +666,7 @@
 				1374E0D41EA89DDF00D613A5 /* NITManagerTest.m */,
 				1374E0D61EA8C00200D613A5 /* NITLogTest.m */,
 				1374E0FB1EAA305A00D613A5 /* NITTrackManagerTest.m */,
+				130FB3801EEE9309008B24C1 /* NITRecipeHistoryTest.m */,
 				1352CA741E7807FE00C0E98E /* Info.plist */,
 			);
 			path = NearITSDKTests;
@@ -847,6 +854,8 @@
 				132297211E923D3300AE6EFC /* NITRecipeCooler.m */,
 				137838631E800EC1001C8CDE /* NITRecipesManager.h */,
 				137838641E800EC1001C8CDE /* NITRecipesManager.m */,
+				130FB37C1EEE8E78008B24C1 /* NITRecipeHistory.h */,
+				130FB37D1EEE8E78008B24C1 /* NITRecipeHistory.m */,
 			);
 			name = Recipes;
 			sourceTree = "<group>";
@@ -914,6 +923,7 @@
 				1349EEB31E796511000B0666 /* NITNetworkProvider.h in Headers */,
 				135CD7A91E9F5E45005C75A4 /* NITUpload.h in Headers */,
 				132297161E8E438A00AE6EFC /* NITFeedbackEvent.h in Headers */,
+				130FB37E1EEE8E78008B24C1 /* NITRecipeHistory.h in Headers */,
 				135CD7A51E9F5B13005C75A4 /* NITAudio.h in Headers */,
 				135CD7791E94F71E005C75A4 /* NITEvent.h in Headers */,
 				1327D8A81E83BE3100C6689E /* NITInstallation.h in Headers */,
@@ -1189,6 +1199,7 @@
 				1352CA841E78294E00C0E98E /* NITManager.m in Sources */,
 				135A707A1E851F1F00D4C9EC /* NITSimpleNotificationReaction.m in Sources */,
 				13423EE41E7BCB07008CAAC8 /* NITGeofenceNode.m in Sources */,
+				130FB37F1EEE8E78008B24C1 /* NITRecipeHistory.m in Sources */,
 				135CD7D11E9F7A1F005C75A4 /* NITLog.m in Sources */,
 				1349EEA31E79325E000B0666 /* NITJSONAPI.m in Sources */,
 				132296F91E8D140B00AE6EFC /* NITClaim.m in Sources */,
@@ -1229,6 +1240,7 @@
 				137E38AC1E8A94E4008E83E6 /* NITTestCase.m in Sources */,
 				1374E0DC1EA8C67400D613A5 /* logging.md in Sources */,
 				1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */,
+				130FB3811EEE9309008B24C1 /* NITRecipeHistoryTest.m in Sources */,
 				1374E0C11EA744FB00D613A5 /* NITFakeLocationManager.m in Sources */,
 				135CD7961E9B7621005C75A4 /* NITNetworkMockManger.m in Sources */,
 				1352CA911E78372B00C0E98E /* NITUtilsTest.m in Sources */,

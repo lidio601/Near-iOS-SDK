@@ -334,6 +334,8 @@
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
+// MARK: - NITManaging delegate
+
 - (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {
     if ([self.name containsString:@"testOnlineEvaluation"]) {
         XCTAssertNotNil(recipe);
