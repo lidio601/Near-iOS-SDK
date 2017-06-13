@@ -1,3 +1,18 @@
+0.9.27 Release notes (2017-06-13)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes scheduling validation for recipe.
+
 0.9.26 Release notes (2017-06-12)
 =============================================================
 
