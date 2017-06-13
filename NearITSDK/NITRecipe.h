@@ -32,6 +32,5 @@ extern NSString* _Nonnull const NITRecipeEngaged;
 - (BOOL)isForeground;
 - (NSString* _Nullable)notificationTitle;
 - (NSString* _Nullable)notificationBody;
-- (BOOL)isScheduledNow:(NSDate* _Nonnull)now;
 
 @end
