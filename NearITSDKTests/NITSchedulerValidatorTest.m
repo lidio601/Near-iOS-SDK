@@ -172,6 +172,7 @@
         NSString *startTime = [dateFormatter stringFromDate:start];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         NSDate *newStartTime = [dateFormatter dateFromString:startTime];
+        newStartTime = [newStartTime dateByAddingTimeInterval:[NSTimeZone localTimeZone].daylightSavingTimeOffset];
         [timetable setObject:[dateFormatter stringFromDate:newStartTime] forKey:@"from"];
     }
     if (end) {
@@ -179,6 +180,7 @@
         NSString *endTime = [dateFormatter stringFromDate:end];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         NSDate *newEndTime = [dateFormatter dateFromString:endTime];
+        newEndTime = [newEndTime dateByAddingTimeInterval:[NSTimeZone localTimeZone].daylightSavingTimeOffset];
         [timetable setObject:[dateFormatter stringFromDate:newEndTime] forKey:@"to"];
     }
     return [NSDictionary dictionaryWithDictionary:timetable];

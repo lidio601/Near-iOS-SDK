@@ -72,6 +72,7 @@
         [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
         dateFormatter.dateFormat = @"HH:mm:ss";
         NSDate *fromHourDate = [dateFormatter dateFromString:fromHour];
+        fromHourDate = [fromHourDate dateByAddingTimeInterval:-1 * [NSTimeZone localTimeZone].daylightSavingTimeOffset];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         NSString *newFromHour = [dateFormatter stringFromDate:fromHourDate];
         
@@ -82,6 +83,7 @@
         [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
         dateFormatter.dateFormat = @"HH:mm:ss";
         NSDate *toHourDate = [dateFormatter dateFromString:toHour];
+        toHourDate = [toHourDate dateByAddingTimeInterval:-1 * [NSTimeZone localTimeZone].daylightSavingTimeOffset];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         NSString *newToHour = [dateFormatter stringFromDate:toHourDate];
         
