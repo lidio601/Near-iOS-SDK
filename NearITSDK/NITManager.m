@@ -26,6 +26,10 @@
 #import "NITNetworkProvider.h"
 #import "NITTrackManager.h"
 #import "NITDateManager.h"
+#import "NITRecipeHistory.h"
+#import "NITCooldownValidator.h"
+#import "NITScheduleValidator.h"
+#import "NITRecipeValidationFilter.h"
 #import "Reachability.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 
@@ -126,8 +130,12 @@
 - (void)pluginSetup {
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     NITDateManager *dateManager = [[NITDateManager alloc] init];
+    NITRecipeHistory *recipeHistory = [[NITRecipeHistory alloc] initWithCacheManager:self.cacheManager dateManager:dateManager];
     self.trackManager = [[NITTrackManager alloc] initWithNetworkManager:self.networkManager cacheManager:self.cacheManager reachability:[Reachability reachabilityForInternetConnection] notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:dateManager];
-    self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration trackManager:self.trackManager];
+    NITCooldownValidator *cooldownValidator = [[NITCooldownValidator alloc] initWithRecipeHistory:recipeHistory dateManager:dateManager];
+    NITScheduleValidator *scheduleValidator = [[NITScheduleValidator alloc] initWithDateManager:dateManager];
+    NITRecipeValidationFilter *recipeValidationFilter = [[NITRecipeValidationFilter alloc] initWithValidators:@[cooldownValidator, scheduleValidator]];
+    self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration trackManager:self.trackManager recipeHistory:recipeHistory recipeValidationFilter:recipeValidationFilter];
     self.recipesManager.manager = self;
     NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration locationManager:self.locationManager trackManager:self.trackManager];

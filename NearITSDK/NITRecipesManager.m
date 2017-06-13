@@ -16,10 +16,11 @@
 #import "NITConstants.h"
 #import "NITImage.h"
 #import "NITClaim.h"
-#import "NITRecipeCooler.h"
 #import "NITCacheManager.h"
 #import "NITTrackManager.h"
 #import "NITDateManager.h"
+#import "NITRecipeHistory.h"
+#import "NITRecipeValidationFilter.h"
 
 #define LOGTAG @"RecipesManager"
 NSString* const RecipesCacheKey = @"Recipes";
@@ -27,24 +28,26 @@ NSString* const RecipesCacheKey = @"Recipes";
 @interface NITRecipesManager()
 
 @property (nonatomic, strong) NSArray<NITRecipe*> *recipes;
-@property (nonatomic, strong) NITRecipeCooler *cooler;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) id<NITNetworkManaging> networkManager;
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) NITTrackManager *trackManager;
+@property (nonatomic, strong) NITRecipeHistory *recipeHistory;
+@property (nonatomic, strong) NITRecipeValidationFilter *recipeValidationFilter;
 
 @end
 
 @implementation NITRecipesManager
 
-- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration *)configuration trackManager:(NITTrackManager * _Nonnull)trackManager {
+- (instancetype)initWithCacheManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration *)configuration trackManager:(NITTrackManager * _Nonnull)trackManager recipeHistory:(NITRecipeHistory * _Nonnull)recipeHistory recipeValidationFilter:(NITRecipeValidationFilter * _Nonnull)recipeValidationFilter {
     self = [super init];
     if (self) {
-        self.cooler = [[NITRecipeCooler alloc] initWithCacheManager:cacheManager dateManager:[[NITDateManager alloc] init]];
         self.cacheManager = cacheManager;
         self.networkManager = networkManager;
         self.configuration = configuration;
         self.trackManager = trackManager;
+        self.recipeHistory = recipeHistory;
+        self.recipeValidationFilter = recipeValidationFilter;
     }
     return self;
 }
@@ -90,15 +93,7 @@ NSString* const RecipesCacheKey = @"Recipes";
         }
     }
     
-    NSDate *now = [NSDate date];
-    NSMutableArray<NITRecipe*> *validRecipes = [[NSMutableArray alloc] init];
-    for (NITRecipe *recipe in matchingRecipes) {
-        if([recipe isScheduledNow:now]) {
-            [validRecipes addObject:recipe];
-        }
-    }
-    
-    NSArray<NITRecipe*> *recipes = [self.cooler filterRecipeWithRecipes:validRecipes];
+    NSArray<NITRecipe*> *recipes = [self.recipeValidationFilter filterRecipes:matchingRecipes];
     
     if ([recipes count] == 0) {
         [self onlinePulseEvaluationWithPlugin:pulsePlugin action:pulseAction bundle:pulseBundle];
@@ -167,7 +162,7 @@ NSString* const RecipesCacheKey = @"Recipes";
 
 - (void)sendTrackingWithRecipeId:(NSString *)recipeId event:(NSString*)event {
     if ([event isEqualToString:NITRecipeNotified]) {
-        [self.cooler markRecipeAsShownWithId:recipeId];
+        [self.recipeHistory markRecipeAsShownWithId:recipeId];
     }
     
     NITConfiguration *config = self.configuration;
@@ -237,20 +232,20 @@ NSString* const RecipesCacheKey = @"Recipes";
         [core setObject:config.installationId forKey:@"installation_id"];
         [core setObject:config.appId forKey:@"app_id"];
     }
-    if (self.cooler) {
-        [core setObject:[self buildCooldownBlockWithRecipeCooler:self.cooler] forKey:@"cooldown"];
+    if (self.recipeHistory) {
+        [core setObject:[self buildCooldownBlockWithRecipeCooler:self.recipeHistory] forKey:@"cooldown"];
     }
     return [NSDictionary dictionaryWithDictionary:core];
 }
 
-- (NSDictionary*)buildCooldownBlockWithRecipeCooler:(NITRecipeCooler*)recipeCooler {
+- (NSDictionary*)buildCooldownBlockWithRecipeCooler:(NITRecipeHistory*)recipeHistory {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
-    NSNumber *latestLog = [recipeCooler latestLog];
+    NSNumber *latestLog = [recipeHistory latestLog];
     if (latestLog) {
         [dict setObject:latestLog forKey:@"last_notified_at"];
     }
-    NSDictionary<NSString*, NSNumber*> *log = [recipeCooler log];
+    NSDictionary<NSString*, NSNumber*> *log = [recipeHistory log];
     if (log) {
         [dict setObject:log forKey:@"recipes_notified_at"];
     }
