@@ -68,10 +68,24 @@
     NSString *toHour = [timetable objectForKey:@"to"];
     
     if (fromHour != nil && ![fromHour isEqual:[NSNull null]]) {
-        valid &= [self isGreaterOrEqualHMSWithHour:[self hourComponentsWithDate:now] referenceHour:[self hourComponentsWithString:fromHour]];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+        dateFormatter.dateFormat = @"HH:mm:ss";
+        NSDate *fromHourDate = [dateFormatter dateFromString:fromHour];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        NSString *newFromHour = [dateFormatter stringFromDate:fromHourDate];
+        
+        valid &= [self isGreaterOrEqualHMSWithHour:[self hourComponentsWithDate:now] referenceHour:[self hourComponentsWithString:newFromHour]];
     }
     if (toHour != nil && ![toHour isEqual:[NSNull null]]) {
-        valid &= [self isGreaterOrEqualHMSWithHour:[self hourComponentsWithString:toHour] referenceHour:[self hourComponentsWithDate:now]];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+        dateFormatter.dateFormat = @"HH:mm:ss";
+        NSDate *toHourDate = [dateFormatter dateFromString:toHour];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        NSString *newToHour = [dateFormatter stringFromDate:toHourDate];
+        
+        valid &= [self isGreaterOrEqualHMSWithHour:[self hourComponentsWithString:newToHour] referenceHour:[self hourComponentsWithDate:now]];
     }
     
     return valid;

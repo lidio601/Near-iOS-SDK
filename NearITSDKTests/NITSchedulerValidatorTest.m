@@ -104,6 +104,9 @@
     NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     [gregorianCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     NSDateComponents *components = [[NSDateComponents alloc] init];
+    [components setDay:1];
+    [components setMonth:1];
+    [components setYear:2000];
     [components setHour:8];
     [components setMinute:0];
     [components setSecond:0];
@@ -165,10 +168,18 @@
     dateFormatter.dateFormat = @"HH:mm:ss";
     NSMutableDictionary<NSString*, id> *timetable = [[NSMutableDictionary alloc] init];
     if (start) {
-        [timetable setObject:[dateFormatter stringFromDate:start] forKey:@"from"];
+        [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+        NSString *startTime = [dateFormatter stringFromDate:start];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        NSDate *newStartTime = [dateFormatter dateFromString:startTime];
+        [timetable setObject:[dateFormatter stringFromDate:newStartTime] forKey:@"from"];
     }
     if (end) {
-        [timetable setObject:[dateFormatter stringFromDate:end] forKey:@"to"];
+        [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
+        NSString *endTime = [dateFormatter stringFromDate:end];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+        NSDate *newEndTime = [dateFormatter dateFromString:endTime];
+        [timetable setObject:[dateFormatter stringFromDate:newEndTime] forKey:@"to"];
     }
     return [NSDictionary dictionaryWithDictionary:timetable];
 }
