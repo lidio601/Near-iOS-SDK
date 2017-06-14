@@ -1,3 +1,18 @@
+0.9.28 Release notes (2017-06-14)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes datetime for trackings.
+
 0.9.27 Release notes (2017-06-13)
 =============================================================
 
