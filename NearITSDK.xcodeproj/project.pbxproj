@@ -1270,7 +1270,6 @@
 				132297041E8D306A00AE6EFC /* NITFeedback.m in Sources */,
 				132297001E8D2F6400AE6EFC /* NITFeedbackReaction.m in Sources */,
 				137E38A51E8A4464008E83E6 /* NITCacheManager.m in Sources */,
-				130FB3791EEE7375008B24C1 /* notification-service.md in Sources */,
 				1327D8971E82824800C6689E /* NITBeaconProximityManager.m in Sources */,
 				1327D89C1E82A4E700C6689E /* NITRecipe.m in Sources */,
 				1352CA8E1E78313300C0E98E /* NITUserProfile.m in Sources */,
