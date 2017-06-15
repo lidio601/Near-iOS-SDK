@@ -57,9 +57,9 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.refreshConfig(completionHandler: completionHandler)
     }
     
-    public func processRecipe(_ userInfo: [AnyHashable : Any]) {
+    public func processRecipeSimple(_ userInfo: [AnyHashable : Any]) {
         if let ui = userInfo as? [String : Any] {
-            manager.processRecipe(userInfo: ui)
+            manager.processRecipeSimple(userInfo: ui)
         }
     }
     

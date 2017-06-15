@@ -205,7 +205,7 @@
  * Process a recipe from a remote notification.
  * @param userInfo The remote notification userInfo dictionary
  */
-- (void)processRecipeWithUserInfo:(NSDictionary<NSString *,id> *)userInfo {
+- (void)processRecipeSimpleWithUserInfo:(NSDictionary<NSString *,id> *)userInfo {
     if(userInfo == nil) {
         return;
     }
