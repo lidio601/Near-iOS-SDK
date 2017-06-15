@@ -177,6 +177,7 @@ NSString* const RecipesCacheKey = @"Recipes";
     
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = ISO8601DateFormatMilliseconds;
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     [resource addAttributeObject:[dateFormatter stringFromDate:[NSDate date]] forKey:@"tracked_at"];
     
     [jsonApi setDataWithResourceObject:resource];
