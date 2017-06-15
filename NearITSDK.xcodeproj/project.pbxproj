@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		130FB3791EEE7375008B24C1 /* notification-service.md in Sources */ = {isa = PBXBuildFile; fileRef = 130FB3781EEE7375008B24C1 /* notification-service.md */; };
 		1319CED31EA0ACA0009046C5 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1319CED21EA0ACA0009046C5 /* .travis.yml */; };
 		1319CED51EA0B987009046C5 /* response_feedback_event.json in Resources */ = {isa = PBXBuildFile; fileRef = 1319CED41EA0B987009046C5 /* response_feedback_event.json */; };
 		1319CED81EA0BDA0009046C5 /* NITGeopolisNodesManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1319CED61EA0BDA0009046C5 /* NITGeopolisNodesManager.h */; };
@@ -1203,7 +1202,6 @@
 				132297041E8D306A00AE6EFC /* NITFeedback.m in Sources */,
 				132297001E8D2F6400AE6EFC /* NITFeedbackReaction.m in Sources */,
 				137E38A51E8A4464008E83E6 /* NITCacheManager.m in Sources */,
-				130FB3791EEE7375008B24C1 /* notification-service.md in Sources */,
 				1327D8971E82824800C6689E /* NITBeaconProximityManager.m in Sources */,
 				1327D89C1E82A4E700C6689E /* NITRecipe.m in Sources */,
 				1352CA8E1E78313300C0E98E /* NITUserProfile.m in Sources */,
