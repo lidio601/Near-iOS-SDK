@@ -1,3 +1,19 @@
+0.9.29 Release notes (2017-06-16)
+=============================================================
+
+### API Breaking Changes
+
+* "processRecipeWithUserInfo:" becomes "processRecipeSimpleWithUserInfo:" in obj-c, in swift is "processRecipeSimple".
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes time band validation with different timezones.
+* Fixes a swift call to the obj-c "processRecipe" method
+
 0.9.28 Release notes (2017-06-14)
 =============================================================
 
