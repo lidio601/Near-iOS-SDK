@@ -30,8 +30,10 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    self.cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    self.cacheManager = mock([NITCacheManager class]);
+    self.reachability = mock([Reachability class]);
+    self.dateManager = [[NITTestDateManager alloc] init];
+    /* dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     [self.cacheManager removeAllItemsWithCompletionHandler:^{
         dispatch_semaphore_signal(semaphore);
     }];
@@ -39,16 +41,16 @@
     
     self.dateManager = [[NITTestDateManager alloc] init];
     self.reachability = mock([Reachability class]);
-    [given([self.reachability currentReachabilityStatus]) willReturnInteger:NotReachable];
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:NotReachable]; */
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
-    dispatch_semaphore_t semaphore2 = dispatch_semaphore_create(0);
+    /* dispatch_semaphore_t semaphore2 = dispatch_semaphore_create(0);
     [self.cacheManager removeAllItemsWithCompletionHandler:^{
         dispatch_semaphore_signal(semaphore2);
     }];
-    dispatch_semaphore_wait(semaphore2, dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC));
+    dispatch_semaphore_wait(semaphore2, dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC)); */
     [super tearDown];
 }
 
@@ -106,16 +108,11 @@
     NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
+    [verifyCount(self.cacheManager, times(1)) saveWithObject:anything() forKey:@"Trackings"];
     
     [queue waitUntilAllOperationsAreFinished];
     
-    [NSThread sleepForTimeInterval:0.5];
-    
     XCTAssertTrue([trackManager.requests count] == 1);
-    NSArray<NITTrackRequest*> *cachedRequests = [self.cacheManager loadArrayForKey:@"Trackings"];
-    XCTAssertTrue([cachedRequests count] == 1);
-    NITTrackRequest *trackRequest = [cachedRequests firstObject];
-    XCTAssertTrue([trackRequest.request.URL.absoluteString isEqualToString:REQUEST_URL]);
 }
 
 - (void)testTrackManagerNetworkSwitch {
@@ -133,17 +130,15 @@
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [queue waitUntilAllOperationsAreFinished];
+    [verifyCount(self.cacheManager, times(2)) saveWithObject:anything() forKey:@"Trackings"];
     
     [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWWAN];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [queue waitUntilAllOperationsAreFinished];
-    
-    [NSThread sleepForTimeInterval:0.5];
+    [verifyCount(self.cacheManager, times(2)) saveWithObject:anything() forKey:@"Trackings"];
     
     XCTAssertTrue([trackManager.requests count] == 0);
-    NSArray<NITTrackRequest*> *cachedRequests = [self.cacheManager loadArrayForKey:@"Trackings"];
-    XCTAssertTrue([cachedRequests count] == 0);
 }
 
 - (void)testTrackManagerCachePrefilled {
@@ -164,9 +159,7 @@
     req2.request = [self simpleTrackRequest];
     req2.date = now;
     NSArray<NITTrackRequest*> *requests = @[req1, req2];
-    [self.cacheManager saveWithObject:requests forKey:@"Trackings"];
-    
-    [NSThread sleepForTimeInterval:0.5];
+    [given([self.cacheManager loadArrayForKey:@"Trackings"]) willReturn:requests];
     
     NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     XCTAssertTrue([trackManager.requests count] == 2);
@@ -175,36 +168,9 @@
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [queue waitUntilAllOperationsAreFinished];
+    [verifyCount(self.cacheManager, times(2)) saveWithObject:anything() forKey:@"Trackings"];
     
     XCTAssertTrue([trackManager.requests count] == 0);
-}
-
-- (void)testTrackManagerCache {
-    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
-    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
-        return [self jsonApiWithContentsOfFile:@"track_response"];
-    };
-    
-    [given([self.reachability currentReachabilityStatus]) willReturnInteger:NotReachable];
-    
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    
-    NSDate *now = [NSDate date];
-    self.dateManager.testCurrentDate = now;
-    
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
-    
-    [trackManager addTrackWithRequest:[self simpleTrackRequest]];
-    [trackManager addTrackWithRequest:[self simpleTrackRequest]];
-    [queue waitUntilAllOperationsAreFinished];
-    
-    [NSThread sleepForTimeInterval:1.0];
-    
-    NSArray<NITTrackRequest*> *cachedRequests = [self.cacheManager loadArrayForKey:@"Trackings"];
-    XCTAssertTrue([cachedRequests count] == 2);
-    NITTrackRequest *trackRequest = [cachedRequests firstObject];
-    XCTAssertTrue([trackRequest.request.URL.absoluteString isEqualToString:REQUEST_URL]);
-    XCTAssertTrue([trackRequest.date compare:now] == NSOrderedSame);
 }
 
 - (void)testTrackRequestRetry {
