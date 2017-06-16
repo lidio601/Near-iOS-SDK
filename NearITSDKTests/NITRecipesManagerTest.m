@@ -14,7 +14,7 @@
 #import "NITNetworkManager.h"
 #import "NITNetworkMockManger.h"
 #import "NITConfiguration.h"
-#import "TestReachability.h"
+#import "Reachability.h"
 #import "NITTrackManager.h"
 #import "NITDateManager.h"
 #import "NITRecipeHistory.h"
@@ -25,7 +25,7 @@
 @interface NITRecipesManagerTest : NITTestCase<NITManaging>
 
 @property (nonatomic, strong) XCTestExpectation *expectation;
-@property (nonatomic, strong) TestReachability *reachability;
+@property (nonatomic, strong) Reachability *reachability;
 @property (nonatomic, strong) NITDateManager *dateManager;
 @property (nonatomic, strong) NITRecipeHistory *recipeHistory;
 @property (nonatomic, strong) NITRecipeValidationFilter *recipeValidationFilter;
@@ -37,8 +37,8 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    self.reachability = [[TestReachability alloc] init];
-    self.reachability.testNetworkStatus = NotReachable;
+    self.reachability = mock([Reachability class]);
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:NotReachable];
     self.dateManager = [[NITDateManager alloc] init];
     NITCacheManager *cacheManager = mock([NITCacheManager class]);
     self.recipeHistory = [[NITRecipeHistory alloc] initWithCacheManager:cacheManager dateManager:self.dateManager];

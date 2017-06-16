@@ -26,14 +26,14 @@
 #import "NITFakeLocationManager.h"
 #import "NITTestBeacon.h"
 #import "NITTrackManager.h"
-#import "TestReachability.h"
 #import "NITDateManager.h"
+#import "Reachability.h"
 #import <OCMockitoIOS/OCMockitoIOS.h>
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
 
 @interface NITGeopolisManagerTest : NITTestCase<NITRecipesManaging>
 
-@property (nonatomic, strong) TestReachability *reachability;
+@property (nonatomic, strong) Reachability *reachability;
 @property (nonatomic, strong) NSString *recipesManagingId;
 @property (nonatomic, strong) XCTestExpectation *recipesManagingExpectation;
 @property (nonatomic, strong) NITConfiguration *configuration;
@@ -51,8 +51,8 @@
     [self.configuration setProfileId:@"fake-profile-id"];
     [self.configuration setInstallationId:@"fake-installation-id"];
     
-    self.reachability = [[TestReachability alloc] init];
-    self.reachability.testNetworkStatus = NotReachable;
+    self.reachability = mock([Reachability class]);
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:NotReachable];
     self.recipesManagingId = nil;
     self.recipesManagingExpectation = nil;
 }

@@ -159,7 +159,6 @@
 		1374E0F91EAA194800D613A5 /* NITTrackRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 1374E0F71EAA194800D613A5 /* NITTrackRequest.h */; };
 		1374E0FA1EAA194800D613A5 /* NITTrackRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0F81EAA194800D613A5 /* NITTrackRequest.m */; };
 		1374E0FC1EAA305A00D613A5 /* NITTrackManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0FB1EAA305A00D613A5 /* NITTrackManagerTest.m */; };
-		1374E1001EAA31C800D613A5 /* TestReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0FF1EAA31C800D613A5 /* TestReachability.m */; };
 		1374E1031EAA338900D613A5 /* track_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374E1021EAA338900D613A5 /* track_response.json */; };
 		1374E1101EB0D23A00D613A5 /* NITDateManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 1374E10E1EB0D23A00D613A5 /* NITDateManager.h */; };
 		1374E1111EB0D23A00D613A5 /* NITDateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E10F1EB0D23A00D613A5 /* NITDateManager.m */; };
@@ -386,8 +385,6 @@
 		1374E0F71EAA194800D613A5 /* NITTrackRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITTrackRequest.h; sourceTree = "<group>"; };
 		1374E0F81EAA194800D613A5 /* NITTrackRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTrackRequest.m; sourceTree = "<group>"; };
 		1374E0FB1EAA305A00D613A5 /* NITTrackManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTrackManagerTest.m; sourceTree = "<group>"; };
-		1374E0FE1EAA31C800D613A5 /* TestReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestReachability.h; sourceTree = "<group>"; };
-		1374E0FF1EAA31C800D613A5 /* TestReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestReachability.m; sourceTree = "<group>"; };
 		1374E1021EAA338900D613A5 /* track_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = track_response.json; sourceTree = "<group>"; };
 		1374E1041EAA34D800D613A5 /* NITTrackManager+Tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NITTrackManager+Tests.h"; sourceTree = "<group>"; };
 		1374E10E1EB0D23A00D613A5 /* NITDateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITDateManager.h; sourceTree = "<group>"; };
@@ -932,8 +929,6 @@
 				1374E0D31EA89D2000D613A5 /* NITManager+Tests.h */,
 				1374E0D81EA8C03B00D613A5 /* NITTestLogger.h */,
 				1374E0D91EA8C03B00D613A5 /* NITTestLogger.m */,
-				1374E0FE1EAA31C800D613A5 /* TestReachability.h */,
-				1374E0FF1EAA31C800D613A5 /* TestReachability.m */,
 				1374E1041EAA34D800D613A5 /* NITTrackManager+Tests.h */,
 				1374E1121EB0D2CE00D613A5 /* NITTestDateManager.h */,
 				1374E1131EB0D2CE00D613A5 /* NITTestDateManager.m */,
@@ -1316,7 +1311,6 @@
 				1374E0DA1EA8C03B00D613A5 /* NITTestLogger.m in Sources */,
 				135CD79B1E9D089A005C75A4 /* NITUserProfileTest.m in Sources */,
 				137E38B11E8A9569008E83E6 /* NITRecipesManagerTest.m in Sources */,
-				1374E1001EAA31C800D613A5 /* TestReachability.m in Sources */,
 				137E38A71E8A4AA6008E83E6 /* NITCacheManagerTest.m in Sources */,
 				135359061EEFD8CE0056AF7C /* NITRecipeValidationFilterTest.m in Sources */,
 				1374E0FC1EAA305A00D613A5 /* NITTrackManagerTest.m in Sources */,

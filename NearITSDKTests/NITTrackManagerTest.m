@@ -10,8 +10,10 @@
 #import "NITTrackManager+Tests.h"
 #import "NITTrackRequest.h"
 #import "NITCacheManager.h"
-#import "TestReachability.h"
+#import "Reachability.h"
 #import "NITTestDateManager.h"
+#import <OCMockitoIOS/OCMockitoIOS.h>
+#import <OCHamcrestIOS/OCHamcrestIOS.h>
 
 #define REQUEST_URL @"http//my.trackings"
 
@@ -19,6 +21,7 @@
 
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) NITTestDateManager *dateManager;
+@property (nonatomic, strong) Reachability *reachability;
 
 @end
 
@@ -35,6 +38,8 @@
     dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC));
     
     self.dateManager = [[NITTestDateManager alloc] init];
+    self.reachability = mock([Reachability class]);
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:NotReachable];
 }
 
 - (void)tearDown {
@@ -53,12 +58,11 @@
         return [self jsonApiWithContentsOfFile:@"track_response"];
     };
     
-    TestReachability *reachability = [[TestReachability alloc] init];
-    reachability.testNetworkStatus = ReachableViaWWAN;
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWWAN];
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     
@@ -74,12 +78,11 @@
         return [self jsonApiWithContentsOfFile:@"track_response"];
     };
     
-    TestReachability *reachability = [[TestReachability alloc] init];
-    reachability.testNetworkStatus = ReachableViaWWAN;
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWWAN];
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
@@ -96,12 +99,11 @@
         return [self jsonApiWithContentsOfFile:@"track_response"];
     };
     
-    TestReachability *reachability = [[TestReachability alloc] init];
-    reachability.testNetworkStatus = NotReachable;
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:NotReachable];
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     
@@ -122,18 +124,17 @@
         return [self jsonApiWithContentsOfFile:@"track_response"];
     };
     
-    TestReachability *reachability = [[TestReachability alloc] init];
-    reachability.testNetworkStatus = NotReachable;
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:NotReachable];
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [queue waitUntilAllOperationsAreFinished];
     
-    reachability.testNetworkStatus = ReachableViaWWAN;
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWWAN];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [queue waitUntilAllOperationsAreFinished];
@@ -151,8 +152,7 @@
         return [self jsonApiWithContentsOfFile:@"track_response"];
     };
     
-    TestReachability *reachability = [[TestReachability alloc] init];
-    reachability.testNetworkStatus = ReachableViaWiFi;
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWiFi];
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
@@ -168,7 +168,7 @@
     
     [NSThread sleepForTimeInterval:0.5];
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     XCTAssertTrue([trackManager.requests count] == 2);
     XCTAssertTrue([[[[[trackManager.requests firstObject] request] URL] absoluteString] isEqualToString:REQUEST_URL]);
     XCTAssertTrue([[[trackManager.requests firstObject] date] compare:now] == NSOrderedSame);
@@ -185,15 +185,14 @@
         return [self jsonApiWithContentsOfFile:@"track_response"];
     };
     
-    TestReachability *reachability = [[TestReachability alloc] init];
-    reachability.testNetworkStatus = NotReachable;
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:NotReachable];
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
     NSDate *now = [NSDate date];
     self.dateManager.testCurrentDate = now;
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
@@ -236,15 +235,14 @@
         return nil;
     };
     
-    TestReachability *reachability = [[TestReachability alloc] init];
-    reachability.testNetworkStatus = ReachableViaWWAN;
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWWAN];
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
     NSDate *now = [NSDate date];
     self.dateManager.testCurrentDate = now;
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [queue waitUntilAllOperationsAreFinished];
@@ -279,15 +277,14 @@
         return nil;
     };
     
-    TestReachability *reachability = [[TestReachability alloc] init];
-    reachability.testNetworkStatus = ReachableViaWWAN;
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWWAN];
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
     NSDate *now = [NSDate date];
     self.dateManager.testCurrentDate = now;
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [queue waitUntilAllOperationsAreFinished];
@@ -377,21 +374,20 @@
         return [self jsonApiWithContentsOfFile:@"track_response"];
     };
     
-    TestReachability *reachability = [[TestReachability alloc] init];
-    reachability.testNetworkStatus = NotReachable;
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:NotReachable];
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
     NSDate *now = [NSDate date];
     self.dateManager.testCurrentDate = now;
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:self.cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:self.dateManager];
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     [queue waitUntilAllOperationsAreFinished];
     XCTAssertTrue([trackManager.requests count] == 1);
     
     self.dateManager.testCurrentDate = [now dateByAddingTimeInterval:30];
-    reachability.testNetworkStatus = ReachableViaWiFi;
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWiFi];
     [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:nil];
     
     [queue waitUntilAllOperationsAreFinished];
