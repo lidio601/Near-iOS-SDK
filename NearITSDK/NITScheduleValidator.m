@@ -9,10 +9,12 @@
 #import "NITScheduleValidator.h"
 #import "NITDateManager.h"
 #import "NITRecipe.h"
+#import "NITTimeBandEvaluator.h"
 
 @interface NITScheduleValidator()
 
 @property (nonatomic, strong) NITDateManager *dateManager;
+@property (nonatomic, strong) NITTimeBandEvaluator *timeBandEvaluator;
 
 @end
 
@@ -21,6 +23,7 @@
 - (instancetype)initWithDateManager:(NITDateManager *)dateManager {
     if (self) {
         self.dateManager = dateManager;
+        self.timeBandEvaluator = [[NITTimeBandEvaluator alloc] initWithDateManager:dateManager];
     }
     return self;
 }
@@ -62,35 +65,11 @@
     if (timetable == nil || [timetable isEqual:[NSNull null]]) {
         return YES;
     }
-    BOOL valid = YES;
     
     NSString *fromHour = [timetable objectForKey:@"from"];
     NSString *toHour = [timetable objectForKey:@"to"];
     
-    if (fromHour != nil && ![fromHour isEqual:[NSNull null]]) {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
-        dateFormatter.dateFormat = @"HH:mm:ss";
-        NSDate *fromHourDate = [dateFormatter dateFromString:fromHour];
-        fromHourDate = [fromHourDate dateByAddingTimeInterval:-1 * [NSTimeZone localTimeZone].daylightSavingTimeOffset];
-        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-        NSString *newFromHour = [dateFormatter stringFromDate:fromHourDate];
-        
-        valid &= [self isGreaterOrEqualHMSWithHour:[self hourComponentsWithDate:now] referenceHour:[self hourComponentsWithString:newFromHour]];
-    }
-    if (toHour != nil && ![toHour isEqual:[NSNull null]]) {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
-        dateFormatter.dateFormat = @"HH:mm:ss";
-        NSDate *toHourDate = [dateFormatter dateFromString:toHour];
-        toHourDate = [toHourDate dateByAddingTimeInterval:-1 * [NSTimeZone localTimeZone].daylightSavingTimeOffset];
-        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-        NSString *newToHour = [dateFormatter stringFromDate:toHourDate];
-        
-        valid &= [self isGreaterOrEqualHMSWithHour:[self hourComponentsWithString:newToHour] referenceHour:[self hourComponentsWithDate:now]];
-    }
-    
-    return valid;
+    return [self.timeBandEvaluator isInTimeBandWithFromHour:fromHour toHour:toHour];
 }
 
 - (BOOL)isDaysValidWithScheduling:(NSDictionary<NSString*, id>*)scheduling date:(NSDate*)now {
@@ -169,53 +148,6 @@
         valid &= NO;
     }
     return valid;
-}
-
-- (BOOL)isGreaterOrEqualHMSWithHour:(NSDateComponents*)hour referenceHour:(NSDateComponents*)refHour {
-    BOOL valid = YES;
-    if (hour.hour == refHour.hour) {
-        if (hour.minute == refHour.minute) {
-            if (hour.second >= refHour.second) {
-                valid &= YES;
-            } else {
-                valid &= NO;
-            }
-        } else if (hour.minute > refHour.minute) {
-            valid &= YES;
-        } else {
-            valid &= NO;
-        }
-    } else if (hour.hour > refHour.hour) {
-        valid &= YES;
-    } else {
-        valid &= NO;
-    }
-    return valid;
-}
-
-- (NSDateComponents*)hourComponentsWithDate:(NSDate*)now {
-    NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
-    [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    return [calendar components:NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:now];
-}
-
-- (NSDateComponents*)hourComponentsWithString:(NSString*)hour {
-    NSDateComponents *hourComponents = [[NSDateComponents alloc] init];
-    hourComponents.hour = 0;
-    hourComponents.minute = 0;
-    hourComponents.second = 0;
-    NSArray<NSString*> *items = [hour componentsSeparatedByString:@":"];
-    if ([items count] >= 1) {
-        hourComponents.hour = [[items objectAtIndex:0] integerValue];
-    }
-    if ([items count] >= 2) {
-        hourComponents.minute = [[items objectAtIndex:1] integerValue];
-    }
-    if ([items count] >= 3) {
-        hourComponents.second = [[items objectAtIndex:2] integerValue];
-    }
-    
-    return hourComponents;
 }
 
 @end

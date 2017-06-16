@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		130FB3791EEE7375008B24C1 /* notification-service.md in Sources */ = {isa = PBXBuildFile; fileRef = 130FB3781EEE7375008B24C1 /* notification-service.md */; };
 		130FB37E1EEE8E78008B24C1 /* NITRecipeHistory.h in Headers */ = {isa = PBXBuildFile; fileRef = 130FB37C1EEE8E78008B24C1 /* NITRecipeHistory.h */; };
 		130FB37F1EEE8E78008B24C1 /* NITRecipeHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 130FB37D1EEE8E78008B24C1 /* NITRecipeHistory.m */; };
 		130FB3811EEE9309008B24C1 /* NITRecipeHistoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 130FB3801EEE9309008B24C1 /* NITRecipeHistoryTest.m */; };
@@ -91,6 +90,9 @@
 		1349EEC51E7A95E3000B0666 /* NITNodesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEC31E7A95E3000B0666 /* NITNodesManager.m */; };
 		1349EEC91E7AA1E3000B0666 /* NITResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 1349EEC71E7AA1E3000B0666 /* NITResource.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		1349EECA1E7AA1E3000B0666 /* NITResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1349EEC81E7AA1E3000B0666 /* NITResource.m */; };
+		134E2ECD1EF2B9F800A2B1F0 /* NITTimeBandEvaluator.h in Headers */ = {isa = PBXBuildFile; fileRef = 134E2ECB1EF2B9F800A2B1F0 /* NITTimeBandEvaluator.h */; };
+		134E2ECE1EF2B9F800A2B1F0 /* NITTimeBandEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 134E2ECC1EF2B9F800A2B1F0 /* NITTimeBandEvaluator.m */; };
+		134E2ED31EF2BAE600A2B1F0 /* NITTimeBandEvaluatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 134E2ED21EF2BAE600A2B1F0 /* NITTimeBandEvaluatorTest.m */; };
 		134E43AD1EBB5AB70099014C /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 134E43AC1EBB5AB70099014C /* OCHamcrestIOS.framework */; };
 		134E43AF1EBB5AC80099014C /* OCMockitoIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 134E43AE1EBB5AC80099014C /* OCMockitoIOS.framework */; };
 		1352CA6E1E7807FE00C0E98E /* NearITSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1352CA641E7807FE00C0E98E /* NearITSDK.framework */; };
@@ -294,6 +296,9 @@
 		1349EEC31E7A95E3000B0666 /* NITNodesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITNodesManager.m; sourceTree = "<group>"; };
 		1349EEC71E7AA1E3000B0666 /* NITResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITResource.h; sourceTree = "<group>"; };
 		1349EEC81E7AA1E3000B0666 /* NITResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITResource.m; sourceTree = "<group>"; };
+		134E2ECB1EF2B9F800A2B1F0 /* NITTimeBandEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITTimeBandEvaluator.h; sourceTree = "<group>"; };
+		134E2ECC1EF2B9F800A2B1F0 /* NITTimeBandEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTimeBandEvaluator.m; sourceTree = "<group>"; };
+		134E2ED21EF2BAE600A2B1F0 /* NITTimeBandEvaluatorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTimeBandEvaluatorTest.m; sourceTree = "<group>"; };
 		134E43AC1EBB5AB70099014C /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCHamcrestIOS.framework; sourceTree = "<group>"; };
 		134E43AE1EBB5AC80099014C /* OCMockitoIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCMockitoIOS.framework; sourceTree = "<group>"; };
 		1352CA641E7807FE00C0E98E /* NearITSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NearITSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -459,6 +464,8 @@
 				130FB3911EEEC1BA008B24C1 /* NITScheduleValidator.m */,
 				135359011EEFD2DD0056AF7C /* NITRecipeValidationFilter.h */,
 				135359021EEFD2DD0056AF7C /* NITRecipeValidationFilter.m */,
+				134E2ECB1EF2B9F800A2B1F0 /* NITTimeBandEvaluator.h */,
+				134E2ECC1EF2B9F800A2B1F0 /* NITTimeBandEvaluator.m */,
 			);
 			name = Validation;
 			sourceTree = "<group>";
@@ -471,6 +478,7 @@
 				130FB38A1EEEA2A0008B24C1 /* NITCooldownValidatorTest.m */,
 				130FB3941EEEC4FF008B24C1 /* NITSchedulerValidatorTest.m */,
 				135359051EEFD8CE0056AF7C /* NITRecipeValidationFilterTest.m */,
+				134E2ED21EF2BAE600A2B1F0 /* NITTimeBandEvaluatorTest.m */,
 			);
 			name = "Test Recipes";
 			sourceTree = "<group>";
@@ -987,6 +995,7 @@
 				13423EE31E7BCB07008CAAC8 /* NITGeofenceNode.h in Headers */,
 				1349EEB81E797045000B0666 /* NITGeopolisManager.h in Headers */,
 				132296FF1E8D2F6400AE6EFC /* NITFeedbackReaction.h in Headers */,
+				134E2ECD1EF2B9F800A2B1F0 /* NITTimeBandEvaluator.h in Headers */,
 				132297221E923D3300AE6EFC /* NITRecipeCooler.h in Headers */,
 				132297031E8D306A00AE6EFC /* NITFeedback.h in Headers */,
 				135CD7D41E9F7ACF005C75A4 /* NITDefaultLogger.h in Headers */,
@@ -1264,6 +1273,7 @@
 				1349EEB01E795030000B0666 /* NITNetworkManager.m in Sources */,
 				1327D8A41E83B7C400C6689E /* NITConstants.m in Sources */,
 				135359041EEFD2DD0056AF7C /* NITRecipeValidationFilter.m in Sources */,
+				134E2ECE1EF2B9F800A2B1F0 /* NITTimeBandEvaluator.m in Sources */,
 				132296F51E8D09D400AE6EFC /* NITCoupon.m in Sources */,
 				1349EEA71E793413000B0666 /* NITJSONAPIResource.m in Sources */,
 				130FB3881EEE9FD6008B24C1 /* NITCooldownValidator.m in Sources */,
@@ -1296,6 +1306,7 @@
 				135359091EEFDB6B0056AF7C /* NITTestValidator.m in Sources */,
 				1374E0DC1EA8C67400D613A5 /* logging.md in Sources */,
 				1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */,
+				134E2ED31EF2BAE600A2B1F0 /* NITTimeBandEvaluatorTest.m in Sources */,
 				130FB3811EEE9309008B24C1 /* NITRecipeHistoryTest.m in Sources */,
 				1374E0C11EA744FB00D613A5 /* NITFakeLocationManager.m in Sources */,
 				135CD7961E9B7621005C75A4 /* NITNetworkMockManger.m in Sources */,

@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NITScheduleValidator *scheduleValidator;
 @property (nonatomic, strong) NITDateManager *dateManager;
 @property (nonatomic, strong) NITRecipe *testRecipe;
+@property (nonatomic, strong) NSString *realDefaultTimeZoneAbbreviation;
 
 @end
 
@@ -31,11 +32,13 @@
     NSDate *now = [NSDate date];
     [given([self.dateManager currentDate]) willReturn:now];
     self.scheduleValidator = [[NITScheduleValidator alloc] initWithDateManager:self.dateManager];
+    self.realDefaultTimeZoneAbbreviation = [NSTimeZone localTimeZone].abbreviation;
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+    [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithAbbreviation:self.realDefaultTimeZoneAbbreviation]];
 }
 
 - (void)testSchedulingIsMissing {
@@ -101,6 +104,7 @@
 
 - (void)testRecipeIsScheduledATimeOfDay {
     // when a recipe is scheduled for this time of day
+    [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     [gregorianCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     NSDateComponents *components = [[NSDateComponents alloc] init];
@@ -165,23 +169,13 @@
 - (NSDictionary<NSString*, id>*)buildSchedulingBlockForTimeWithStart:(NSDate*)start end:(NSDate*)end {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    dateFormatter.dateFormat = @"HH:mm:ss";
+    dateFormatter.dateFormat = @"HH:mm";
     NSMutableDictionary<NSString*, id> *timetable = [[NSMutableDictionary alloc] init];
     if (start) {
-        [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
-        NSString *startTime = [dateFormatter stringFromDate:start];
-        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-        NSDate *newStartTime = [dateFormatter dateFromString:startTime];
-        newStartTime = [newStartTime dateByAddingTimeInterval:[NSTimeZone localTimeZone].daylightSavingTimeOffset];
-        [timetable setObject:[dateFormatter stringFromDate:newStartTime] forKey:@"from"];
+        [timetable setObject:[dateFormatter stringFromDate:start] forKey:@"from"];
     }
     if (end) {
-        [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
-        NSString *endTime = [dateFormatter stringFromDate:end];
-        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-        NSDate *newEndTime = [dateFormatter dateFromString:endTime];
-        newEndTime = [newEndTime dateByAddingTimeInterval:[NSTimeZone localTimeZone].daylightSavingTimeOffset];
-        [timetable setObject:[dateFormatter stringFromDate:newEndTime] forKey:@"to"];
+        [timetable setObject:[dateFormatter stringFromDate:end] forKey:@"to"];
     }
     return [NSDictionary dictionaryWithDictionary:timetable];
 }
