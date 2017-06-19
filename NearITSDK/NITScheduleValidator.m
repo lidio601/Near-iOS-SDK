@@ -38,6 +38,10 @@
 }
 
 - (BOOL)isValidWithRecipe:(NITRecipe *)recipe {
+    if ([recipe.scheduling isKindOfClass:[NSDictionary class]]) {
+        return YES;
+    }
+    
     NSDate *now = [self.dateManager currentDate];
     NSMutableArray<NSNumber*> *valids = [[NSMutableArray alloc] init];
     NSArray<NSDictionary<NSString*, id>*> *scheduling = recipe.scheduling;
