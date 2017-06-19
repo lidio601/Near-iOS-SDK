@@ -13,6 +13,9 @@
 #import "NITDateManager.h"
 #import "NITScheduleValidator.h"
 
+#define DAY_SECONDS 86400
+#define YEAR_SECONDS 31536000
+
 @interface NITSchedulerValidatorTest : NITTestCase
 
 @property (nonatomic, strong) NITScheduleValidator *scheduleValidator;
@@ -32,6 +35,7 @@
     NSDate *now = [NSDate date];
     [given([self.dateManager currentDate]) willReturn:now];
     self.scheduleValidator = [[NITScheduleValidator alloc] initWithDateManager:self.dateManager];
+    [self.scheduleValidator setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     self.realDefaultTimeZoneAbbreviation = [NSTimeZone localTimeZone].abbreviation;
 }
 
@@ -46,14 +50,112 @@
     [given([self.dateManager currentDate]) willReturn:now];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
     
-    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:-1 * 60 * 60 * 24]];
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:-DAY_SECONDS]];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
     
-    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:60 * 60 * 24]];
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval: DAY_SECONDS]];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
     
-    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:60 * 60 * 24 * 365]];
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:YEAR_SECONDS]];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:YEAR_SECONDS * 10]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:-YEAR_SECONDS * 10]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+}
+
+- (void)testSchedulingCoversEverytime {
+    NSArray *scheduling = [[self jsonWithContentsOfFile:@"schedule_complete_coverage_validity"] objectForKey:@"scheduling"];
+    self.testRecipe.scheduling = scheduling;
+    
+    NSDate *now = [NSDate date];
+    [given([self.dateManager currentDate]) willReturn:now];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:-DAY_SECONDS]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval: DAY_SECONDS]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:YEAR_SECONDS]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:YEAR_SECONDS * 10]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:-YEAR_SECONDS * 10]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+}
+
+- (void)testRecipeScheduleForDatePeriod {
+    NSArray *scheduling = [[self jsonWithContentsOfFile:@"schedule_only_during_jun_2017"] objectForKey:@"scheduling"];
+    self.testRecipe.scheduling = scheduling;
+    
+    NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    [gregorianCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setYear:2017];
+    [dateComponents setMonth:6];
+    [dateComponents setDay:15];
+    [dateComponents setHour:12];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    
+    // middle of june
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]); // 2017-06-15 12:00:00
+    
+    // start of june
+    [dateComponents setDay:1];
+    [dateComponents setHour:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]); // 2017-06-01 00:00:00
+    
+    // end of june
+    [dateComponents setDay:30];
+    [dateComponents setHour:23];
+    [dateComponents setMinute:59];
+    [dateComponents setSecond:59];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]); // 2017-06-30 23:59:59
+    
+    // way before
+    [dateComponents setMonth:1];
+    [dateComponents setDay:1];
+    [dateComponents setHour:12];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]); // 2017-01-01 12:00:00
+    
+    // just before
+    [dateComponents setMonth:5];
+    [dateComponents setDay:31];
+    [dateComponents setHour:23];
+    [dateComponents setMinute:59];
+    [dateComponents setSecond:59];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]); // 2017-05-31 23:59:59
+    
+    // just after
+    [dateComponents setMonth:7];
+    [dateComponents setDay:1];
+    [dateComponents setHour:0];
+    [dateComponents setMinute:00];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]); // 2017-07-01 00:00:00
+    
+    // way after
+    [dateComponents setMonth:8];
+    [dateComponents setDay:20];
+    [dateComponents setHour:18];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]); // 2017-08-20 18:00:00
 }
 
 /* - (void)testSchedulingIsMissing {

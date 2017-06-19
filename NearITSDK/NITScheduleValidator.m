@@ -75,18 +75,14 @@
 
 - (BOOL)isDateValidWithScheduling:(NSDictionary<NSString*, id>*)scheduling date:(NSDate*)now {
     BOOL valid = YES;
-    NSDictionary<NSString*, id> *date = [scheduling objectForKey:@"date"];
-    if(date == nil || [date isEqual:[NSNull null]]) {
-        return YES;
-    }
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     
     NSDate *checkDate = [now dateByAddingTimeInterval:self.timeZone.secondsFromGMT];
-    id from = [date objectForKey:@"from"];
-    id to = [date objectForKey:@"to"];
+    id from = [scheduling objectForKey:@"from"];
+    id to = [scheduling objectForKey:@"to"];
     
     if (from != nil && ![from isEqual:[NSNull null]]) {
         NSDate *fromDate = [dateFormatter dateFromString:[from stringByAppendingString:@" 00:00:00"]];
