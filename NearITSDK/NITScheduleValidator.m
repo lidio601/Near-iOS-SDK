@@ -115,7 +115,8 @@
 - (NSString*)nameOfDay:(NSDate*)now {
     NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
     [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    NSDateComponents *nowComponents = [calendar components:NSCalendarUnitWeekday fromDate:now];
+    NSDate *checkDate = [now dateByAddingTimeInterval:self.timeZone.secondsFromGMT];
+    NSDateComponents *nowComponents = [calendar components:NSCalendarUnitWeekday fromDate:checkDate];
     switch (nowComponents.weekday) {
         case 1:
             return @"sun";
