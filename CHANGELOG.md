@@ -1,3 +1,18 @@
+0.9.30 Release notes (2017-06-19)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes date band and days validation with different timezones.
+
 0.9.29 Release notes (2017-06-16)
 =============================================================
 
