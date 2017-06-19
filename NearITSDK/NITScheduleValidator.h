@@ -14,5 +14,6 @@
 @interface NITScheduleValidator : NSObject<NITValidating>
 
 - (instancetype _Nonnull)initWithDateManager:(NITDateManager* _Nonnull)dateManager;
+- (void)setTimeZone:(NSTimeZone *)timeZone;
 
 @end

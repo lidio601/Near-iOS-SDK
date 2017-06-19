@@ -15,17 +15,26 @@
 
 @property (nonatomic, strong) NITDateManager *dateManager;
 @property (nonatomic, strong) NITTimeBandEvaluator *timeBandEvaluator;
+@property (nonatomic, strong) NSTimeZone *timeZone;
 
 @end
 
 @implementation NITScheduleValidator
 
+@synthesize timeZone = _timeZone;
+
 - (instancetype)initWithDateManager:(NITDateManager *)dateManager {
     if (self) {
         self.dateManager = dateManager;
         self.timeBandEvaluator = [[NITTimeBandEvaluator alloc] initWithDateManager:dateManager];
+        self.timeZone = [NSTimeZone localTimeZone];
     }
     return self;
+}
+
+- (void)setTimeZone:(NSTimeZone *)timeZone {
+    _timeZone = timeZone;
+    [self.timeBandEvaluator setTimeZone:timeZone];
 }
 
 - (BOOL)isValidWithRecipe:(NITRecipe *)recipe {
@@ -42,19 +51,31 @@
     }
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     
+    NSDate *checkDate = [now dateByAddingTimeInterval:self.timeZone.secondsFromGMT];
     id from = [date objectForKey:@"from"];
     id to = [date objectForKey:@"to"];
     
     if (from != nil && ![from isEqual:[NSNull null]]) {
-        NSDate *fromDate = [dateFormatter dateFromString:from];
-        valid &= [self isGreaterOrEqualDMYWithFromDate:now referenceDate:fromDate];
+        NSDate *fromDate = [dateFormatter dateFromString:[from stringByAppendingString:@" 00:00:00"]];
+        NSComparisonResult fromResult = [fromDate compare:checkDate];
+        if (fromResult == NSOrderedAscending || fromResult == NSOrderedSame) {
+            valid &= YES;
+        } else {
+            valid = NO;
+        }
     }
+    
     if (to != nil && ![to isEqual:[NSNull null]]) {
-        NSDate *toDate = [dateFormatter dateFromString:to];
-        valid &= [self isGreaterOrEqualDMYWithFromDate:toDate referenceDate:now];
+        NSDate *toDate = [dateFormatter dateFromString:[to stringByAppendingString:@" 23:59:59"]];
+        NSComparisonResult toResult = [toDate compare:checkDate];
+        if (toResult == NSOrderedDescending || toResult == NSOrderedSame) {
+            valid &= YES;
+        } else {
+            valid = NO;
+        }
     }
     
     return valid;
@@ -122,32 +143,6 @@
             return @"";
             break;
     }
-}
-
-- (BOOL)isGreaterOrEqualDMYWithFromDate:(NSDate*)fromDate referenceDate:(NSDate*)refDate {
-    BOOL valid = YES;
-    NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
-    [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    NSDateComponents *fromComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:fromDate];
-    NSDateComponents *refComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:refDate];
-    if (fromComponents.year == refComponents.year) {
-        if (fromComponents.month == refComponents.month) {
-            if (fromComponents.day >= refComponents.day) {
-                valid &= YES;
-            } else {
-                valid &= NO;
-            }
-        } else if (fromComponents.month > refComponents.month) {
-            valid &= YES;
-        } else {
-            valid &= NO;
-        }
-    } else if (fromComponents.year > refComponents.year) {
-        valid &= YES;
-    } else {
-        valid &= NO;
-    }
-    return valid;
 }
 
 @end

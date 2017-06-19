@@ -102,6 +102,35 @@
     XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
 }
 
+- (void)testScheduledTimeZone {
+    NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    [gregorianCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    [components setYear:2017];
+    [components setMonth:1];
+    [components setDay:1];
+    [components setHour:0];
+    [components setMinute:0];
+    [components setSecond:0];
+    NSDate *startPeriod = [gregorianCalendar dateFromComponents:components];
+    NSDate *endPeriod = [gregorianCalendar dateFromComponents:components];
+    self.testRecipe.scheduling = [self buildSchedulingWithStartDate:startPeriod endDate:endPeriod startTime:nil endTime:nil];
+
+    NSTimeZone *cet = [NSTimeZone timeZoneWithAbbreviation:@"CEST"];
+    NSDate *newDate = [NSDate dateWithTimeIntervalSince1970:1483225200]; // 2017-01-01 01:00 local time (Sunday)
+    [self.scheduleValidator setTimeZone:cet];
+    [given([self.dateManager currentDate]) willReturn:newDate];
+    
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    NSTimeZone *pdt = [NSTimeZone timeZoneWithAbbreviation:@"PDT"];
+    newDate = [NSDate dateWithTimeIntervalSince1970:1483322400]; // 2017-01-01 19:00 local time (Sunday)
+    [self.scheduleValidator setTimeZone:pdt];
+    [given([self.dateManager currentDate]) willReturn:newDate];
+    
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+}
+
 - (void)testRecipeIsScheduledATimeOfDay {
     // when a recipe is scheduled for this time of day
     [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
