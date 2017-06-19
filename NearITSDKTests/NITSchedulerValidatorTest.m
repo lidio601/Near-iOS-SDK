@@ -42,6 +42,21 @@
 }
 
 - (void)testSchedulingIsMissing {
+    NSDate *now = [NSDate date];
+    [given([self.dateManager currentDate]) willReturn:now];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:-1 * 60 * 60 * 24]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:60 * 60 * 24]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:60 * 60 * 24 * 365]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+}
+
+/* - (void)testSchedulingIsMissing {
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
 }
 
@@ -184,6 +199,8 @@
     [given([self.dateManager currentDate]) willReturn:[endTime dateByAddingTimeInterval:60 * 60]];
     XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
 }
+ 
+*/
 
 // MARK: - Utility
 

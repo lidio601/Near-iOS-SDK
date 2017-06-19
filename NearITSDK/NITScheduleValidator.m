@@ -39,8 +39,38 @@
 
 - (BOOL)isValidWithRecipe:(NITRecipe *)recipe {
     NSDate *now = [self.dateManager currentDate];
-    NSDictionary<NSString*, id> *scheduling = recipe.scheduling;
-    return scheduling == nil || ([self isDateValidWithScheduling:scheduling date:now] && [self isTimetableValidWithScheduling:scheduling date:now] && [self isDaysValidWithScheduling:scheduling date:now]);
+    NSMutableArray<NSNumber*> *valids = [[NSMutableArray alloc] init];
+    NSArray<NSDictionary<NSString*, id>*> *scheduling = recipe.scheduling;
+    for(NSDictionary *schedule in scheduling) {
+        BOOL blockValid = YES;
+        blockValid &= [self isDateValidWithScheduling:schedule date:now];
+        NSDictionary *days = [schedule objectForKey:@"days"];
+        if (days != nil && ![days isEqual:[NSNull null]]) {
+            NSString *dayName = [self nameOfDay:now];
+            NSArray *day = [days objectForKey:[dayName capitalizedString]];
+            if (day != nil && ![day isEqual:[NSNull null]]) {
+                BOOL timeBandValid = NO;
+                for (NSDictionary<NSString*, id> *band in day) {
+                    timeBandValid |= [self isTimetableValidWithScheduling:band date:now];
+                }
+                blockValid &= timeBandValid;
+            } else {
+                blockValid &= NO;
+            }
+        }
+        [valids addObject:[NSNumber numberWithBool:blockValid]];
+    }
+    BOOL valid = YES;
+    NSInteger falseCount = 0;
+    for(NSNumber *val in valids) {
+        if (![val boolValue]) {
+            falseCount++;
+        }
+    }
+    if ([valids count] > 0 && [valids count] == falseCount) {
+        valid = NO;
+    }
+    return valid;
 }
 
 - (BOOL)isDateValidWithScheduling:(NSDictionary<NSString*, id>*)scheduling date:(NSDate*)now {
@@ -91,23 +121,6 @@
     NSString *toHour = [timetable objectForKey:@"to"];
     
     return [self.timeBandEvaluator isInTimeBandWithFromHour:fromHour toHour:toHour];
-}
-
-- (BOOL)isDaysValidWithScheduling:(NSDictionary<NSString*, id>*)scheduling date:(NSDate*)now {
-    NSArray<NSString*> *days = [scheduling objectForKey:@"days"];
-    NSMutableArray<NSString*> *lowercaseDays = [[NSMutableArray alloc] initWithCapacity:[days count]];
-    for(NSString *day in days) {
-        [lowercaseDays addObject:[day lowercaseString]];
-    }
-    if (days == nil || [days isEqual:[NSNull null]]) {
-        return YES;
-    }
-    NSString *dayName = [self nameOfDay:now];
-    if ([lowercaseDays containsObject:dayName]) {
-        return YES;
-    }
-    
-    return NO;
 }
 
 // MARK: - Utility
