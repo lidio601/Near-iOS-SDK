@@ -158,6 +158,187 @@
     XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]); // 2017-08-20 18:00:00
 }
 
+- (void)testRecipeIsScheduledOnlyForSelectedDaysOfWeek {
+    NSArray *scheduling = [[self jsonWithContentsOfFile:@"schedule_only_mon_wed_thu_sat"] objectForKey:@"scheduling"];
+    self.testRecipe.scheduling = scheduling;
+    
+    NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    [gregorianCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setYear:2017];
+    [dateComponents setMonth:6];
+    [dateComponents setDay:12];
+    [dateComponents setHour:0];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    
+    // Monday
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    // Tuesday
+    [dateComponents setDay:13];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    // Wednesday
+    [dateComponents setDay:14];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    // Thursday
+    [dateComponents setDay:15];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    // Friday
+    [dateComponents setDay:16];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    // Saturday
+    [dateComponents setDay:17];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    // Sunday
+    [dateComponents setDay:18];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+}
+
+- (void)testRecipeScheduledForMultipleTimeframes {
+    NSArray *scheduling = [[self jsonWithContentsOfFile:@"schedule_various_daily_timeframes"] objectForKey:@"scheduling"];
+    self.testRecipe.scheduling = scheduling;
+    
+    NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    [gregorianCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setYear:2017];
+    [dateComponents setMonth:6];
+    [dateComponents setDay:12];
+    
+    // True values
+    
+    [dateComponents setHour:9];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:9];
+    [dateComponents setMinute:30];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:10];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:12];
+    [dateComponents setMinute:30];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:13];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:14];
+    [dateComponents setMinute:45];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:17];
+    [dateComponents setMinute:15];
+    [dateComponents setSecond:27];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:18];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:18];
+    [dateComponents setMinute:50];
+    [dateComponents setSecond:3];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    // False values
+    
+    [dateComponents setHour:8];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:8];
+    [dateComponents setMinute:59];
+    [dateComponents setSecond:59];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:10];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:1];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:11];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:12];
+    [dateComponents setMinute:29];
+    [dateComponents setSecond:59];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:14];
+    [dateComponents setMinute:45];
+    [dateComponents setSecond:1];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:16];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:17];
+    [dateComponents setMinute:15];
+    [dateComponents setSecond:26];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:18];
+    [dateComponents setMinute:50];
+    [dateComponents setSecond:4];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setDay:13]; // Tuesday
+    [dateComponents setHour:12];
+    [dateComponents setMinute:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+}
+
 /* - (void)testSchedulingIsMissing {
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
 }

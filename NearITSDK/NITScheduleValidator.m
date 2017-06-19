@@ -108,13 +108,8 @@
 }
 
 - (BOOL)isTimetableValidWithScheduling:(NSDictionary<NSString*, id>*)scheduling date:(NSDate*)now {
-    NSDictionary<NSString*, id> *timetable = [scheduling objectForKey:@"timetable"];
-    if (timetable == nil || [timetable isEqual:[NSNull null]]) {
-        return YES;
-    }
-    
-    NSString *fromHour = [timetable objectForKey:@"from"];
-    NSString *toHour = [timetable objectForKey:@"to"];
+    NSString *fromHour = [scheduling objectForKey:@"from"];
+    NSString *toHour = [scheduling objectForKey:@"to"];
     
     return [self.timeBandEvaluator isInTimeBandWithFromHour:fromHour toHour:toHour];
 }

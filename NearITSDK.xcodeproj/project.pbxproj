@@ -143,6 +143,8 @@
 		1364A4D61EE566F5009F75FA /* manager_datapoint.json in Resources */ = {isa = PBXBuildFile; fileRef = 1364A4D51EE566F5009F75FA /* manager_datapoint.json */; };
 		13746D141EF7D47600D09183 /* schedule_complete_coverage_validity.json in Resources */ = {isa = PBXBuildFile; fileRef = 13746D131EF7D47600D09183 /* schedule_complete_coverage_validity.json */; };
 		13746D161EF7D69B00D09183 /* schedule_only_during_jun_2017.json in Resources */ = {isa = PBXBuildFile; fileRef = 13746D151EF7D69B00D09183 /* schedule_only_during_jun_2017.json */; };
+		13746D181EF7DCB100D09183 /* schedule_only_mon_wed_thu_sat.json in Resources */ = {isa = PBXBuildFile; fileRef = 13746D171EF7DCB100D09183 /* schedule_only_mon_wed_thu_sat.json */; };
+		13746D1A1EF7DEE200D09183 /* schedule_various_daily_timeframes.json in Resources */ = {isa = PBXBuildFile; fileRef = 13746D191EF7DEE200D09183 /* schedule_various_daily_timeframes.json */; };
 		1374E09A1EA5F4FA00D613A5 /* NearITSDKSwift.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 1374E0991EA5F4FA00D613A5 /* NearITSDKSwift.podspec */; };
 		1374E0C11EA744FB00D613A5 /* NITFakeLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0C01EA744FB00D613A5 /* NITFakeLocationManager.m */; };
 		1374E0D21EA76B7400D613A5 /* NITTestBeacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0D11EA76B7400D613A5 /* NITTestBeacon.m */; };
@@ -366,6 +368,8 @@
 		1364A4D51EE566F5009F75FA /* manager_datapoint.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manager_datapoint.json; sourceTree = "<group>"; };
 		13746D131EF7D47600D09183 /* schedule_complete_coverage_validity.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_complete_coverage_validity.json; sourceTree = "<group>"; };
 		13746D151EF7D69B00D09183 /* schedule_only_during_jun_2017.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_only_during_jun_2017.json; sourceTree = "<group>"; };
+		13746D171EF7DCB100D09183 /* schedule_only_mon_wed_thu_sat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_only_mon_wed_thu_sat.json; sourceTree = "<group>"; };
+		13746D191EF7DEE200D09183 /* schedule_various_daily_timeframes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_various_daily_timeframes.json; sourceTree = "<group>"; };
 		1374E0991EA5F4FA00D613A5 /* NearITSDKSwift.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NearITSDKSwift.podspec; sourceTree = "<group>"; };
 		1374E09B1EA5F5C500D613A5 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		1374E0BF1EA744FB00D613A5 /* NITFakeLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITFakeLocationManager.h; sourceTree = "<group>"; };
@@ -876,6 +880,8 @@
 			children = (
 				13746D131EF7D47600D09183 /* schedule_complete_coverage_validity.json */,
 				13746D151EF7D69B00D09183 /* schedule_only_during_jun_2017.json */,
+				13746D171EF7DCB100D09183 /* schedule_only_mon_wed_thu_sat.json */,
+				13746D191EF7DEE200D09183 /* schedule_various_daily_timeframes.json */,
 			);
 			name = Validation;
 			sourceTree = "<group>";
@@ -1204,11 +1210,13 @@
 				137E38A91E8A6B16008E83E6 /* contents1.json in Resources */,
 				135A70841E85281F00D4C9EC /* simple_recipe.json in Resources */,
 				1327D8901E8266B700C6689E /* single_gf.json in Resources */,
+				13746D1A1EF7DEE200D09183 /* schedule_various_daily_timeframes.json in Resources */,
 				135CD79E1E9D0970005C75A4 /* response_create_new_profile.json in Resources */,
 				132296F11E8D078200AE6EFC /* response_coupon_evaluated_recipe.json in Resources */,
 				1322971F1E923BAE00AE6EFC /* cooldown_recipe.json in Resources */,
 				1327D88D1E8266B700C6689E /* empty_config.json in Resources */,
 				135A70971E8555CB00D4C9EC /* response_content_reaction.json in Resources */,
+				13746D181EF7DCB100D09183 /* schedule_only_mon_wed_thu_sat.json in Resources */,
 				1349EEAC1E7948FA000B0666 /* jsonapi_sample1.json in Resources */,
 				132297191E8E4DF100AE6EFC /* feedback1.json in Resources */,
 				135CD7A11E9E4276005C75A4 /* config_22.png in Resources */,
