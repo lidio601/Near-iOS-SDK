@@ -64,7 +64,7 @@ class AppDelegate {
 ...
 
   func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-    manager.processRecipe(userInfo)
+    manager.processRecipeSimple(userInfo)
   }
 ...
 }
@@ -76,7 +76,7 @@ class AppDelegate {
 ...
 
     - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler
-        [manager processRecipeWithUserInfo: userInfo];
+        [manager processRecipeSimpleWithUserInfo: userInfo];
     }
 ...
 }
