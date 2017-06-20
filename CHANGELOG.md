@@ -1,3 +1,18 @@
+0.9.31 Release notes (2017-06-20)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* Better location accuracy.
+
+### Bugfixes
+
+* None.
+
 0.9.30 Release notes (2017-06-19)
 =============================================================
 
