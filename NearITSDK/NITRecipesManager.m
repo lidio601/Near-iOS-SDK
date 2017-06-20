@@ -232,6 +232,11 @@ NSString* const RecipesCacheKey = @"Recipes";
         [core setObject:config.profileId forKey:@"profile_id"];
         [core setObject:config.installationId forKey:@"installation_id"];
         [core setObject:config.appId forKey:@"app_id"];
+        NSDate *now = [NSDate date];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"XXX"];
+        NSString *hours = [dateFormatter stringFromDate:now];
+        [core setObject:hours forKey:@"utc_offset"];
     }
     if (self.recipeHistory) {
         [core setObject:[self buildCooldownBlockWithRecipeCooler:self.recipeHistory] forKey:@"cooldown"];
