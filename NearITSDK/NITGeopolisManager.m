@@ -62,7 +62,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         } else {
             self.locationManager = [[CLLocationManager alloc] init];
         }
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
         self.locationManager.delegate = self;
         [self.locationManager requestLocation];
         self.nodesManager = nodesManager;
