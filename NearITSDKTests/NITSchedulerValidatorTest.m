@@ -412,4 +412,52 @@
     XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
 }
 
+- (void)testMultipleTimeframesTimeZonePDT {
+    NSArray *scheduling = [[self jsonWithContentsOfFile:@"schedule_various_daily_timeframes"] objectForKey:@"scheduling"];
+    self.testRecipe.scheduling = scheduling;
+    [self.scheduleValidator setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"PDT"]];
+    
+    NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    [gregorianCalendar setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"PDT"]];
+    
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setYear:2017];
+    [dateComponents setMonth:6];
+    [dateComponents setDay:12];
+    
+    // True values
+    
+    [dateComponents setHour:9];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:14];
+    [dateComponents setMinute:45];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:18];
+    [dateComponents setMinute:50];
+    [dateComponents setSecond:3];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    // False values
+    
+    [dateComponents setHour:8];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    
+    [dateComponents setHour:18];
+    [dateComponents setMinute:50];
+    [dateComponents setSecond:4];
+    [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+}
+
 @end
