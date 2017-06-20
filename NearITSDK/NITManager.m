@@ -32,6 +32,7 @@
 #import "NITRecipeValidationFilter.h"
 #import "Reachability.h"
 #import <CoreBluetooth/CoreBluetooth.h>
+#import <UserNotifications/UserNotifications.h>
 
 #define LOGTAG @"Manager"
 
@@ -83,6 +84,8 @@
 - (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager locationManager:(CLLocationManager*)locationManager bluetoothManager:(CBCentralManager*)bluetoothManager {
     self = [super init];
     if (self) {
+        self.showBackgroundNotification = YES;
+        
         self.configuration = configuration;
         self.networkManager = networkManager;
         self.cacheManager = cacheManager;
@@ -371,7 +374,28 @@
                 }
             } else {
                 //Notify the delegate
-                if ([self.delegate respondsToSelector:@selector(manager:eventWithContent:recipe:)]) {
+                if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive && self.showBackgroundNotification) {
+                    if (NSClassFromString(@"UNMutableNotificationContent")) {
+                        UNMutableNotificationContent *notification = [[UNMutableNotificationContent alloc] init];
+                        notification.body = recipe.notificationBody;
+                        notification.sound = [UNNotificationSound defaultSound];
+                        NSData *contentData = [NSKeyedArchiver archivedDataWithRootObject:content];
+                        if ([content conformsToProtocol:@protocol(NSCoding)]) {
+                            notification.userInfo = @{@"owner" : @"NearIT", @"content" : contentData, @"class" : NSStringFromClass([content class])};
+                        } else {
+                            notification.userInfo = @{@"owner" : @"NearIT", @"recipeId" : recipe.ID};
+                        }
+                        UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
+                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:recipe.ID content:notification trigger:trigger];
+                        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+                            if (error) {
+                                NITLogE(LOGTAG, @"Background notification scheduling failed: %@", error);
+                            }
+                        }];
+                    } else {
+                        
+                    }
+                } else if ([self.delegate respondsToSelector:@selector(manager:eventWithContent:recipe:)]) {
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                         [self.delegate manager:self eventWithContent:content recipe:recipe];
                     }];

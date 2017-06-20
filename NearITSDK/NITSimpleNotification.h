@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NITSimpleNotification : NSObject
+@interface NITSimpleNotification : NSObject<NSCoding>
 
 @property (nonatomic, strong) NSString * _Nullable notificationTitle;
 @property (nonatomic, strong) NSString * _Nonnull message;
