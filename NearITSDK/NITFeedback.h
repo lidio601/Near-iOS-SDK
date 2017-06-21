@@ -8,7 +8,7 @@
 
 #import <NearITSDK/NearITSDK.h>
 
-@interface NITFeedback : NITResource
+@interface NITFeedback : NITResource<NSCoding>
 
 @property (nonatomic, strong) NSString* _Nonnull question;
 @property (nonatomic, strong) NSString* _Nonnull recipeId;

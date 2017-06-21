@@ -14,6 +14,7 @@
 #import "NITUpload.h"
 #import "NITCoupon.h"
 #import "NITClaim.h"
+#import "NITFeedback.h"
 
 @interface NITReactionModelTest : NITTestCase
 
@@ -139,6 +140,21 @@
     XCTAssertTrue([unarchivedClaim.claimedAt isEqualToString:claim.claimedAt]);
     XCTAssertTrue([unarchivedClaim.redeemedAt isEqualToString:claim.redeemedAt]);
     XCTAssertTrue([unarchivedClaim.recipeId isEqualToString:claim.recipeId]);
+}
+
+// MARK: - Feedback
+
+- (void)testSerializeFeedback {
+    NITFeedback *feedback = [[NITFeedback alloc] init];
+    feedback.question = @"What am I?";
+    feedback.recipeId = @"ffe0";
+    
+    NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:feedback];
+    XCTAssertNotNil(archivedData);
+    NITFeedback *unarchivedFeedback = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+    
+    XCTAssertTrue([unarchivedFeedback.question isEqualToString:feedback.question]);
+    XCTAssertTrue([unarchivedFeedback.recipeId isEqualToString:feedback.recipeId]);
 }
 
 @end
