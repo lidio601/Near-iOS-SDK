@@ -12,6 +12,8 @@
 #import "NITImage.h"
 #import "NITAudio.h"
 #import "NITUpload.h"
+#import "NITCoupon.h"
+#import "NITClaim.h"
 
 @interface NITReactionModelTest : NITTestCase
 
@@ -29,6 +31,8 @@
     [super tearDown];
 }
 
+// MARK: - Simple Notification
+
 - (void)testSerializeSimpleNotification {
     NITSimpleNotification *simpleNotification = [[NITSimpleNotification alloc] init];
     simpleNotification.notificationTitle = @"title";
@@ -39,6 +43,8 @@
     XCTAssertTrue([unarchivedSimpleNotification.notificationTitle isEqualToString:simpleNotification.notificationTitle]);
     XCTAssertTrue([unarchivedSimpleNotification.message isEqualToString:simpleNotification.message]);
 }
+
+// MARK: - Content
 
 - (void)testSerializeContent {
     NITContent *content = [[NITContent alloc] init];
@@ -89,6 +95,50 @@
     NSString *unarchivedUploadUrl = [[unarchivedUpload url] absoluteString];
     NSString *uploadUrl = [[upload url] absoluteString];
     XCTAssertTrue([unarchivedUploadUrl isEqualToString:uploadUrl]);
+}
+
+// MARK: - Coupon
+
+- (void)testSerializeCoupon {
+    NITCoupon *coupon = [[NITCoupon alloc] init];
+    coupon.name = @"Coupon name";
+    coupon.couponDescription = @"Description";
+    coupon.value = @"10 $";
+    coupon.expiresAt = @"2017-06-05T08:32:00.000Z";
+    coupon.redeemableFrom = @"2017-06-01T08:32:00.000Z";
+    NITClaim *claim = [[NITClaim alloc] init];
+    coupon.claims = @[claim];
+    coupon.icon = [[NITImage alloc] init];
+    
+    NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:coupon];
+    XCTAssertNotNil(archivedData);
+    NITCoupon *unarchivedCoupon = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+    
+    XCTAssertTrue([unarchivedCoupon.name isEqualToString:coupon.name]);
+    XCTAssertTrue([unarchivedCoupon.couponDescription isEqualToString:coupon.couponDescription]);
+    XCTAssertTrue([unarchivedCoupon.value isEqualToString:coupon.value]);
+    XCTAssertTrue([unarchivedCoupon.expiresAt isEqualToString:coupon.expiresAt]);
+    XCTAssertTrue([unarchivedCoupon.redeemableFrom isEqualToString:coupon.redeemableFrom]);
+    XCTAssertTrue([unarchivedCoupon.claims count] == 1);
+    XCTAssertNotNil(unarchivedCoupon.icon);
+    XCTAssertTrue([unarchivedCoupon.claims objectAtIndex:0].coupon == unarchivedCoupon);
+}
+
+- (void)testSerializeClaim {
+    NITClaim *claim = [[NITClaim alloc] init];
+    claim.serialNumber = @"8601";
+    claim.claimedAt = @"2017-06-05T08:32:00.000Z";
+    claim.redeemedAt = @"2017-06-01T08:32:00.000Z";
+    claim.recipeId = @"0ff2";
+    
+    NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:claim];
+    XCTAssertNotNil(archivedData);
+    NITClaim *unarchivedClaim = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+    
+    XCTAssertTrue([unarchivedClaim.serialNumber isEqualToString:claim.serialNumber]);
+    XCTAssertTrue([unarchivedClaim.claimedAt isEqualToString:claim.claimedAt]);
+    XCTAssertTrue([unarchivedClaim.redeemedAt isEqualToString:claim.redeemedAt]);
+    XCTAssertTrue([unarchivedClaim.recipeId isEqualToString:claim.recipeId]);
 }
 
 @end
