@@ -119,27 +119,29 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     
     self.locationTimerRetry = 0;
     [NSOperationQueue.mainQueue addOperationWithBlock:^{
-        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
-            self.locationTimerRetry++;
-            NITLogD(@"LocationTimer", @"Entered in timer: retry %d", self.locationTimerRetry);
-            if (!self.stepResponse) {
-                NITLogW(@"LocationTimer", @"Request step response by timer");
-                [self.locationManager requestLocation];
-                [self requestStateForRoots];
-            } else {
-                [self.locationTimer invalidate];
-                NITLogD(@"LocationTimer", @"Invalidate timer due to a successful state");
-            }
-            if (self.locationTimerRetry >= MAX_LOCATION_TIMER_RETRY) {
-                NITLogW(@"LocationTimer", @"MAX_LOCATION_TIMER_RETRY reached");
-                [self.locationTimer invalidate];
-            }
-        }];
+        self.locationTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(locationTimerFired:) userInfo:nil repeats:YES];
     }];
     
     [self startMonitoringRoots];
     
     return YES;
+}
+
+- (void)locationTimerFired:(NSTimer*)timer {
+    self.locationTimerRetry++;
+    NITLogD(@"LocationTimer", @"Entered in timer: retry %d", self.locationTimerRetry);
+    if (!self.stepResponse) {
+        NITLogW(@"LocationTimer", @"Request step response by timer");
+        [self.locationManager requestLocation];
+        [self requestStateForRoots];
+    } else {
+        [self.locationTimer invalidate];
+        NITLogD(@"LocationTimer", @"Invalidate timer due to a successful state");
+    }
+    if (self.locationTimerRetry >= MAX_LOCATION_TIMER_RETRY) {
+        NITLogW(@"LocationTimer", @"MAX_LOCATION_TIMER_RETRY reached");
+        [self.locationTimer invalidate];
+    }
 }
 
 - (void)startMonitoringRoots {
