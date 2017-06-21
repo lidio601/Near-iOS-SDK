@@ -21,6 +21,8 @@
 @property (nonatomic, strong) NITScheduleValidator *scheduleValidator;
 @property (nonatomic, strong) NITDateManager *dateManager;
 @property (nonatomic, strong) NITRecipe *testRecipe;
+@property (nonatomic, strong) NITRecipe *testRecipe2;
+@property (nonatomic, strong) NITRecipe *testRecipe3;
 @property (nonatomic, strong) NSString *realDefaultTimeZoneAbbreviation;
 
 @end
@@ -31,6 +33,8 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     self.testRecipe = [[NITRecipe alloc] init];
+    self.testRecipe2 = [[NITRecipe alloc] init];
+    self.testRecipe3 = [[NITRecipe alloc] init];
     self.dateManager = mock([NITDateManager class]);
     NSDate *now = [NSDate date];
     [given([self.dateManager currentDate]) willReturn:now];
@@ -46,48 +50,42 @@
 }
 
 - (void)testSchedulingIsMissing {
-    NSDate *now = [NSDate date];
-    [given([self.dateManager currentDate]) willReturn:now];
-    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
-    
-    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:-DAY_SECONDS]];
-    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
-    
-    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval: DAY_SECONDS]];
-    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
-    
-    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:YEAR_SECONDS]];
-    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
-    
-    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:YEAR_SECONDS * 10]];
-    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
-    
-    [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:-YEAR_SECONDS * 10]];
-    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
-}
-
-- (void)testSchedulingCoversEverytime {
     NSArray *scheduling = [[self jsonWithContentsOfFile:@"schedule_complete_coverage_validity"] objectForKey:@"scheduling"];
-    self.testRecipe.scheduling = scheduling;
+    self.testRecipe2.scheduling = scheduling;
+    
+    scheduling = [[self jsonWithContentsOfFile:@"schedule_always_valid_edge_case"] objectForKey:@"scheduling"];
+    self.testRecipe3.scheduling = scheduling;
     
     NSDate *now = [NSDate date];
     [given([self.dateManager currentDate]) willReturn:now];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe3]);
     
     [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:-DAY_SECONDS]];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe3]);
     
     [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval: DAY_SECONDS]];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe3]);
     
     [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:YEAR_SECONDS]];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe3]);
     
     [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:YEAR_SECONDS * 10]];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe3]);
     
     [given([self.dateManager currentDate]) willReturn:[now dateByAddingTimeInterval:-YEAR_SECONDS * 10]];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe3]);
 }
 
 - (void)testRecipeScheduleForDatePeriod {
@@ -162,6 +160,9 @@
     NSArray *scheduling = [[self jsonWithContentsOfFile:@"schedule_only_mon_wed_thu_sat"] objectForKey:@"scheduling"];
     self.testRecipe.scheduling = scheduling;
     
+    scheduling = [[self jsonWithContentsOfFile:@"schedule_empty_days_schedule"] objectForKey:@"scheduling"];
+    self.testRecipe2.scheduling = scheduling;
+    
     NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     [gregorianCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     
@@ -176,36 +177,43 @@
     // Monday
     [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
     
     // Tuesday
     [dateComponents setDay:13];
     [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
     XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
     
     // Wednesday
     [dateComponents setDay:14];
     [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
     
     // Thursday
     [dateComponents setDay:15];
     [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
     
     // Friday
     [dateComponents setDay:16];
     [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
     XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
     
     // Saturday
     [dateComponents setDay:17];
     [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
     XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertTrue([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
     
     // Sunday
     [dateComponents setDay:18];
     [given([self.dateManager currentDate]) willReturn:[gregorianCalendar dateFromComponents:dateComponents]];
     XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe]);
+    XCTAssertFalse([self.scheduleValidator isValidWithRecipe:self.testRecipe2]);
 }
 
 - (void)testRecipeScheduledForMultipleTimeframes {

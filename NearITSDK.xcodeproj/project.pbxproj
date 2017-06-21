@@ -123,6 +123,8 @@
 		135A708D1E85448E00D4C9EC /* NITContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 135A708B1E85448E00D4C9EC /* NITContent.m */; };
 		135A708F1E8547AF00D4C9EC /* content_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 135A708E1E8547AF00D4C9EC /* content_recipe.json */; };
 		135A70971E8555CB00D4C9EC /* response_content_reaction.json in Resources */ = {isa = PBXBuildFile; fileRef = 135A70961E8555CB00D4C9EC /* response_content_reaction.json */; };
+		135BB64B1EFA51B6005DB5C9 /* schedule_always_valid_edge_case.json in Resources */ = {isa = PBXBuildFile; fileRef = 135BB64A1EFA51B6005DB5C9 /* schedule_always_valid_edge_case.json */; };
+		135BB64D1EFA5B64005DB5C9 /* schedule_empty_days_schedule.json in Resources */ = {isa = PBXBuildFile; fileRef = 135BB64C1EFA5B64005DB5C9 /* schedule_empty_days_schedule.json */; };
 		135CD7791E94F71E005C75A4 /* NITEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 135CD7771E94F71E005C75A4 /* NITEvent.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		135CD77A1E94F71E005C75A4 /* NITEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD7781E94F71E005C75A4 /* NITEvent.m */; };
 		135CD7961E9B7621005C75A4 /* NITNetworkMockManger.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD7951E9B7621005C75A4 /* NITNetworkMockManger.m */; };
@@ -337,6 +339,8 @@
 		135A708B1E85448E00D4C9EC /* NITContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITContent.m; sourceTree = "<group>"; };
 		135A708E1E8547AF00D4C9EC /* content_recipe.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = content_recipe.json; sourceTree = "<group>"; };
 		135A70961E8555CB00D4C9EC /* response_content_reaction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_content_reaction.json; sourceTree = "<group>"; };
+		135BB64A1EFA51B6005DB5C9 /* schedule_always_valid_edge_case.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_always_valid_edge_case.json; sourceTree = "<group>"; };
+		135BB64C1EFA5B64005DB5C9 /* schedule_empty_days_schedule.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_empty_days_schedule.json; sourceTree = "<group>"; };
 		135CD7771E94F71E005C75A4 /* NITEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITEvent.h; sourceTree = "<group>"; };
 		135CD7781E94F71E005C75A4 /* NITEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITEvent.m; sourceTree = "<group>"; };
 		135CD7831E966DE7005C75A4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -880,11 +884,13 @@
 		13746D121EF7D45C00D09183 /* Validation */ = {
 			isa = PBXGroup;
 			children = (
+				135BB64A1EFA51B6005DB5C9 /* schedule_always_valid_edge_case.json */,
 				13746D131EF7D47600D09183 /* schedule_complete_coverage_validity.json */,
 				13746D151EF7D69B00D09183 /* schedule_only_during_jun_2017.json */,
 				13746D171EF7DCB100D09183 /* schedule_only_mon_wed_thu_sat.json */,
 				13746D191EF7DEE200D09183 /* schedule_various_daily_timeframes.json */,
 				13746D1B1EF7E5E800D09183 /* schedule_multiple_validity_periods.json */,
+				135BB64C1EFA5B64005DB5C9 /* schedule_empty_days_schedule.json */,
 			);
 			name = Validation;
 			sourceTree = "<group>";
@@ -1225,11 +1231,13 @@
 				132297191E8E4DF100AE6EFC /* feedback1.json in Resources */,
 				135CD7A11E9E4276005C75A4 /* config_22.png in Resources */,
 				1374E1031EAA338900D613A5 /* track_response.json in Resources */,
+				135BB64B1EFA51B6005DB5C9 /* schedule_always_valid_edge_case.json in Resources */,
 				132297111E8E3BC200AE6EFC /* custom_jsons.json in Resources */,
 				1374E0E11EA8F0D500D613A5 /* fake_new_profile.json in Resources */,
 				132297061E8D362400AE6EFC /* response_feeback_reaction.json in Resources */,
 				132296E41E8CFA1F00AE6EFC /* recipes.json in Resources */,
 				132296ED1E8D046500AE6EFC /* response_online_recipe.json in Resources */,
+				135BB64D1EFA5B64005DB5C9 /* schedule_empty_days_schedule.json in Resources */,
 				135A708F1E8547AF00D4C9EC /* content_recipe.json in Resources */,
 				13746D141EF7D47600D09183 /* schedule_complete_coverage_validity.json in Resources */,
 				1374E0E51EA8F5F600D613A5 /* manager_config_22.json in Resources */,
