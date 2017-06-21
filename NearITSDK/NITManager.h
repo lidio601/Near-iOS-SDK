@@ -13,6 +13,7 @@
 @class NITManager;
 @class NITEvent;
 @class NITCoupon;
+@class UNNotificationResponse;
 
 @protocol NITManaging <NSObject>
 
@@ -53,5 +54,6 @@
 - (void)createNewProfileWithCompletionHandler:(void (^ _Nullable)(NSString* _Nullable profileId, NSError* _Nullable error))handler;
 - (void)setProfileId:(NSString * _Nonnull)profileId;
 - (void)setSuiteName:(NSString * _Nonnull)suiteName;
+- (BOOL)handleLocalNotificationResponse:(UNNotificationResponse* _Nonnull)response completionHandler:(void (^_Nullable)(id _Nullable content, NSString * _Nullable recipeId, NSError * _Nullable error))completionHandler;
 
 @end

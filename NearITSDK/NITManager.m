@@ -359,6 +359,39 @@
     [self.configuration setSuiteUserDefaults:suiteUserDefaults];
 }
 
+- (BOOL)handleLocalNotificationResponse:(UNNotificationResponse *)response completionHandler:(void (^)(id _Nullable, NSString * _Nullable, NSError * _Nullable))completionHandler {
+    NSDictionary *userInfo = response.notification.request.content.userInfo;
+    BOOL valid = [self handleLocalUserInfo:userInfo completionHandler:^(id _Nullable content, NSString * _Nullable recipeId, NSError * _Nullable error) {
+        if (completionHandler) {
+            completionHandler(content, recipeId, error);
+        }
+    }];
+    return valid;
+}
+
+- (BOOL)handleLocalUserInfo:(NSDictionary* _Nonnull)userInfo completionHandler:(void (^)(id _Nullable, NSString * _Nullable, NSError * _Nullable))completionHandler {
+    NSString *owner = [userInfo objectForKey:@"owner"];
+    NSString *type = [userInfo objectForKey:@"type"];
+    NSData *recipeData = [userInfo objectForKey:@"recipe"];
+    NSData *contentData = [userInfo objectForKey:@"content"];
+    if (owner == nil || ![owner isEqualToString:@"NearIT"] || recipeData == nil || contentData == nil || type == nil || ![type isEqualToString:@"local"]) {
+        NITLogW(LOGTAG, @"Invalid NearIT local notification");
+        NSError *anError = [NSError errorWithDomain:NITManagerErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"The notification response has invalid fields for a NearIT notification"}];
+        if (completionHandler) {
+            completionHandler(nil, nil, anError);
+        }
+        return NO;
+    }
+    
+    NITRecipe *recipe = [NSKeyedUnarchiver unarchiveObjectWithData:recipeData];
+    id content = [NSKeyedUnarchiver unarchiveObjectWithData:contentData];
+    if (completionHandler) {
+        completionHandler(content, recipe.ID, nil);
+    }
+    
+    return YES;
+}
+
 // MARK: - NITManaging
 
 - (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {
@@ -380,10 +413,11 @@
                         notification.body = recipe.notificationBody;
                         notification.sound = [UNNotificationSound defaultSound];
                         NSData *contentData = [NSKeyedArchiver archivedDataWithRootObject:content];
+                        NSData *recipeData = [NSKeyedArchiver archivedDataWithRootObject:recipe];
                         if ([content conformsToProtocol:@protocol(NSCoding)]) {
-                            notification.userInfo = @{@"owner" : @"NearIT", @"content" : contentData, @"class" : NSStringFromClass([content class])};
+                            notification.userInfo = @{@"owner" : @"NearIT", @"content" : contentData, @"recipe" : recipeData, @"type" : @"local"};
                         } else {
-                            notification.userInfo = @{@"owner" : @"NearIT", @"recipeId" : recipe.ID};
+                            notification.userInfo = @{@"owner" : @"NearIT", @"recipeId" : recipe.ID, @"type" : @"local"};
                         }
                         UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
                         UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:recipe.ID content:notification trigger:trigger];

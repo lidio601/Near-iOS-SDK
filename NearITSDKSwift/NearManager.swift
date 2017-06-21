@@ -8,6 +8,7 @@
 
 import UIKit
 import NearITSDK
+import UserNotifications
 
 public enum NearRecipeTracking : String {
     case notified = "notified"
@@ -119,6 +120,15 @@ public final class NearManager: NSObject, NITManagerDelegate {
     
     public func processRecipe(id: String) {
         manager.processRecipe(withId: id)
+    }
+    
+    @available(iOS 10.0, *)
+    public func handleLocalNotificationResponse(_ response: UNNotificationResponse, completionHandler:((Any?, String?, Error?) -> Void)?) -> Bool {
+        return manager.handleLocalNotificationResponse(response) { (content, recipeId, error) in
+            if let completionHandler = completionHandler {
+                completionHandler(content, recipeId, error);
+            }
+        }
     }
     
     public func manager(_ manager: NITManager, eventWithContent content: Any, recipe: NITRecipe) {
