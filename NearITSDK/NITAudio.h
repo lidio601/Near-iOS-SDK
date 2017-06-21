@@ -8,7 +8,7 @@
 
 #import "NITResource.h"
 
-@interface NITAudio : NITResource
+@interface NITAudio : NITResource<NSCoding>
 
 @property (nonatomic, strong) NSDictionary<NSString*, NSString*>* _Nonnull audio;
 

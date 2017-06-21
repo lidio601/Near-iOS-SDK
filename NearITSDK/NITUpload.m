@@ -8,11 +8,26 @@
 
 #import "NITUpload.h"
 
+#define UploadKey @"upload"
+
 @implementation NITUpload
 
 - (NSURL *)url {
     NSString* stringUrl = [self.upload objectForKey:@"url"];
     return [NSURL URLWithString:stringUrl];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        self.upload = [aDecoder decodeObjectForKey:UploadKey];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.upload forKey:UploadKey];
 }
 
 @end

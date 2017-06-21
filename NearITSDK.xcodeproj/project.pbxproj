@@ -123,6 +123,7 @@
 		135A708D1E85448E00D4C9EC /* NITContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 135A708B1E85448E00D4C9EC /* NITContent.m */; };
 		135A708F1E8547AF00D4C9EC /* content_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 135A708E1E8547AF00D4C9EC /* content_recipe.json */; };
 		135A70971E8555CB00D4C9EC /* response_content_reaction.json in Resources */ = {isa = PBXBuildFile; fileRef = 135A70961E8555CB00D4C9EC /* response_content_reaction.json */; };
+		135BB64F1EFA5DF0005DB5C9 /* NITReactionModelTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 135BB64E1EFA5DF0005DB5C9 /* NITReactionModelTest.m */; };
 		135CD7791E94F71E005C75A4 /* NITEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 135CD7771E94F71E005C75A4 /* NITEvent.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		135CD77A1E94F71E005C75A4 /* NITEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD7781E94F71E005C75A4 /* NITEvent.m */; };
 		135CD7961E9B7621005C75A4 /* NITNetworkMockManger.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD7951E9B7621005C75A4 /* NITNetworkMockManger.m */; };
@@ -332,6 +333,7 @@
 		135A708B1E85448E00D4C9EC /* NITContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITContent.m; sourceTree = "<group>"; };
 		135A708E1E8547AF00D4C9EC /* content_recipe.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = content_recipe.json; sourceTree = "<group>"; };
 		135A70961E8555CB00D4C9EC /* response_content_reaction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_content_reaction.json; sourceTree = "<group>"; };
+		135BB64E1EFA5DF0005DB5C9 /* NITReactionModelTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITReactionModelTest.m; sourceTree = "<group>"; };
 		135CD7771E94F71E005C75A4 /* NITEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITEvent.h; sourceTree = "<group>"; };
 		135CD7781E94F71E005C75A4 /* NITEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITEvent.m; sourceTree = "<group>"; };
 		135CD7831E966DE7005C75A4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -713,6 +715,7 @@
 				1349EEA81E793833000B0666 /* NITJSONAPITests.m */,
 				13423EE51E7BD451008CAAC8 /* NITGeopolisManagerTest.m */,
 				135A70801E8525F700D4C9EC /* NITReactionTest.m */,
+				135BB64E1EFA5DF0005DB5C9 /* NITReactionModelTest.m */,
 				137E38A61E8A4AA6008E83E6 /* NITCacheManagerTest.m */,
 				132297241E92417200AE6EFC /* NITConfigurationTest.m */,
 				135CD79A1E9D089A005C75A4 /* NITUserProfileTest.m */,
@@ -1311,6 +1314,7 @@
 				1374E0DA1EA8C03B00D613A5 /* NITTestLogger.m in Sources */,
 				135CD79B1E9D089A005C75A4 /* NITUserProfileTest.m in Sources */,
 				137E38B11E8A9569008E83E6 /* NITRecipesManagerTest.m in Sources */,
+				135BB64F1EFA5DF0005DB5C9 /* NITReactionModelTest.m in Sources */,
 				137E38A71E8A4AA6008E83E6 /* NITCacheManagerTest.m in Sources */,
 				135359061EEFD8CE0056AF7C /* NITRecipeValidationFilterTest.m in Sources */,
 				1374E0FC1EAA305A00D613A5 /* NITTrackManagerTest.m in Sources */,
