@@ -123,10 +123,10 @@ public final class NearManager: NSObject, NITManagerDelegate {
     }
     
     @available(iOS 10.0, *)
-    public func handleLocalNotificationResponse(_ response: UNNotificationResponse, completionHandler:((Any?, String?, Error?) -> Void)?) -> Bool {
-        return manager.handleLocalNotificationResponse(response) { (content, recipeId, error) in
+    public func handleLocalNotificationResponse(_ response: UNNotificationResponse, completionHandler:((Any?, NITRecipe?, Error?) -> Void)?) -> Bool {
+        return manager.handleLocalNotificationResponse(response) { (content, recipe, error) in
             if let completionHandler = completionHandler {
-                completionHandler(content, recipeId, error);
+                completionHandler(content, recipe, error);
             }
         }
     }

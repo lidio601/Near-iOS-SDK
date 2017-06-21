@@ -359,17 +359,17 @@
     [self.configuration setSuiteUserDefaults:suiteUserDefaults];
 }
 
-- (BOOL)handleLocalNotificationResponse:(UNNotificationResponse *)response completionHandler:(void (^)(id _Nullable, NSString * _Nullable, NSError * _Nullable))completionHandler {
+- (BOOL)handleLocalNotificationResponse:(UNNotificationResponse *)response completionHandler:(void (^)(id _Nullable, NITRecipe * _Nullable, NSError * _Nullable))completionHandler {
     NSDictionary *userInfo = response.notification.request.content.userInfo;
-    BOOL valid = [self handleLocalUserInfo:userInfo completionHandler:^(id _Nullable content, NSString * _Nullable recipeId, NSError * _Nullable error) {
+    BOOL valid = [self handleLocalUserInfo:userInfo completionHandler:^(id _Nullable content, NITRecipe * _Nullable recipe, NSError * _Nullable error) {
         if (completionHandler) {
-            completionHandler(content, recipeId, error);
+            completionHandler(content, recipe, error);
         }
     }];
     return valid;
 }
 
-- (BOOL)handleLocalUserInfo:(NSDictionary* _Nonnull)userInfo completionHandler:(void (^)(id _Nullable, NSString * _Nullable, NSError * _Nullable))completionHandler {
+- (BOOL)handleLocalUserInfo:(NSDictionary* _Nonnull)userInfo completionHandler:(void (^)(id _Nullable, NITRecipe * _Nullable, NSError * _Nullable))completionHandler {
     NSString *owner = [userInfo objectForKey:@"owner"];
     NSString *type = [userInfo objectForKey:@"type"];
     NSData *recipeData = [userInfo objectForKey:@"recipe"];
@@ -386,7 +386,7 @@
     NITRecipe *recipe = [NSKeyedUnarchiver unarchiveObjectWithData:recipeData];
     id content = [NSKeyedUnarchiver unarchiveObjectWithData:contentData];
     if (completionHandler) {
-        completionHandler(content, recipe.ID, nil);
+        completionHandler(content, recipe, nil);
     }
     
     return YES;
