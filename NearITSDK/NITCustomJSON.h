@@ -8,7 +8,7 @@
 
 #import <NearITSDK/NearITSDK.h>
 
-@interface NITCustomJSON : NITResource
+@interface NITCustomJSON : NITResource<NSCoding>
 
 @property (nonatomic, strong) NSDictionary<NSString*, id> *content;
 

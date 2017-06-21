@@ -15,6 +15,7 @@
 #import "NITCoupon.h"
 #import "NITClaim.h"
 #import "NITFeedback.h"
+#import "NITCustomJSON.h"
 
 @interface NITReactionModelTest : NITTestCase
 
@@ -155,6 +156,23 @@
     
     XCTAssertTrue([unarchivedFeedback.question isEqualToString:feedback.question]);
     XCTAssertTrue([unarchivedFeedback.recipeId isEqualToString:feedback.recipeId]);
+}
+
+// MARK: - Custom JSON
+
+- (void)testSerializeCustomJSON {
+    NITCustomJSON *json = [[NITCustomJSON alloc] init];
+    json.content = @{@"message" : @"Hello world!"};
+    
+    NSData *archivedData = [NSKeyedArchiver archivedDataWithRootObject:json];
+    XCTAssertNotNil(archivedData);
+    NITCustomJSON *unarchivedJson = [NSKeyedUnarchiver unarchiveObjectWithData:archivedData];
+    
+    NSDictionary<NSString*, id> *unarchivedContent = unarchivedJson.content;
+    XCTAssertNotNil(unarchivedContent);
+    NSString *unarchivedMessage = [unarchivedContent objectForKey:@"message"];
+    XCTAssertNotNil(unarchivedMessage);
+    XCTAssertTrue([unarchivedMessage isEqualToString:@"Hello world!"]);
 }
 
 @end
