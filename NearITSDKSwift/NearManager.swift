@@ -8,6 +8,7 @@
 
 import UIKit
 import NearITSDK
+import UserNotifications
 
 public enum NearRecipeTracking : String {
     case notified = "notified"
@@ -57,20 +58,22 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.refreshConfig(completionHandler: completionHandler)
     }
     
-    public func processRecipeSimple(_ userInfo: [AnyHashable : Any]) {
+    public func processRecipeSimple(_ userInfo: [AnyHashable : Any]) -> Bool {
         if let ui = userInfo as? [String : Any] {
-            manager.processRecipeSimple(userInfo: ui)
+            return manager.processRecipeSimple(userInfo: ui)
         }
+        return false
     }
     
-    public func processRecipe(_ userInfo: [AnyHashable : Any], completion: ((Any?, NITRecipe?, Error?) -> Void)?) {
+    public func processRecipe(_ userInfo: [AnyHashable : Any], completion: ((Any?, NITRecipe?, Error?) -> Void)?) -> Bool {
         if let ui = userInfo as? [String : Any] {
-            manager.processRecipe(userInfo: ui, completion: { (content, recipe, error) in
+            return manager.processRecipe(userInfo: ui, completion: { (content, recipe, error) in
                 if completion != nil {
                     completion!(content, recipe, error)
                 }
             })
         }
+        return false
     }
     
     public func sendTracking(_ recipeId: String, event: NearRecipeTracking) {
@@ -119,6 +122,24 @@ public final class NearManager: NSObject, NITManagerDelegate {
     
     public func processRecipe(id: String) {
         manager.processRecipe(withId: id)
+    }
+    
+    @available(iOS 10.0, *)
+    public func handleLocalNotificationResponse(_ response: UNNotificationResponse, completionHandler:((Any?, NITRecipe?, Error?) -> Void)?) -> Bool {
+        return manager.handleLocalNotificationResponse(response) { (content, recipe, error) in
+            if let completionHandler = completionHandler {
+                completionHandler(content, recipe, error);
+            }
+        }
+    }
+    
+    public func handleLocalNotification(_ notification: UILocalNotification, completionHandler:((Any?, NITRecipe?, Error?) -> Void)?) -> Bool {
+        manager.handle(notification) { (content, recipe, error) in
+            if let completionHandler = completionHandler {
+                completionHandler(content, recipe, error);
+            }
+        }
+        return true
     }
     
     public func manager(_ manager: NITManager, eventWithContent content: Any, recipe: NITRecipe) {

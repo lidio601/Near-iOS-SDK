@@ -32,6 +32,7 @@
 #import "NITRecipeValidationFilter.h"
 #import "Reachability.h"
 #import <CoreBluetooth/CoreBluetooth.h>
+#import <UserNotifications/UserNotifications.h>
 
 #define LOGTAG @"Manager"
 
@@ -83,6 +84,8 @@
 - (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager locationManager:(CLLocationManager*)locationManager bluetoothManager:(CBCentralManager*)bluetoothManager {
     self = [super init];
     if (self) {
+        self.showBackgroundNotification = YES;
+        
         self.configuration = configuration;
         self.networkManager = networkManager;
         self.cacheManager = cacheManager;
@@ -213,21 +216,23 @@
  * Process a recipe from a remote notification.
  * @param userInfo The remote notification userInfo dictionary
  */
-- (void)processRecipeSimpleWithUserInfo:(NSDictionary<NSString *,id> *)userInfo {
+- (BOOL)processRecipeSimpleWithUserInfo:(NSDictionary<NSString *,id> *)userInfo {
     if(userInfo == nil) {
-        return;
+        return NO;
     }
     
     NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
     if(recipeId) {
         [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
         [self.recipesManager processRecipe:recipeId];
+        return YES;
     }
+    return NO;
 }
 
-- (void)processRecipeWithUserInfo:(NSDictionary<NSString *,id> *)userInfo completion:(void (^_Nullable)(id _Nullable object, NITRecipe* _Nullable recipe, NSError* _Nullable error))completionHandler {
+- (BOOL)processRecipeWithUserInfo:(NSDictionary<NSString *,id> *)userInfo completion:(void (^_Nullable)(id _Nullable object, NITRecipe* _Nullable recipe, NSError* _Nullable error))completionHandler {
     if(userInfo == nil) {
-        return;
+        return NO;
     }
     
     NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
@@ -261,7 +266,9 @@
                 }
             }
         }];
+        return YES;
     }
+    return NO;
 }
 
 - (void)sendTrackingWithRecipeId:(NSString *)recipeId event:(NSString *)event {
@@ -356,6 +363,57 @@
     [self.configuration setSuiteUserDefaults:suiteUserDefaults];
 }
 
+- (BOOL)handleLocalNotificationResponse:(UNNotificationResponse *)response completionHandler:(void (^)(id _Nullable, NITRecipe * _Nullable, NSError * _Nullable))completionHandler {
+    NSDictionary *userInfo = response.notification.request.content.userInfo;
+    BOOL valid = [self handleLocalUserInfo:userInfo completionHandler:^(id _Nullable content, NITRecipe * _Nullable recipe, NSError * _Nullable error) {
+        if (completionHandler) {
+            completionHandler(content, recipe, error);
+        }
+    }];
+    return valid;
+}
+
+- (BOOL)handleLocalNotification:(UILocalNotification*)notification completionHandler:(void (^)(id _Nullable, NITRecipe * _Nullable, NSError * _Nullable))completionHandler {
+    NSDictionary *userInfo = notification.userInfo;
+    if (userInfo) {
+        BOOL valid = [self handleLocalUserInfo:userInfo completionHandler:^(id _Nullable content, NITRecipe * _Nullable recipe, NSError * _Nullable error) {
+            if (completionHandler) {
+                completionHandler(content, recipe, error);
+            }
+        }];
+        return valid;
+    } else {
+        NSError *anError = [NSError errorWithDomain:NITManagerErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"The notification response has invalid fields for a NearIT notification"}];
+        if (completionHandler) {
+            completionHandler(nil, nil, anError);
+        }
+        return NO;
+    }
+}
+
+- (BOOL)handleLocalUserInfo:(NSDictionary* _Nonnull)userInfo completionHandler:(void (^)(id _Nullable, NITRecipe * _Nullable, NSError * _Nullable))completionHandler {
+    NSString *owner = [userInfo objectForKey:@"owner"];
+    NSString *type = [userInfo objectForKey:@"type"];
+    NSData *recipeData = [userInfo objectForKey:@"recipe"];
+    NSData *contentData = [userInfo objectForKey:@"content"];
+    if (owner == nil || ![owner isEqualToString:@"NearIT"] || recipeData == nil || contentData == nil || type == nil || ![type isEqualToString:@"local"]) {
+        NITLogW(LOGTAG, @"Invalid NearIT local notification");
+        NSError *anError = [NSError errorWithDomain:NITManagerErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"The notification response has invalid fields for a NearIT notification"}];
+        if (completionHandler) {
+            completionHandler(nil, nil, anError);
+        }
+        return NO;
+    }
+    
+    NITRecipe *recipe = [NSKeyedUnarchiver unarchiveObjectWithData:recipeData];
+    id content = [NSKeyedUnarchiver unarchiveObjectWithData:contentData];
+    if (completionHandler) {
+        completionHandler(content, recipe, nil);
+    }
+    
+    return YES;
+}
+
 // MARK: - NITManaging
 
 - (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe {
@@ -371,7 +429,40 @@
                 }
             } else {
                 //Notify the delegate
-                if ([self.delegate respondsToSelector:@selector(manager:eventWithContent:recipe:)]) {
+                if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive && self.showBackgroundNotification) {
+                    if (NSClassFromString(@"UNMutableNotificationContent")) {
+                        UNMutableNotificationContent *notification = [[UNMutableNotificationContent alloc] init];
+                        notification.body = recipe.notificationBody;
+                        notification.sound = [UNNotificationSound defaultSound];
+                        NSData *contentData = [NSKeyedArchiver archivedDataWithRootObject:content];
+                        NSData *recipeData = [NSKeyedArchiver archivedDataWithRootObject:recipe];
+                        if ([content conformsToProtocol:@protocol(NSCoding)]) {
+                            notification.userInfo = @{@"owner" : @"NearIT", @"content" : contentData, @"recipe" : recipeData, @"type" : @"local"};
+                        } else {
+                            notification.userInfo = @{@"owner" : @"NearIT", @"recipeId" : recipe.ID, @"type" : @"local"};
+                        }
+                        UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
+                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:recipe.ID content:notification trigger:trigger];
+                        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+                            if (error) {
+                                NITLogE(LOGTAG, @"Background notification scheduling failed: %@", error);
+                            }
+                        }];
+                    } else {
+                        UILocalNotification *notification = [[UILocalNotification alloc] init];
+                        notification.alertBody = recipe.notificationBody;
+                        notification.soundName = UILocalNotificationDefaultSoundName;
+                        NSData *contentData = [NSKeyedArchiver archivedDataWithRootObject:content];
+                        NSData *recipeData = [NSKeyedArchiver archivedDataWithRootObject:recipe];
+                        if ([content conformsToProtocol:@protocol(NSCoding)]) {
+                            notification.userInfo = @{@"owner" : @"NearIT", @"content" : contentData, @"recipe" : recipeData, @"type" : @"local"};
+                        } else {
+                            notification.userInfo = @{@"owner" : @"NearIT", @"recipeId" : recipe.ID, @"type" : @"local"};
+                        }
+                        notification.fireDate = [NSDate date];
+                        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+                    }
+                } else if ([self.delegate respondsToSelector:@selector(manager:eventWithContent:recipe:)]) {
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                         [self.delegate manager:self eventWithContent:content recipe:recipe];
                     }];

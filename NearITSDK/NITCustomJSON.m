@@ -8,6 +8,20 @@
 
 #import "NITCustomJSON.h"
 
+#define ContentKey @"content"
+
 @implementation NITCustomJSON
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+    if (self) {
+        self.content = [aDecoder decodeObjectForKey:ContentKey];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.content forKey:ContentKey];
+}
 
 @end
