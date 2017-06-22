@@ -369,6 +369,24 @@
     return valid;
 }
 
+- (BOOL)handleLocalNotification:(UILocalNotification*)notification completionHandler:(void (^)(id _Nullable, NITRecipe * _Nullable, NSError * _Nullable))completionHandler {
+    NSDictionary *userInfo = notification.userInfo;
+    if (userInfo) {
+        BOOL valid = [self handleLocalUserInfo:userInfo completionHandler:^(id _Nullable content, NITRecipe * _Nullable recipe, NSError * _Nullable error) {
+            if (completionHandler) {
+                completionHandler(content, recipe, error);
+            }
+        }];
+        return valid;
+    } else {
+        NSError *anError = [NSError errorWithDomain:NITManagerErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"The notification response has invalid fields for a NearIT notification"}];
+        if (completionHandler) {
+            completionHandler(nil, nil, anError);
+        }
+        return NO;
+    }
+}
+
 - (BOOL)handleLocalUserInfo:(NSDictionary* _Nonnull)userInfo completionHandler:(void (^)(id _Nullable, NITRecipe * _Nullable, NSError * _Nullable))completionHandler {
     NSString *owner = [userInfo objectForKey:@"owner"];
     NSString *type = [userInfo objectForKey:@"type"];
@@ -427,7 +445,18 @@
                             }
                         }];
                     } else {
-                        
+                        UILocalNotification *notification = [[UILocalNotification alloc] init];
+                        notification.alertBody = recipe.notificationBody;
+                        notification.soundName = UILocalNotificationDefaultSoundName;
+                        NSData *contentData = [NSKeyedArchiver archivedDataWithRootObject:content];
+                        NSData *recipeData = [NSKeyedArchiver archivedDataWithRootObject:recipe];
+                        if ([content conformsToProtocol:@protocol(NSCoding)]) {
+                            notification.userInfo = @{@"owner" : @"NearIT", @"content" : contentData, @"recipe" : recipeData, @"type" : @"local"};
+                        } else {
+                            notification.userInfo = @{@"owner" : @"NearIT", @"recipeId" : recipe.ID, @"type" : @"local"};
+                        }
+                        notification.fireDate = [NSDate date];
+                        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
                     }
                 } else if ([self.delegate respondsToSelector:@selector(manager:eventWithContent:recipe:)]) {
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
