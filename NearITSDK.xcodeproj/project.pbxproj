@@ -334,6 +334,7 @@
 		135A708E1E8547AF00D4C9EC /* content_recipe.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = content_recipe.json; sourceTree = "<group>"; };
 		135A70961E8555CB00D4C9EC /* response_content_reaction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_content_reaction.json; sourceTree = "<group>"; };
 		135BB64E1EFA5DF0005DB5C9 /* NITReactionModelTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITReactionModelTest.m; sourceTree = "<group>"; };
+		135BB6521EFBC0D0005DB5C9 /* local-background-notification.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "local-background-notification.md"; sourceTree = "<group>"; };
 		135CD7771E94F71E005C75A4 /* NITEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITEvent.h; sourceTree = "<group>"; };
 		135CD7781E94F71E005C75A4 /* NITEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITEvent.m; sourceTree = "<group>"; };
 		135CD7831E966DE7005C75A4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -836,6 +837,7 @@
 				135CD7901E976A40005C75A4 /* user-profilation.md */,
 				1374E0DB1EA8C67400D613A5 /* logging.md */,
 				130FB3781EEE7375008B24C1 /* notification-service.md */,
+				135BB6521EFBC0D0005DB5C9 /* local-background-notification.md */,
 			);
 			path = docs;
 			sourceTree = "<group>";
