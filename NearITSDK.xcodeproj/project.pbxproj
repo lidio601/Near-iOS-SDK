@@ -344,6 +344,18 @@
 		135BB64C1EFA5B64005DB5C9 /* schedule_empty_days_schedule.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_empty_days_schedule.json; sourceTree = "<group>"; };
 		135BB64E1EFA5DF0005DB5C9 /* NITReactionModelTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITReactionModelTest.m; sourceTree = "<group>"; };
 		135BB6521EFBC0D0005DB5C9 /* local-background-notification.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "local-background-notification.md"; sourceTree = "<group>"; };
+		135BB6541EFBD2E7005DB5C9 /* apns_walkthrough.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = apns_walkthrough.md; sourceTree = "<group>"; };
+		135BB6591EFBD33A005DB5C9 /* 09.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = 09.gif; sourceTree = "<group>"; };
+		135BB65A1EFBD33A005DB5C9 /* capabilities.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = capabilities.png; sourceTree = "<group>"; };
+		135BB65B1EFBD33A005DB5C9 /* pushtutorial00.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushtutorial00.png; sourceTree = "<group>"; };
+		135BB65C1EFBD33A005DB5C9 /* pushtutorial01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushtutorial01.png; sourceTree = "<group>"; };
+		135BB65D1EFBD33A005DB5C9 /* pushtutorial02.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = pushtutorial02.gif; sourceTree = "<group>"; };
+		135BB65E1EFBD33A005DB5C9 /* pushtutorial03.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = pushtutorial03.gif; sourceTree = "<group>"; };
+		135BB65F1EFBD33A005DB5C9 /* pushtutorial04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushtutorial04.png; sourceTree = "<group>"; };
+		135BB6601EFBD33A005DB5C9 /* pushtutorial05.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushtutorial05.png; sourceTree = "<group>"; };
+		135BB6611EFBD33A005DB5C9 /* pushtutorial06.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushtutorial06.png; sourceTree = "<group>"; };
+		135BB6621EFBD33A005DB5C9 /* pushtutorial07.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushtutorial07.png; sourceTree = "<group>"; };
+		135BB6631EFBD33A005DB5C9 /* pushtutorial08.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushtutorial08.png; sourceTree = "<group>"; };
 		135CD7771E94F71E005C75A4 /* NITEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITEvent.h; sourceTree = "<group>"; };
 		135CD7781E94F71E005C75A4 /* NITEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITEvent.m; sourceTree = "<group>"; };
 		135CD7831E966DE7005C75A4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -840,9 +852,28 @@
 			name = Content;
 			sourceTree = "<group>";
 		};
+		135BB6581EFBD321005DB5C9 /* push_help */ = {
+			isa = PBXGroup;
+			children = (
+				135BB6591EFBD33A005DB5C9 /* 09.gif */,
+				135BB65A1EFBD33A005DB5C9 /* capabilities.png */,
+				135BB65B1EFBD33A005DB5C9 /* pushtutorial00.png */,
+				135BB65C1EFBD33A005DB5C9 /* pushtutorial01.png */,
+				135BB65D1EFBD33A005DB5C9 /* pushtutorial02.gif */,
+				135BB65E1EFBD33A005DB5C9 /* pushtutorial03.gif */,
+				135BB65F1EFBD33A005DB5C9 /* pushtutorial04.png */,
+				135BB6601EFBD33A005DB5C9 /* pushtutorial05.png */,
+				135BB6611EFBD33A005DB5C9 /* pushtutorial06.png */,
+				135BB6621EFBD33A005DB5C9 /* pushtutorial07.png */,
+				135BB6631EFBD33A005DB5C9 /* pushtutorial08.png */,
+			);
+			path = push_help;
+			sourceTree = "<group>";
+		};
 		135CD7891E976A02005C75A4 /* docs */ = {
 			isa = PBXGroup;
 			children = (
+				135BB6581EFBD321005DB5C9 /* push_help */,
 				135CD78A1E976A23005C75A4 /* css */,
 				135CD78B1E976A40005C75A4 /* enable-triggers.md */,
 				135CD78C1E976A40005C75A4 /* handle-content.md */,
@@ -853,6 +884,7 @@
 				1374E0DB1EA8C67400D613A5 /* logging.md */,
 				130FB3781EEE7375008B24C1 /* notification-service.md */,
 				135BB6521EFBC0D0005DB5C9 /* local-background-notification.md */,
+				135BB6541EFBD2E7005DB5C9 /* apns_walkthrough.md */,
 			);
 			path = docs;
 			sourceTree = "<group>";
