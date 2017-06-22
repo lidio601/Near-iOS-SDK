@@ -216,21 +216,23 @@
  * Process a recipe from a remote notification.
  * @param userInfo The remote notification userInfo dictionary
  */
-- (void)processRecipeSimpleWithUserInfo:(NSDictionary<NSString *,id> *)userInfo {
+- (BOOL)processRecipeSimpleWithUserInfo:(NSDictionary<NSString *,id> *)userInfo {
     if(userInfo == nil) {
-        return;
+        return NO;
     }
     
     NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
     if(recipeId) {
         [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
         [self.recipesManager processRecipe:recipeId];
+        return YES;
     }
+    return NO;
 }
 
-- (void)processRecipeWithUserInfo:(NSDictionary<NSString *,id> *)userInfo completion:(void (^_Nullable)(id _Nullable object, NITRecipe* _Nullable recipe, NSError* _Nullable error))completionHandler {
+- (BOOL)processRecipeWithUserInfo:(NSDictionary<NSString *,id> *)userInfo completion:(void (^_Nullable)(id _Nullable object, NITRecipe* _Nullable recipe, NSError* _Nullable error))completionHandler {
     if(userInfo == nil) {
-        return;
+        return NO;
     }
     
     NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
@@ -264,7 +266,9 @@
                 }
             }
         }];
+        return YES;
     }
+    return NO;
 }
 
 - (void)sendTrackingWithRecipeId:(NSString *)recipeId event:(NSString *)event {
