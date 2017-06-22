@@ -8,7 +8,7 @@
 
 #import <NearITSDK/NearITSDK.h>
 
-@interface NITUpload : NITResource
+@interface NITUpload : NITResource<NSCoding>
 
 @property (nonatomic, strong) NSDictionary<NSString*, NSString*>* _Nonnull upload;
 

@@ -10,7 +10,7 @@
 
 @class NITCoupon;
 
-@interface NITClaim : NITResource
+@interface NITClaim : NITResource<NSCoding>
 
 @property (nonatomic, strong) NSString * _Nonnull serialNumber;
 @property (nonatomic, strong) NSString * _Nonnull claimedAt;

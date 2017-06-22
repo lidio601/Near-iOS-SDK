@@ -9,6 +9,11 @@
 #import "NITClaim.h"
 #import "NITConstants.h"
 
+#define SerialNumberKey @"serialNumber"
+#define ClaimedAt @"claimedAt"
+#define RedeemedAt @"redeemedAt"
+#define RecipeId @"recipeId"
+
 @implementation NITClaim
 
 - (NSDictionary *)attributesMap {
@@ -31,6 +36,24 @@
         return [dateFormatter dateFromString:(NSString * _Nonnull)self.redeemedAt];
     }
     return nil;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+    if (self) {
+        self.serialNumber = [aDecoder decodeObjectForKey:SerialNumberKey];
+        self.claimedAt = [aDecoder decodeObjectForKey:ClaimedAt];
+        self.redeemedAt = [aDecoder decodeObjectForKey:RedeemedAt];
+        self.recipeId = [aDecoder decodeObjectForKey:RecipeId];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.serialNumber forKey:SerialNumberKey];
+    [aCoder encodeObject:self.claimedAt forKey:ClaimedAt];
+    [aCoder encodeObject:self.redeemedAt forKey:RedeemedAt];
+    [aCoder encodeObject:self.recipeId forKey:RecipeId];
 }
 
 @end

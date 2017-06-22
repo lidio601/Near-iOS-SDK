@@ -11,7 +11,7 @@
 @class NITClaim;
 @class NITImage;
 
-@interface NITCoupon : NITResource
+@interface NITCoupon : NITResource<NSCoding>
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *couponDescription;
