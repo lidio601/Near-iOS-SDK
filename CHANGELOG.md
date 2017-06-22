@@ -1,3 +1,19 @@
+0.9.33 Release notes (2017-06-22)
+=============================================================
+
+### API Breaking Changes
+
+* processRecipes methods return a BOOL.
+
+### Enhancements
+
+* Now by default the SDK gives local background notification for triggers events.
+* The processRecipes... methods return a BOOL which means if a remote notification comes from Near or not.
+
+### Bugfixes
+
+* None.
+
 0.9.32 Release notes (2017-06-21)
 =============================================================
 
