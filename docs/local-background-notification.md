@@ -27,7 +27,7 @@ func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive respo
 ```objective-c
 // Objective-C
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
-    BOOL isNear = [self handleLocalNotificationResponse:response completionHandler:^(id  _Nullable content, NITRecipe * _Nullable recipe, NSError * _Nullable error) {
+    BOOL isNear = [manager handleLocalNotificationResponse:response completionHandler:^(id  _Nullable content, NITRecipe * _Nullable recipe, NSError * _Nullable error) {
         if ([content isKindOfClass:[NITContent class]]) {
             // Do something
         }
@@ -38,7 +38,39 @@ func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive respo
 }
 ```
 
+The result of `handleLocalNotificationResponse` means if a notification is from Near (true) or not (false).
+
 ## Handle local notification for iOS 9
+
+In iOS 9 you only need to implement the `didReceiveLocalNotification` (`didReceive` in Swift) to handle the tap on a notification.
+
+```swift
+// Swift
+func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
+    let isNear = manager.handleLocalNotificationResponse(response) { (content, recipe, error) in
+        if let content = content as? NITContent {
+            // Do something
+        }
+        // Code for other content types
+    }
+    print("Is a Near local notification: \(isNear)");
+}
+```
+
+```objective-c
+// Objective-C
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    BOOL isNear = [manager handleLocalNotification:notification completionHandler:^(id  _Nullable content, NITRecipe * _Nullable recipe, NSError * _Nullable error) {
+        if ([content isKindOfClass:[NITContent class]]) {
+            // Do something
+        }
+        // Code for other content types
+    }];
+    NSLog(@"Is a Near local notification: %d", isNear);
+}
+```
+
+The result of `handleLocalNotification` means if a notification is from Near (true) or not (false).
 
 ## How to disable local background notification
 
