@@ -181,6 +181,8 @@
 		138250241E88F88500264BAC /* NearITSDKSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 138250161E88F88500264BAC /* NearITSDKSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1382502D1E88F8B300264BAC /* NearITSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1352CA641E7807FE00C0E98E /* NearITSDK.framework */; };
 		1382502F1E88F8E500264BAC /* NearManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1382502E1E88F8E500264BAC /* NearManager.swift */; };
+		13AB72901F01596600FE14D9 /* NSData+Zip.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AB728F1F01596600FE14D9 /* NSData+Zip.m */; };
+		13AB72921F015A3800FE14D9 /* NITZipTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 13AB72911F015A3800FE14D9 /* NITZipTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -427,6 +429,9 @@
 		138250211E88F88500264BAC /* NearITSDKSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearITSDKSwiftTests.swift; sourceTree = "<group>"; };
 		138250231E88F88500264BAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1382502E1E88F8E500264BAC /* NearManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearManager.swift; sourceTree = "<group>"; };
+		13AB728E1F0158E600FE14D9 /* NSData+Zip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+Zip.h"; sourceTree = "<group>"; };
+		13AB728F1F01596600FE14D9 /* NSData+Zip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Zip.m"; sourceTree = "<group>"; };
+		13AB72911F015A3800FE14D9 /* NITZipTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITZipTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -597,6 +602,8 @@
 				1327D8A21E83B7C400C6689E /* NITConstants.m */,
 				1374E10E1EB0D23A00D613A5 /* NITDateManager.h */,
 				1374E10F1EB0D23A00D613A5 /* NITDateManager.m */,
+				13AB728E1F0158E600FE14D9 /* NSData+Zip.h */,
+				13AB728F1F01596600FE14D9 /* NSData+Zip.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -735,6 +742,7 @@
 				1374E0D41EA89DDF00D613A5 /* NITManagerTest.m */,
 				1374E0D61EA8C00200D613A5 /* NITLogTest.m */,
 				1374E0FB1EAA305A00D613A5 /* NITTrackManagerTest.m */,
+				13AB72911F015A3800FE14D9 /* NITZipTest.m */,
 				1352CA741E7807FE00C0E98E /* Info.plist */,
 			);
 			path = NearITSDKTests;
@@ -1319,6 +1327,7 @@
 				137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */,
 				1349EEB41E796511000B0666 /* NITNetworkProvider.m in Sources */,
 				1374E0FA1EAA194800D613A5 /* NITTrackRequest.m in Sources */,
+				13AB72901F01596600FE14D9 /* NSData+Zip.m in Sources */,
 				135A70761E8503D900D4C9EC /* NITReaction.m in Sources */,
 				1349EEC11E7A9272000B0666 /* NITNode.m in Sources */,
 				1349EEC51E7A95E3000B0666 /* NITNodesManager.m in Sources */,
@@ -1338,6 +1347,7 @@
 				135359091EEFDB6B0056AF7C /* NITTestValidator.m in Sources */,
 				1374E0DC1EA8C67400D613A5 /* logging.md in Sources */,
 				1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */,
+				13AB72921F015A3800FE14D9 /* NITZipTest.m in Sources */,
 				134E2ED31EF2BAE600A2B1F0 /* NITTimeBandEvaluatorTest.m in Sources */,
 				130FB3811EEE9309008B24C1 /* NITRecipeHistoryTest.m in Sources */,
 				1374E0C11EA744FB00D613A5 /* NITFakeLocationManager.m in Sources */,
@@ -1512,6 +1522,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "${SRCROOT}/NearITSDK/Map.modulemap";
+				OTHER_LDFLAGS = "-lz";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nearit.NearITSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1536,6 +1547,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "${SRCROOT}/NearITSDK/Map.modulemap";
+				OTHER_LDFLAGS = "-lz";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nearit.NearITSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
