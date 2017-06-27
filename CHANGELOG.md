@@ -1,3 +1,18 @@
+0.9.34 Release notes (2017-06-27)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes a lack of icon for coupons.
+
 0.9.33 Release notes (2017-06-22)
 =============================================================
 
