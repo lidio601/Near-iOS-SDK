@@ -8,6 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+void *NewBase64Decode(
+                      const char *inputBuffer,
+                      size_t length,
+                      size_t *outputLength);
+
+char *NewBase64Encode(
+                      const void *inputBuffer,
+                      size_t length,
+                      bool separateLines,
+                      size_t *outputLength);
+
 @interface NSData (NSDataZip)
 
 // ZLIB
@@ -17,5 +28,9 @@
 // GZIP
 - (NSData *) gzipInflate;
 - (NSData *) gzipDeflate;
+
+// BASE64
+
++ (NSData *)dataFromBase64String:(NSString *)aString;
 
 @end
