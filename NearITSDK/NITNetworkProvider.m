@@ -170,6 +170,10 @@ static NITNetworkProvider *sharedProvider;
     return [self requestWithPath:[NSString stringWithFormat:@"/plugins/coupon-blaster/coupons?filter[claims.profile_id]=%@&include=claims,icon", profileId]];
 }
 
+- (NSURLRequest *)couponWithProfileId:(NSString *)profileId bundleId:(NSString *)bundleId {
+    return [self requestWithPath:[NSString stringWithFormat:@"/plugins/coupon-blaster/coupons/%@?filter[claims.profile_id]=%@&include=claims,icon", bundleId, profileId]];
+}
+
 - (NSURLRequest *)feedbackWithBundleId:(NSString *)bundleId {
     return [self requestWithPath:[NSString stringWithFormat:@"/plugins/feedbacks/feedbacks/%@", bundleId]];
 }
