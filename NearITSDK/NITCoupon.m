@@ -44,6 +44,13 @@
     return nil;
 }
 
+- (BOOL)hasContentToInclude {
+    if (self.icon != nil) {
+        return YES;
+    }
+    return NO;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super init];
     if (self) {

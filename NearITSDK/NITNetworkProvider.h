@@ -30,6 +30,7 @@
 - (NSURLRequest* _Nonnull)sendTrackingsWithJsonApi:(NITJSONAPI* _Nonnull)jsonApi;
 - (NSURLRequest* _Nonnull)sendGeopolisTrackingsWithJsonApi:(NITJSONAPI * _Nonnull)jsonApi;
 - (NSURLRequest* _Nonnull)couponsWithProfileId:(NSString* _Nonnull)profileId;
+- (NSURLRequest* _Nonnull)couponWithProfileId:(NSString* _Nonnull)profileId bundleId:(NSString* _Nonnull)bundleId;
 - (NSURLRequest* _Nonnull)feedbackWithBundleId:(NSString* _Nonnull)bundleId;
 - (NSURLRequest* _Nonnull)feedbacks;
 - (NSURLRequest* _Nonnull)sendFeedbackEventWithJsonApi:(NITJSONAPI* _Nonnull)jsonApi feedbackId:(NSString* _Nonnull)feedbackId;
