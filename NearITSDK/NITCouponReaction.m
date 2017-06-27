@@ -40,8 +40,21 @@
 - (void)contentWithRecipe:(NITRecipe *)recipe completionHandler:(void (^)(id _Nullable, NSError * _Nullable))handler {
     if ([recipe.reactionBundle isKindOfClass:[NITCoupon class]]) {
         if (handler) {
-            NITLogD(LOGTAG, @"Coupon from reactionBundle");
-            handler((NITCoupon*)recipe.reactionBundle, nil);
+            NITCoupon *coupon = (NITCoupon*)recipe.reactionBundle;
+            if (coupon.hasContentToInclude) {
+                NITLogD(LOGTAG, @"Coupon has content to include");
+                [self requestSingleReactionWithBundleId:recipe.reactionBundle.ID completionHandler:^(id content, NSError *error) {
+                    if (error) {
+                        handler(nil, error);
+                    } else {
+                        NITCoupon *coupon = (NITCoupon*)content;
+                        handler(coupon, nil);
+                    }
+                }];
+            } else {
+                NITLogD(LOGTAG, @"Coupon from reactionBundle");
+                handler(coupon, nil);
+            }
         }
     } else {
         if (handler) {
@@ -50,6 +63,35 @@
             handler(nil, anError);
         }
     }
+}
+
+- (void)requestSingleReactionWithBundleId:(NSString*)bundleId completionHandler:(void (^)(id content, NSError *error))handler {
+    [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] couponWithProfileId:self.configuration.profileId bundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        if(error) {
+            if (handler) {
+                NITLogE(LOGTAG, @"Coupon request failure");
+                NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:105 userInfo:@{NSLocalizedDescriptionKey:@"Invalid coupon data", NSUnderlyingErrorKey: error}];
+                handler(nil, anError);
+            }
+        } else {
+            [json registerClass:[NITCoupon class] forType:@"coupons"];
+            [json registerClass:[NITClaim class] forType:@"claims"];
+            [json registerClass:[NITImage class] forType:@"images"];
+            NSArray<NITCoupon*> *coupons = [json parseToArrayOfObjects];
+            if ([coupons count] > 0) {
+                NITCoupon *coupon = [coupons objectAtIndex:0];
+                if (handler) {
+                    handler(coupon, nil);
+                }
+            } else {
+                if (handler) {
+                    NITLogW(LOGTAG, @"Empty coupon data");
+                    NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:106 userInfo:@{NSLocalizedDescriptionKey:@"Empty coupon data", NSUnderlyingErrorKey: error}];
+                    handler(nil, anError);
+                }
+            }
+        }
+    }];
 }
 
 - (void)couponsWithCompletionHandler:(void (^)(NSArray<NITCoupon *> * _Nullable, NSError * _Nullable))handler {

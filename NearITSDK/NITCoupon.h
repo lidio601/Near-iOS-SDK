@@ -23,4 +23,6 @@
 @property (nonatomic, readonly) NSDate *expires;
 @property (nonatomic, readonly) NSDate *redeemable;
 
+- (BOOL)hasContentToInclude;
+
 @end

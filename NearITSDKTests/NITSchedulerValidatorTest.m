@@ -77,6 +77,7 @@
     // when a recipe is scheduled for the month of january 2017
     NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     [gregorianCalendar setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    [self.scheduleValidator setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     NSDateComponents *components = [[NSDateComponents alloc] init];
     [components setYear:2017];
     [components setMonth:1];
