@@ -73,6 +73,10 @@
     }
 }
 
+- (id)contentWithJsonReactionBundle:(NSDictionary<NSString *,id> *)jsonReactionBundle recipeId:(NSString * _Nonnull)recipeId{
+    return nil;
+}
+
 - (void)requestSingleReactionWithBundleId:(NSString*)bundleId completionHandler:(void (^)(id content, NSError *error))handler {
     [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] couponWithProfileId:self.configuration.profileId bundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if(error) {

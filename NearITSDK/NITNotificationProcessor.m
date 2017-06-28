@@ -12,6 +12,8 @@
 #import "NITRecipe.h"
 #import "NITJSONAPI.h"
 #import "NSData+Zip.h"
+#import "NITConstants.h"
+#import "NITSimpleNotification.h"
 
 @interface NITNotificationProcessor()
 
@@ -42,9 +44,20 @@
     //NSString *reactionActionId = [userInfo objectForKey:@"reaction_action_id"];
     NSString *reactionBundleId = [userInfo objectForKey:NOTPROC_REACTION_BUNDLE_ID];
     NSString *reactionBundle = [userInfo objectForKey:NOTPROC_REACTION_BUNDLE];
+    NSDictionary<NSString*, id> *aps = [userInfo objectForKey:@"aps"];
+    NSString *alert = [aps objectForKey:@"alert"];
     BOOL isReactionBundleSuccess = NO;
     
-    if (reactionBundle && reactionPluginId) {
+    if ([reactionPluginId isEqualToString:NITSimpleNotificationPluginName] && alert) {
+        NITSimpleNotification *simple = [[NITSimpleNotification alloc] init];
+        simple.message = alert;
+        if (completionHandler) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                completionHandler(simple, recipeId, nil);
+            }];
+        }
+        return YES;
+    } else if (reactionBundle && reactionPluginId) {
         [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
         NSData *zipData = [NSData dataFromBase64String:reactionBundle];
         NSData *unzippedData = [zipData zlibInflate];
@@ -52,6 +65,17 @@
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:unzippedData options:NSJSONReadingMutableContainers error:&jsonError];
         if (json) {
             NITReaction *reaction = [self.reactions objectForKey:reactionPluginId];
+            if (reaction) {
+                id content = [reaction contentWithJsonReactionBundle:json recipeId:recipeId];
+                if (content) {
+                    isReactionBundleSuccess = YES;
+                    if (completionHandler) {
+                        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                            completionHandler(content, recipeId, nil);
+                        }];
+                    }
+                }
+            }
         }
     }
     if(reactionPluginId && reactionBundleId && recipeId && !isReactionBundleSuccess) {
@@ -105,9 +129,9 @@
     
     if (recipeId == nil) {
         return NO;
-    } else if(reactionBundleId && reactionBundleId && recipeId) {
+    } else if(reactionPluginId && reactionBundleId && recipeId && !isReactionBundleSuccess) {
         return YES;
-    } else if(reactionBundle) {
+    } else if(reactionBundle && reactionPluginId) {
         return YES;
     } else if(recipeId) {
         return YES;

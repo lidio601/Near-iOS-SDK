@@ -17,3 +17,4 @@ NSErrorDomain const NITRecipeErrorDomain = @"com.nearit.recipe";
 NSString* const ISO8601DateFormatMilliseconds = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
 NSString* const NITFeedbackPluginName = @"feedbacks";
+NSString* const NITSimpleNotificationPluginName = @"simple-notification";

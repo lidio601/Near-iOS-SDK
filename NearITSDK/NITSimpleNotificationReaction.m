@@ -11,6 +11,7 @@
 #import "NITSimpleNotification.h"
 #import "NITConstants.h"
 #import "NITLog.h"
+#import "NITJSONAPI.h"
 
 #define LOGTAG @"SimpleNotificationReaction"
 
@@ -34,6 +35,10 @@
     if (handler) {
         handler(nil, nil);
     }
+}
+
+- (id)contentWithJsonReactionBundle:(NSDictionary<NSString *,id> *)jsonReactionBundle recipeId:(NSString * _Nonnull)recipeId{
+    return nil;
 }
 
 - (NITSimpleNotification*)contentWithRecipe:(NITRecipe*)recipe {

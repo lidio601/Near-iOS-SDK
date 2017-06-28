@@ -41,6 +41,10 @@
     
 }
 
+- (id)contentWithJsonReactionBundle:(NSDictionary<NSString *,id> *)jsonReactionBundle recipeId:(NSString * _Nonnull)recipeId{
+    return nil;
+}
+
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))handler {
     if(handler) {
         handler(nil);

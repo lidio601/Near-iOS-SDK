@@ -87,6 +87,7 @@ typedef void (^ProcessRecipeBlock)(NITRecipe * _Nullable recipe, NSError * _Null
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"process"];
     BOOL processable = [self.processor processNotificationWithUserInfo:self.userInfo completion:^(id  _Nullable content, NSString * _Nullable recipeId, NSError * _Nullable error) {
+        XCTAssertNil(error);
         [verifyCount(self.recipesManager, times(1)) processRecipe:anything() completion:anything()];
         [verifyCount(self.simpleReaction, times(1)) contentWithRecipe:anything() completionHandler:anything()];
         XCTAssertTrue([content isKindOfClass:[NITSimpleNotification class]]);
@@ -113,8 +114,63 @@ typedef void (^ProcessRecipeBlock)(NITRecipe * _Nullable recipe, NSError * _Null
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"process"];
     BOOL processable = [self.processor processNotificationWithUserInfo:self.userInfo completion:^(id  _Nullable content, NSString * _Nullable recipeId, NSError * _Nullable error) {
+        XCTAssertNil(error);
         [verifyCount(self.contentReaction, times(1)) contentWithReactionBundleId:anything() recipeId:anything() completionHandler:anything()];
+        [verifyCount(self.recipesManager, never()) processRecipe:anything() completion:anything()];
         XCTAssertTrue([content isKindOfClass:[NITContent class]]);
+        [expectation fulfill];
+    }];
+    
+    XCTAssertTrue(processable);
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+}
+
+- (void)testReactionBundle {
+    self.dummyReactionPluginId = CONTENT_REACTION;
+    NSString *reactionBundle = @"eJyVksFOhDAQhu88BXLemhZKS/fqxQcwMdFsNgMzKBGBQNGYDe9udxdYUBP10gwz80+/+cvB8/0AwUKw9Q8udl8FujggrTFM8oxlCjiTqckZhAkwKV1FCWEojIPNWdFSCbaoq+65aLp5kCtAj0W9SFzuqvqyHJPDZmovXuGJuh/7H+eMv6ieOuxHQ0fiUb1ZV8/bSJ1AjJKz2HEzmUeagcmBiVipLCQSZDBYCIc53n2j7JuyBvx1K2+hmhmzurJU2YkyAGvbIu0trW1rmv34CpEEjYYzIdFxqzRhici5OyDMTIQokc8bT9OPwptz6N9SWdb+fd2WeBWsjXZXdCtn/+XS7osfI/ACpiWwhHs48YRcaMYjFso7wbdSbIW+jpRS8cNFcfpbvs15K5DqfVlUL+t8/V5RO3bnoAUoUizlRjCZELFUG3dg4kxSOtIiChbA+Dcyb3rIwRs+AYn3vrc=";
+    
+    [self.userInfo setObject:self.dummyRecipeId forKey:NOTPROC_RECIPE_ID];
+    [self.userInfo setObject:self.dummyReactionBundleId forKey:NOTPROC_REACTION_BUNDLE_ID];
+    [self.userInfo setObject:self.dummyReactionPluginId forKey:NOTPROC_REACTION_PLUGIN_ID];
+    [self.userInfo setObject:reactionBundle forKey:NOTPROC_REACTION_BUNDLE];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"process"];
+    BOOL processable = [self.processor processNotificationWithUserInfo:self.userInfo completion:^(id  _Nullable content, NSString * _Nullable recipeId, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        XCTAssertTrue([recipeId isEqualToString:self.dummyRecipeId]);
+        [verifyCount(self.contentReaction, times(1)) contentWithJsonReactionBundle:anything() recipeId:anything()];
+        [verifyCount(self.recipesManager, never()) processRecipe:anything() completion:anything()];
+        XCTAssertTrue([content isKindOfClass:[NITContent class]]);
+        
+        [expectation fulfill];
+    }];
+    
+    XCTAssertTrue(processable);
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+}
+
+- (void)testSimpleNotificationWithReactionPluginId {
+    self.dummyReactionPluginId = SIMPLE_NOT_REACTION;
+    
+    [self.userInfo setObject:self.dummyRecipeId forKey:NOTPROC_RECIPE_ID];
+    [self.userInfo setObject:self.dummyReactionBundleId forKey:NOTPROC_REACTION_BUNDLE_ID];
+    [self.userInfo setObject:self.dummyReactionPluginId forKey:NOTPROC_REACTION_PLUGIN_ID];
+    [self.userInfo setObject:@{@"alert" : @"APS Hello World!"} forKey:@"aps"];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"process"];
+    BOOL processable = [self.processor processNotificationWithUserInfo:self.userInfo completion:^(id  _Nullable content, NSString * _Nullable recipeId, NSError * _Nullable error) {
+        XCTAssertNil(error);
+        [verifyCount(self.recipesManager, never()) processRecipe:anything() completion:anything()];
+        [verifyCount(self.simpleReaction, never()) contentWithRecipe:anything() completionHandler:anything()];
+        [verifyCount(self.simpleReaction, never()) contentWithJsonReactionBundle:anything() recipeId:anything()];
+        [verifyCount(self.simpleReaction, never()) contentWithReactionBundleId:anything() recipeId:anything() completionHandler:anything()];
+        XCTAssertTrue([content isKindOfClass:[NITSimpleNotification class]]);
+        if ([content isKindOfClass:[NITSimpleNotification class]]) {
+            NITSimpleNotification *simple = (NITSimpleNotification*)content;
+            XCTAssertTrue([simple.message isEqualToString:@"APS Hello World!"]);
+        }
         [expectation fulfill];
     }];
     

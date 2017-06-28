@@ -49,6 +49,17 @@
     }
 }
 
+- (id)contentWithJsonReactionBundle:(NSDictionary<NSString *,id> *)jsonReactionBundle recipeId:(NSString * _Nonnull)recipeId{
+    NITJSONAPI *json = [[NITJSONAPI alloc] init];
+    [json registerClass:[NITCustomJSON class] forType:@"json_contents"];
+    NSArray<NITCustomJSON*> *jsons = [json parseToArrayOfObjects];
+    if([jsons count] > 0) {
+        NITCustomJSON *json = [jsons objectAtIndex:0];
+        return json;
+    }
+    return nil;
+}
+
 - (void)requestSingleReactionWithBundleId:(NSString*)bundleId completionHandler:(void (^)(id, NSError*))handler {
     [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] customJSONWithBundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {

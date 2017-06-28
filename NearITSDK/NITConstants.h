@@ -28,3 +28,4 @@ extern NSErrorDomain const NITRecipeErrorDomain;
 extern NSString* const ISO8601DateFormatMilliseconds;
 
 extern NSString* const NITFeedbackPluginName;
+extern NSString* const NITSimpleNotificationPluginName;
