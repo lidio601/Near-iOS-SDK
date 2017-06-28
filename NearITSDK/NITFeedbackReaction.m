@@ -54,6 +54,15 @@
     }];
 }
 
+- (void)contentWithReactionBundleId:(NSString *)reactionBundleId recipeId:(NSString* _Nonnull)recipeId completionHandler:(void (^)(id _Nullable, NSError * _Nullable))handler {
+    if (handler) {
+        [self requestSingleReactionWithBundleId:reactionBundleId completionHandler:^(NITFeedback *feedback, NSError *error) {
+            feedback.recipeId = recipeId;
+            handler(feedback, error);
+        }];
+    }
+}
+
 - (void)requestSingleReactionWithBundleId:(NSString*)bundleId completionHandler:(void (^)(NITFeedback*, NSError*))handler {
     [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] feedbackWithBundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {

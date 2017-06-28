@@ -31,6 +31,9 @@
 #import "NITScheduleValidator.h"
 #import "NITRecipeValidationFilter.h"
 #import "Reachability.h"
+#import "NSData+Zip.h"
+#import "NITJSONAPI.h"
+#import "NITNotificationProcessor.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <UserNotifications/UserNotifications.h>
 
@@ -50,6 +53,7 @@
 @property (nonatomic, strong) NITTrackManager *trackManager;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) CBCentralManager *bluetoothManager;
+@property (nonatomic, strong) NITNotificationProcessor *notificationProcessor;
 @property (nonatomic) CBManagerState lastBluetoothState;
 @property (nonatomic) BOOL started;
 
@@ -101,6 +105,7 @@
         [self pluginSetup];
         [self reactionsSetup];
         self.started = NO;
+        self.notificationProcessor = [[NITNotificationProcessor alloc] initWithRecipesManager:self.recipesManager reactions:self.reactions];
         
         [self.profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
             if(error == nil) {
@@ -217,58 +222,29 @@
  * @param userInfo The remote notification userInfo dictionary
  */
 - (BOOL)processRecipeSimpleWithUserInfo:(NSDictionary<NSString *,id> *)userInfo {
-    if(userInfo == nil) {
-        return NO;
-    }
-    
-    NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
-    if(recipeId) {
-        [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
-        [self.recipesManager processRecipe:recipeId];
-        return YES;
-    }
-    return NO;
+    return [self.notificationProcessor processNotificationWithUserInfo:userInfo completion:^(id  _Nullable content, NSString * _Nullable recipeId, NSError * _Nullable error) {
+        NITRecipe *recipe = [[NITRecipe alloc] init];
+        recipe.ID = recipeId;
+        if([self.delegate respondsToSelector:@selector(manager:eventFailureWithError:recipe:)]) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self.delegate manager:self eventFailureWithError:error recipe:recipe];
+            }];
+        } else if ([self.delegate respondsToSelector:@selector(manager:eventWithContent:recipe:)]) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [self.delegate manager:self eventWithContent:content recipe:recipe];
+            }];
+        }
+    }];
 }
 
-- (BOOL)processRecipeWithUserInfo:(NSDictionary<NSString *,id> *)userInfo completion:(void (^_Nullable)(id _Nullable object, NITRecipe* _Nullable recipe, NSError* _Nullable error))completionHandler {
-    if(userInfo == nil) {
-        return NO;
-    }
-    
-    NSString *recipeId = [userInfo objectForKey:@"recipe_id"];
-    if(recipeId) {
-        [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
-        [self.recipesManager processRecipe:recipeId completion:^(NITRecipe * _Nullable recipe, NSError * _Nullable error) {
-            if (recipe) {
-                NITReaction *reaction = [self.reactions objectForKey:recipe.reactionPluginId];
-                if(reaction) {
-                    [reaction contentWithRecipe:recipe completionHandler:^(id _Nonnull content, NSError * _Nullable error) {
-                        if(error) {
-                            if (completionHandler) {
-                                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                    completionHandler(nil, nil, error);
-                                }];
-                            }
-                        } else {
-                            if (completionHandler) {
-                                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                    completionHandler(content, recipe, nil);
-                                }];
-                            }
-                        }
-                    }];
-                }
-            } else {
-                if (completionHandler) {
-                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                        completionHandler(nil, nil, error);
-                    }];
-                }
-            }
-        }];
-        return YES;
-    }
-    return NO;
+- (BOOL)processRecipeWithUserInfo:(NSDictionary<NSString *,id> *)userInfo completion:(void (^)(id _Nullable, NITRecipe * _Nullable, NSError * _Nullable))completionHandler {
+    return [self.notificationProcessor processNotificationWithUserInfo:userInfo completion:^(id  _Nullable content, NSString * _Nullable recipeId, NSError * _Nullable error) {
+        if (completionHandler) {
+            NITRecipe *recipe = [[NITRecipe alloc] init];
+            recipe.ID = recipeId;
+            completionHandler(content, recipe, error);
+        }
+    }];
 }
 
 - (void)sendTrackingWithRecipeId:(NSString *)recipeId event:(NSString *)event {

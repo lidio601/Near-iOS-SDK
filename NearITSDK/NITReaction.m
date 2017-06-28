@@ -37,6 +37,10 @@
                                  userInfo:nil];
 }
 
+- (void)contentWithReactionBundleId:(NITRecipe *)recipe completionHandler:(void (^)(id _Nullable, NSError * _Nullable))handler {
+    
+}
+
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))handler {
     if(handler) {
         handler(nil);

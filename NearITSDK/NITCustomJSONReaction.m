@@ -41,6 +41,14 @@
     }];
 }
 
+- (void)contentWithReactionBundleId:(NSString *)reactionBundleId completionHandler:(void (^)(id _Nullable, NSError * _Nullable))handler {
+    if (handler) {
+        [self requestSingleReactionWithBundleId:reactionBundleId completionHandler:^(id content, NSError *error) {
+            handler(content, error);
+        }];
+    }
+}
+
 - (void)requestSingleReactionWithBundleId:(NSString*)bundleId completionHandler:(void (^)(id, NSError*))handler {
     [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] customJSONWithBundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         if (error) {

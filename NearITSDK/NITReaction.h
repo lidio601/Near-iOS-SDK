@@ -22,6 +22,7 @@
 
 - (NSString* _Nonnull)pluginName;
 - (void)contentWithRecipe:(NITRecipe* _Nonnull)recipe completionHandler:(void (^_Nullable)(id _Nullable content, NSError * _Nullable error))handler;
+- (void)contentWithReactionBundleId:(NSString* _Nonnull)reactionBundleId recipeId:(NSString* _Nonnull)recipeId completionHandler:(void (^_Nullable)(id _Nullable content, NSError * _Nullable error))handler;
 - (void)refreshConfigWithCompletionHandler:(void(^ _Nullable)(NSError * _Nullable error))handler;
 
 @end

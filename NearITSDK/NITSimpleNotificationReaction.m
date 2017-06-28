@@ -30,6 +30,12 @@
     }
 }
 
+- (void)contentWithReactionBundleId:(NSString *)reactionBundleId recipeId:(NSString* _Nonnull)recipeId completionHandler:(void (^)(id _Nullable, NSError * _Nullable))handler {
+    if (handler) {
+        handler(nil, nil);
+    }
+}
+
 - (NITSimpleNotification*)contentWithRecipe:(NITRecipe*)recipe {
     NSString *title = [recipe notificationTitle];
     NSString *body = [recipe notificationBody];
