@@ -81,6 +81,21 @@ typedef void (^ProcessRecipeBlock)(NITRecipe * _Nullable recipe, NSError * _Null
     [super tearDown];
 }
 
+- (void)testMissingRecipeId {
+    [self.userInfo setObject:self.dummyReactionBundleId forKey:NOTPROC_REACTION_BUNDLE_ID];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"process"];
+    BOOL processable = [self.processor processNotificationWithUserInfo:self.userInfo completion:^(id  _Nullable object, NSString * _Nullable recipeId, NSError * _Nullable error) {
+        XCTAssertNotNil(error);
+        XCTAssertTrue(error.code == 102);
+        
+        [expectation fulfill];
+    }];
+    XCTAssertFalse(processable);
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+}
+
 - (void)testOldFormatNotification {
     [self.userInfo setObject:self.dummyRecipeId forKey:NOTPROC_RECIPE_ID];
     [self setRecipesManagerProcessRecipeWithReactionPluginId:SIMPLE_NOT_REACTION];

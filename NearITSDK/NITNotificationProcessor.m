@@ -14,6 +14,9 @@
 #import "NSData+Zip.h"
 #import "NITConstants.h"
 #import "NITSimpleNotification.h"
+#import "NITLog.h"
+
+#define LOGTAG @"NotificationProcessor"
 
 @interface NITNotificationProcessor()
 
@@ -36,6 +39,10 @@
 - (BOOL)processNotificationWithUserInfo:(NSDictionary<NSString *,id> *)userInfo completion:(void (^)(id _Nullable, NSString * _Nullable, NSError * _Nullable))completionHandler {
     
     if(userInfo == nil) {
+        if (completionHandler) {
+            NSError *anError = [NSError errorWithDomain:NITNotificationProcessorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"Invalid userInfo"}];
+            completionHandler(nil, nil, anError);
+        }
         return NO;
     }
     
@@ -47,6 +54,15 @@
     NSDictionary<NSString*, id> *aps = [userInfo objectForKey:@"aps"];
     NSString *alert = [aps objectForKey:@"alert"];
     BOOL isReactionBundleSuccess = NO;
+    
+    if (recipeId == nil) {
+        NITLogE(LOGTAG, @"Invalid recipeId");
+        if (completionHandler) {
+            NSError *anError = [NSError errorWithDomain:NITNotificationProcessorDomain code:102 userInfo:@{NSLocalizedDescriptionKey:@"Invalid recipeId"}];
+            completionHandler(nil, recipeId, anError);
+        }
+        return NO;
+    }
     
     if ([reactionPluginId isEqualToString:NITSimpleNotificationPluginName] && alert) {
         NITSimpleNotification *simple = [[NITSimpleNotification alloc] init];
@@ -127,9 +143,7 @@
         }];
     }
     
-    if (recipeId == nil) {
-        return NO;
-    } else if(reactionPluginId && reactionBundleId && recipeId && !isReactionBundleSuccess) {
+    if(reactionPluginId && reactionBundleId && recipeId && !isReactionBundleSuccess) {
         return YES;
     } else if(reactionBundle && reactionPluginId) {
         return YES;
