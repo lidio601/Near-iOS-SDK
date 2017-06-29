@@ -62,6 +62,8 @@
             completionHandler(nil, recipeId, anError);
         }
         return NO;
+    } else {
+        [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeNotified];
     }
     
     if ([reactionPluginId isEqualToString:NITSimpleNotificationPluginName] && alert) {
@@ -79,7 +81,6 @@
         }
         return YES;
     } else if (reactionBundle && reactionPluginId) {
-        [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
         NSData *zipData = [NSData dataFromBase64String:reactionBundle];
         NSData *unzippedData = [zipData zlibInflate];
         NSError *jsonError;
@@ -100,7 +101,6 @@
         }
     }
     if(reactionPluginId && reactionBundleId && recipeId && !isReactionBundleSuccess) {
-        [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
         NITReaction *reaction = [self.reactions objectForKey:reactionPluginId];
         if(reaction) {
             [self processWithReactionBundleId:reactionBundleId recipeId:recipeId reaction:reaction completionHandler:^(id _Nullable content, NSError * _Nullable error) {
@@ -130,7 +130,6 @@
             }];
         }
     } else if (recipeId && !isReactionBundleSuccess) {
-        [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
         [self processWithRecipeId:recipeId completionHandler:^(id _Nullable content, NSError * _Nullable error) {
             if (error) {
                 if (completionHandler) {

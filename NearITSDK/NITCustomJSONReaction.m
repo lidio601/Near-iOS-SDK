@@ -41,7 +41,7 @@
     }];
 }
 
-- (void)contentWithReactionBundleId:(NSString *)reactionBundleId completionHandler:(void (^)(id _Nullable, NSError * _Nullable))handler {
+- (void)contentWithReactionBundleId:(NSString *)reactionBundleId recipeId:(NSString *)recipeId completionHandler:(void (^)(id _Nullable, NSError * _Nullable))handler {
     if (handler) {
         [self requestSingleReactionWithBundleId:reactionBundleId completionHandler:^(id content, NSError *error) {
             handler(content, error);
