@@ -47,6 +47,25 @@
     }];
 }
 
+- (void)contentWithReactionBundleId:(NSString *)reactionBundleId recipeId:(NSString* _Nonnull)recipeId completionHandler:(void (^)(id _Nullable, NSError * _Nullable))handler {
+    if (handler) {
+        [self requestSingleReactionWithBundleId:reactionBundleId completionHandler:^(id content, NSError *error) {
+            handler(content, error);
+        }];
+    }
+}
+
+- (id)contentWithJsonReactionBundle:(NSDictionary<NSString *,id> *)jsonReactionBundle recipeId:(NSString * _Nonnull)recipeId{
+    NITJSONAPI *json = [[NITJSONAPI alloc] initWithDictionary:jsonReactionBundle];
+    [self registerJsonApiClasses:json];
+    NSArray<NITContent*> *contents = [json parseToArrayOfObjects];
+    if([contents count] > 0) {
+        NITContent *content = [contents objectAtIndex:0];
+        return content;
+    }
+    return nil;
+}
+
 - (void)requestSingleReactionWithBundleId:(NSString*)bundleId completionHandler:(void (^)(id content, NSError *error))handler {
     [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] contentWithBundleId:bundleId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
         
@@ -55,10 +74,7 @@
             NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"Invalid content data", NSUnderlyingErrorKey: error}];
             handler(nil, anError);
         } else {
-            [json registerClass:[NITContent class] forType:@"contents"];
-            [json registerClass:[NITImage class] forType:@"images"];
-            [json registerClass:[NITAudio class] forType:@"audios"];
-            [json registerClass:[NITUpload class] forType:@"uploads"];
+            [self registerJsonApiClasses:json];
             
             NSArray<NITContent*> *contents = [json parseToArrayOfObjects];
             if([contents count] > 0) {
@@ -83,10 +99,7 @@
                 handler(anError);
             }
         } else {
-            [json registerClass:[NITContent class] forType:@"contents"];
-            [json registerClass:[NITImage class] forType:@"images"];
-            [json registerClass:[NITAudio class] forType:@"audios"];
-            [json registerClass:[NITUpload class] forType:@"uploads"];
+            [self registerJsonApiClasses:json];
             
             self.contents = [json parseToArrayOfObjects];
             [self.cacheManager saveWithArray:self.contents forKey:CACHE_KEY];
@@ -95,6 +108,13 @@
             }
         }
     }];
+}
+
+- (void)registerJsonApiClasses:(NITJSONAPI*)json {
+    [json registerClass:[NITContent class] forType:@"contents"];
+    [json registerClass:[NITImage class] forType:@"images"];
+    [json registerClass:[NITAudio class] forType:@"audios"];
+    [json registerClass:[NITUpload class] forType:@"uploads"];
 }
 
 @end

@@ -11,6 +11,7 @@
 #import "NITSimpleNotification.h"
 #import "NITConstants.h"
 #import "NITLog.h"
+#import "NITJSONAPI.h"
 
 #define LOGTAG @"SimpleNotificationReaction"
 
@@ -28,6 +29,17 @@
             handler(nil, anError);
         }
     }
+}
+
+- (void)contentWithReactionBundleId:(NSString *)reactionBundleId recipeId:(NSString* _Nonnull)recipeId completionHandler:(void (^)(id _Nullable, NSError * _Nullable))handler {
+    if (handler) {
+        NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"Undefined request for Simple Notification"}];
+        handler(nil, anError);
+    }
+}
+
+- (id)contentWithJsonReactionBundle:(NSDictionary<NSString *,id> *)jsonReactionBundle recipeId:(NSString * _Nonnull)recipeId{
+    return nil;
 }
 
 - (NITSimpleNotification*)contentWithRecipe:(NITRecipe*)recipe {
