@@ -50,7 +50,7 @@
 }
 
 - (id)contentWithJsonReactionBundle:(NSDictionary<NSString *,id> *)jsonReactionBundle recipeId:(NSString * _Nonnull)recipeId{
-    NITJSONAPI *json = [[NITJSONAPI alloc] init];
+    NITJSONAPI *json = [[NITJSONAPI alloc] initWithDictionary:jsonReactionBundle];
     [json registerClass:[NITCustomJSON class] forType:@"json_contents"];
     NSArray<NITCustomJSON*> *jsons = [json parseToArrayOfObjects];
     if([jsons count] > 0) {
