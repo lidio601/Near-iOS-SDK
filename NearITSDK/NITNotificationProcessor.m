@@ -52,7 +52,7 @@
     NSString *reactionBundleId = [userInfo objectForKey:NOTPROC_REACTION_BUNDLE_ID];
     NSString *reactionBundle = [userInfo objectForKey:NOTPROC_REACTION_BUNDLE];
     NSDictionary<NSString*, id> *aps = [userInfo objectForKey:@"aps"];
-    NSString *alert = [aps objectForKey:@"alert"];
+    id alert = [aps objectForKey:@"alert"];
     BOOL isReactionBundleSuccess = NO;
     
     if (recipeId == nil) {
@@ -66,7 +66,12 @@
     
     if ([reactionPluginId isEqualToString:NITSimpleNotificationPluginName] && alert) {
         NITSimpleNotification *simple = [[NITSimpleNotification alloc] init];
-        simple.message = alert;
+        if ([alert isKindOfClass:[NSString class]]) {
+            simple.message = (NSString*)alert;
+        } else if([alert isKindOfClass:[NSDictionary class]]) {
+            NSString *body = [alert objectForKey:@"body"];
+            simple.message = body;
+        }
         if (completionHandler) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 completionHandler(simple, recipeId, nil);
