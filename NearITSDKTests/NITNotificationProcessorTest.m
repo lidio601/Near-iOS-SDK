@@ -72,6 +72,8 @@ typedef void (^ProcessRecipeBlock)(NITRecipe * _Nullable recipe, NSError * _Null
         block(content, nil);
         return nil;
     }];
+    NITContent *emptyContent = [[NITContent alloc] init];
+    [given([self.contentReaction contentWithJsonReactionBundle:anything() recipeId:anything()]) willReturn:emptyContent];
     
     self.processor = [[NITNotificationProcessor alloc] initWithRecipesManager:self.recipesManager reactions:@{SIMPLE_NOT_REACTION : self.simpleReaction, CONTENT_REACTION : self.contentReaction}];
 }
@@ -155,6 +157,7 @@ typedef void (^ProcessRecipeBlock)(NITRecipe * _Nullable recipe, NSError * _Null
         XCTAssertNil(error);
         XCTAssertTrue([recipeId isEqualToString:self.dummyRecipeId]);
         [verifyCount(self.contentReaction, times(1)) contentWithJsonReactionBundle:anything() recipeId:anything()];
+        [verifyCount(self.contentReaction, never()) contentWithReactionBundleId:anything() recipeId:anything() completionHandler:anything()];
         [verifyCount(self.recipesManager, never()) processRecipe:anything() completion:anything()];
         XCTAssertTrue([content isKindOfClass:[NITContent class]]);
         

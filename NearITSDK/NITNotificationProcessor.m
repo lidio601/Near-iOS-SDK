@@ -124,7 +124,7 @@
                 }
             }];
         }
-    } else if (recipeId) {
+    } else if (recipeId && !isReactionBundleSuccess) {
         [self.recipesManager sendTrackingWithRecipeId:recipeId event:NITRecipeEngaged];
         [self processWithRecipeId:recipeId completionHandler:^(id _Nullable content, NSError * _Nullable error) {
             if (error) {
