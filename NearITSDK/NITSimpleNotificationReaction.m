@@ -33,7 +33,8 @@
 
 - (void)contentWithReactionBundleId:(NSString *)reactionBundleId recipeId:(NSString* _Nonnull)recipeId completionHandler:(void (^)(id _Nullable, NSError * _Nullable))handler {
     if (handler) {
-        handler(nil, nil);
+        NSError *anError = [NSError errorWithDomain:NITReactionErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"Undefined request for Simple Notification"}];
+        handler(nil, anError);
     }
 }
 
