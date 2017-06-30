@@ -17,6 +17,8 @@
 @class NITRecipeHistory;
 @class NITRecipeValidationFilter;
 
+extern NSString* const RecipesCacheKey;
+
 @protocol NITRecipesManaging <NSObject>
 
 - (void)setRecipesWithJsonApi:(NITJSONAPI* _Nullable)json;

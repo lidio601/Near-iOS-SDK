@@ -29,6 +29,8 @@
 @property (nonatomic, strong) NITDateManager *dateManager;
 @property (nonatomic, strong) NITRecipeHistory *recipeHistory;
 @property (nonatomic, strong) NITRecipeValidationFilter *recipeValidationFilter;
+@property (nonatomic, strong) NITCacheManager *cacheManager;
+@property (nonatomic, strong) NITTrackManager *trackManager;
 
 @end
 
@@ -43,6 +45,8 @@
     NITCacheManager *cacheManager = mock([NITCacheManager class]);
     self.recipeHistory = [[NITRecipeHistory alloc] initWithCacheManager:cacheManager dateManager:self.dateManager];
     self.recipeValidationFilter = mock([NITRecipeValidationFilter class]);
+    self.cacheManager = mock([NITCacheManager class]);
+    self.trackManager = mock([NITTrackManager class]);
 }
 
 - (void)tearDown {
@@ -52,13 +56,12 @@
 
 - (void)testOnlineEvaluation {
     self.expectation = [self expectationWithDescription:@"expectation"];
+    [given([self.cacheManager loadArrayForKey:RecipesCacheKey]) willReturn:nil];
     
     NITJSONAPI *recipesJson = [self jsonApiWithContentsOfFile:@"online_recipe"];
     
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:[[NSOperationQueue alloc] init] dateManager:[[NITDateManager alloc] init]];
-    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:self.trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
     [recipesManager setRecipesWithJsonApi:recipesJson];
     recipesManager.manager = self;
     
@@ -73,13 +76,12 @@
 
 - (void)testOnlinePulseEvaluation {
     self.expectation = [self expectationWithDescription:@"expectation"];
+    [given([self.cacheManager loadArrayForKey:RecipesCacheKey]) willReturn:nil];
     
     NITJSONAPI *recipesJson = [self jsonApiWithContentsOfFile:@"online_recipe"];
     
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:[[NSOperationQueue alloc] init] dateManager:[[NITDateManager alloc] init]];
-    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:self.trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
     [recipesManager setRecipesWithJsonApi:recipesJson];
     recipesManager.manager = self;
     
@@ -93,31 +95,24 @@
 }
 
 - (void)testRecipesManagerCacheNotEmpty {
-    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    NSString *path = [bundle pathForResource:@"recipes" ofType:@"json"];
-    NITJSONAPI *jsonApi = [[NITJSONAPI alloc ] initWithContentsOfFile:path error:nil];
+    NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"recipes"];
     [jsonApi registerClass:[NITRecipe class] forType:@"recipes"];
+    
+    NSArray<NITRecipe*> *recipes = [jsonApi parseToArrayOfObjects];
+    [given([self.cacheManager loadArrayForKey:RecipesCacheKey]) willReturn:recipes];
     
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return nil;
     };
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:[self name]];
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:[[NSOperationQueue alloc] init] dateManager:[[NITDateManager alloc] init]];
-    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
-    [cacheManager saveWithObject:[jsonApi parseToArrayOfObjects] forKey:@"Recipes"];
-    [NSThread sleepForTimeInterval:0.5];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:self.trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
     
     XCTestExpectation *recipesExp = [self expectationWithDescription:@"Recipes"];
     [recipesManager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
         XCTAssertNil(error);
         XCTAssertTrue([recipesManager recipesCount] == 6);
+        [verifyCount(self.cacheManager, times(1)) loadArrayForKey:RecipesCacheKey];
         [recipesExp fulfill];
-    }];
-    
-    XCTestExpectation *cacheExp = [self expectationWithDescription:@"Cache"];
-    [cacheManager removeAllItemsWithCompletionHandler:^{
-        [cacheExp fulfill];
     }];
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
