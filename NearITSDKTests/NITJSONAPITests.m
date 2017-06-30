@@ -73,4 +73,11 @@
     XCTAssertEqual([resource attributesCount], 2, @"Attributes count is wrong");
 }
 
+- (void)testWithGenericJson {
+    NSDictionary *genericJson = @{@"message" : @"Hello World!"};
+    NITJSONAPI *jsonApi = [[NITJSONAPI alloc] initWithDictionary:genericJson];
+    NITJSONAPIResource *resource = [jsonApi firstResourceObject];
+    XCTAssertNil(resource.ID);
+}
+
 @end
