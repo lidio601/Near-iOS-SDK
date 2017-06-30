@@ -634,7 +634,7 @@
 				1327D8861E8266A600C6689E /* Nodes Manager */,
 				1349EEAB1E7948FA000B0666 /* jsonapi_sample1.json */,
 			);
-			name = Fixtures;
+			path = Fixtures;
 			sourceTree = "<group>";
 		};
 		1349EEB51E796FF3000B0666 /* Geopolis */ = {
