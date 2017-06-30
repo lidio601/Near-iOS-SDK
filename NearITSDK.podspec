@@ -16,5 +16,6 @@ s.source                = { :git => "https://github.com/nearit/Near-iOS-SDK.git"
 s.source_files          = 'NearITSDK', 'NearITSDK/**/*.{h,m}'
 s.ios.deployment_target = '9.0'
 s.requires_arc          = true
+s.xcconfig              = { "OTHER_LDFLAGS" => "-lz" }
 
 end
