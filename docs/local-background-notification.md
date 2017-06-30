@@ -47,7 +47,7 @@ In iOS 9 you only need to implement the `didReceiveLocalNotification` (`didRecei
 ```swift
 // Swift
 func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
-    let isNear = manager.handleLocalNotificationResponse(response) { (content, recipe, error) in
+    let isNear = manager.handleLocalNotification(response) { (content, recipe, error) in
         if let content = content as? NITContent {
             // Do something
         }
