@@ -74,6 +74,15 @@
 }
 
 - (id)contentWithJsonReactionBundle:(NSDictionary<NSString *,id> *)jsonReactionBundle recipeId:(NSString * _Nonnull)recipeId{
+    NITJSONAPI *json = [[NITJSONAPI alloc] initWithDictionary:jsonReactionBundle];
+    [self registerJsonApiClasses:json];
+    NSArray<NITCoupon*> *coupons = [json parseToArrayOfObjects];
+    if ([coupons count] > 0) {
+        NITCoupon *coupon = [coupons objectAtIndex:0];
+        if (coupon.claims != nil && [coupon.claims count] >= 1) {
+            return coupon;
+        }
+    }
     return nil;
 }
 
@@ -86,9 +95,7 @@
                 handler(nil, anError);
             }
         } else {
-            [json registerClass:[NITCoupon class] forType:@"coupons"];
-            [json registerClass:[NITClaim class] forType:@"claims"];
-            [json registerClass:[NITImage class] forType:@"images"];
+            [self registerJsonApiClasses:json];
             NSArray<NITCoupon*> *coupons = [json parseToArrayOfObjects];
             if ([coupons count] > 0) {
                 NITCoupon *coupon = [coupons objectAtIndex:0];
@@ -115,9 +122,7 @@
                 handler(nil, anError);
             }
         } else {
-            [json registerClass:[NITCoupon class] forType:@"coupons"];
-            [json registerClass:[NITClaim class] forType:@"claims"];
-            [json registerClass:[NITImage class] forType:@"images"];
+            [self registerJsonApiClasses:json];
             NSArray<NITCoupon*> *coupons = [json parseToArrayOfObjects];
             if (handler) {
                 NITLogD(LOGTAG, @"Coupons request success, number of coupons %d", [coupons count]);
@@ -125,6 +130,12 @@
             }
         }
     }];
+}
+
+- (void)registerJsonApiClasses:(NITJSONAPI*)json {
+    [json registerClass:[NITCoupon class] forType:@"coupons"];
+    [json registerClass:[NITClaim class] forType:@"claims"];
+    [json registerClass:[NITImage class] forType:@"images"];
 }
 
 @end

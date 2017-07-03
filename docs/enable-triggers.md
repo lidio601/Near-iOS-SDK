@@ -56,7 +56,7 @@ func application(_ application: UIApplication, didRegisterForRemoteNotifications
 ```objective-c
 // Objective-C
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [manager setDeviceToken:token];
+    [manager setDeviceTokenWithData:token];
 }
 ```
 

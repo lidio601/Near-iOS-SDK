@@ -1,3 +1,18 @@
+0.9.35 Release notes (2017-06-30)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* Push notifications can now be handled without network request.
+
+### Bugfixes
+
+* None.
+
 0.9.34 Release notes (2017-06-27)
 =============================================================
 

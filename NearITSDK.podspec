@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 s.name                  = 'NearITSDK'
-s.version               = '0.9.34'
+s.version               = '0.9.35'
 s.summary               = 'nearit.com iOS SDK'
 s.description           = 'nearit.com iOS SDK for Objective-C'
 
@@ -16,5 +16,6 @@ s.source                = { :git => "https://github.com/nearit/Near-iOS-SDK.git"
 s.source_files          = 'NearITSDK', 'NearITSDK/**/*.{h,m}'
 s.ios.deployment_target = '9.0'
 s.requires_arc          = true
+s.xcconfig              = { "OTHER_LDFLAGS" => "-lz" }
 
 end
