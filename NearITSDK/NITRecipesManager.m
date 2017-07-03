@@ -107,6 +107,10 @@ NSString* const RecipesCacheKey = @"Recipes";
     }
 }
 
+- (void)gotPulseWithPulsePlugin:(NSString *)pulsePlugin pulseAction:(NSString *)pulseAction pulseBundle:(NSString *)pulseBundle tags:(NSArray<NSString *> *)tags {
+    
+}
+
 - (void)processRecipe:(NSString*)recipeId {
     [self processRecipe:recipeId completion:^(NITRecipe * _Nullable recipe, NSError * _Nullable error) {
         if (recipe) {

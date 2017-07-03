@@ -19,6 +19,7 @@
 #import "NITDateManager.h"
 #import "NITRecipeHistory.h"
 #import "NITRecipeValidationFilter.h"
+#import "NITPulseBundle.h"
 #import <OCMockitoIOS/OCMockitoIOS.h>
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
 
@@ -116,6 +117,36 @@
     }];
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
+// MARK: - Tags loading
+
+- (void)testLoadingRecipesWithPulseBundleTags {
+    NITJSONAPI *json = [self jsonApiWithContentsOfFile:@"recipe_pulse_bundle_tags"];
+    [json registerClass:[NITRecipe class] forType:@"recipes"];
+    NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
+    XCTAssertTrue(recipes.count == 1);
+    if (recipes.count > 0) {
+        NITRecipe *recipe = [recipes objectAtIndex:0];
+        XCTAssertTrue(recipe.tags.count == 3);
+        for(NSInteger index = 0; index < recipe.tags.count; index++) {
+            NSString *tag = [recipe.tags objectAtIndex:index];
+            switch (index) {
+                case 0:
+                    XCTAssertTrue([tag isEqualToString:@"banana"]);
+                    break;
+                case 1:
+                    XCTAssertTrue([tag isEqualToString:@"apple"]);
+                    break;
+                case 2:
+                    XCTAssertTrue([tag isEqualToString:@"hello world"]);
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 // MARK: - NITManaging delegate

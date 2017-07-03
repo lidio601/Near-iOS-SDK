@@ -23,6 +23,7 @@ extern NSString* const RecipesCacheKey;
 
 - (void)setRecipesWithJsonApi:(NITJSONAPI* _Nullable)json;
 - (void)gotPulseWithPulsePlugin:(NSString* _Nonnull)pulsePlugin pulseAction:(NSString* _Nonnull)pulseAction pulseBundle:(NSString* _Nullable)pulseBundle;
+- (void)gotPulseWithPulsePlugin:(NSString* _Nonnull)pulsePlugin pulseAction:(NSString* _Nonnull)pulseAction pulseBundle:(NSString* _Nullable)pulseBundle tags:(NSArray<NSString*>* _Nullable)tags;
 
 @end
 

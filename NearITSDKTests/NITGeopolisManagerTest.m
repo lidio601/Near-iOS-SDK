@@ -324,6 +324,51 @@
     XCTAssertTrue(check);
 }
 
+// MARK: - Tags loading
+
+- (void)testLoadingTagsFilledSingleGFConfig {
+    NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"single_gf_tags"];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
+    NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
+    
+    XCTAssertTrue([nodes count] == 1);
+    XCTAssertTrue([[nodesManager roots] count] == 1);
+    if ([nodes count] > 0) {
+        NITNode *node = [nodes objectAtIndex:0];
+        XCTAssertTrue(node.tags.count == 3);
+        for(NSInteger index = 0; index < node.tags.count; index++) {
+            NSString *tag = [node.tags objectAtIndex:index];
+            switch (index) {
+                case 0:
+                    XCTAssertTrue([tag isEqualToString:@"banana"]);
+                    break;
+                case 1:
+                    XCTAssertTrue([tag isEqualToString:@"apple"]);
+                    break;
+                case 2:
+                    XCTAssertTrue([tag isEqualToString:@"hello world"]);
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+- (void)testLoadingTagsNullSingleGFConfig {
+    NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"single_gf_tags_null"];
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
+    NSArray<NITNode*> *nodes = [nodesManager setNodesWithJsonApi:jsonApi];
+    
+    XCTAssertTrue([nodes count] == 1);
+    XCTAssertTrue([[nodesManager roots] count] == 1);
+    if ([nodes count] > 0) {
+        NITNode *node = [nodes objectAtIndex:0];
+        XCTAssertNil(node.tags);
+    }
+}
+
 // MARK: - Test GeopolisNodesManager currentNodes
 
 - (void)testGeopolisNodesManagerConfig22CurrentNodesSimple {

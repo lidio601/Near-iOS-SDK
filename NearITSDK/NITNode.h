@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSString* _Nullable identifier;
 @property (nonatomic, strong) NITNode* _Nullable parent;
 @property (nonatomic, strong) NSArray<NITNode*>* _Nullable children;
+@property (nonatomic, strong) NSArray<NSString*>* _Nullable tags;
 
 - (CLRegion* _Nullable)createRegion;
 - (BOOL)isLeaf;
