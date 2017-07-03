@@ -17,7 +17,7 @@
 @class NITRecipeHistory;
 @class NITRecipeValidationFilter;
 
-extern NSString* const RecipesCacheKey;
+extern NSString* _Nonnull const RecipesCacheKey;
 
 @protocol NITRecipesManaging <NSObject>
 
