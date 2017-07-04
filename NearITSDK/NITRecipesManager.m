@@ -98,18 +98,7 @@ NSString* const RecipesCacheKey = @"Recipes";
         handled = YES;
     }
     
-    NSArray<NITRecipe*> *recipes = [self.recipeValidationFilter filterRecipes:matchingRecipes];
-    
-    if ([recipes count] == 0) {
-        //[self onlinePulseEvaluationWithPlugin:pulsePlugin action:pulseAction bundle:pulseBundle];
-    } else {
-        NITRecipe *recipe = [recipes objectAtIndex:0];
-        if(recipe.isEvaluatedOnline) {
-            [self evaluateRecipeWithId:recipe.ID];
-        } else {
-            [self gotRecipe:recipe];
-        }
-    }
+    [self handleRecipesValidation:matchingRecipes];
     
     return handled;
 }
@@ -128,6 +117,16 @@ NSString* const RecipesCacheKey = @"Recipes";
         handled = YES;
     }
     
+    [self handleRecipesValidation:matchingRecipes];
+    
+    return handled;
+}
+
+- (void)gotPulseOnlineWithPulsePlugin:(NSString *)pulsePlugin pulseAction:(NSString *)pulseAction pulseBundle:(NSString *)pulseBundle {
+    [self onlinePulseEvaluationWithPlugin:pulsePlugin action:pulseAction bundle:pulseBundle];
+}
+
+- (void)handleRecipesValidation:(NSArray<NITRecipe*>*)matchingRecipes {
     NSArray<NITRecipe*> *recipes = [self.recipeValidationFilter filterRecipes:matchingRecipes];
     
     if ([recipes count] == 0) {
@@ -140,12 +139,6 @@ NSString* const RecipesCacheKey = @"Recipes";
             [self gotRecipe:recipe];
         }
     }
-    
-    return handled;
-}
-
-- (void)gotPulseOnlineWithPulsePlugin:(NSString *)pulsePlugin pulseAction:(NSString *)pulseAction pulseBundle:(NSString *)pulseBundle {
-    [self onlinePulseEvaluationWithPlugin:pulsePlugin action:pulseAction bundle:pulseBundle];
 }
 
 - (BOOL)verifyTags:(NSArray<NSString*>*)tags recipeTags:(NSArray<NSString*>*)recipeTags {
