@@ -98,6 +98,10 @@
 		134E2ED31EF2BAE600A2B1F0 /* NITTimeBandEvaluatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 134E2ED21EF2BAE600A2B1F0 /* NITTimeBandEvaluatorTest.m */; };
 		134E43AD1EBB5AB70099014C /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 134E43AC1EBB5AB70099014C /* OCHamcrestIOS.framework */; };
 		134E43AF1EBB5AC80099014C /* OCMockitoIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 134E43AE1EBB5AC80099014C /* OCMockitoIOS.framework */; };
+		134F998F1F0B9DB600B464B4 /* NITGeopolisRadar.h in Headers */ = {isa = PBXBuildFile; fileRef = 134F998D1F0B9DB600B464B4 /* NITGeopolisRadar.h */; };
+		134F99901F0B9DB600B464B4 /* NITGeopolisRadar.m in Sources */ = {isa = PBXBuildFile; fileRef = 134F998E1F0B9DB600B464B4 /* NITGeopolisRadar.m */; };
+		134F99921F0BA02300B464B4 /* NITGeopolisRadarTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 134F99911F0BA02300B464B4 /* NITGeopolisRadarTest.m */; };
+		134F99951F0BA41700B464B4 /* NITStubGeopolisRadar.m in Sources */ = {isa = PBXBuildFile; fileRef = 134F99941F0BA41700B464B4 /* NITStubGeopolisRadar.m */; };
 		1352CA6E1E7807FE00C0E98E /* NearITSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1352CA641E7807FE00C0E98E /* NearITSDK.framework */; };
 		1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1352CA721E7807FE00C0E98E /* NearITSDKTests.m */; };
 		1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 1352CA671E7807FE00C0E98E /* NearITSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -309,6 +313,11 @@
 		134E2ED21EF2BAE600A2B1F0 /* NITTimeBandEvaluatorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTimeBandEvaluatorTest.m; sourceTree = "<group>"; };
 		134E43AC1EBB5AB70099014C /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCHamcrestIOS.framework; sourceTree = "<group>"; };
 		134E43AE1EBB5AC80099014C /* OCMockitoIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OCMockitoIOS.framework; sourceTree = "<group>"; };
+		134F998D1F0B9DB600B464B4 /* NITGeopolisRadar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITGeopolisRadar.h; sourceTree = "<group>"; };
+		134F998E1F0B9DB600B464B4 /* NITGeopolisRadar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITGeopolisRadar.m; sourceTree = "<group>"; };
+		134F99911F0BA02300B464B4 /* NITGeopolisRadarTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITGeopolisRadarTest.m; sourceTree = "<group>"; };
+		134F99931F0BA41700B464B4 /* NITStubGeopolisRadar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITStubGeopolisRadar.h; sourceTree = "<group>"; };
+		134F99941F0BA41700B464B4 /* NITStubGeopolisRadar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITStubGeopolisRadar.m; sourceTree = "<group>"; };
 		1352CA641E7807FE00C0E98E /* NearITSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NearITSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1352CA671E7807FE00C0E98E /* NearITSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NearITSDK.h; sourceTree = "<group>"; };
 		1352CA681E7807FE00C0E98E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -640,6 +649,7 @@
 		1349EEB51E796FF3000B0666 /* Geopolis */ = {
 			isa = PBXGroup;
 			children = (
+				134F998C1F0B9D9800B464B4 /* Radar */,
 				1327D8931E82823300C6689E /* Beacon */,
 				1349EEBD1E7A9264000B0666 /* Nodes */,
 				1349EEB61E797045000B0666 /* NITGeopolisManager.h */,
@@ -680,6 +690,15 @@
 				134E43AC1EBB5AB70099014C /* OCHamcrestIOS.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		134F998C1F0B9D9800B464B4 /* Radar */ = {
+			isa = PBXGroup;
+			children = (
+				134F998D1F0B9DB600B464B4 /* NITGeopolisRadar.h */,
+				134F998E1F0B9DB600B464B4 /* NITGeopolisRadar.m */,
+			);
+			name = Radar;
 			sourceTree = "<group>";
 		};
 		1352CA5A1E7807FD00C0E98E = {
@@ -760,6 +779,7 @@
 				1374E0FB1EAA305A00D613A5 /* NITTrackManagerTest.m */,
 				13AB72911F015A3800FE14D9 /* NITZipTest.m */,
 				130CCF9B1F02690D00876327 /* NITNotificationProcessorTest.m */,
+				134F99911F0BA02300B464B4 /* NITGeopolisRadarTest.m */,
 				1352CA741E7807FE00C0E98E /* Info.plist */,
 			);
 			path = NearITSDKTests;
@@ -996,6 +1016,8 @@
 				1374E1131EB0D2CE00D613A5 /* NITTestDateManager.m */,
 				135359071EEFDB6B0056AF7C /* NITTestValidator.h */,
 				135359081EEFDB6B0056AF7C /* NITTestValidator.m */,
+				134F99931F0BA41700B464B4 /* NITStubGeopolisRadar.h */,
+				134F99941F0BA41700B464B4 /* NITStubGeopolisRadar.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1052,6 +1074,7 @@
 				13423EE31E7BCB07008CAAC8 /* NITGeofenceNode.h in Headers */,
 				1349EEB81E797045000B0666 /* NITGeopolisManager.h in Headers */,
 				130CCF991F02644000876327 /* NITNotificationProcessor.h in Headers */,
+				134F998F1F0B9DB600B464B4 /* NITGeopolisRadar.h in Headers */,
 				132296FF1E8D2F6400AE6EFC /* NITFeedbackReaction.h in Headers */,
 				134E2ECD1EF2B9F800A2B1F0 /* NITTimeBandEvaluator.h in Headers */,
 				132297221E923D3300AE6EFC /* NITRecipeCooler.h in Headers */,
@@ -1351,6 +1374,7 @@
 				1349EEC11E7A9272000B0666 /* NITNode.m in Sources */,
 				1349EEC51E7A95E3000B0666 /* NITNodesManager.m in Sources */,
 				1349EECA1E7AA1E3000B0666 /* NITResource.m in Sources */,
+				134F99901F0B9DB600B464B4 /* NITGeopolisRadar.m in Sources */,
 				132297231E923D3300AE6EFC /* NITRecipeCooler.m in Sources */,
 				135CD7AA1E9F5E45005C75A4 /* NITUpload.m in Sources */,
 				1319CED91EA0BDA0009046C5 /* NITGeopolisNodesManager.m in Sources */,
@@ -1361,6 +1385,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				134F99921F0BA02300B464B4 /* NITGeopolisRadarTest.m in Sources */,
 				1374E1141EB0D2CE00D613A5 /* NITTestDateManager.m in Sources */,
 				137E38AC1E8A94E4008E83E6 /* NITTestCase.m in Sources */,
 				135359091EEFDB6B0056AF7C /* NITTestValidator.m in Sources */,
@@ -1372,6 +1397,7 @@
 				1374E0C11EA744FB00D613A5 /* NITFakeLocationManager.m in Sources */,
 				135CD7961E9B7621005C75A4 /* NITNetworkMockManger.m in Sources */,
 				1352CA911E78372B00C0E98E /* NITUtilsTest.m in Sources */,
+				134F99951F0BA41700B464B4 /* NITStubGeopolisRadar.m in Sources */,
 				130FB38B1EEEA2A0008B24C1 /* NITCooldownValidatorTest.m in Sources */,
 				1374E0D51EA89DDF00D613A5 /* NITManagerTest.m in Sources */,
 				1374E0DA1EA8C03B00D613A5 /* NITTestLogger.m in Sources */,
