@@ -70,7 +70,7 @@
         return [self jsonApiWithContentsOfFile:@"response_online_recipe"];
     };
     
-    [recipesManager gotPulseWithPulsePlugin:@"geopolis" pulseAction:@"leave_place" pulseBundle:@"9712e11a-ef3a-4b34-bdf6-413a84146f2e"];
+    [recipesManager gotPulseOnlineWithPulsePlugin:@"geopolis" pulseAction:@"leave_place" pulseBundle:@"9712e11a-ef3a-4b34-bdf6-413a84146f2e"];
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
@@ -90,7 +90,7 @@
         return [self jsonApiWithContentsOfFile:@"response_pulse_evaluation"];
     };
     
-    [recipesManager gotPulseWithPulsePlugin:@"beacon_forest" pulseAction:@"always_evaluated" pulseBundle:@"e11f58db-054e-4df1-b09b-d0cbe2676031"];
+    [recipesManager gotPulseOnlineWithPulsePlugin:@"beacon_forest" pulseAction:@"always_evaluated" pulseBundle:@"e11f58db-054e-4df1-b09b-d0cbe2676031"];
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
