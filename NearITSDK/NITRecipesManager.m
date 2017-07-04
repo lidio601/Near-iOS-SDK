@@ -84,7 +84,8 @@ NSString* const RecipesCacheKey = @"Recipes";
 
 // MARK: - NITRecipesManaging
 
-- (void)gotPulseWithPulsePlugin:(NSString *)pulsePlugin pulseAction:(NSString *)pulseAction pulseBundle:(NSString *)pulseBundle {
+- (BOOL)gotPulseWithPulsePlugin:(NSString *)pulsePlugin pulseAction:(NSString *)pulseAction pulseBundle:(NSString *)pulseBundle {
+    BOOL handled = NO;
     NSMutableArray<NITRecipe*> *matchingRecipes = [[NSMutableArray alloc] init];
     
     for (NITRecipe *recipe in self.recipes) {
@@ -93,10 +94,14 @@ NSString* const RecipesCacheKey = @"Recipes";
         }
     }
     
+    if (matchingRecipes.count > 0) {
+        handled = YES;
+    }
+    
     NSArray<NITRecipe*> *recipes = [self.recipeValidationFilter filterRecipes:matchingRecipes];
     
     if ([recipes count] == 0) {
-        [self onlinePulseEvaluationWithPlugin:pulsePlugin action:pulseAction bundle:pulseBundle];
+        //[self onlinePulseEvaluationWithPlugin:pulsePlugin action:pulseAction bundle:pulseBundle];
     } else {
         NITRecipe *recipe = [recipes objectAtIndex:0];
         if(recipe.isEvaluatedOnline) {
@@ -105,10 +110,59 @@ NSString* const RecipesCacheKey = @"Recipes";
             [self gotRecipe:recipe];
         }
     }
+    
+    return handled;
 }
 
-- (void)gotPulseWithPulsePlugin:(NSString *)pulsePlugin pulseAction:(NSString *)pulseAction pulseBundle:(NSString *)pulseBundle tags:(NSArray<NSString *> *)tags {
+- (BOOL)gotPulseWithPulsePlugin:(NSString *)pulsePlugin pulseAction:(NSString *)pulseAction tags:(NSArray<NSString *> *)tags {
+    BOOL handled = NO;
+    NSMutableArray<NITRecipe*> *matchingRecipes = [[NSMutableArray alloc] init];
     
+    for (NITRecipe *recipe in self.recipes) {
+        if ([recipe.pulsePluginId isEqualToString:pulsePlugin] && [recipe.pulseAction.ID isEqualToString:pulseAction] && [self verifyTags:tags recipeTags:recipe.tags]) {
+            [matchingRecipes addObject:recipe];
+        }
+    }
+    
+    if (matchingRecipes.count > 0) {
+        handled = YES;
+    }
+    
+    NSArray<NITRecipe*> *recipes = [self.recipeValidationFilter filterRecipes:matchingRecipes];
+    
+    if ([recipes count] == 0) {
+        //[self onlinePulseEvaluationWithPlugin:pulsePlugin action:pulseAction bundle:pulseBundle];
+    } else {
+        NITRecipe *recipe = [recipes objectAtIndex:0];
+        if(recipe.isEvaluatedOnline) {
+            [self evaluateRecipeWithId:recipe.ID];
+        } else {
+            [self gotRecipe:recipe];
+        }
+    }
+    
+    return handled;
+}
+
+- (void)gotPulseOnlineWithPulsePlugin:(NSString *)pulsePlugin pulseAction:(NSString *)pulseAction pulseBundle:(NSString *)pulseBundle {
+    [self onlinePulseEvaluationWithPlugin:pulsePlugin action:pulseAction bundle:pulseBundle];
+}
+
+- (BOOL)verifyTags:(NSArray<NSString*>*)tags recipeTags:(NSArray<NSString*>*)recipeTags {
+    if (tags == nil || recipeTags == nil) {
+        return NO;
+    }
+    
+    NSInteger trueCount = 0;
+    for(NSString *tag in tags) {
+        if ([recipeTags indexOfObjectIdenticalTo:tag] != NSNotFound) {
+            trueCount++;
+        }
+    }
+    if (trueCount == tags.count) {
+        return YES;
+    }
+    return NO;
 }
 
 - (void)processRecipe:(NSString*)recipeId {

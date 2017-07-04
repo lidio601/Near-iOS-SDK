@@ -366,9 +366,20 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     NITLogD(LOGTAG, @"Trigger for event -> %@ - node -> %@", eventString, node);
     
     [self trackEventWithIdentifier:node.identifier event:event];
+    
+    BOOL hasIdentifier = NO;
+    BOOL hasTags = NO;
+    NSString *pulseAction = [NITUtils stringFromRegionEvent:event];
+    
     if([self.recipesManager respondsToSelector:@selector(gotPulseWithPulsePlugin:pulseAction:pulseBundle:)]) {
-        NSString *pulseAction = [NITUtils stringFromRegionEvent:event];
-        [self.recipesManager gotPulseWithPulsePlugin:self.pluginName pulseAction:pulseAction pulseBundle:node.identifier];
+        hasIdentifier = [self.recipesManager gotPulseWithPulsePlugin:self.pluginName pulseAction:pulseAction pulseBundle:node.identifier];
+    }
+    if (!hasIdentifier && [self.recipesManager respondsToSelector:@selector(gotPulseWithPulsePlugin:pulseAction:tags:)]) {
+        NSString *pulseTagAction = [NITUtils stringTagFromRegionEvent:event];
+        hasTags = [self.recipesManager gotPulseWithPulsePlugin:self.pluginName pulseAction:pulseTagAction tags:node.tags];
+    }
+    if (!hasIdentifier && !hasTags && [self.recipesManager respondsToSelector:@selector(gotPulseOnlineWithPulsePlugin:pulseAction:pulseBundle:)]) {
+        [self.recipesManager gotPulseOnlineWithPulsePlugin:self.pluginName pulseAction:pulseAction pulseBundle:node.identifier];
     }
 }
 
