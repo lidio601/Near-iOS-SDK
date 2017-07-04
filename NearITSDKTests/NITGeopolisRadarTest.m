@@ -78,4 +78,23 @@
     XCTAssertFalse(radar.isStarted);
 }
 
+// MARK: - Stop
+
+- (void)testGeopolisRadarStop {
+    CLRegion *regionMon1 = mock([CLRegion class]);
+    CLRegion *regionMon2 = mock([CLRegion class]);
+    CLBeaconRegion *regionRang = mock([CLBeaconRegion class]);
+    NSSet<CLRegion*> *monitoredRegions = [[NSSet alloc] initWithObjects:regionMon1, regionMon2, nil];
+    NSSet<CLRegion*> *rangedRegions = [[NSSet alloc] initWithObjects:regionRang, nil];
+    [given([self.locationManager monitoredRegions]) willReturn:monitoredRegions];
+    [given([self.locationManager rangedRegions]) willReturn:rangedRegions];
+    
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    [radar stop];
+    
+    XCTAssertFalse(radar.isStarted);
+    [verifyCount(self.locationManager, times(2)) stopMonitoringForRegion:anything()];
+    [verifyCount(self.locationManager, times(1)) stopRangingBeaconsInRegion:anything()];
+}
+
 @end

@@ -28,5 +28,6 @@
 - (instancetype _Nonnull)initWithDelegate:(id<NITGeopolisRadarDelegate> _Nullable)delegate nodesManager:(NITGeopolisNodesManager* _Nonnull)nodesManager locationManager:(CLLocationManager* _Nonnull)locationManager;
 
 - (BOOL)start;
+- (void)stop;
 
 @end

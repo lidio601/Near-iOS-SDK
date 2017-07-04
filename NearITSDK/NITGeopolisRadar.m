@@ -39,6 +39,8 @@
     return self;
 }
 
+// MARK: - Start
+
 - (BOOL)start {
     if(self.started) {
         return YES;
@@ -76,9 +78,27 @@
     }
 }
 
-
 - (CLAuthorizationStatus)locationAuthorizationStatus {
     return [CLLocationManager authorizationStatus];
+}
+
+// MARK: - Stop
+
+- (void)stop {
+    self.started = NO;
+    
+    for (CLRegion *region in self.locationManager.monitoredRegions) {
+        [self.locationManager stopMonitoringForRegion:region];
+    }
+    for (CLBeaconRegion *region in self.locationManager.rangedRegions) {
+        [self.locationManager stopRangingBeaconsInRegion:region];
+    }
+    [self.locationManager stopUpdatingLocation];
+    [self.nodesManager clear];
+    /* [self.locationTimer invalidate];
+    self.locationTimer = nil;
+    self.locationTimerRetry = 0;
+    [self.visitedNodes removeAllObjects]; */
 }
 
 // MARK: - Location Manager Delegate
