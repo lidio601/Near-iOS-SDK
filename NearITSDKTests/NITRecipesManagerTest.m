@@ -95,6 +95,49 @@
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
 
+- (void)testGotPulseBundleNoMatching {
+    NITJSONAPI *recipesJson = [self jsonApiWithContentsOfFile:@"recipes"];
+    
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:self.trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
+    [recipesManager setRecipesWithJsonApi:recipesJson];
+    
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return nil;
+    };
+    
+    NITRecipe *fakeRecipe = [[NITRecipe alloc] init];
+    [given([self.recipeValidationFilter filterRecipes:anything()]) willReturn:@[fakeRecipe]];
+    
+    BOOL hasIdentifier = [recipesManager gotPulseWithPulsePlugin:@"geopolis" pulseAction:@"enter_place" pulseBundle:@"average_bundle"];
+    XCTAssertFalse(hasIdentifier);
+}
+
+- (void)testGotPulseBundleMatchingWithValidation {
+    NITJSONAPI *recipesJson = [self jsonApiWithContentsOfFile:@"recipes"];
+    
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:self.trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
+    [recipesManager setRecipesWithJsonApi:recipesJson];
+    
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return nil;
+    };
+    
+    [given([self.recipeValidationFilter filterRecipes:anything()]) willReturn:nil];
+    
+    // Has matching but the validation has empty recipes
+    BOOL hasIdentifier = [recipesManager gotPulseWithPulsePlugin:@"geopolis" pulseAction:@"ranging.near" pulseBundle:@"8373e68b-7c5d-411c-9a9c-3cc7ebf039e4"];
+    XCTAssertFalse(hasIdentifier);
+    
+    NITRecipe *fakeRecipe = [[NITRecipe alloc] init];
+    [given([self.recipeValidationFilter filterRecipes:anything()]) willReturn:@[fakeRecipe]];
+    
+    // Has matching and the validation has at least one recipes
+    hasIdentifier = [recipesManager gotPulseWithPulsePlugin:@"geopolis" pulseAction:@"ranging.near" pulseBundle:@"8373e68b-7c5d-411c-9a9c-3cc7ebf039e4"];
+    XCTAssertTrue(hasIdentifier);
+}
+
 - (void)testRecipesManagerCacheNotEmpty {
     NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"recipes"];
     [jsonApi registerClass:[NITRecipe class] forType:@"recipes"];
