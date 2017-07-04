@@ -50,7 +50,7 @@
 
 // MARK: - Start
 
-- (void)testGeopolisRadarStartAuthorizedAlways {
+- (void)testStartAuthorizedAlways {
     NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
     radar.authorizationStatus = kCLAuthorizationStatusAuthorizedAlways;
     [radar start];
@@ -61,7 +61,7 @@
     [verifyCount(self.locationManager, times(1)) requestStateForRegion:anything()];
 }
 
-- (void)testGeopolisRadarStartNotAuthorized {
+- (void)testStartNotAuthorized {
     NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
     radar.authorizationStatus = kCLAuthorizationStatusNotDetermined;
     [radar start];
@@ -69,7 +69,7 @@
     XCTAssertFalse(radar.isStarted);
 }
 
-- (void)testGeopolisRadarStartEmptyNodes {
+- (void)testStartEmptyNodes {
     NITGeopolisNodesManager *nodesManager = mock([NITGeopolisNodesManager class]);
     [given([nodesManager roots]) willReturn:@[]];
     NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:nodesManager locationManager:self.locationManager];
@@ -80,7 +80,7 @@
 
 // MARK: - Stop
 
-- (void)testGeopolisRadarStop {
+- (void)testStop {
     CLRegion *regionMon1 = mock([CLRegion class]);
     CLRegion *regionMon2 = mock([CLRegion class]);
     CLBeaconRegion *regionRang = mock([CLBeaconRegion class]);
@@ -95,6 +95,26 @@
     XCTAssertFalse(radar.isStarted);
     [verifyCount(self.locationManager, times(2)) stopMonitoringForRegion:anything()];
     [verifyCount(self.locationManager, times(1)) stopRangingBeaconsInRegion:anything()];
+}
+
+// MARK: - Location timer
+
+- (void)testLocationTimerStopForMaxRetry {
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    NSTimer *mockTimer = mock([NSTimer class]);
+    radar.stubLocationTimer = mockTimer;
+    [verifyCount(self.locationManager, times(1)) requestLocation];
+    [radar start];
+    
+    [radar fireLocationTimer];
+    [verifyCount(self.locationManager, times(1)) requestLocation];
+    [verifyCount(mockTimer, never()) invalidate];
+    [radar fireLocationTimer];
+    [verifyCount(self.locationManager, times(1)) requestLocation];
+    [verifyCount(mockTimer, never()) invalidate];
+    [radar fireLocationTimer];
+    [verifyCount(self.locationManager, never()) requestLocation];
+    [verifyCount(mockTimer, times(1)) invalidate];
 }
 
 @end

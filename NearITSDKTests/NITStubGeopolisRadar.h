@@ -12,7 +12,9 @@
 @interface NITStubGeopolisRadar : NITGeopolisRadar
 
 @property (nonatomic) CLAuthorizationStatus authorizationStatus;
+@property (nonatomic, strong) NSTimer *stubLocationTimer;
 
 - (CLAuthorizationStatus)locationAuthorizationStatus;
+- (void)fireLocationTimer;
 
 @end

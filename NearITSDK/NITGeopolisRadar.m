@@ -15,11 +15,14 @@
 #import "NITBeaconNode.h"
 
 #define LOGTAG @"GeopolisRadar"
+#define MAX_LOCATION_TIMER_RETRY 3
 
 @interface NITGeopolisRadar()<CLLocationManagerDelegate>
 
 @property (nonatomic, strong) NITGeopolisNodesManager *nodesManager;
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) NSTimer *locationTimer;
+@property (nonatomic) NSInteger locationTimerRetry;
 @property (nonatomic) BOOL started;
 
 @end
@@ -34,6 +37,7 @@
         self.locationManager = locationManager;
         self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
         self.locationManager.delegate = self;
+        [self.locationManager requestLocation];
         self.started = NO;
     }
     return self;
@@ -59,6 +63,9 @@
     }
     self.started = YES;
     
+    self.locationTimerRetry = 0;
+    self.locationTimer = [self makeLocationTimer];
+    
     [self startMonitoringRoots];
     
     return YES;
@@ -78,10 +85,6 @@
     }
 }
 
-- (CLAuthorizationStatus)locationAuthorizationStatus {
-    return [CLLocationManager authorizationStatus];
-}
-
 // MARK: - Stop
 
 - (void)stop {
@@ -95,10 +98,40 @@
     }
     [self.locationManager stopUpdatingLocation];
     [self.nodesManager clear];
-    /* [self.locationTimer invalidate];
+    [self.locationTimer invalidate];
     self.locationTimer = nil;
     self.locationTimerRetry = 0;
-    [self.visitedNodes removeAllObjects]; */
+}
+
+// MARK: - Location timer
+
+- (void)locationTimerFired:(NSTimer*)timer {
+    self.locationTimerRetry++;
+    NITLogD(@"LocationTimer", @"Entered in timer: retry %d", self.locationTimerRetry);
+    /* if (!self.stepResponse) {
+        NITLogW(@"LocationTimer", @"Request step response by timer");
+        [self.locationManager requestLocation];
+        [self requestStateForRoots];
+    } else {
+        [self.locationTimer invalidate];
+        NITLogD(@"LocationTimer", @"Invalidate timer due to a successful state");
+    } */
+    if (self.locationTimerRetry >= MAX_LOCATION_TIMER_RETRY) {
+        NITLogW(@"LocationTimer", @"MAX_LOCATION_TIMER_RETRY reached");
+        [self.locationTimer invalidate];
+    } else {
+        [self.locationManager requestLocation];
+    }
+}
+
+// MARK: - Utils
+
+- (CLAuthorizationStatus)locationAuthorizationStatus {
+    return [CLLocationManager authorizationStatus];
+}
+
+- (NSTimer*)makeLocationTimer {
+    return [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(locationTimerFired:) userInfo:nil repeats:YES];
 }
 
 // MARK: - Location Manager Delegate
@@ -112,7 +145,10 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
-    
+    CLLocation *location = [locations lastObject];
+    NSDate *eventDate = location.timestamp;
+    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+    NITLogD(LOGTAG, @"Location update (%.4f,%.4f) %.1f seconds ago", location.coordinate.latitude, location.coordinate.longitude, fabs(howRecent));
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {

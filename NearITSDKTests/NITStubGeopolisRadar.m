@@ -7,6 +7,15 @@
 //
 
 #import "NITStubGeopolisRadar.h"
+#import <OCMockitoIOS/OCMockitoIOS.h>
+
+@interface NITStubGeopolisRadar()
+
+@property (nonatomic, strong) NSTimer *locationTimer;
+
+- (void)locationTimerFired:(NSTimer*)timer;
+
+@end
 
 @implementation NITStubGeopolisRadar
 
@@ -20,6 +29,17 @@
 
 - (CLAuthorizationStatus)locationAuthorizationStatus {
     return self.authorizationStatus;
+}
+
+- (NSTimer*)makeLocationTimer {
+    if (self.stubLocationTimer) {
+        return self.stubLocationTimer;
+    }
+    return mock([NSTimer class]);
+}
+
+- (void)fireLocationTimer {
+    [self locationTimerFired:self.locationTimer];
 }
 
 @end
