@@ -376,9 +376,14 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     NITJSONAPI *json = [[NITJSONAPI alloc] init];
     NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
     resource.type = @"trackings";
-    [resource addAttributeObject:self.configuration.profileId forKey:@"profile_id"];
-    [resource addAttributeObject:self.configuration.installationId forKey:@"installation_id"];
-    [resource addAttributeObject:self.configuration.appId forKey:@"app_id"];
+    if (self.configuration.profileId && self.configuration.installationId && self.configuration.appId) {
+        [resource addAttributeObject:self.configuration.profileId forKey:@"profile_id"];
+        [resource addAttributeObject:self.configuration.installationId forKey:@"installation_id"];
+        [resource addAttributeObject:self.configuration.appId forKey:@"app_id"];
+    } else {
+        NITLogW(LOGTAG, @"Can't send recipe tracking: missing data");
+        return;
+    }
     [resource addAttributeObject:identifier forKey:@"identifier"];
     NSString *eventString = [NITUtils stringFromRegionEvent:event];
     [resource addAttributeObject:eventString forKey:@"event"];

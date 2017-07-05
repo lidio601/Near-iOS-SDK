@@ -406,6 +406,7 @@
             } else {
                 //Notify the delegate
                 if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive && self.showBackgroundNotification) {
+                    [self sendTrackingWithRecipeId:recipe.ID event:NITRecipeNotified];
                     if (NSClassFromString(@"UNMutableNotificationContent")) {
                         UNMutableNotificationContent *notification = [[UNMutableNotificationContent alloc] init];
                         notification.body = recipe.notificationBody;
