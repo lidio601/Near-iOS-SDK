@@ -174,6 +174,7 @@ NSString* const RecipesCacheKey = @"Recipes";
         [resource addAttributeObject:config.installationId forKey:@"installation_id"];
         [resource addAttributeObject:config.appId forKey:@"app_id"];
     } else {
+        NITLogW(LOGTAG, @"Can't send geopolis tracking: missing data");
         return;
     }
     [resource addAttributeObject:recipeId forKey:@"recipe_id"];

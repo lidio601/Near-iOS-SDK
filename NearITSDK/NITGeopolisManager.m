@@ -381,6 +381,7 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         [resource addAttributeObject:self.configuration.installationId forKey:@"installation_id"];
         [resource addAttributeObject:self.configuration.appId forKey:@"app_id"];
     } else {
+        NITLogW(LOGTAG, @"Can't send recipe tracking: missing data");
         return;
     }
     [resource addAttributeObject:identifier forKey:@"identifier"];
