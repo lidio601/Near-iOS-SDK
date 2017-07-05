@@ -1,3 +1,19 @@
+0.9.36 Release notes (2017-07-05)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes a crash due to "installationId" missing.
+* Fixes cooldown for automatic background notification.
+
 0.9.35 Release notes (2017-06-30)
 =============================================================
 
