@@ -13,6 +13,8 @@
 #import "NITNode.h"
 #import "NITGeofenceNode.h"
 #import "NITBeaconNode.h"
+#import "NITBeaconProximityManager.h"
+#import "NITConstants.h"
 
 #define LOGTAG @"GeopolisRadar"
 #define MAX_LOCATION_TIMER_RETRY 3
@@ -21,9 +23,12 @@
 
 @property (nonatomic, strong) NITGeopolisNodesManager *nodesManager;
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) NITBeaconProximityManager *beaconProximity;
+@property (nonatomic, strong) NSMutableArray<NITNode*> *visitedNodes;
 @property (nonatomic, strong) NSTimer *locationTimer;
 @property (nonatomic) NSInteger locationTimerRetry;
 @property (nonatomic) BOOL started;
+@property (nonatomic) BOOL stepResponse;
 
 @end
 
@@ -35,6 +40,8 @@
         self.delegate = delegate;
         self.nodesManager = nodesManager;
         self.locationManager = locationManager;
+        self.beaconProximity = [[NITBeaconProximityManager alloc] init];
+        self.visitedNodes = [[NSMutableArray alloc] init];
         self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
         self.locationManager.delegate = self;
         [self.locationManager requestLocation];
@@ -124,6 +131,182 @@
     }
 }
 
+// MARK: - Step
+
+- (void)stepInRegion:(CLRegion*)region {
+    self.stepResponse = YES;
+    NITLogD(LOGTAG, @"StepInRegion -> %@", region.identifier);
+    NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+    if (node == nil) {
+        return;
+    }
+    NITLogD(LOGTAG, @"StepInNode -> %@", node);
+    if (![self isAlreadyVisitedWithNode:node]) {
+        [self triggerInRegion:region];
+    }
+    
+    [self setVisitedWithNode:node];
+    NSArray<NITNode*> *monitoredNodes = [self.nodesManager monitoredNodesOnEnterWithId:region.identifier];
+    NSArray<NITNode*> *rangedNodes = [self.nodesManager rangedNodesOnEnterWithId:region.identifier];
+    NITLogD(LOGTAG, @"Regions state stepIn MR -> %d, RR -> %d", [monitoredNodes count], [rangedNodes count]);
+    
+    [self setMonitoringWithNodes:monitoredNodes];
+    [self setRangingWithNodes:rangedNodes];
+}
+
+- (void)triggerInRegion:(CLRegion*)region {
+    self.stepResponse = YES;
+    NITLogD(LOGTAG, @"TriggerInRegion -> %@", region.identifier);
+    NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+    if (node == nil) {
+        return;
+    }
+    NITLogD(LOGTAG, @"TriggerInNode -> %@", node);
+    
+    [self setVisitedWithNode:node];
+    if ([node isKindOfClass:[NITGeofenceNode class]]) {
+        [self triggerWithEvent:NITRegionEventEnterPlace node:node];
+    } else {
+        [self triggerWithEvent:NITRegionEventEnterArea node:node];
+    }
+}
+
+- (void)stepOutRegion:(CLRegion*)region {
+    self.stepResponse = YES;
+    NITLogD(LOGTAG, @"StepOutRegion -> %@", region.identifier);
+    NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+    if (node == nil) {
+        return;
+    }
+    NITLogD(LOGTAG, @"StepOutNode -> %@", node);
+    
+    BOOL isMonitored = NO;
+    for (CLRegion *monitoredRegion in self.locationManager.monitoredRegions) {
+        if ([monitoredRegion.identifier isEqualToString:region.identifier]) {
+            isMonitored = YES;
+        }
+    }
+    
+    if (!isMonitored) {
+        NITLogD(LOGTAG, @"StepOutNode ignored because is not monitored -> %@", node);
+        return;
+    }
+    
+    NSArray<NITNode*> *monitoredNodes = [self.nodesManager monitoredNodesOnExitWithId:region.identifier];
+    NSArray<NITNode*> *rangedNodes = [self.nodesManager rangedNodesOnExitWithId:region.identifier];
+    NITLogD(LOGTAG, @"Regions state stepOut MR -> %d, RR -> %d", [monitoredNodes count], [rangedNodes count]);
+    
+    [self setMonitoringWithNodes:monitoredNodes];
+    [self setRangingWithNodes:rangedNodes];
+}
+
+- (void)triggerOutRegion:(CLRegion*)region {
+    self.stepResponse = YES;
+    NITLogD(LOGTAG, @"TriggerOutRegion -> %@", region.identifier);
+    NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+    if (node == nil) {
+        return;
+    }
+    NITLogD(LOGTAG, @"TriggerOutNode -> %@", node);
+    
+    if ([node isKindOfClass:[NITGeofenceNode class]]) {
+        [self triggerWithEvent:NITRegionEventLeavePlace node:node];
+    } else {
+        [self triggerWithEvent:NITRegionEventLeaveArea node:node];
+    }
+}
+
+- (BOOL)stillExistsWithRegionIdentifier:(NSString*)identifier nodes:(NSArray<NITNode*>*)nodes {
+    BOOL exists = NO;
+    for(NITNode *node in nodes) {
+        if ([node.ID.lowercaseString isEqualToString:identifier.lowercaseString]) {
+            exists = YES;
+            break;
+        }
+    }
+    return exists;
+}
+
+- (BOOL)existsWithRegionIdentifier:(NSString*)identifier regions:(NSArray<CLRegion*>*)regions {
+    BOOL exists = NO;
+    for (CLRegion *region in regions) {
+        if ([region.identifier.lowercaseString isEqualToString:identifier.lowercaseString]) {
+            exists = YES;
+            break;
+        }
+    }
+    return exists;
+}
+
+- (void)setMonitoringWithNodes:(NSArray<NITNode*>*)nodes {
+    for(CLRegion *region in self.locationManager.monitoredRegions) {
+        if (![self stillExistsWithRegionIdentifier:region.identifier nodes:nodes]) {
+            [self.locationManager stopMonitoringForRegion:region];
+            NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+            if (node) {
+                [self setNotVisitedWithNode:node];
+            }
+        }
+    }
+    
+    for(NITNode *node in nodes) {
+        if (![self existsWithRegionIdentifier:node.ID regions:[self.locationManager.monitoredRegions allObjects]]) {
+            CLRegion *region = [node createRegion];
+            region.notifyOnEntry = YES;
+            region.notifyOnExit = YES;
+            [self.locationManager startMonitoringForRegion:region];
+            [self.locationManager requestStateForRegion:region];
+        }
+    }
+}
+
+- (void)setRangingWithNodes:(NSArray<NITNode*>*)nodes {
+    for(CLBeaconRegion *region in self.locationManager.rangedRegions) {
+        if (![self stillExistsWithRegionIdentifier:region.identifier nodes:nodes]) {
+            [self.locationManager stopRangingBeaconsInRegion:region];
+            [self.beaconProximity removeRegionWithIdentifier:region.identifier];
+            NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+            if (node) {
+                [self setNotVisitedWithNode:node];
+            }
+        }
+    }
+    
+    for(NITNode *node in nodes) {
+        if (![self existsWithRegionIdentifier:node.ID regions:[self.locationManager.rangedRegions allObjects]]) {
+            CLRegion *region = [node createRegion];
+            if ([region isKindOfClass:[CLBeaconRegion class]]) {
+                [self.locationManager startRangingBeaconsInRegion:(CLBeaconRegion*)region];
+                [self.beaconProximity addRegionWithIdentifier:region.identifier];
+            }
+        }
+    }
+}
+
+- (void)setVisitedWithNode:(NITNode*)node {
+    [self.visitedNodes addObject:node];
+}
+
+- (void)setNotVisitedWithNode:(NITNode*)node {
+    [self.visitedNodes removeObject:node];
+}
+
+- (BOOL)isAlreadyVisitedWithNode:(NITNode*)node {
+    NSUInteger index = [self.visitedNodes indexOfObject:node];
+    if (index != NSNotFound) {
+        return YES;
+    }
+    return NO;
+}
+
+// MARK: - Trigger
+
+- (void)triggerWithEvent:(NITRegionEvent)event node:(NITNode*)node {
+    if ([self.delegate respondsToSelector:@selector(geopolisRadar:didTriggerWithNode:event:)]) {
+        [self.delegate geopolisRadar:self didTriggerWithNode:node event:event];
+    }
+}
+
 // MARK: - Utils
 
 - (CLAuthorizationStatus)locationAuthorizationStatus {
@@ -137,7 +320,25 @@
 // MARK: - Location Manager Delegate
 
 - (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region {
-    
+    switch (state) {
+        case CLRegionStateInside:
+            [self stepInRegion:region];
+            break;
+        case CLRegionStateOutside:
+            [self stepOutRegion:region];
+            break;
+        case CLRegionStateUnknown:
+            NITLogE(LOGTAG, @"Undefined status for region in node: %@", [self.nodesManager nodeWithID:region.identifier]);
+            break;
+    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
+    [self triggerInRegion:region];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region {
+    [self triggerOutRegion:region];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray<CLBeacon *> *)beacons inRegion:(CLBeaconRegion *)region {

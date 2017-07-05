@@ -57,11 +57,21 @@
 }
     
 - (void)simulateDidEnterRegion:(CLRegion*)region {
-    [self.delegate locationManager:self didEnterRegion:region];
+    if ([self.delegate respondsToSelector:@selector(locationManager:didEnterRegion:)]) {
+        [self.delegate locationManager:self didEnterRegion:region];
+    }
+    if ([self.delegate respondsToSelector:@selector(locationManager:didDetermineState:forRegion:)]) {
+        [self.delegate locationManager:self didDetermineState:CLRegionStateInside forRegion:region];
+    }
 }
-    
+
 - (void)simulateDidExitRegion:(CLRegion*)region {
-    [self.delegate locationManager:self didExitRegion:region];
+    if ([self.delegate respondsToSelector:@selector(locationManager:didExitRegion:)]) {
+        [self.delegate locationManager:self didExitRegion:region];
+    }
+    if ([self.delegate respondsToSelector:@selector(locationManager:didDetermineState:forRegion:)]) {
+        [self.delegate locationManager:self didDetermineState:CLRegionStateOutside forRegion:region];
+    }
 }
 
 - (void)simulateDidRangeBeacons:(NSArray<CLBeacon*>*)beacons region:(CLBeaconRegion*)region {

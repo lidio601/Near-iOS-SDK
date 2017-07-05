@@ -14,7 +14,10 @@
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
 #import "NITGeopolisNodesManager.h"
 #import "NITNode.h"
+#import "NITGeofenceNode.h"
+#import "NITBeaconNode.h"
 #import "NITStubGeopolisRadar.h"
+#import "NITFakeLocationManager.h"
 
 @interface NITGeopolisRadarTest : NITTestCase
 
@@ -22,6 +25,7 @@
 @property (nonatomic, strong) NITGeopolisNodesManager *nodesManagerOne;
 @property (nonatomic, strong) NITGeopolisNodesManager *nodesManager22;
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) NITFakeLocationManager *fakeLocationManager;
 
 @end
 
@@ -41,6 +45,7 @@
     [self.nodesManager22 setNodesWithJsonApi:config22];
     
     self.locationManager = mock([CLLocationManager class]);
+    self.fakeLocationManager = [[NITFakeLocationManager alloc] init];
 }
 
 - (void)tearDown {
@@ -115,6 +120,31 @@
     [radar fireLocationTimer];
     [verifyCount(self.locationManager, never()) requestLocation];
     [verifyCount(mockTimer, times(1)) invalidate];
+}
+
+// MARK: - Location Manager
+
+- (void)testSimpleGeofence {
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    CLRegion *region = mock([CLRegion class]);
+    [given([region identifier]) willReturn:@"R1"];
+    
+    NITNode *mon1 = [[NITGeofenceNode alloc] init];
+    mon1.identifier = @"R1";
+    [given([self.nodesManagerOne nodeWithID:@"R1"]) willReturn:mon1];
+    [given([self.nodesManagerOne monitoredNodesOnEnterWithId:@"R1"]) willReturn:@[mon1]];
+    [given([self.nodesManagerOne rangedNodesOnEnterWithId:@"R1"]) willReturn:nil];
+    [radar simulateDidDetermineStateWithRegion:region state:CLRegionStateInside];
+    
+    [verifyCount(self.nodesManagerOne, times(1)) monitoredNodesOnEnterWithId:@"R1"];
+    [verifyCount(self.nodesManagerOne, times(1)) rangedNodesOnEnterWithId:@"R1"];
+    [verifyCount(self.locationManager, times(1)) requestStateForRegion:anything()];
+    [verifyCount(self.locationManager, times(1)) startMonitoringForRegion:anything()];
+    [verifyCount(self.delegate, times(1)) geopolisRadar:sameInstance(radar) didTriggerWithNode:sameInstance(mon1) event:NITRegionEventEnterPlace];
+    [verifyCount(self.delegate, never()) geopolisRadar:sameInstance(radar) didTriggerWithNode:anything() event:NITRegionEventEnterArea];
+    [verifyCount(self.delegate, never()) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventEnterArea];
+    [verifyCount(self.delegate, never()) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventLeavePlace];
+    [verifyCount(self.delegate, never()) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventLeaveArea];
 }
 
 @end
