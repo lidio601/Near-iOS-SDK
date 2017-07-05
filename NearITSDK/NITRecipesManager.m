@@ -169,9 +169,13 @@ NSString* const RecipesCacheKey = @"Recipes";
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
     NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
     resource.type = @"trackings";
-    [resource addAttributeObject:config.profileId forKey:@"profile_id"];
-    [resource addAttributeObject:config.installationId forKey:@"installation_id"];
-    [resource addAttributeObject:config.appId forKey:@"app_id"];
+    if (self.configuration.profileId && self.configuration.installationId && self.configuration.appId) {
+        [resource addAttributeObject:config.profileId forKey:@"profile_id"];
+        [resource addAttributeObject:config.installationId forKey:@"installation_id"];
+        [resource addAttributeObject:config.appId forKey:@"app_id"];
+    } else {
+        return;
+    }
     [resource addAttributeObject:recipeId forKey:@"recipe_id"];
     [resource addAttributeObject:event forKey:@"event"];
     
