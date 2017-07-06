@@ -16,6 +16,9 @@
 #import "Reachability.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <CoreLocation/CoreLocation.h>
+#import "NITLog.h"
+
+#define LOGTAG @"Installation"
 
 @interface NITInstallation()
 
@@ -50,6 +53,12 @@
     }
 }
 
+- (void)shouldRegisterInstallation {
+    if (self.reachability.currentReachabilityStatus != NotReachable && !self.isBusy && self.isQueued) {
+        [self makeInstallation];
+    }
+}
+
 - (void)makeInstallation {
     self.isBusy = YES;
     self.isQueued = NO;
@@ -70,7 +79,9 @@
                 self.isBusy = NO;
                 if (error) {
                     self.isQueued = YES;
+                    NITLogW(LOGTAG, @"Update installation failure");
                 } else {
+                    NITLogI(LOGTAG, @"Update installation registered");
                     if (self.isQueued) {
                         self.isQueued = NO;
                         [self makeInstallation];
@@ -83,9 +94,11 @@
             [self handleResponseWithJsonApi:json error:error completionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
                 self.isBusy = NO;
                 if (error) {
+                    NITLogW(LOGTAG, @"New installation failure");
                     self.isQueued = YES;
                 } else {
                     if (self.isQueued) {
+                        NITLogD(LOGTAG, @"New installation registered");
                         self.isQueued = NO;
                         [self makeInstallation];
                     }

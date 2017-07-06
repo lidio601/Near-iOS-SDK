@@ -20,6 +20,7 @@
 - (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager reachability:(Reachability* _Nonnull)reachability;
 
 - (void)registerInstallation;
+- (void)shouldRegisterInstallation;
 - (BOOL)isQueued;
 
 @end

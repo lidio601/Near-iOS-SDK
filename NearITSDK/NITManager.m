@@ -454,6 +454,7 @@
 // MARK: - Application state
 
 - (void)applicationDidBeacomActive:(NSNotification*)notification {
+    [self.profile.installation shouldRegisterInstallation];
     if (self.lastBluetoothState != self.bluetoothManager.state) {
         self.profile.installation.bluetoothState = self.lastBluetoothState;
         [self.profile.installation registerInstallation];
