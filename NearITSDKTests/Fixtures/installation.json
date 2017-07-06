@@ -1,0 +1,17 @@
+{
+    "data": {
+        "id": "bbaa70c1-9542-4c43-b713-721bcf78fdc6",
+        "type": "installations",
+        "attributes": {
+            "platform": "ios",
+            "platform_version": "6",
+            "sdk_version": "4",
+            "device_identifier": "f62db080-b65e-436d-87ad-b318bb6ae266",
+            "app_id": "571aae6a-ae36-4569-98d5-8ef0bc1acd83",
+            "profile_id": "2467639c-afd6-4a34-9d01-4698ceaf1a09",
+            "bluetooth": false,
+            "location": false,
+            "revoked": false
+        }
+    }
+}

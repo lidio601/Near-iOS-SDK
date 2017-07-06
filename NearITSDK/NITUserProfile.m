@@ -52,7 +52,7 @@
             if (resource.ID) {
                 self.configuration.profileId = resource.ID;
                 if (handler) {
-                    [self.installation registerInstallationWithCompletionHandler:nil];
+                    [self.installation registerInstallation];
                     handler(resource.ID, nil);
                 }
             } else {
@@ -130,12 +130,12 @@
 
 - (void)resetProfile {
     self.configuration.profileId = nil;
-    [self.installation registerInstallationWithCompletionHandler:nil];
+    [self.installation registerInstallation];
 }
 
 - (void)setProfileId:(NSString *)profileId {
     self.configuration.profileId = profileId;
-    [self.installation registerInstallationWithCompletionHandler:nil];
+    [self.installation registerInstallation];
 }
 
 @end
