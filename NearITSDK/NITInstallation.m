@@ -37,11 +37,17 @@
 }
 
 - (void)registerInstallationWithCompletionHandler:(void (^)(NSString * _Nullable installationId, NSError * _Nullable error))handler {
-    
     NSString *realInstallationId = [[self configuration] installationId];
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
     
-    [jsonApi setDataWithResourceObject:[self installationResourceWithInstallationId:realInstallationId]];
+    NITJSONAPIResource *resource = [self installationResourceWithInstallationId:realInstallationId];
+    if (resource) {
+        [jsonApi setDataWithResourceObject:resource];
+    } else {
+        NSError *newError = [[NSError alloc] initWithDomain:NITInstallationErrorDomain code:3 userInfo:@{NSLocalizedDescriptionKey:@"Installation resource not created"}];
+        handler(nil, newError);
+        return;
+    }
     
     if (realInstallationId) {
         [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] updateInstallationWithJsonApi:jsonApi installationId:realInstallationId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
@@ -64,6 +70,10 @@
 
 - (NITJSONAPIResource*)installationResourceWithInstallationId:(NSString*)installationId {
     NITConfiguration *config = [self configuration];
+    
+    if(config.profileId == nil) {
+        return nil;
+    }
     
     NITJSONAPIResource *resource = [[NITJSONAPIResource alloc] init];
     if(installationId) {
