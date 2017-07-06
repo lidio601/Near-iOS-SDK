@@ -13,6 +13,7 @@
 #import "NITNetworkProvider.h"
 #import "NITConfiguration.h"
 #import "NITConstants.h"
+#import "Reachability.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <CoreLocation/CoreLocation.h>
 
@@ -20,23 +21,38 @@
 
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) id<NITNetworkManaging> networkManager;
-@property (nonatomic, strong) CBCentralManager *bluetoothManager;
+@property (nonatomic, strong) Reachability *reachability;
+@property (nonatomic) BOOL isBusy;
+@property (nonatomic) BOOL isQueued;
 
 @end
 
 @implementation NITInstallation
 
-- (instancetype)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager {
+- (instancetype)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager reachability:(Reachability * _Nonnull)reachability {
     self = [super init];
     if (self) {
         self.configuration = configuration;
         self.networkManager = networkManager;
-        self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:nil queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey : [NSNumber numberWithBool:NO]}];
+        self.reachability = reachability;
+        self.bluetoothState = CBManagerStateUnknown;
+        self.isBusy = NO;
+        self.isQueued = NO;
     }
     return self;
 }
 
-- (void)registerInstallationWithCompletionHandler:(void (^)(NSString * _Nullable installationId, NSError * _Nullable error))handler {
+- (void)registerInstallation {
+    if (self.reachability.currentReachabilityStatus != NotReachable && !self.isBusy) {
+        [self makeInstallation];
+    } else { // Set installation as queued
+        self.isQueued = YES;
+    }
+}
+
+- (void)makeInstallation {
+    self.isBusy = YES;
+    self.isQueued = NO;
     NSString *realInstallationId = [[self configuration] installationId];
     NITJSONAPI *jsonApi = [[NITJSONAPI alloc] init];
     
@@ -44,24 +60,35 @@
     if (resource) {
         [jsonApi setDataWithResourceObject:resource];
     } else {
-        NSError *newError = [[NSError alloc] initWithDomain:NITInstallationErrorDomain code:3 userInfo:@{NSLocalizedDescriptionKey:@"Installation resource not created"}];
-        handler(nil, newError);
+        self.isBusy = NO;
         return;
     }
     
     if (realInstallationId) {
         [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] updateInstallationWithJsonApi:jsonApi installationId:realInstallationId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
             [self handleResponseWithJsonApi:json error:error completionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
-                if (handler) {
-                    handler(installationId, error);
+                self.isBusy = NO;
+                if (error) {
+                    self.isQueued = YES;
+                } else {
+                    if (self.isQueued) {
+                        self.isQueued = NO;
+                        [self makeInstallation];
+                    }
                 }
             }];
         }];
     } else {
         [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] newInstallationWithJsonApi:jsonApi] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
             [self handleResponseWithJsonApi:json error:error completionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
-                if (handler) {
-                    handler(installationId, error);
+                self.isBusy = NO;
+                if (error) {
+                    self.isQueued = YES;
+                } else {
+                    if (self.isQueued) {
+                        self.isQueued = NO;
+                        [self makeInstallation];
+                    }
                 }
             }];
         }];
@@ -99,7 +126,7 @@
         [resource addAttributeObject:config.deviceToken forKey:@"device_identifier"];
     }
     
-    if (self.bluetoothManager.state == CBManagerStatePoweredOn) {
+    if (self.bluetoothState == CBManagerStatePoweredOn) {
         [resource addAttributeObject:[NSNumber numberWithBool:YES] forKey:@"bluetooth"];
     } else {
         [resource addAttributeObject:[NSNumber numberWithBool:NO] forKey:@"bluetooth"];

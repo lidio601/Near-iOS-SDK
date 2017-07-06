@@ -54,6 +54,7 @@
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) CBCentralManager *bluetoothManager;
 @property (nonatomic, strong) NITNotificationProcessor *notificationProcessor;
+@property (nonatomic, strong) Reachability *internetReachability;
 @property (nonatomic) CBManagerState lastBluetoothState;
 @property (nonatomic) BOOL started;
 
@@ -96,10 +97,11 @@
         self.locationManager = locationManager;
         self.bluetoothManager = bluetoothManager;
         self.lastBluetoothState = self.bluetoothManager.state;
+        self.internetReachability = [Reachability reachabilityForInternetConnection];
         
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
         
-        NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager];
+        NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager reachability:self.internetReachability];
         self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation];
         [self.cacheManager setAppId:[self.configuration appId]];
         [self pluginSetup];
@@ -139,7 +141,7 @@
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     NITDateManager *dateManager = [[NITDateManager alloc] init];
     NITRecipeHistory *recipeHistory = [[NITRecipeHistory alloc] initWithCacheManager:self.cacheManager dateManager:dateManager];
-    self.trackManager = [[NITTrackManager alloc] initWithNetworkManager:self.networkManager cacheManager:self.cacheManager reachability:[Reachability reachabilityForInternetConnection] notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:dateManager];
+    self.trackManager = [[NITTrackManager alloc] initWithNetworkManager:self.networkManager cacheManager:self.cacheManager reachability:self.internetReachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:dateManager];
     NITCooldownValidator *cooldownValidator = [[NITCooldownValidator alloc] initWithRecipeHistory:recipeHistory dateManager:dateManager];
     NITScheduleValidator *scheduleValidator = [[NITScheduleValidator alloc] initWithDateManager:dateManager];
     NITRecipeValidationFilter *recipeValidationFilter = [[NITRecipeValidationFilter alloc] initWithValidators:@[cooldownValidator, scheduleValidator]];
@@ -214,7 +216,7 @@
 - (void)setDeviceTokenWithData:(NSData *)token {
     NSString *tokenString = [[[[token description] stringByReplacingOccurrencesOfString: @"<" withString: @""] stringByReplacingOccurrencesOfString: @">" withString: @""] stringByReplacingOccurrencesOfString: @" " withString: @""];
     [self.configuration setDeviceToken:tokenString];
-    [self.profile.installation registerInstallationWithCompletionHandler:nil];
+    [self.profile.installation registerInstallation];
 }
 
 /**
@@ -453,13 +455,8 @@
 
 - (void)applicationDidBeacomActive:(NSNotification*)notification {
     if (self.lastBluetoothState != self.bluetoothManager.state) {
-        [self.profile.installation registerInstallationWithCompletionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
-            if (error) {
-                NITLogE(LOGTAG, @"Failed to register installation due to bluetooth state change (didBecomeActive)");
-            } else {
-                NITLogD(LOGTAG, @"Successful register installation due to bluetooth state change (didBecomeActive)");
-            }
-        }];
+        self.profile.installation.bluetoothState = self.lastBluetoothState;
+        [self.profile.installation registerInstallation];
     }
 }
 
@@ -469,13 +466,8 @@
     NITLogD(LOGTAG, @"Bluetooth state change: %@", [NITUtils stringFromBluetoothState:central.state]);
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive || [[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
         self.lastBluetoothState = central.state;
-        [self.profile.installation registerInstallationWithCompletionHandler:^(NSString * _Nullable installationId, NSError * _Nullable error) {
-            if (error) {
-                NITLogE(LOGTAG, @"Failed to register installation due to bluetooth state change");
-            } else {
-                NITLogD(LOGTAG, @"Successful register installation due to bluetooth state change");
-            }
-        }];
+        self.profile.installation.bluetoothState = self.lastBluetoothState;
+        [self.profile.installation registerInstallation];
     }
 }
 
