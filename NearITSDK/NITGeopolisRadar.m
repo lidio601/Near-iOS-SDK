@@ -44,7 +44,6 @@
         self.visitedNodes = [[NSMutableArray alloc] init];
         self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
         self.locationManager.delegate = self;
-        [self.locationManager requestLocation];
         self.started = NO;
     }
     return self;
@@ -115,19 +114,16 @@
 - (void)locationTimerFired:(NSTimer*)timer {
     self.locationTimerRetry++;
     NITLogD(@"LocationTimer", @"Entered in timer: retry %d", self.locationTimerRetry);
-    /* if (!self.stepResponse) {
+    if (self.locationTimerRetry >= MAX_LOCATION_TIMER_RETRY) {
+        NITLogW(@"LocationTimer", @"MAX_LOCATION_TIMER_RETRY reached");
+        [self.locationTimer invalidate];
+    } else if (!self.stepResponse) {
         NITLogW(@"LocationTimer", @"Request step response by timer");
         [self.locationManager requestLocation];
         [self requestStateForRoots];
     } else {
         [self.locationTimer invalidate];
         NITLogD(@"LocationTimer", @"Invalidate timer due to a successful state");
-    } */
-    if (self.locationTimerRetry >= MAX_LOCATION_TIMER_RETRY) {
-        NITLogW(@"LocationTimer", @"MAX_LOCATION_TIMER_RETRY reached");
-        [self.locationTimer invalidate];
-    } else {
-        [self.locationManager requestLocation];
     }
 }
 
@@ -297,6 +293,14 @@
         return YES;
     }
     return NO;
+}
+
+- (void)requestStateForRoots {
+    NSArray<NITNode*> *roots = [self.nodesManager roots];
+    for (NITNode *node in roots) {
+        CLRegion *region = [node createRegion];
+        [self.locationManager requestStateForRegion:region];
+    }
 }
 
 // MARK: - Trigger

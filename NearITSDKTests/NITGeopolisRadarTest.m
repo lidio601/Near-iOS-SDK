@@ -112,18 +112,64 @@
     NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
     NSTimer *mockTimer = mock([NSTimer class]);
     radar.stubLocationTimer = mockTimer;
-    [verifyCount(self.locationManager, times(1)) requestLocation];
-    [radar start];
     
+    NITNode *node = mock([NITGeofenceNode class]);
+    [given(node.ID) willReturn:ID_R1];
+    CLRegion *region = [self makeMockRegionWithIdentifier:ID_R1];
+    [given([node createRegion]) willReturn:region];
+    [given([self.nodesManagerOne roots]) willReturn:@[node]];
+    
+    [verifyCount(self.locationManager, never()) requestLocation];
+    [radar start];
+    [verifyCount(self.locationManager, times(1)) requestStateForRegion:anything()];
+    
+    // 1st fire
     [radar fireLocationTimer];
     [verifyCount(self.locationManager, times(1)) requestLocation];
     [verifyCount(mockTimer, never()) invalidate];
+    [verifyCount(self.locationManager, times(1)) requestStateForRegion:anything()];
+    
+    // 2nd fire
     [radar fireLocationTimer];
     [verifyCount(self.locationManager, times(1)) requestLocation];
     [verifyCount(mockTimer, never()) invalidate];
+    [verifyCount(self.locationManager, times(1)) requestStateForRegion:anything()];
+    
+    // 3rd fire (stop)
     [radar fireLocationTimer];
     [verifyCount(self.locationManager, never()) requestLocation];
     [verifyCount(mockTimer, times(1)) invalidate];
+    [verifyCount(self.locationManager, never()) requestStateForRegion:anything()];
+}
+
+- (void)testLocationTimerStopForGeofenceInside {
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    NSTimer *mockTimer = mock([NSTimer class]);
+    radar.stubLocationTimer = mockTimer;
+    
+    NITNode *node = mock([NITGeofenceNode class]);
+    [given(node.ID) willReturn:ID_R1];
+    CLRegion *region = [self makeMockRegionWithIdentifier:ID_R1];
+    [given([node createRegion]) willReturn:region];
+    [given([self.nodesManagerOne roots]) willReturn:@[node]];
+    
+    [verifyCount(self.locationManager, never()) requestLocation];
+    [radar start];
+    [verifyCount(self.locationManager, times(1)) requestStateForRegion:anything()];
+    
+    // 1st fire, should continue
+    [radar fireLocationTimer];
+    [verifyCount(self.locationManager, times(1)) requestLocation];
+    [verifyCount(mockTimer, never()) invalidate];
+    [verifyCount(self.locationManager, times(1)) requestStateForRegion:anything()];
+    
+    [radar simulateDidDetermineStateWithRegion:[self makeMockRegionWithIdentifier:ID_R1] state:CLRegionStateInside];
+    
+    // 2nd fire, should stop for Geofence enter (timer invalidate)
+    [radar fireLocationTimer];
+    [verifyCount(self.locationManager, never()) requestLocation];
+    [verifyCount(mockTimer, times(1)) invalidate];
+    [verifyCount(self.locationManager, never()) requestStateForRegion:anything()];
 }
 
 // MARK: - Location Manager
