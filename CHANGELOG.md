@@ -1,3 +1,18 @@
+0.9.38 Release notes (2017-07-06)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes a problem with the SDK installation process.
+
 0.9.37 Release notes (2017-07-05)
 =============================================================
 
