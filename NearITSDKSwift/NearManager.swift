@@ -29,6 +29,14 @@ public final class NearManager: NSObject, NITManagerDelegate {
             return manager.profileId()
         }
     }
+    public var showBackgroundNotification: Bool {
+        get {
+            return manager.showBackgroundNotification
+        }
+        set(show) {
+            manager.showBackgroundNotification = show
+        }
+    }
     
     public init(apiKey: String) {
         super.init()

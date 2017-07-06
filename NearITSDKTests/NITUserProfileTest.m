@@ -41,9 +41,6 @@
     };
     
     self.installation = mock([NITInstallation class]);
-    [givenVoid([self.installation registerInstallationWithCompletionHandler:anything()]) willDo:^id _Nonnull(NSInvocation * _Nonnull invocation) {
-        return nil;
-    }];
 }
 
 - (void)tearDown {
@@ -58,7 +55,7 @@
     
     NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
     [profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
-        [verifyCount(self.installation, times(1)) registerInstallationWithCompletionHandler:anything()];
+        [verifyCount(self.installation, times(1)) registerInstallation];
         XCTAssertNil(error);
         [verifyCount(self.configuration, times(1)) setProfileId:@"user-profile-id"];
         
@@ -72,7 +69,7 @@
     self.configuration.profileId = PROFILEID;
     NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
     [profile resetProfile];
-    [verifyCount(self.installation, times(1)) registerInstallationWithCompletionHandler:anything()];
+    [verifyCount(self.installation, times(1)) registerInstallation];
     [verifyCount(self.configuration, times(1)) setProfileId:nilValue()];
 }
 
@@ -80,7 +77,7 @@
     XCTAssertNil(self.configuration.profileId);
     NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
     [profile setProfileId:PROFILEID];
-    [verifyCount(self.installation, times(1)) registerInstallationWithCompletionHandler:anything()];
+    [verifyCount(self.installation, times(1)) registerInstallation];
     [verifyCount(self.configuration, times(1)) setProfileId:PROFILEID];
 }
 

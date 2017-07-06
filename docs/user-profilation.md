@@ -63,10 +63,10 @@ NSDictionary<NSString*, id> *values = @{@"gender" : @"M", @"age" : [NSNumber num
 }];
 ```
 
-## Link external data to a NearIT profile
+## Link NearIT profiles with an external User Database
 
-You might want to keep a reference between the data hosted on your system and NearIT data.
-You can do it by setting the user ID explicitly. 
+You might want to link users in your CRM database with NearIT profiles. You can do it by storing the NearIT profileID in your CRM database. This way, you can link our analytics with your own user base and associate all the devices of an user to the same NearIT profile.
+Furthermore, if you detect that your user already has a NearIT profileID in your CRM database, you can manually set it on a local app installation with the method:
 ```swift
 // Swift
 manager.setProfile(id: "<your profile id>")
@@ -79,5 +79,4 @@ manager.setProfile(id: "<your profile id>")
 
 You can then set the relevant user-data to this profile with the aforementioned methods.
 
-This way you can allow the user to share its profile along different installations of the app.
 Please keep in mind that you will be responsible of storing our profile identifier in your system.

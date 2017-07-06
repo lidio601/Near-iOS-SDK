@@ -102,6 +102,8 @@
 		134F99901F0B9DB600B464B4 /* NITGeopolisRadar.m in Sources */ = {isa = PBXBuildFile; fileRef = 134F998E1F0B9DB600B464B4 /* NITGeopolisRadar.m */; };
 		134F99921F0BA02300B464B4 /* NITGeopolisRadarTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 134F99911F0BA02300B464B4 /* NITGeopolisRadarTest.m */; };
 		134F99951F0BA41700B464B4 /* NITStubGeopolisRadar.m in Sources */ = {isa = PBXBuildFile; fileRef = 134F99941F0BA41700B464B4 /* NITStubGeopolisRadar.m */; };
+		134F60771F0E4947003CCD77 /* NITInstallationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 134F60761F0E4947003CCD77 /* NITInstallationTest.m */; };
+		134F607A1F0E4E77003CCD77 /* installation.json in Resources */ = {isa = PBXBuildFile; fileRef = 134F60791F0E4E77003CCD77 /* installation.json */; };
 		1352CA6E1E7807FE00C0E98E /* NearITSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1352CA641E7807FE00C0E98E /* NearITSDK.framework */; };
 		1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1352CA721E7807FE00C0E98E /* NearITSDKTests.m */; };
 		1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 1352CA671E7807FE00C0E98E /* NearITSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -318,6 +320,8 @@
 		134F99911F0BA02300B464B4 /* NITGeopolisRadarTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITGeopolisRadarTest.m; sourceTree = "<group>"; };
 		134F99931F0BA41700B464B4 /* NITStubGeopolisRadar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITStubGeopolisRadar.h; sourceTree = "<group>"; };
 		134F99941F0BA41700B464B4 /* NITStubGeopolisRadar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITStubGeopolisRadar.m; sourceTree = "<group>"; };
+		134F60761F0E4947003CCD77 /* NITInstallationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITInstallationTest.m; sourceTree = "<group>"; };
+		134F60791F0E4E77003CCD77 /* installation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = installation.json; sourceTree = "<group>"; };
 		1352CA641E7807FE00C0E98E /* NearITSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NearITSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1352CA671E7807FE00C0E98E /* NearITSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NearITSDK.h; sourceTree = "<group>"; };
 		1352CA681E7807FE00C0E98E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -635,6 +639,7 @@
 		1349EEAA1E7948CD000B0666 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				134F60781F0E4E11003CCD77 /* Installation */,
 				1374E1011EAA333E00D613A5 /* Track */,
 				1374E0DF1EA8F0B500D613A5 /* Manager */,
 				135CD79C1E9D0952005C75A4 /* User Profile */,
@@ -699,6 +704,14 @@
 				134F998E1F0B9DB600B464B4 /* NITGeopolisRadar.m */,
 			);
 			name = Radar;
+			sourceTree = "<group>";
+		};
+		134F60781F0E4E11003CCD77 /* Installation */ = {
+			isa = PBXGroup;
+			children = (
+				134F60791F0E4E77003CCD77 /* installation.json */,
+			);
+			name = Installation;
 			sourceTree = "<group>";
 		};
 		1352CA5A1E7807FD00C0E98E = {
@@ -780,6 +793,7 @@
 				13AB72911F015A3800FE14D9 /* NITZipTest.m */,
 				130CCF9B1F02690D00876327 /* NITNotificationProcessorTest.m */,
 				134F99911F0BA02300B464B4 /* NITGeopolisRadarTest.m */,
+				134F60761F0E4947003CCD77 /* NITInstallationTest.m */,
 				1352CA741E7807FE00C0E98E /* Info.plist */,
 			);
 			path = NearITSDKTests;
@@ -1300,6 +1314,7 @@
 				1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */,
 				135CD7A21E9E4276005C75A4 /* config_22.json in Resources */,
 				1319CED51EA0B987009046C5 /* response_feedback_event.json in Resources */,
+				134F607A1F0E4E77003CCD77 /* installation.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1393,6 +1408,7 @@
 				1352CA731E7807FE00C0E98E /* NearITSDKTests.m in Sources */,
 				13AB72921F015A3800FE14D9 /* NITZipTest.m in Sources */,
 				134E2ED31EF2BAE600A2B1F0 /* NITTimeBandEvaluatorTest.m in Sources */,
+				134F60771F0E4947003CCD77 /* NITInstallationTest.m in Sources */,
 				130FB3811EEE9309008B24C1 /* NITRecipeHistoryTest.m in Sources */,
 				1374E0C11EA744FB00D613A5 /* NITFakeLocationManager.m in Sources */,
 				135CD7961E9B7621005C75A4 /* NITNetworkMockManger.m in Sources */,

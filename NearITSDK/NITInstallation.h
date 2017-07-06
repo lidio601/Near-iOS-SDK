@@ -8,13 +8,19 @@
 
 #import <Foundation/Foundation.h>
 #import "NITNetworkManaging.h"
+#import <CoreBluetooth/CoreBluetooth.h>
 
 @class NITConfiguration;
+@class Reachability;
 
 @interface NITInstallation : NSObject
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager;
+@property (nonatomic) CBManagerState bluetoothState;
 
-- (void)registerInstallationWithCompletionHandler:(void (^_Nullable)(NSString* _Nullable installationId, NSError* _Nullable error))handler;
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager reachability:(Reachability* _Nonnull)reachability;
+
+- (void)registerInstallation;
+- (void)shouldRegisterInstallation;
+- (BOOL)isQueued;
 
 @end
