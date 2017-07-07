@@ -12,6 +12,7 @@
 #import "NITJSONAPIResource.h"
 
 #define NITApiVersion @"2"
+#define NITNearVersion @"1"
 
 static NITNetworkProvider *sharedProvider;
 
@@ -219,6 +220,7 @@ static NITNetworkProvider *sharedProvider;
     [request setValue:@"application/vnd.api+json" forHTTPHeaderField:@"Content-Type"];
     [request setValue:@"application/vnd.api+json" forHTTPHeaderField:@"Accept"];
     [request setValue:NITApiVersion forHTTPHeaderField:@"X-API-Version"];
+    [request setValue:NITNearVersion forHTTPHeaderField:@"X-Near-Version"];
 }
 
 @end

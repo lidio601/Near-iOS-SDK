@@ -18,7 +18,7 @@ extern NSString* _Nonnull const NITRecipeEngaged;
 @property (nonatomic, strong) NSString * _Nullable name;
 @property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable notification;
 @property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable labels;
-@property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable scheduling;
+@property (nonatomic, strong) NSArray<NSDictionary<NSString*, id>*> * _Nullable scheduling;
 @property (nonatomic, strong) NSDictionary<NSString*, id> * _Nullable cooldown;
 @property (nonatomic, strong) NSString * _Nonnull pulsePluginId;
 @property (nonatomic, strong) NSString * _Nonnull reactionPluginId;

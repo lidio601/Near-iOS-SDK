@@ -71,4 +71,12 @@
     return jsonApi;
 }
 
+- (NSDictionary *)jsonWithContentsOfFile:(NSString *)filename {
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSString *path = [bundle pathForResource:filename ofType:@"json"];
+    NSData *jsonData = [NSData dataWithContentsOfFile:path];
+    
+    return [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
+}
+
 @end

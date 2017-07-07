@@ -70,6 +70,10 @@
         NSString *minutesSplit = [split objectAtIndex:1];
         [newComponents setHour:[hourSplit integerValue]];
         [newComponents setMinute:[minutesSplit integerValue]];
+        if ([split count] > 2) {
+            NSString *secondsSplit = [split objectAtIndex:2];
+            [newComponents setSecond:[secondsSplit integerValue]];
+        }
     }
     
     return [calendar dateFromComponents:newComponents];

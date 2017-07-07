@@ -18,6 +18,7 @@
 #import <NearITSDK/NITFeedback.h>
 #import <NearITSDK/NITFeedbackEvent.h>
 #import <NearITSDK/NITCustomJSON.h>
+#import <NearITSDK/NITSimpleNotification.h>
 #import <NearITSDK/NITEvent.h>
 #import <NearITSDK/NITAudio.h>
 #import <NearITSDK/NITUpload.h>
