@@ -1,3 +1,18 @@
+0.9.39 Release notes (2017-07-07)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Includes NITSimpleNotification type for Objective-C.
+
 0.9.38 Release notes (2017-07-06)
 =============================================================
 
