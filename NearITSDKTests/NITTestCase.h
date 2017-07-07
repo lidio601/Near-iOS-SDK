@@ -22,5 +22,6 @@
 - (NITFeedback*)feedbackWithContentsOfFile:(NSString*)filename;
 - (NSArray<NITContent*>*)contentsWithContentsOfFile:(NSString*)filename;
 - (NITJSONAPI*)jsonApiWithContentsOfFile:(NSString*)filename;
+- (NSDictionary*)jsonWithContentsOfFile:(NSString*)filename;
 
 @end

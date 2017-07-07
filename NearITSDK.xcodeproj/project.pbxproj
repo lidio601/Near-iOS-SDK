@@ -128,6 +128,8 @@
 		135A708D1E85448E00D4C9EC /* NITContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 135A708B1E85448E00D4C9EC /* NITContent.m */; };
 		135A708F1E8547AF00D4C9EC /* content_recipe.json in Resources */ = {isa = PBXBuildFile; fileRef = 135A708E1E8547AF00D4C9EC /* content_recipe.json */; };
 		135A70971E8555CB00D4C9EC /* response_content_reaction.json in Resources */ = {isa = PBXBuildFile; fileRef = 135A70961E8555CB00D4C9EC /* response_content_reaction.json */; };
+		135BB64B1EFA51B6005DB5C9 /* schedule_always_valid_edge_case.json in Resources */ = {isa = PBXBuildFile; fileRef = 135BB64A1EFA51B6005DB5C9 /* schedule_always_valid_edge_case.json */; };
+		135BB64D1EFA5B64005DB5C9 /* schedule_empty_days_schedule.json in Resources */ = {isa = PBXBuildFile; fileRef = 135BB64C1EFA5B64005DB5C9 /* schedule_empty_days_schedule.json */; };
 		135BB64F1EFA5DF0005DB5C9 /* NITReactionModelTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 135BB64E1EFA5DF0005DB5C9 /* NITReactionModelTest.m */; };
 		135CD7791E94F71E005C75A4 /* NITEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 135CD7771E94F71E005C75A4 /* NITEvent.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		135CD77A1E94F71E005C75A4 /* NITEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 135CD7781E94F71E005C75A4 /* NITEvent.m */; };
@@ -150,6 +152,11 @@
 		1374D4A31F0A2CA5002248D4 /* single_gf_tags.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374D4A21F0A2CA5002248D4 /* single_gf_tags.json */; };
 		1374D4A71F0A33AB002248D4 /* single_gf_tags_null.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374D4A61F0A33AB002248D4 /* single_gf_tags_null.json */; };
 		1374D4A91F0A3B0E002248D4 /* recipe_pulse_bundle_tags.json in Resources */ = {isa = PBXBuildFile; fileRef = 1374D4A81F0A3B0E002248D4 /* recipe_pulse_bundle_tags.json */; };
+		13746D141EF7D47600D09183 /* schedule_complete_coverage_validity.json in Resources */ = {isa = PBXBuildFile; fileRef = 13746D131EF7D47600D09183 /* schedule_complete_coverage_validity.json */; };
+		13746D161EF7D69B00D09183 /* schedule_only_during_jun_2017.json in Resources */ = {isa = PBXBuildFile; fileRef = 13746D151EF7D69B00D09183 /* schedule_only_during_jun_2017.json */; };
+		13746D181EF7DCB100D09183 /* schedule_only_mon_wed_thu_sat.json in Resources */ = {isa = PBXBuildFile; fileRef = 13746D171EF7DCB100D09183 /* schedule_only_mon_wed_thu_sat.json */; };
+		13746D1A1EF7DEE200D09183 /* schedule_various_daily_timeframes.json in Resources */ = {isa = PBXBuildFile; fileRef = 13746D191EF7DEE200D09183 /* schedule_various_daily_timeframes.json */; };
+		13746D1C1EF7E5E800D09183 /* schedule_multiple_validity_periods.json in Resources */ = {isa = PBXBuildFile; fileRef = 13746D1B1EF7E5E800D09183 /* schedule_multiple_validity_periods.json */; };
 		1374E09A1EA5F4FA00D613A5 /* NearITSDKSwift.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 1374E0991EA5F4FA00D613A5 /* NearITSDKSwift.podspec */; };
 		1374E0C11EA744FB00D613A5 /* NITFakeLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0C01EA744FB00D613A5 /* NITFakeLocationManager.m */; };
 		1374E0D21EA76B7400D613A5 /* NITTestBeacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 1374E0D11EA76B7400D613A5 /* NITTestBeacon.m */; };
@@ -348,6 +355,8 @@
 		135A708B1E85448E00D4C9EC /* NITContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITContent.m; sourceTree = "<group>"; };
 		135A708E1E8547AF00D4C9EC /* content_recipe.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = content_recipe.json; sourceTree = "<group>"; };
 		135A70961E8555CB00D4C9EC /* response_content_reaction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = response_content_reaction.json; sourceTree = "<group>"; };
+		135BB64A1EFA51B6005DB5C9 /* schedule_always_valid_edge_case.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_always_valid_edge_case.json; sourceTree = "<group>"; };
+		135BB64C1EFA5B64005DB5C9 /* schedule_empty_days_schedule.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_empty_days_schedule.json; sourceTree = "<group>"; };
 		135BB64E1EFA5DF0005DB5C9 /* NITReactionModelTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITReactionModelTest.m; sourceTree = "<group>"; };
 		135BB6521EFBC0D0005DB5C9 /* local-background-notification.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "local-background-notification.md"; sourceTree = "<group>"; };
 		135BB6541EFBD2E7005DB5C9 /* apns_walkthrough.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = apns_walkthrough.md; sourceTree = "<group>"; };
@@ -395,6 +404,11 @@
 		1374D4A21F0A2CA5002248D4 /* single_gf_tags.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = single_gf_tags.json; sourceTree = "<group>"; };
 		1374D4A61F0A33AB002248D4 /* single_gf_tags_null.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = single_gf_tags_null.json; sourceTree = "<group>"; };
 		1374D4A81F0A3B0E002248D4 /* recipe_pulse_bundle_tags.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recipe_pulse_bundle_tags.json; sourceTree = "<group>"; };
+		13746D131EF7D47600D09183 /* schedule_complete_coverage_validity.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_complete_coverage_validity.json; sourceTree = "<group>"; };
+		13746D151EF7D69B00D09183 /* schedule_only_during_jun_2017.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_only_during_jun_2017.json; sourceTree = "<group>"; };
+		13746D171EF7DCB100D09183 /* schedule_only_mon_wed_thu_sat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_only_mon_wed_thu_sat.json; sourceTree = "<group>"; };
+		13746D191EF7DEE200D09183 /* schedule_various_daily_timeframes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_various_daily_timeframes.json; sourceTree = "<group>"; };
+		13746D1B1EF7E5E800D09183 /* schedule_multiple_validity_periods.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schedule_multiple_validity_periods.json; sourceTree = "<group>"; };
 		1374E0991EA5F4FA00D613A5 /* NearITSDKSwift.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NearITSDKSwift.podspec; sourceTree = "<group>"; };
 		1374E09B1EA5F5C500D613A5 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		1374E0BF1EA744FB00D613A5 /* NITFakeLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITFakeLocationManager.h; sourceTree = "<group>"; };
@@ -528,6 +542,7 @@
 		132296E01E8CF12700AE6EFC /* Recipes Manager */ = {
 			isa = PBXGroup;
 			children = (
+				13746D121EF7D45C00D09183 /* Validation */,
 				132296E11E8CF14600AE6EFC /* online_recipe.json */,
 				132296E31E8CFA1F00AE6EFC /* recipes.json */,
 				132296EC1E8D046500AE6EFC /* response_online_recipe.json */,
@@ -951,6 +966,20 @@
 			name = Logging;
 			sourceTree = "<group>";
 		};
+		13746D121EF7D45C00D09183 /* Validation */ = {
+			isa = PBXGroup;
+			children = (
+				135BB64A1EFA51B6005DB5C9 /* schedule_always_valid_edge_case.json */,
+				13746D131EF7D47600D09183 /* schedule_complete_coverage_validity.json */,
+				13746D151EF7D69B00D09183 /* schedule_only_during_jun_2017.json */,
+				13746D171EF7DCB100D09183 /* schedule_only_mon_wed_thu_sat.json */,
+				13746D191EF7DEE200D09183 /* schedule_various_daily_timeframes.json */,
+				13746D1B1EF7E5E800D09183 /* schedule_multiple_validity_periods.json */,
+				135BB64C1EFA5B64005DB5C9 /* schedule_empty_days_schedule.json */,
+			);
+			name = Validation;
+			sourceTree = "<group>";
+		};
 		1374E0DF1EA8F0B500D613A5 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
@@ -1276,23 +1305,29 @@
 				137E38A91E8A6B16008E83E6 /* contents1.json in Resources */,
 				135A70841E85281F00D4C9EC /* simple_recipe.json in Resources */,
 				1327D8901E8266B700C6689E /* single_gf.json in Resources */,
+				13746D1A1EF7DEE200D09183 /* schedule_various_daily_timeframes.json in Resources */,
 				135CD79E1E9D0970005C75A4 /* response_create_new_profile.json in Resources */,
 				132296F11E8D078200AE6EFC /* response_coupon_evaluated_recipe.json in Resources */,
 				1322971F1E923BAE00AE6EFC /* cooldown_recipe.json in Resources */,
 				1327D88D1E8266B700C6689E /* empty_config.json in Resources */,
+				13746D1C1EF7E5E800D09183 /* schedule_multiple_validity_periods.json in Resources */,
 				135A70971E8555CB00D4C9EC /* response_content_reaction.json in Resources */,
+				13746D181EF7DCB100D09183 /* schedule_only_mon_wed_thu_sat.json in Resources */,
 				1349EEAC1E7948FA000B0666 /* jsonapi_sample1.json in Resources */,
 				1374D4A31F0A2CA5002248D4 /* single_gf_tags.json in Resources */,
 				132297191E8E4DF100AE6EFC /* feedback1.json in Resources */,
 				1374D4A71F0A33AB002248D4 /* single_gf_tags_null.json in Resources */,
 				135CD7A11E9E4276005C75A4 /* config_22.png in Resources */,
 				1374E1031EAA338900D613A5 /* track_response.json in Resources */,
+				135BB64B1EFA51B6005DB5C9 /* schedule_always_valid_edge_case.json in Resources */,
 				132297111E8E3BC200AE6EFC /* custom_jsons.json in Resources */,
 				1374E0E11EA8F0D500D613A5 /* fake_new_profile.json in Resources */,
 				132297061E8D362400AE6EFC /* response_feeback_reaction.json in Resources */,
 				132296E41E8CFA1F00AE6EFC /* recipes.json in Resources */,
 				132296ED1E8D046500AE6EFC /* response_online_recipe.json in Resources */,
+				135BB64D1EFA5B64005DB5C9 /* schedule_empty_days_schedule.json in Resources */,
 				135A708F1E8547AF00D4C9EC /* content_recipe.json in Resources */,
+				13746D141EF7D47600D09183 /* schedule_complete_coverage_validity.json in Resources */,
 				1374E0E51EA8F5F600D613A5 /* manager_config_22.json in Resources */,
 				132297131E8E3C7800AE6EFC /* response_custom_json_reaction.json in Resources */,
 				137857A81EB9D33500B2D73A /* content_reaction_mgr_22.json in Resources */,
@@ -1300,6 +1335,7 @@
 				1374D4A91F0A3B0E002248D4 /* recipe_pulse_bundle_tags.json in Resources */,
 				1327D8AB1E83E6A300C6689E /* beacon_areas_in_bg.json in Resources */,
 				1364A4D61EE566F5009F75FA /* manager_datapoint.json in Resources */,
+				13746D161EF7D69B00D09183 /* schedule_only_during_jun_2017.json in Resources */,
 				1327D88F1E8266B700C6689E /* multi_level_gf.json in Resources */,
 				135CD7A21E9E4276005C75A4 /* config_22.json in Resources */,
 				1319CED51EA0B987009046C5 /* response_feedback_event.json in Resources */,
