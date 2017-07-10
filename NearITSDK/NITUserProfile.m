@@ -66,40 +66,16 @@
 }
 
 - (void)setUserDataWithKey:(NSString*)key value:(NSString*)value completionHandler:(void (^)(NSError* error))handler {
-    if (self.configuration.profileId == nil) {
-        [self createNewProfileWithCompletionHandler:nil];
+    NSDictionary *dataPoint = @{@"key": key, @"value": value};
+    [self setBatchUserDataWithDictionary:dataPoint completionHandler:^(NSError * _Nullable error) {
         if (handler) {
-            NSError *newError = [[NSError alloc] initWithDomain:NITUserProfileErrorDomain code:3 userInfo:@{NSLocalizedDescriptionKey : @"Profile not found"}];
-            handler(newError);
-        }
-        return;
-    }
-    
-    NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
-    [attributes setObject:key forKey:@"key"];
-    if (value) {
-        [attributes setObject:value forKey:@"value"];
-    } else {
-        [attributes setObject:[NSNull null] forKey:@"value"];
-    }
-    NITJSONAPI *jsonApi = [NITJSONAPI jsonApiWithAttributes:attributes type:@"data_points"];
-    [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] setUserDataWithJsonApi:jsonApi profileId:self.configuration.profileId] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
-        if (error) {
-            if (handler) {
-                NSError *newError = [[NSError alloc] initWithDomain:NITUserProfileErrorDomain code:4 userInfo:@{NSLocalizedDescriptionKey : @"Data point error", NSUnderlyingErrorKey:error}];
-                handler(newError);
-            }
-        } else {
-            if (handler) {
-                handler(nil);
-            }
+            handler(error);
         }
     }];
 }
 
 - (void)setBatchUserDataWithDictionary:(NSDictionary<NSString*, id>*)valuesDictiornary completionHandler:(void (^)(NSError* error))handler {
     if (self.configuration.profileId == nil) {
-        [self createNewProfileWithCompletionHandler:nil];
         if (handler) {
             NSError *newError = [[NSError alloc] initWithDomain:NITUserProfileErrorDomain code:3 userInfo:@{NSLocalizedDescriptionKey : @"Profile not found"}];
             handler(newError);

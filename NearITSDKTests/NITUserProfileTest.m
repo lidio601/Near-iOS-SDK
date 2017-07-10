@@ -66,7 +66,7 @@
 }
 
 - (void)testResetProfile {
-    self.configuration.profileId = PROFILEID;
+    [given([self.configuration profileId]) willReturn:PROFILEID];
     NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
     [profile resetProfile];
     [verifyCount(self.installation, times(1)) registerInstallation];
@@ -79,6 +79,79 @@
     [profile setProfileId:PROFILEID];
     [verifyCount(self.installation, times(1)) registerInstallation];
     [verifyCount(self.configuration, times(1)) setProfileId:PROFILEID];
+}
+
+- (void)testSingleUserDataKey {
+    [given([self.configuration profileId]) willReturn:nil];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
+    
+    self.networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return [[NITJSONAPI alloc] init];
+    };
+    
+    XCTestExpectation *expWithError = [self expectationWithDescription:@"withError"];
+    [profile setUserDataWithKey:@"aKey" value:@"aValue" completionHandler:^(NSError * _Nullable error) {
+        XCTAssertNotNil(error); // Error should exists because profileId is nil
+        XCTAssertFalse(self.networkManager.isMockCalled);
+        [expWithError fulfill];
+    }];
+    
+    [given([self.configuration profileId]) willReturn:PROFILEID];
+    XCTestExpectation *expWithoutError = [self expectationWithDescription:@"withoutError"];
+    [profile setUserDataWithKey:@"aKey" value:@"aValue" completionHandler:^(NSError * _Nullable error) {
+        XCTAssertNil(error); // Error should exists because profileId is nil
+        XCTAssertTrue(self.networkManager.isMockCalled);
+        [expWithoutError fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void)testBatchUserDataKey {
+    [given([self.configuration profileId]) willReturn:nil];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
+    
+    self.networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return [[NITJSONAPI alloc] init];
+    };
+    
+    NSDictionary *dataPoints = @{@"key1" : @"value1", @"key2" : @"value2" };
+    
+    XCTestExpectation *expWithError = [self expectationWithDescription:@"withError"];
+    [profile setBatchUserDataWithDictionary:dataPoints completionHandler:^(NSError * _Nullable error) {
+        XCTAssertNotNil(error); // Error should exists because profileId is nil
+        XCTAssertFalse(self.networkManager.isMockCalled);
+        [expWithError fulfill];
+    }];
+    
+    [given([self.configuration profileId]) willReturn:PROFILEID];
+    XCTestExpectation *expWithoutError = [self expectationWithDescription:@"withoutError"];
+    [profile setBatchUserDataWithDictionary:dataPoints completionHandler:^(NSError * _Nullable error) {
+        XCTAssertNil(error); // Error should exists because profileId is nil
+        XCTAssertTrue(self.networkManager.isMockCalled);
+        [expWithoutError fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void)testBatchUserDataKeyWithErrorFromNetwork {
+    [given([self.configuration profileId]) willReturn:PROFILEID];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
+    
+    self.networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return nil; // The network failure (no data from network)
+    };
+    
+    NSDictionary *dataPoints = @{@"key1" : @"value1", @"key2" : @"value2" };
+    
+    XCTestExpectation *expWithError = [self expectationWithDescription:@"withError"];
+    [profile setBatchUserDataWithDictionary:dataPoints completionHandler:^(NSError * _Nullable error) {
+        XCTAssertNotNil(error); // Error should exists because of a network failure
+        [expWithError fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
 @end
