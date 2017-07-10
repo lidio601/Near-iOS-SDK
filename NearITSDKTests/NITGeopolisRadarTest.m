@@ -374,17 +374,23 @@
     NITNode *mon1 = mock([NITGeofenceNode class]);
     [given(mon1.ID) willReturn:ID_R1];
     [given([mon1 createRegion]) willReturn:[self makeMockRegionWithIdentifier:ID_R1]];
+    
+    NITNode *mon2 = mock([NITGeofenceNode class]);
+    [given(mon2.ID) willReturn:@"new2"];
+    [given([mon2 createRegion]) willReturn:[self makeMockRegionWithIdentifier:@"new2"]];
+    
     [given([self.nodesManagerOne nodeWithID:ID_R1]) willReturn:mon1];
-    [given([self.nodesManagerOne monitoredNodesOnExitWithId:ID_R1]) willReturn:@[mon1]];
+    [given([self.nodesManagerOne nodeWithID:@"new2"]) willReturn:mon2];
+    [given([self.nodesManagerOne monitoredNodesOnExitWithId:ID_R1]) willReturn:@[mon1, mon2]];
     [given([self.nodesManagerOne rangedNodesOnExitWithId:ID_R1]) willReturn:nil];
     NSSet<CLRegion*> *monitoredRegions = [[NSSet alloc] initWithObjects:region, monRegion1, monRegion2, nil];
     [given([self.locationManager monitoredRegions]) willReturn:monitoredRegions];
     
     [radar simulateDidDetermineStateWithRegion:region state:CLRegionStateOutside];
     
-    // Should not start a new monitoring and only stop the old two
-    [verifyCount(self.locationManager, never()) requestStateForRegion:anything()];
-    [verifyCount(self.locationManager, never()) startMonitoringForRegion:anything()];
+    // Should start a new monitoring (only mon2) and stop the old two (monRegion1, monRegion2)
+    [verifyCount(self.locationManager, times(1)) requestStateForRegion:anything()];
+    [verifyCount(self.locationManager, times(1)) startMonitoringForRegion:anything()];
     [verifyCount(self.locationManager, times(2)) stopMonitoringForRegion:anything()];
     [verifyCount(self.locationManager, never()) startRangingBeaconsInRegion:anything()];
     [verifyCount(self.locationManager, never()) stopMonitoringForRegion:anything()];
