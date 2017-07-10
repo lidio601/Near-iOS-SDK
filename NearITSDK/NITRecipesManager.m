@@ -154,7 +154,7 @@ NSString* const RecipesCacheKey = @"Recipes";
             trueCount++;
         }
     }
-    if (trueCount == tags.count) {
+    if (trueCount == recipeTags.count) {
         return YES;
     }
     return NO;
