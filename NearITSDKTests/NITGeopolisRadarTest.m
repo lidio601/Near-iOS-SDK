@@ -23,6 +23,12 @@
 #define ID_R2 @"R2"
 #define ID_A1 @"A1"
 
+@interface NITGeopolisRadar (Tests)
+
+- (BOOL)stepResponse;
+
+@end
+
 @interface NITGeopolisRadarTest : NITTestCase
 
 @property (nonatomic, strong) id<NITGeopolisRadarDelegate> delegate;
@@ -177,6 +183,7 @@
 - (void)testSimpleGeofenceDidDetermineInside {
     NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
     CLRegion *region = [self makeMockRegionWithIdentifier:ID_R1];
+    XCTAssertFalse([radar stepResponse]);
     
     NITNode *mon1 = mock([NITGeofenceNode class]);
     [given(mon1.ID) willReturn:ID_R1];
@@ -185,6 +192,7 @@
     [given([self.nodesManagerOne monitoredNodesOnEnterWithId:ID_R1]) willReturn:@[mon1]];
     [given([self.nodesManagerOne rangedNodesOnEnterWithId:ID_R1]) willReturn:nil];
     [radar simulateDidDetermineStateWithRegion:region state:CLRegionStateInside];
+    XCTAssertTrue([radar stepResponse]);
     
     [verifyCount(self.nodesManagerOne, times(1)) monitoredNodesOnEnterWithId:ID_R1];
     [verifyCount(self.nodesManagerOne, times(1)) rangedNodesOnEnterWithId:ID_R1];
@@ -205,6 +213,7 @@
     
     // The second determine state on the same region should not call any trigger
     [radar simulateDidDetermineStateWithRegion:region state:CLRegionStateInside];
+    XCTAssertTrue([radar stepResponse]);
     [verifyCount(self.delegate, never()) geopolisRadar:sameInstance(radar) didTriggerWithNode:sameInstance(mon1) event:NITRegionEventEnterPlace];
     [verifyCount(self.delegate, never()) geopolisRadar:sameInstance(radar) didTriggerWithNode:anything() event:NITRegionEventEnterArea];
     [verifyCount(self.delegate, never()) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventEnterArea];
@@ -253,6 +262,7 @@
 - (void)testSimpleGeofenceDidDetermineOutside {
     NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
     CLRegion *region = [self makeMockRegionWithIdentifier:ID_R1];
+    XCTAssertFalse([radar stepResponse]);
     
     NITNode *mon1 = mock([NITGeofenceNode class]);
     [given(mon1.ID) willReturn:ID_R1];
@@ -264,6 +274,7 @@
     
     // Test region outside without monitored regions, should "never" call
     [radar simulateDidDetermineStateWithRegion:region state:CLRegionStateOutside];
+    XCTAssertTrue([radar stepResponse]);
     
     [verifyCount(self.nodesManagerOne, never()) monitoredNodesOnExitWithId:ID_R1];
     [verifyCount(self.nodesManagerOne, never()) rangedNodesOnExitWithId:ID_R1];
@@ -283,6 +294,7 @@
     NSSet<CLRegion*> *monitoredRegions = [[NSSet alloc] initWithObjects:region, nil];
     [given([self.locationManager monitoredRegions]) willReturn:monitoredRegions];
     [radar simulateDidDetermineStateWithRegion:region state:CLRegionStateOutside];
+    XCTAssertTrue([radar stepResponse]);
     
     [verifyCount(self.nodesManagerOne, times(1)) monitoredNodesOnExitWithId:ID_R1];
     [verifyCount(self.nodesManagerOne, times(1)) rangedNodesOnExitWithId:ID_R1];
