@@ -1,4 +1,4 @@
-//
+ //
 //  NITGeopolisRadar.m
 //  NearITSDK
 //
@@ -34,13 +34,13 @@
 
 @implementation NITGeopolisRadar
 
-- (instancetype)initWithDelegate:(id<NITGeopolisRadarDelegate>)delegate nodesManager:(NITGeopolisNodesManager *)nodesManager locationManager:(CLLocationManager *)locationManager {
+- (instancetype)initWithDelegate:(id<NITGeopolisRadarDelegate>)delegate nodesManager:(NITGeopolisNodesManager *)nodesManager locationManager:(CLLocationManager *)locationManager beaconProximityManager:(NITBeaconProximityManager * _Nonnull)beaconProximity {
     self = [super init];
     if (self) {
         self.delegate = delegate;
         self.nodesManager = nodesManager;
         self.locationManager = locationManager;
-        self.beaconProximity = [[NITBeaconProximityManager alloc] init];
+        self.beaconProximity = beaconProximity;
         self.visitedNodes = [[NSMutableArray alloc] init];
         self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
         self.locationManager.delegate = self;
@@ -321,6 +321,19 @@
     return [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(locationTimerFired:) userInfo:nil repeats:YES];
 }
 
+- (NITRegionEvent)regionEventFromProximity:(CLProximity)proximity {
+    switch (proximity) {
+        case CLProximityImmediate:
+            return NITRegionEventImmediate;
+        case CLProximityNear:
+            return NITRegionEventNear;
+        case CLProximityFar:
+            return NITRegionEventFar;
+        default:
+            return NITRegionEventUnknown;
+    }
+}
+
 // MARK: - Location Manager Delegate
 
 - (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region {
@@ -346,7 +359,39 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray<CLBeacon *> *)beacons inRegion:(CLBeaconRegion *)region {
+    NITNode *node = [self.nodesManager nodeWithID:region.identifier];
+    NITBeaconNode *beaconNode;
+    if ([node isKindOfClass:[NITBeaconNode class]]) {
+        beaconNode = (NITBeaconNode*)node;
+    } else {
+        return;
+    }
     
+    NSMutableArray<NSString*>* appeared = [[NSMutableArray alloc] init];
+    
+    for(CLBeacon *beacon in beacons) {
+        CLProximity proximity = beacon.proximity;
+        
+        if (proximity == CLProximityUnknown) {
+            return;
+        }
+        
+        NITBeaconNode *minorNode = [self.nodesManager beaconNodeWithBeacon:beacon inChildren:beaconNode.children];
+        NITRegionEvent beaconEvent = [self regionEventFromProximity:proximity];
+        NSString *beaconIdentifier = minorNode.identifier;
+        
+        if (minorNode != nil && beaconIdentifier != nil) {
+            [appeared addObject:beaconIdentifier];
+            
+            CLProximity previousProximity = [self.beaconProximity proximityWithBeaconIdentifier:beaconIdentifier regionIdentifier:region.identifier];
+            if (previousProximity != beacon.proximity) {
+                [self.beaconProximity addProximityWithBeaconIdentifier:beaconIdentifier regionIdentifier:region.identifier proximity:beacon.proximity];
+                [self triggerWithEvent:beaconEvent node:minorNode];
+            }
+        }
+    }
+    
+    [self.beaconProximity evaluateDisappearedWithBeaconIdentifiers:appeared regionIdentifier:region.identifier];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {

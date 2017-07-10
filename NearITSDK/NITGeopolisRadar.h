@@ -13,6 +13,7 @@
 @class NITNode;
 @class NITGeopolisNodesManager;
 @class CLLocationManager;
+@class NITBeaconProximityManager;
 
 @protocol NITGeopolisRadarDelegate <NSObject>
 
@@ -25,7 +26,7 @@
 @property (nonatomic, weak) id<NITGeopolisRadarDelegate> _Nullable delegate;
 @property (nonatomic, readonly) BOOL isStarted;
 
-- (instancetype _Nonnull)initWithDelegate:(id<NITGeopolisRadarDelegate> _Nullable)delegate nodesManager:(NITGeopolisNodesManager* _Nonnull)nodesManager locationManager:(CLLocationManager* _Nonnull)locationManager;
+- (instancetype _Nonnull)initWithDelegate:(id<NITGeopolisRadarDelegate> _Nullable)delegate nodesManager:(NITGeopolisNodesManager* _Nonnull)nodesManager locationManager:(CLLocationManager* _Nonnull)locationManager beaconProximityManager:(NITBeaconProximityManager* _Nonnull)beaconProximity;
 
 - (BOOL)start;
 - (void)stop;

@@ -18,10 +18,13 @@
 #import "NITBeaconNode.h"
 #import "NITStubGeopolisRadar.h"
 #import "NITFakeLocationManager.h"
+#import "NITBeaconProximityManager.h"
 
 #define ID_R1 @"R1"
 #define ID_R2 @"R2"
 #define ID_A1 @"A1"
+#define ID_B1 @"B1"
+#define ID_B2 @"B2"
 
 @interface NITGeopolisRadar (Tests)
 
@@ -36,6 +39,7 @@
 @property (nonatomic, strong) NITGeopolisNodesManager *nodesManager22;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NITFakeLocationManager *fakeLocationManager;
+@property (nonatomic, strong) NITBeaconProximityManager *beaconProximity;
 
 @end
 
@@ -56,6 +60,7 @@
     
     self.locationManager = mock([CLLocationManager class]);
     self.fakeLocationManager = [[NITFakeLocationManager alloc] init];
+    self.beaconProximity = mock([NITBeaconProximityManager class]);
 }
 
 - (void)tearDown {
@@ -66,7 +71,7 @@
 // MARK: - Start
 
 - (void)testStartAuthorizedAlways {
-    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
     radar.authorizationStatus = kCLAuthorizationStatusAuthorizedAlways;
     [radar start];
     // Should start
@@ -77,7 +82,7 @@
 }
 
 - (void)testStartNotAuthorized {
-    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
     radar.authorizationStatus = kCLAuthorizationStatusNotDetermined;
     [radar start];
     // Should not start
@@ -87,7 +92,7 @@
 - (void)testStartEmptyNodes {
     NITGeopolisNodesManager *nodesManager = mock([NITGeopolisNodesManager class]);
     [given([nodesManager roots]) willReturn:@[]];
-    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:nodesManager locationManager:self.locationManager];
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:nodesManager locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
     [radar start];
     // Should not start
     XCTAssertFalse(radar.isStarted);
@@ -104,7 +109,7 @@
     [given([self.locationManager monitoredRegions]) willReturn:monitoredRegions];
     [given([self.locationManager rangedRegions]) willReturn:rangedRegions];
     
-    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
     [radar stop];
     
     XCTAssertFalse(radar.isStarted);
@@ -115,7 +120,7 @@
 // MARK: - Location timer
 
 - (void)testLocationTimerStopForMaxRetry {
-    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
     NSTimer *mockTimer = mock([NSTimer class]);
     radar.stubLocationTimer = mockTimer;
     
@@ -149,7 +154,7 @@
 }
 
 - (void)testLocationTimerStopForGeofenceInside {
-    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
     NSTimer *mockTimer = mock([NSTimer class]);
     radar.stubLocationTimer = mockTimer;
     
@@ -181,7 +186,7 @@
 // MARK: - Location Manager
 
 - (void)testSimpleGeofenceDidDetermineInside {
-    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
     CLRegion *region = [self makeMockRegionWithIdentifier:ID_R1];
     XCTAssertFalse([radar stepResponse]);
     
@@ -222,7 +227,7 @@
 }
 
 - (void)testSimpleAreaDidDetermineInside {
-    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
     CLRegion *region = [self makeMockRegionWithIdentifier:ID_A1];
     
     NITNode *bNode1 = mock([NITBeaconNode class]);
@@ -260,7 +265,7 @@
 }
 
 - (void)testSimpleGeofenceDidDetermineOutside {
-    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
     CLRegion *region = [self makeMockRegionWithIdentifier:ID_R1];
     XCTAssertFalse([radar stepResponse]);
     
@@ -341,7 +346,7 @@
 }
 
 - (void)testGeofenceDidDetermineInsideDifferentRegionsSet {
-    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
     CLRegion *region = [self makeMockRegionWithIdentifier:ID_R1];
     CLRegion *monRegion1 = [self makeMockRegionWithIdentifier:ID_R2];
     CLRegion *monRegion2 = [self makeMockRegionWithIdentifier:ID_A1];
@@ -366,7 +371,7 @@
 }
 
 - (void)testGeofenceDidDetermineOutsideDifferentRegionsSet {
-    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager];
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
     CLRegion *region = [self makeMockRegionWithIdentifier:ID_R1];
     CLRegion *monRegion1 = [self makeMockRegionWithIdentifier:ID_R2];
     CLRegion *monRegion2 = [self makeMockRegionWithIdentifier:ID_A1];
@@ -396,10 +401,64 @@
     [verifyCount(self.locationManager, never()) stopMonitoringForRegion:anything()];
 }
 
+// MARK: - Beacons ranging
+
+- (void)testRangingSimpleChangingProximity {
+    NITStubGeopolisRadar *radar = [[NITStubGeopolisRadar alloc] initWithDelegate:self.delegate nodesManager:self.nodesManagerOne locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
+    CLBeaconRegion *region = [self makeMockBeaconRegionWithIdentifier:ID_B1];
+    
+    NITBeaconNode *beacon1 = mock([NITBeaconNode class]);
+    [given(beacon1.identifier) willReturn:ID_B1];
+    [given(beacon1.minor) willReturn:[NSNumber numberWithInt:200]];
+    [given([beacon1 createRegion]) willReturn:[self makeMockBeaconRegionWithIdentifier:ID_B1]];
+    
+    CLBeacon *realBeacon1 = mock([CLBeacon class]);
+    [given(realBeacon1.proximity) willReturnInteger:CLProximityNear];
+    [given(realBeacon1.minor) willReturn:[NSNumber numberWithInt:200]];
+    
+    CLBeacon *realBeacon2 = mock([CLBeacon class]);
+    [given(realBeacon2.proximity) willReturnInteger:CLProximityImmediate];
+    [given(realBeacon2.minor) willReturn:[NSNumber numberWithInt:300]];
+    
+    [given([self.nodesManagerOne nodeWithID:ID_B1]) willReturn:beacon1];
+    [given([self.nodesManagerOne rangedNodesOnEnterWithId:ID_B1]) willReturn:@[beacon1]];
+    [given([self.nodesManagerOne beaconNodeWithBeacon:sameInstance(realBeacon1) inChildren:anything()]) willReturn:beacon1];
+    [given([self.nodesManagerOne beaconNodeWithBeacon:sameInstance(realBeacon2) inChildren:anything()]) willReturn:nil];
+    
+    [given([self.beaconProximity proximityWithBeaconIdentifier:ID_B1 regionIdentifier:anything()]) willReturnInteger:CLProximityUnknown];
+    
+    // Should call near event
+    [radar simulateDidRangeBeacons:@[realBeacon1, realBeacon2] region:region];
+    [verifyCount(self.delegate, times(1)) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventNear];
+    [verifyCount(self.delegate, never()) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventImmediate];
+    [verifyCount(self.delegate, never()) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventFar];
+    
+    // Should not call any event, beacuse "realBeacon1" has the same proximity as before
+    [given([self.beaconProximity proximityWithBeaconIdentifier:ID_B1 regionIdentifier:anything()]) willReturnInteger:CLProximityNear];
+    [radar simulateDidRangeBeacons:@[realBeacon1, realBeacon2] region:region];
+    [verifyCount(self.delegate, never()) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventNear];
+    [verifyCount(self.delegate, never()) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventImmediate];
+    [verifyCount(self.delegate, never()) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventFar];
+    
+    // Should call immediate, beacause "realBeacon1" has changed proximity
+    [given([self.beaconProximity proximityWithBeaconIdentifier:ID_B1 regionIdentifier:anything()]) willReturnInteger:CLProximityNear];
+    [given(realBeacon1.proximity) willReturnInteger:CLProximityImmediate];
+    [radar simulateDidRangeBeacons:@[realBeacon1, realBeacon2] region:region];
+    [verifyCount(self.delegate, never()) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventNear];
+    [verifyCount(self.delegate, times(1)) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventImmediate];
+    [verifyCount(self.delegate, never()) geopolisRadar:anything() didTriggerWithNode:anything() event:NITRegionEventFar];
+}
+
 // MARK: - Utils
 
 - (CLRegion*)makeMockRegionWithIdentifier:(NSString*)identifier {
     CLRegion *region = mock([CLRegion class]);
+    [given([region identifier]) willReturn:identifier];
+    return region;
+}
+
+- (CLBeaconRegion*)makeMockBeaconRegionWithIdentifier:(NSString*)identifier {
+    CLBeaconRegion *region = mock([CLBeaconRegion class]);
     [given([region identifier]) willReturn:identifier];
     return region;
 }

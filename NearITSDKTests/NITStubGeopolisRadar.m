@@ -20,8 +20,8 @@
 
 @implementation NITStubGeopolisRadar
 
-- (instancetype)initWithDelegate:(id<NITGeopolisRadarDelegate>)delegate nodesManager:(NITGeopolisNodesManager *)nodesManager locationManager:(CLLocationManager *)locationManager {
-    self = [super initWithDelegate:delegate nodesManager:nodesManager locationManager:locationManager];
+- (instancetype)initWithDelegate:(id<NITGeopolisRadarDelegate>)delegate nodesManager:(NITGeopolisNodesManager *)nodesManager locationManager:(CLLocationManager *)locationManager beaconProximityManager:(NITBeaconProximityManager * _Nonnull)beaconProximity {
+    self = [super initWithDelegate:delegate nodesManager:nodesManager locationManager:locationManager beaconProximityManager:beaconProximity];
     if (self) {
         self.authorizationStatus = kCLAuthorizationStatusAuthorizedAlways;
     }
