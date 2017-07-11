@@ -1,3 +1,18 @@
+0.9.40 Release notes (2017-07-11)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes NITManagerDelegate call.
+
 0.9.39 Release notes (2017-07-07)
 =============================================================
 
