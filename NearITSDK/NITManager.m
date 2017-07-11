@@ -227,7 +227,7 @@
     return [self.notificationProcessor processNotificationWithUserInfo:userInfo completion:^(id  _Nullable content, NSString * _Nullable recipeId, NSError * _Nullable error) {
         NITRecipe *recipe = [[NITRecipe alloc] init];
         recipe.ID = recipeId;
-        if([self.delegate respondsToSelector:@selector(manager:eventFailureWithError:recipe:)]) {
+        if([self.delegate respondsToSelector:@selector(manager:eventFailureWithError:recipe:)] && error) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 [self.delegate manager:self eventFailureWithError:error recipe:recipe];
             }];
