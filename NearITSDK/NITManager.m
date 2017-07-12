@@ -40,7 +40,7 @@
 
 #define LOGTAG @"Manager"
 
-@interface NITManager()<NITManaging, CBCentralManagerDelegate>
+@interface NITManager()<NITManaging, CBCentralManagerDelegate, NITUserDataBackoffDelegate>
 
 @property (nonatomic, strong) NITGeopolisManager *geopolisManager;
 @property (nonatomic, strong) NITRecipesManager *recipesManager;
@@ -104,6 +104,7 @@
         
         NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager reachability:self.internetReachability];
         NITUserDataBackoff *userDataBackoff = [[NITUserDataBackoff alloc] initWithConfiguration:self.configuration networkManager:self.networkManager cacheManager:self.cacheManager];
+        userDataBackoff.delegate = self;
         self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation userDataBackoff:userDataBackoff];
         [self.cacheManager setAppId:[self.configuration appId]];
         [self pluginSetup];
@@ -458,6 +459,18 @@
         self.profile.installation.bluetoothState = self.lastBluetoothState;
         [self.profile.installation registerInstallation];
     }
+}
+
+// MARK: - User Data Backoff delegate
+
+- (void)userDataBackoffDidComplete:(NITUserDataBackoff *)userDataBackoff {
+    [self.recipesManager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
+        NITLogI(LOGTAG, @"Recipes updated due to user data backoff completion");
+    }];
+}
+
+- (void)userDataBackoffDidFailed:(NITUserDataBackoff *)userDataBackoff withError:(NSError *)error {
+    
 }
 
 // MARK: - Bluetooth manager delegate
