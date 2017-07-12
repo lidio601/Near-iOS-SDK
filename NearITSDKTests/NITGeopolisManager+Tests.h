@@ -7,6 +7,7 @@
 //
 
 #import "NITGeopolisManager.h"
+#import "NITConstants.h"
 
 @class NITBeaconProximityManager;
 
@@ -18,5 +19,6 @@
 - (NITBeaconProximityManager *)beaconProximity;
 - (NITGeopolisNodesManager*)nodesManager;
 - (BOOL)started;
+- (void)triggerWithEvent:(NITRegionEvent)event node:(NITNode*)node;
 
 @end

@@ -68,6 +68,27 @@
     }
 }
 
++ (NSString*)stringTagFromRegionEvent:(NITRegionEvent)event {
+    switch (event) {
+        case NITRegionEventEnterPlace:
+            return @"enter_tags";
+        case NITRegionEventLeavePlace:
+            return @"leave_tags";
+        case NITRegionEventEnterArea:
+            return @"enter_tags";
+        case NITRegionEventLeaveArea:
+            return @"leave_tags";
+        case NITRegionEventImmediate:
+            return @"ranging_tags.immediate";
+        case NITRegionEventNear:
+            return @"ranging_tags.near";
+        case NITRegionEventFar:
+            return @"ranging_tags.far";
+        default:
+            return @"";
+    }
+}
+
 + (NSString *)stringFromBluetoothState:(CBManagerState)state {
     switch (state) {
         case CBManagerStatePoweredOn:

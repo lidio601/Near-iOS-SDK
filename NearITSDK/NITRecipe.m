@@ -21,7 +21,8 @@ NSString* const NITRecipeEngaged = @"engaged";
               @"reaction_plugin_id" : @"reactionPluginId",
               @"reaction_action" : @"reactionAction",
               @"reaction_bundle" : @"reactionBundle",
-              @"reaction_bundle_id" : @"reactionBundleId" };
+              @"reaction_bundle_id" : @"reactionBundleId",
+              @"pulse_bundle_tags" : @"tags" };
 }
 
 - (BOOL)isEvaluatedOnline {

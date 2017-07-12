@@ -19,6 +19,7 @@
 #import "NITDateManager.h"
 #import "NITRecipeHistory.h"
 #import "NITRecipeValidationFilter.h"
+#import "NITPulseBundle.h"
 #import <OCMockitoIOS/OCMockitoIOS.h>
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
 
@@ -69,7 +70,7 @@
         return [self jsonApiWithContentsOfFile:@"response_online_recipe"];
     };
     
-    [recipesManager gotPulseWithPulsePlugin:@"geopolis" pulseAction:@"leave_place" pulseBundle:@"9712e11a-ef3a-4b34-bdf6-413a84146f2e"];
+    [recipesManager gotPulseOnlineWithPulsePlugin:@"geopolis" pulseAction:@"leave_place" pulseBundle:@"9712e11a-ef3a-4b34-bdf6-413a84146f2e"];
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }
@@ -89,9 +90,52 @@
         return [self jsonApiWithContentsOfFile:@"response_pulse_evaluation"];
     };
     
-    [recipesManager gotPulseWithPulsePlugin:@"beacon_forest" pulseAction:@"always_evaluated" pulseBundle:@"e11f58db-054e-4df1-b09b-d0cbe2676031"];
+    [recipesManager gotPulseOnlineWithPulsePlugin:@"beacon_forest" pulseAction:@"always_evaluated" pulseBundle:@"e11f58db-054e-4df1-b09b-d0cbe2676031"];
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
+- (void)testGotPulseBundleNoMatching {
+    NITJSONAPI *recipesJson = [self jsonApiWithContentsOfFile:@"recipes"];
+    
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:self.trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
+    [recipesManager setRecipesWithJsonApi:recipesJson];
+    
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return nil;
+    };
+    
+    NITRecipe *fakeRecipe = [[NITRecipe alloc] init];
+    [given([self.recipeValidationFilter filterRecipes:anything()]) willReturn:@[fakeRecipe]];
+    
+    BOOL hasIdentifier = [recipesManager gotPulseWithPulsePlugin:@"geopolis" pulseAction:@"enter_place" pulseBundle:@"average_bundle"];
+    XCTAssertFalse(hasIdentifier);
+}
+
+- (void)testGotPulseBundleMatchingWithValidation {
+    NITJSONAPI *recipesJson = [self jsonApiWithContentsOfFile:@"recipes"];
+    
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:self.trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
+    [recipesManager setRecipesWithJsonApi:recipesJson];
+    
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return nil;
+    };
+    
+    [given([self.recipeValidationFilter filterRecipes:anything()]) willReturn:nil];
+    
+    // Has matching but the validation has empty recipes
+    BOOL hasIdentifier = [recipesManager gotPulseWithPulsePlugin:@"geopolis" pulseAction:@"ranging.near" pulseBundle:@"8373e68b-7c5d-411c-9a9c-3cc7ebf039e4"];
+    XCTAssertFalse(hasIdentifier);
+    
+    NITRecipe *fakeRecipe = [[NITRecipe alloc] init];
+    [given([self.recipeValidationFilter filterRecipes:anything()]) willReturn:@[fakeRecipe]];
+    
+    // Has matching and the validation has at least one recipes
+    hasIdentifier = [recipesManager gotPulseWithPulsePlugin:@"geopolis" pulseAction:@"ranging.near" pulseBundle:@"8373e68b-7c5d-411c-9a9c-3cc7ebf039e4"];
+    XCTAssertTrue(hasIdentifier);
 }
 
 - (void)testRecipesManagerCacheNotEmpty {
@@ -116,6 +160,36 @@
     }];
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
+// MARK: - Tags loading
+
+- (void)testLoadingRecipesWithPulseBundleTags {
+    NITJSONAPI *json = [self jsonApiWithContentsOfFile:@"recipe_pulse_bundle_tags"];
+    [json registerClass:[NITRecipe class] forType:@"recipes"];
+    NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
+    XCTAssertTrue(recipes.count == 1);
+    if (recipes.count > 0) {
+        NITRecipe *recipe = [recipes objectAtIndex:0];
+        XCTAssertTrue(recipe.tags.count == 3);
+        for(NSInteger index = 0; index < recipe.tags.count; index++) {
+            NSString *tag = [recipe.tags objectAtIndex:index];
+            switch (index) {
+                case 0:
+                    XCTAssertTrue([tag isEqualToString:@"banana"]);
+                    break;
+                case 1:
+                    XCTAssertTrue([tag isEqualToString:@"apple"]);
+                    break;
+                case 2:
+                    XCTAssertTrue([tag isEqualToString:@"hello world"]);
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 // MARK: - NITManaging delegate

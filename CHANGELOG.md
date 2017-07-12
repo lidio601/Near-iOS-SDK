@@ -1,3 +1,34 @@
+0.9.41 Release notes (2017-07-12)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* Geotags support.
+* Backoff system for user's data.
+
+### Bugfixes
+
+* None.
+
+0.9.40 Release notes (2017-07-11)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes NITManagerDelegate call.
+
 0.9.39 Release notes (2017-07-07)
 =============================================================
 

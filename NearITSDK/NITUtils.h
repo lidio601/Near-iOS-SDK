@@ -14,6 +14,7 @@
 
 + (NSString* _Nonnull)fetchAppIdFromApiKey:(NSString* _Nonnull)apiKey;
 + (NSString* _Nonnull)stringFromRegionEvent:(NITRegionEvent)event;
++ (NSString* _Nonnull)stringTagFromRegionEvent:(NITRegionEvent)event;
 + (NSString* _Nonnull)stringFromBluetoothState:(CBManagerState)state;
 
 @end

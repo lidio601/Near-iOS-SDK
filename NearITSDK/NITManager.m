@@ -34,12 +34,13 @@
 #import "NSData+Zip.h"
 #import "NITJSONAPI.h"
 #import "NITNotificationProcessor.h"
+#import "NITUserDataBackoff.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <UserNotifications/UserNotifications.h>
 
 #define LOGTAG @"Manager"
 
-@interface NITManager()<NITManaging, CBCentralManagerDelegate>
+@interface NITManager()<NITManaging, CBCentralManagerDelegate, NITUserDataBackoffDelegate>
 
 @property (nonatomic, strong) NITGeopolisManager *geopolisManager;
 @property (nonatomic, strong) NITRecipesManager *recipesManager;
@@ -102,7 +103,9 @@
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
         
         NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager reachability:self.internetReachability];
-        self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation];
+        NITUserDataBackoff *userDataBackoff = [[NITUserDataBackoff alloc] initWithConfiguration:self.configuration networkManager:self.networkManager cacheManager:self.cacheManager];
+        userDataBackoff.delegate = self;
+        self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation userDataBackoff:userDataBackoff];
         [self.cacheManager setAppId:[self.configuration appId]];
         [self pluginSetup];
         [self reactionsSetup];
@@ -227,7 +230,7 @@
     return [self.notificationProcessor processNotificationWithUserInfo:userInfo completion:^(id  _Nullable content, NSString * _Nullable recipeId, NSError * _Nullable error) {
         NITRecipe *recipe = [[NITRecipe alloc] init];
         recipe.ID = recipeId;
-        if([self.delegate respondsToSelector:@selector(manager:eventFailureWithError:recipe:)]) {
+        if([self.delegate respondsToSelector:@selector(manager:eventFailureWithError:recipe:)] && error) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 [self.delegate manager:self eventFailureWithError:error recipe:recipe];
             }];
@@ -277,6 +280,10 @@
     }];
 }
 
+- (void)setDeferredUserDataWithKey:(NSString *)key value:(NSString *)value {
+    [self.profile setDeferredUserDataWithKey:key value:value];
+}
+
 - (void)sendEventWithEvent:(NITEvent *)event completionHandler:(void (^)(NSError * _Nullable))handler {
     if ([[event pluginName] isEqualToString:NITFeedbackPluginName]) {
         [self.feedbackReaction sendEventWithFeedbackEvent:(NITFeedbackEvent*)event completionHandler:^(NSError * _Nullable error) {
@@ -322,14 +329,6 @@
 
 - (NSString *)profileId {
     return self.configuration.profileId;
-}
-
-- (void)createNewProfileWithCompletionHandler:(void (^)(NSString * _Nullable, NSError * _Nullable))handler {
-    [self.profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
-        if (handler) {
-            handler(profileId, error);
-        }
-    }];
 }
 
 - (void)setProfileId:(NSString *)profileId {
@@ -455,10 +454,23 @@
 
 - (void)applicationDidBeacomActive:(NSNotification*)notification {
     [self.profile.installation shouldRegisterInstallation];
+    [self.profile shouldSendUserData];
     if (self.lastBluetoothState != self.bluetoothManager.state) {
         self.profile.installation.bluetoothState = self.lastBluetoothState;
         [self.profile.installation registerInstallation];
     }
+}
+
+// MARK: - User Data Backoff delegate
+
+- (void)userDataBackoffDidComplete:(NITUserDataBackoff *)userDataBackoff {
+    [self.recipesManager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
+        NITLogI(LOGTAG, @"Recipes updated due to user data backoff completion");
+    }];
+}
+
+- (void)userDataBackoffDidFailed:(NITUserDataBackoff *)userDataBackoff withError:(NSError *)error {
+    
 }
 
 // MARK: - Bluetooth manager delegate

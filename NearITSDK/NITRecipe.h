@@ -23,6 +23,7 @@ extern NSString* _Nonnull const NITRecipeEngaged;
 @property (nonatomic, strong) NSString * _Nonnull pulsePluginId;
 @property (nonatomic, strong) NSString * _Nonnull reactionPluginId;
 @property (nonatomic, strong) NSString * _Nonnull reactionBundleId;
+@property (nonatomic, strong) NSArray<NSString*> * _Nullable tags;
 @property (nonatomic, strong) NITResource * _Nonnull pulseBundle;
 @property (nonatomic, strong) NITResource * _Nonnull pulseAction;
 @property (nonatomic, strong) NITResource * _Nonnull reactionAction;
