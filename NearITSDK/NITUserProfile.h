@@ -26,5 +26,6 @@
 - (void)setDeferredUserDataWithKey:(NSString* _Nonnull)key value:(NSString* _Nullable)value;
 - (void)resetProfile;
 - (void)setProfileId:(NSString*_Nonnull)profileId;
+- (void)shouldSendUserData;
 
 @end

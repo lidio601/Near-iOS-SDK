@@ -54,8 +54,9 @@
             NITJSONAPIResource *resource = [json firstResourceObject];
             if (resource.ID) {
                 self.configuration.profileId = resource.ID;
+                [self.installation registerInstallation];
+                [self shouldSendUserData];
                 if (handler) {
-                    [self.installation registerInstallation];
                     handler(resource.ID, nil);
                 }
             } else {
@@ -119,6 +120,10 @@
 - (void)setProfileId:(NSString *)profileId {
     self.configuration.profileId = profileId;
     [self.installation registerInstallation];
+}
+
+- (void)shouldSendUserData {
+    [self.userDataBackoff shouldSendDataPoints];
 }
 
 @end

@@ -453,6 +453,7 @@
 
 - (void)applicationDidBeacomActive:(NSNotification*)notification {
     [self.profile.installation shouldRegisterInstallation];
+    [self.profile shouldSendUserData];
     if (self.lastBluetoothState != self.bluetoothManager.state) {
         self.profile.installation.bluetoothState = self.lastBluetoothState;
         [self.profile.installation registerInstallation];
