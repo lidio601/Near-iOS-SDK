@@ -70,7 +70,13 @@
 }
 
 - (void)setUserDataWithKey:(NSString*)key value:(NSString*)value completionHandler:(void (^)(NSError* error))handler {
-    NSDictionary *dataPoint = @{@"key": key, @"value": value};
+    NSMutableDictionary *dataPoint = [[NSMutableDictionary alloc] init];
+    [dataPoint setObject:key forKey:@"key"];
+    if (value) {
+        [dataPoint setObject:value forKey:@"value"];
+    } else {
+        [dataPoint setObject:[NSNull null] forKey:@"value"];
+    }
     [self setBatchUserDataWithDictionary:dataPoint completionHandler:^(NSError * _Nullable error) {
         if (handler) {
             handler(error);
