@@ -114,6 +114,9 @@
 		135359041EEFD2DD0056AF7C /* NITRecipeValidationFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 135359021EEFD2DD0056AF7C /* NITRecipeValidationFilter.m */; };
 		135359061EEFD8CE0056AF7C /* NITRecipeValidationFilterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 135359051EEFD8CE0056AF7C /* NITRecipeValidationFilterTest.m */; };
 		135359091EEFDB6B0056AF7C /* NITTestValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 135359081EEFDB6B0056AF7C /* NITTestValidator.m */; };
+		135370541F15FF0000231790 /* NITUserDataBackoffTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 135370531F15FF0000231790 /* NITUserDataBackoffTest.m */; };
+		135954501F15121400626508 /* NITUserDataBackoff.h in Headers */ = {isa = PBXBuildFile; fileRef = 1359544E1F15121400626508 /* NITUserDataBackoff.h */; };
+		135954511F15121400626508 /* NITUserDataBackoff.m in Sources */ = {isa = PBXBuildFile; fileRef = 1359544F1F15121400626508 /* NITUserDataBackoff.m */; };
 		135A70751E8503D900D4C9EC /* NITReaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 135A70731E8503D900D4C9EC /* NITReaction.h */; };
 		135A70761E8503D900D4C9EC /* NITReaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 135A70741E8503D900D4C9EC /* NITReaction.m */; };
 		135A70791E851F1F00D4C9EC /* NITSimpleNotificationReaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 135A70771E851F1F00D4C9EC /* NITSimpleNotificationReaction.h */; };
@@ -338,6 +341,9 @@
 		135359051EEFD8CE0056AF7C /* NITRecipeValidationFilterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipeValidationFilterTest.m; sourceTree = "<group>"; };
 		135359071EEFDB6B0056AF7C /* NITTestValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITTestValidator.h; sourceTree = "<group>"; };
 		135359081EEFDB6B0056AF7C /* NITTestValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITTestValidator.m; sourceTree = "<group>"; };
+		135370531F15FF0000231790 /* NITUserDataBackoffTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITUserDataBackoffTest.m; sourceTree = "<group>"; };
+		1359544E1F15121400626508 /* NITUserDataBackoff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITUserDataBackoff.h; sourceTree = "<group>"; };
+		1359544F1F15121400626508 /* NITUserDataBackoff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITUserDataBackoff.m; sourceTree = "<group>"; };
 		135A70731E8503D900D4C9EC /* NITReaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITReaction.h; sourceTree = "<group>"; };
 		135A70741E8503D900D4C9EC /* NITReaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITReaction.m; sourceTree = "<group>"; };
 		135A70771E851F1F00D4C9EC /* NITSimpleNotificationReaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITSimpleNotificationReaction.h; sourceTree = "<group>"; };
@@ -783,6 +789,7 @@
 				137E38A61E8A4AA6008E83E6 /* NITCacheManagerTest.m */,
 				132297241E92417200AE6EFC /* NITConfigurationTest.m */,
 				135CD79A1E9D089A005C75A4 /* NITUserProfileTest.m */,
+				135370531F15FF0000231790 /* NITUserDataBackoffTest.m */,
 				1374E0D41EA89DDF00D613A5 /* NITManagerTest.m */,
 				1374E0D61EA8C00200D613A5 /* NITLogTest.m */,
 				1374E0FB1EAA305A00D613A5 /* NITTrackManagerTest.m */,
@@ -813,6 +820,8 @@
 			children = (
 				1352CA8B1E78313300C0E98E /* NITUserProfile.h */,
 				1352CA8C1E78313300C0E98E /* NITUserProfile.m */,
+				1359544E1F15121400626508 /* NITUserDataBackoff.h */,
+				1359544F1F15121400626508 /* NITUserDataBackoff.m */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -1105,6 +1114,7 @@
 				137E38A41E8A4464008E83E6 /* NITCacheManager.h in Headers */,
 				1352CA8D1E78313300C0E98E /* NITUserProfile.h in Headers */,
 				130FB3921EEEC1BA008B24C1 /* NITScheduleValidator.h in Headers */,
+				135954501F15121400626508 /* NITUserDataBackoff.h in Headers */,
 				132296EA1E8CFCAD00AE6EFC /* NITCouponReaction.h in Headers */,
 				13824FF11E88F22100264BAC /* NITImage.h in Headers */,
 				1352CA751E7807FE00C0E98E /* NearITSDK.h in Headers */,
@@ -1395,6 +1405,7 @@
 				1352CA8E1E78313300C0E98E /* NITUserProfile.m in Sources */,
 				135CD77A1E94F71E005C75A4 /* NITEvent.m in Sources */,
 				137838661E800EC1001C8CDE /* NITRecipesManager.m in Sources */,
+				135954511F15121400626508 /* NITUserDataBackoff.m in Sources */,
 				1349EEB41E796511000B0666 /* NITNetworkProvider.m in Sources */,
 				1374E0FA1EAA194800D613A5 /* NITTrackRequest.m in Sources */,
 				13AB72901F01596600FE14D9 /* NSData+Zip.m in Sources */,
@@ -1425,6 +1436,7 @@
 				135CD7961E9B7621005C75A4 /* NITNetworkMockManger.m in Sources */,
 				1352CA911E78372B00C0E98E /* NITUtilsTest.m in Sources */,
 				130FB38B1EEEA2A0008B24C1 /* NITCooldownValidatorTest.m in Sources */,
+				135370541F15FF0000231790 /* NITUserDataBackoffTest.m in Sources */,
 				1374E0D51EA89DDF00D613A5 /* NITManagerTest.m in Sources */,
 				1374E0DA1EA8C03B00D613A5 /* NITTestLogger.m in Sources */,
 				130CCF9C1F02690D00876327 /* NITNotificationProcessorTest.m in Sources */,

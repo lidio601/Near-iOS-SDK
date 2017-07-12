@@ -12,16 +12,18 @@
 @class NITConfiguration;
 @class NITNetworkManager;
 @class NITInstallation;
+@class NITUserDataBackoff;
 
 @interface NITUserProfile : NSObject
 
 @property (nonatomic, strong) NITInstallation * _Nonnull installation;
 
-- (instancetype _Nonnull )initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager installation:(NITInstallation* _Nonnull)installation;
+- (instancetype _Nonnull )initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager installation:(NITInstallation* _Nonnull)installation userDataBackoff:(NITUserDataBackoff* _Nonnull)userDataBackoff;
 
 - (void)createNewProfileWithCompletionHandler:(void (^ _Nullable)(NSString* _Nullable profileId, NSError* _Nullable error))handler;
 - (void)setUserDataWithKey:(NSString* _Nonnull)key value:(NSString* _Nullable)value completionHandler:(void (^_Nullable)(NSError* _Nullable error))handler;
 - (void)setBatchUserDataWithDictionary:(NSDictionary<NSString*, id>* _Nonnull)valuesDictiornary completionHandler:(void (^_Nullable)(NSError* _Nullable error))handler;
+- (void)setDeferredUserDataWithKey:(NSString* _Nonnull)key value:(NSString* _Nullable)value;
 - (void)resetProfile;
 - (void)setProfileId:(NSString*_Nonnull)profileId;
 

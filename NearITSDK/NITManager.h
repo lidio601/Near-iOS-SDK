@@ -45,6 +45,7 @@
 - (void)sendTrackingWithRecipeId:(NSString * _Nonnull)recipeId event:(NSString* _Nonnull)event;
 - (void)setUserDataWithKey:(NSString* _Nonnull)key value:(NSString* _Nullable)value completionHandler:(void (^_Nullable)(NSError* _Nullable error))handler;
 - (void)setBatchUserDataWithDictionary:(NSDictionary<NSString*, id>* _Nonnull)valuesDictiornary completionHandler:(void (^_Nullable)(NSError* _Nullable error))handler;
+- (void)setDeferredUserDataWithKey:(NSString * _Nonnull)key value:(NSString * _Nonnull)value;
 - (void)sendEventWithEvent:(NITEvent* _Nonnull)event completionHandler:(void (^_Nullable)(NSError* _Nullable error))handler;
 - (void)couponsWithCompletionHandler:(void (^ _Nullable)(NSArray<NITCoupon*>* _Nullable, NSError* _Nullable))handler;
 - (NSArray<NITRecipe*>* _Nonnull)recipes;
@@ -52,7 +53,6 @@
 - (BOOL)processRecipeWithUserInfo:(NSDictionary<NSString *,id> * _Nonnull)userInfo completion:(void (^_Nullable)(id _Nullable object, NITRecipe* _Nullable recipe, NSError* _Nullable error))completionHandler;
 - (void)resetProfile;
 - (NSString* _Nullable)profileId;
-- (void)createNewProfileWithCompletionHandler:(void (^ _Nullable)(NSString* _Nullable profileId, NSError* _Nullable error))handler;
 - (void)setProfileId:(NSString * _Nonnull)profileId;
 - (void)setSuiteName:(NSString * _Nonnull)suiteName;
 - (BOOL)handleLocalNotificationResponse:(UNNotificationResponse* _Nonnull)response completionHandler:(void (^_Nullable)(id _Nullable content, NITRecipe * _Nullable recipe, NSError * _Nullable error))completionHandler;

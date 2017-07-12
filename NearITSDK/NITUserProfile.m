@@ -14,22 +14,25 @@
 #import "NITJSONAPIResource.h"
 #import "NITConstants.h"
 #import "NITInstallation.h"
+#import "NITUserDataBackoff.h"
 
 @interface NITUserProfile()
 
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) NITNetworkManager *networkManager;
+@property (nonatomic, strong) NITUserDataBackoff *userDataBackoff;
 
 @end
 
 @implementation NITUserProfile
 
-- (instancetype)initWithConfiguration:(NITConfiguration *)configuration networkManager:(id<NITNetworkManaging>)networkManager installation:(NITInstallation*)installation {
+- (instancetype)initWithConfiguration:(NITConfiguration *)configuration networkManager:(id<NITNetworkManaging>)networkManager installation:(NITInstallation*)installation userDataBackoff:(NITUserDataBackoff * _Nonnull)userDataBackoff {
     self = [super init];
     if (self) {
         self.configuration = configuration;
         self.networkManager = networkManager;
         self.installation = installation;
+        self.userDataBackoff = userDataBackoff;
     }
     return self;
 }
@@ -102,6 +105,10 @@
             }
         }
     }];
+}
+
+- (void)setDeferredUserDataWithKey:(NSString *)key value:(NSString *)value {
+    [self.userDataBackoff setUserDataWithKey:key value:value];
 }
 
 - (void)resetProfile {

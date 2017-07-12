@@ -9,6 +9,7 @@
 #import "NITTestCase.h"
 #import "NITUserProfile.h"
 #import "NITInstallation.h"
+#import "NITUserDataBackoff.h"
 #import <OCMockitoIOS/OCMockitoIOS.h>
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
 
@@ -19,6 +20,7 @@
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) NITNetworkMockManger *networkManager;
 @property (nonatomic, strong) NITInstallation *installation;
+@property (nonatomic, strong) NITUserDataBackoff *userDataBackoff;
 
 @end
 
@@ -31,6 +33,7 @@
     [given([self.configuration appId]) willReturn:@"app-id"];
     [given([self.configuration profileId]) willReturn:nil];
     self.networkManager = [[NITNetworkMockManger alloc] init];
+    self.userDataBackoff = mock([NITUserDataBackoff class]);
     
     __weak NITUserProfileTest *weakSelf = self;
     self.networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
@@ -53,7 +56,7 @@
     
     XCTAssertNil(self.configuration.profileId);
     
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation userDataBackoff:self.userDataBackoff];
     [profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
         [verifyCount(self.installation, times(1)) registerInstallation];
         XCTAssertNil(error);
@@ -67,7 +70,7 @@
 
 - (void)testResetProfile {
     [given([self.configuration profileId]) willReturn:PROFILEID];
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation userDataBackoff:self.userDataBackoff];
     [profile resetProfile];
     [verifyCount(self.installation, times(1)) registerInstallation];
     [verifyCount(self.configuration, times(1)) setProfileId:nilValue()];
@@ -75,7 +78,7 @@
 
 - (void)testSetProfile {
     XCTAssertNil(self.configuration.profileId);
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation userDataBackoff:self.userDataBackoff];
     [profile setProfileId:PROFILEID];
     [verifyCount(self.installation, times(1)) registerInstallation];
     [verifyCount(self.configuration, times(1)) setProfileId:PROFILEID];
@@ -83,7 +86,7 @@
 
 - (void)testSingleUserDataKey {
     [given([self.configuration profileId]) willReturn:nil];
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation userDataBackoff:self.userDataBackoff];
     
     self.networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return [[NITJSONAPI alloc] init];
@@ -109,7 +112,7 @@
 
 - (void)testBatchUserDataKey {
     [given([self.configuration profileId]) willReturn:nil];
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation userDataBackoff:self.userDataBackoff];
     
     self.networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return [[NITJSONAPI alloc] init];
@@ -137,7 +140,7 @@
 
 - (void)testBatchUserDataKeyWithErrorFromNetwork {
     [given([self.configuration profileId]) willReturn:PROFILEID];
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:self.installation userDataBackoff:self.userDataBackoff];
     
     self.networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return nil; // The network failure (no data from network)

@@ -34,6 +34,7 @@
 #import "NSData+Zip.h"
 #import "NITJSONAPI.h"
 #import "NITNotificationProcessor.h"
+#import "NITUserDataBackoff.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <UserNotifications/UserNotifications.h>
 
@@ -102,7 +103,8 @@
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
         
         NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager reachability:self.internetReachability];
-        self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation];
+        NITUserDataBackoff *userDataBackoff = [[NITUserDataBackoff alloc] initWithConfiguration:self.configuration networkManager:self.networkManager cacheManager:self.cacheManager];
+        self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation userDataBackoff:userDataBackoff];
         [self.cacheManager setAppId:[self.configuration appId]];
         [self pluginSetup];
         [self reactionsSetup];
@@ -277,6 +279,10 @@
     }];
 }
 
+- (void)setDeferredUserDataWithKey:(NSString *)key value:(NSString *)value {
+    [self.profile setDeferredUserDataWithKey:key value:value];
+}
+
 - (void)sendEventWithEvent:(NITEvent *)event completionHandler:(void (^)(NSError * _Nullable))handler {
     if ([[event pluginName] isEqualToString:NITFeedbackPluginName]) {
         [self.feedbackReaction sendEventWithFeedbackEvent:(NITFeedbackEvent*)event completionHandler:^(NSError * _Nullable error) {
@@ -322,14 +328,6 @@
 
 - (NSString *)profileId {
     return self.configuration.profileId;
-}
-
-- (void)createNewProfileWithCompletionHandler:(void (^)(NSString * _Nullable, NSError * _Nullable))handler {
-    [self.profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
-        if (handler) {
-            handler(profileId, error);
-        }
-    }];
 }
 
 - (void)setProfileId:(NSString *)profileId {
