@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 s.name                  = 'NearITSDK'
-s.version               = '0.9.39'
+s.version               = '0.9.40'
 s.summary               = 'nearit.com iOS SDK'
 s.description           = 'nearit.com iOS SDK for Objective-C'
 

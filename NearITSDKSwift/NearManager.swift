@@ -96,6 +96,10 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.setBatchUserDataWith(valuesDictionary, completionHandler: completionHandler)
     }
     
+    public func setDeferredUserData(_ key: String, value: String) {
+        manager.setDeferredUserDataWithKey(key, value: value)
+    }
+    
     public func sendEvent(_ event: NITEvent, completionHandler: ((Error?) -> Void)?) {
         manager.sendEvent(with: event, completionHandler: completionHandler)
     }
@@ -114,14 +118,6 @@ public final class NearManager: NSObject, NITManagerDelegate {
     
     public func setSuiteName(_ name: String) {
         manager.setSuiteName(name)
-    }
-    
-    public func createNewProfile(_ completionHandler: ((String?, Error?) -> Void)?) {
-        manager.createNewProfile { (profileId, error) in
-            if let handler = completionHandler {
-                handler(profileId, error)
-            }
-        }
     }
     
     public func recipes() -> [NITRecipe] {
