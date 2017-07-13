@@ -1,3 +1,18 @@
+1.0.1 Release notes (2017-07-13)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* Reset profile creates a new profile.
+
+### Bugfixes
+
+* None.
+
 1.0.0 Release notes (2017-07-13)
 =============================================================
 
