@@ -14,8 +14,11 @@ NSErrorDomain const NITInstallationErrorDomain = @"com.nearit.installation";
 NSErrorDomain const NITReactionErrorDomain = @"com.nearit.reaction";
 NSErrorDomain const NITRecipeErrorDomain = @"com.nearit.recipe";
 NSErrorDomain const NITNotificationProcessorDomain = @"com.nearit.notificationProcessor";
+NSErrorDomain const NITNetowkrErrorDomain = @"com.nearit.network";
 
 NSString* const ISO8601DateFormatMilliseconds = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
 NSString* const NITFeedbackPluginName = @"feedbacks";
 NSString* const NITSimpleNotificationPluginName = @"simple-notification";
+
+NSString* const NITHttpStatusCode = @"http-status-code";

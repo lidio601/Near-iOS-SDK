@@ -9,8 +9,8 @@
 #import "NITNetworkManager.h"
 #import "NITConfiguration.h"
 #import "NITJSONAPI.h"
+#import "NITConstants.h"
 
-#define NITNetowkrErrorDomain @"com.nearit.network"
 #define LogResponseOnError YES
 
 @interface NITNetworkManager()
@@ -42,6 +42,7 @@
                     [errorUserInfo setObject:@"HTTP Status 500" forKey:NSLocalizedDescriptionKey];
                     if(error) {
                         [errorUserInfo setObject:error forKey:NSUnderlyingErrorKey];
+                        [errorUserInfo setObject:[NSNumber numberWithInteger:httpResponse.statusCode] forKey:NITHttpStatusCode];
                     }
                     NSError *statusError = [NSError errorWithDomain:NITNetowkrErrorDomain code:1 userInfo:errorUserInfo];
                     if (LogResponseOnError) {

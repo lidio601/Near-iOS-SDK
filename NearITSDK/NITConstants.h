@@ -25,8 +25,11 @@ extern NSErrorDomain const NITInstallationErrorDomain;
 extern NSErrorDomain const NITReactionErrorDomain;
 extern NSErrorDomain const NITRecipeErrorDomain;
 extern NSErrorDomain const NITNotificationProcessorDomain;
+extern NSErrorDomain const NITNetowkrErrorDomain;
 
 extern NSString* const ISO8601DateFormatMilliseconds;
 
 extern NSString* const NITFeedbackPluginName;
 extern NSString* const NITSimpleNotificationPluginName;
+
+extern NSString* const NITHttpStatusCode;

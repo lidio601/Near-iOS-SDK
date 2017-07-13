@@ -20,7 +20,7 @@
 - (void)setAppId:(NSString * _Nonnull)appId;
 - (void)setProfileId:(NSString * _Nullable)profileId;
 - (NSString* _Nullable)installationId;
-- (void)setInstallationId:(NSString* _Nonnull)installationId;
+- (void)setInstallationId:(NSString* _Nullable)installationId;
 - (NSString * _Nullable)deviceToken;
 - (void)setDeviceToken:(NSString * _Nonnull)deviceToken;
 - (void)clear;
