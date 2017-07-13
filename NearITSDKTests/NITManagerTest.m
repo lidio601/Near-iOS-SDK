@@ -94,7 +94,6 @@
     
     NITGeopolisManager *geopolis = [manager geopolisManager];
     XCTAssertTrue([[[geopolis nodesManager] roots] count] == 2);
-    XCTAssertTrue([[manager recipes] count] == 6);
     
     // Enter R1 geofence node, should be a simple-notification
     [self.expectations setObject:[self expectationWithDescription:@"r1_notification"] forKey:@"r1_notification"];

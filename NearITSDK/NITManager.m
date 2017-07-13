@@ -311,12 +311,14 @@
     }];
 }
 
-- (NSArray<NITRecipe *> *)recipes {
-    NSArray<NITRecipe*> *recipes = [self.recipesManager recipes];
-    if (recipes) {
-        return recipes;
-    }
-    return [NSArray array];
+- (void)recipesWithCompletionHandler:(void (^)(NSArray<NITRecipe *> * _Nullable, NSError * _Nullable))completionHandler {
+    [self.recipesManager recipesWithCompletionHandler:^(NSArray<NITRecipe *> * _Nullable recipes, NSError * _Nullable error) {
+        if(completionHandler) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                completionHandler(recipes, error);
+            }];
+        }
+    }];
 }
 
 - (void)processRecipeWithId:(NSString *)recipeId  {

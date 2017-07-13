@@ -120,8 +120,12 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.setSuiteName(name)
     }
     
-    public func recipes() -> [NITRecipe] {
-        return manager.recipes()
+    public func recipes(_ completionHandler:(([NITRecipe]?, Error?) -> Void)?) {
+        manager.recipes { (recipes, error) in
+            if let handler = completionHandler {
+                handler(recipes, error)
+            }
+        }
     }
     
     public func processRecipe(id: String) {

@@ -48,7 +48,7 @@
 - (void)setDeferredUserDataWithKey:(NSString * _Nonnull)key value:(NSString * _Nonnull)value;
 - (void)sendEventWithEvent:(NITEvent* _Nonnull)event completionHandler:(void (^_Nullable)(NSError* _Nullable error))handler;
 - (void)couponsWithCompletionHandler:(void (^ _Nullable)(NSArray<NITCoupon*>* _Nullable, NSError* _Nullable))handler;
-- (NSArray<NITRecipe*>* _Nonnull)recipes;
+- (void)recipesWithCompletionHandler:(void (^_Nullable)(NSArray<NITRecipe*>* _Nullable recipes, NSError * _Nullable error))completionHandler;
 - (void)processRecipeWithId:(NSString* _Nonnull)recipeId;
 - (BOOL)processRecipeWithUserInfo:(NSDictionary<NSString *,id> * _Nonnull)userInfo completion:(void (^_Nullable)(id _Nullable object, NITRecipe* _Nullable recipe, NSError* _Nullable error))completionHandler;
 - (void)resetProfile;
