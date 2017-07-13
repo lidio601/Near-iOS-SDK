@@ -1,3 +1,18 @@
+1.0.0 Release notes (2017-07-13)
+=============================================================
+
+### API Breaking Changes
+
+* "recipes" method on Near Manager is no more available, use recipes download with callback instead.
+
+### Enhancements
+
+* New recipes download method.
+
+### Bugfixes
+
+* Fixes cache loading in RecipesManager.
+
 0.9.41 Release notes (2017-07-12)
 =============================================================
 
