@@ -327,6 +327,14 @@
 
 - (void)resetProfile {
     [self.profile resetProfile];
+    [self.profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
+        if(error == nil) {
+            NITLogD(LOGTAG, @"Profile creation successful (reset): %@", profileId);
+            [self refreshConfigWithCompletionHandler:nil];
+        } else {
+            NITLogE(LOGTAG, @"Profile creation error (reset)");
+        }
+    }];
 }
 
 - (NSString *)profileId {
