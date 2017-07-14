@@ -71,7 +71,9 @@
     
     [self.locationManager requestLocation];
     self.locationTimerRetry = 0;
-    self.locationTimer = [self makeLocationTimer];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        self.locationTimer = [self makeLocationTimer];
+    }];
     
     [self startMonitoringRoots];
     
@@ -118,12 +120,14 @@
     if (self.locationTimerRetry >= MAX_LOCATION_TIMER_RETRY) {
         NITLogW(@"LocationTimer", @"MAX_LOCATION_TIMER_RETRY reached");
         [self.locationTimer invalidate];
+        self.locationTimer = nil;
     } else if (!self.stepResponse) {
         NITLogW(@"LocationTimer", @"Request step response by timer");
         [self.locationManager requestLocation];
         [self requestStateForRoots];
     } else {
         [self.locationTimer invalidate];
+        self.locationTimer = nil;
         NITLogD(@"LocationTimer", @"Invalidate timer due to a successful state");
     }
 }
