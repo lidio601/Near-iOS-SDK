@@ -8,7 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+@class NITCacheManager;
+
+@protocol NITCacheManagerDelegate <NSObject>
+
+- (void)cacheManager:(NITCacheManager* _Nonnull)cacheManager didSaveKey:(NSString* _Nonnull)key;
+
+@end
+
 @interface NITCacheManager : NSObject
+
+@property (nonatomic, weak) id<NITCacheManagerDelegate> _Nullable delegate;
 
 + (instancetype _Nonnull)sharedInstance;
 - (instancetype _Nonnull)initWithAppId:(NSString* _Nonnull)appId;

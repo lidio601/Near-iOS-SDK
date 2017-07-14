@@ -11,6 +11,26 @@
 
 NSErrorDomain const NITNetworkMockErrorDomain = @"com.nearit.networkmock";
 
+@implementation NITNetworkResponse
+
+- (instancetype)initWithJSONApi:(NITJSONAPI *)jsonApi {
+    self = [super init];
+    if (self) {
+        self.jsonApi = jsonApi;
+    }
+    return self;
+}
+
+- (instancetype)initWithError:(NSError *)error {
+    self = [super init];
+    if (self) {
+        self.error = error;
+    }
+    return self;
+}
+
+@end
+
 @interface NITNetworkMockManger()
 
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NITMockBlock> *mockBlocks;
@@ -34,7 +54,18 @@ NSErrorDomain const NITNetworkMockErrorDomain = @"com.nearit.networkmock";
 }
 
 - (void)makeRequestWithURLRequest:(NSURLRequest *)request jsonApicompletionHandler:(void (^)(NITJSONAPI * _Nullable, NSError * _Nullable))completionHandler {
-    if (self.mock) {
+    if (self.mockResponse) {
+        NITNetworkResponse *response = self.mockResponse(request);
+        if (response) {
+            self.isMockCalled = true;
+            self.numberOfCalls++;
+            if (response.jsonApi) {
+                completionHandler(response.jsonApi, nil);
+            } else if(response.error) {
+                completionHandler(nil, response.error);
+            }
+        }
+    } else if (self.mock) {
         NITJSONAPI *json = self.mock(request);
         if (json) {
             self.isMockCalled = YES;

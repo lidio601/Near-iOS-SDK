@@ -311,12 +311,14 @@
     }];
 }
 
-- (NSArray<NITRecipe *> *)recipes {
-    NSArray<NITRecipe*> *recipes = [self.recipesManager recipes];
-    if (recipes) {
-        return recipes;
-    }
-    return [NSArray array];
+- (void)recipesWithCompletionHandler:(void (^)(NSArray<NITRecipe *> * _Nullable, NSError * _Nullable))completionHandler {
+    [self.recipesManager recipesWithCompletionHandler:^(NSArray<NITRecipe *> * _Nullable recipes, NSError * _Nullable error) {
+        if(completionHandler) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                completionHandler(recipes, error);
+            }];
+        }
+    }];
 }
 
 - (void)processRecipeWithId:(NSString *)recipeId  {
@@ -325,6 +327,14 @@
 
 - (void)resetProfile {
     [self.profile resetProfile];
+    [self.profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
+        if(error == nil) {
+            NITLogD(LOGTAG, @"Profile creation successful (reset): %@", profileId);
+            [self refreshConfigWithCompletionHandler:nil];
+        } else {
+            NITLogE(LOGTAG, @"Profile creation error (reset)");
+        }
+    }];
 }
 
 - (NSString *)profileId {

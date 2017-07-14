@@ -122,7 +122,11 @@
 
 - (void)setInstallationId:(NSString *)installationId {
     _installationId = installationId;
-    [self saveParamWithKey:INSTALLATIONID value:installationId];
+    if (installationId) {
+        [self saveParamWithKey:INSTALLATIONID value:installationId];
+    } else {
+        [self.userDefaults removeObjectForKey:[self paramKeyWithKey:INSTALLATIONID]];
+    }
 }
 
 - (NSString *)deviceToken {

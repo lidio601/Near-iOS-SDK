@@ -61,7 +61,16 @@ static NITCacheManager *defaultCache;
     NSString *filePath = [[self appDirectory] stringByAppendingPathComponent:key];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:array];
-        [data writeToFile:filePath atomically:NO];
+        NSLock *saveLock = [[NSLock alloc] init];
+        if ([saveLock tryLock]) {
+            [data writeToFile:filePath atomically:NO];
+            [saveLock unlock];
+        } else {
+            [data writeToFile:filePath atomically:NO];
+        }
+        if ([self.delegate respondsToSelector:@selector(cacheManager:didSaveKey:)]) {
+            [self.delegate cacheManager:self didSaveKey:key];
+        }
     });
 }
 
@@ -69,7 +78,16 @@ static NITCacheManager *defaultCache;
     NSString *filePath = [[self appDirectory] stringByAppendingPathComponent:key];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object];
-        [data writeToFile:filePath atomically:NO];
+        NSLock *saveLock = [[NSLock alloc] init];
+        if ([saveLock tryLock]) {
+            [data writeToFile:filePath atomically:NO];
+            [saveLock unlock];
+        } else {
+            [data writeToFile:filePath atomically:NO];
+        }
+        if ([self.delegate respondsToSelector:@selector(cacheManager:didSaveKey:)]) {
+            [self.delegate cacheManager:self didSaveKey:key];
+        }
     });
 }
 

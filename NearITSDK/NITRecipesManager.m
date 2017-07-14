@@ -48,6 +48,7 @@ NSString* const RecipesCacheKey = @"Recipes";
         self.trackManager = trackManager;
         self.recipeHistory = recipeHistory;
         self.recipeValidationFilter = recipeValidationFilter;
+        self.recipes = [self.cacheManager loadArrayForKey:RecipesCacheKey];
     }
     return self;
 }
@@ -77,6 +78,22 @@ NSString* const RecipesCacheKey = @"Recipes";
             [self.cacheManager saveWithObject:self.recipes forKey:RecipesCacheKey];
             if (completionHandler) {
                 completionHandler(error);
+            }
+        }
+    }];
+}
+
+- (void)recipesWithCompletionHandler:(void (^)(NSArray<NITRecipe *> * _Nullable, NSError * _Nullable))completionHandler {
+    [self.networkManager makeRequestWithURLRequest:[[NITNetworkProvider sharedInstance] recipesProcessListWithJsonApi:[self buildEvaluationBody]] jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+        if (error) {
+            if (completionHandler) {
+                completionHandler(nil, error);
+            }
+        } else {
+            if (completionHandler) {
+                [json registerClass:[NITRecipe class] forType:@"recipes"];
+                NSArray<NITRecipe*>* recipes = [json parseToArrayOfObjects];
+                completionHandler(recipes, nil);
             }
         }
     }];

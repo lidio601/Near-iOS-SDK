@@ -79,11 +79,15 @@
                 self.isBusy = NO;
                 if (error) {
                     self.isQueued = YES;
+                    NSNumber *statusCode = [error.userInfo objectForKey:NITHttpStatusCode];
+                    if (statusCode && [statusCode integerValue] == 404) {
+                        self.configuration.installationId = nil;
+                        [self makeInstallation];
+                    }
                     NITLogW(LOGTAG, @"Update installation failure");
                 } else {
                     NITLogI(LOGTAG, @"Update installation registered");
                     if (self.isQueued) {
-                        self.isQueued = NO;
                         [self makeInstallation];
                     }
                 }

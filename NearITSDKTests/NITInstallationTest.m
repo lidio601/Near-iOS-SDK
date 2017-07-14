@@ -14,6 +14,7 @@
 #import "Reachability.h"
 #import "NITConfiguration.h"
 #import "NITJSONAPI.h"
+#import "NITConstants.h"
 
 @interface NITInstallationTest : NITTestCase
 
@@ -100,6 +101,58 @@
     [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWiFi];
     NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:self.configution networkManager:self.networkManager reachability:self.reachability];
     [installation registerInstallation];
+    XCTAssertTrue(installation.isQueued);
+}
+
+- (void)testRegisterInstallationFailedWith404 {
+    NSString *installationId404 = @"404-installation-id";
+    NSString *fileInstallationId = @"bbaa70c1-9542-4c43-b713-721bcf78fdc6";
+    
+    NITJSONAPI *installationJson = [self jsonApiWithContentsOfFile:@"installation"];
+    
+    [[given(self.configution.installationId) willReturn:installationId404] willReturn:nil];
+    self.networkManager.mock = nil;
+    self.networkManager.mockResponse = ^NITNetworkResponse *(NSURLRequest *request) {
+        if ([request.URL.absoluteString containsString:[NSString stringWithFormat:@"/installations/%@", installationId404]]) {
+            NSError *error = [[NSError alloc] initWithDomain:NITNetowkrErrorDomain code:1 userInfo:@{NITHttpStatusCode : [NSNumber numberWithInteger:404]}];
+            return [[NITNetworkResponse alloc] initWithError:error];
+        } else {
+            return [[NITNetworkResponse alloc] initWithJSONApi:installationJson];
+        }
+        
+    };
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWiFi];
+    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:self.configution networkManager:self.networkManager reachability:self.reachability];
+    [installation registerInstallation];
+    
+    [verifyCount(self.configution, times(1)) setInstallationId:nil];
+    [verifyCount(self.configution, times(1)) setInstallationId:fileInstallationId];
+    XCTAssertFalse(installation.isQueued);
+}
+
+- (void)testRegisterInstallationFailedWith403 {
+    NSString *installationId403 = @"403-installation-id";
+    NSString *fileInstallationId = @"bbaa70c1-9542-4c43-b713-721bcf78fdc6";
+    
+    NITJSONAPI *installationJson = [self jsonApiWithContentsOfFile:@"installation"];
+    
+    [given(self.configution.installationId) willReturn:installationId403];
+    self.networkManager.mock = nil;
+    self.networkManager.mockResponse = ^NITNetworkResponse *(NSURLRequest *request) {
+        if ([request.URL.absoluteString containsString:[NSString stringWithFormat:@"/installations/%@", installationId403]]) {
+            NSError *error = [[NSError alloc] initWithDomain:NITNetowkrErrorDomain code:1 userInfo:@{NITHttpStatusCode : [NSNumber numberWithInteger:403]}];
+            return [[NITNetworkResponse alloc] initWithError:error];
+        } else {
+            return [[NITNetworkResponse alloc] initWithJSONApi:installationJson];
+        }
+        
+    };
+    [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWiFi];
+    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:self.configution networkManager:self.networkManager reachability:self.reachability];
+    [installation registerInstallation];
+    
+    [verifyCount(self.configution, never()) setInstallationId:nil];
+    [verifyCount(self.configution, never()) setInstallationId:fileInstallationId];
     XCTAssertTrue(installation.isQueued);
 }
 

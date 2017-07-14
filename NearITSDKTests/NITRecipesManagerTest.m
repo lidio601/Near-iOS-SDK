@@ -150,6 +150,7 @@
         return nil;
     };
     NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:self.trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
+    [verifyCount(self.cacheManager, times(1)) loadArrayForKey:RecipesCacheKey];
     
     XCTestExpectation *recipesExp = [self expectationWithDescription:@"Recipes"];
     [recipesManager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
@@ -160,6 +161,52 @@
     }];
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
+- (void)testRecipesDownloadEmptyCache {
+    NITJSONAPI *recipesJson = [self jsonApiWithContentsOfFile:@"recipes"];
+    [given([self.cacheManager loadArrayForKey:RecipesCacheKey]) willReturn:nil];
+    
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return recipesJson;
+    };
+    
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:self.trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
+    [verifyCount(self.cacheManager, times(1)) loadArrayForKey:RecipesCacheKey];
+    
+    XCTestExpectation *exp = [self expectationWithDescription:@"Recipes"];
+    [recipesManager recipesWithCompletionHandler:^(NSArray<NITRecipe *> * _Nullable recipes, NSError * _Nullable error) {
+        XCTAssertTrue(networkManager.isMockCalled);
+        XCTAssertTrue(recipes.count == 6);
+        [exp fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void)testRecipesDownloadFilledCache {
+    NITJSONAPI *recipesJson = [self jsonApiWithContentsOfFile:@"recipes"];
+    [recipesJson registerClass:[NITRecipe class] forType:@"recipes"];
+    NSArray<NITRecipe*> *recipes = [recipesJson parseToArrayOfObjects];
+    [given([self.cacheManager loadArrayForKey:RecipesCacheKey]) willReturn:recipes];
+    
+    NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
+        return recipesJson;
+    };
+    
+    NITRecipesManager *recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:networkManager configuration:[[NITConfiguration alloc] init] trackManager:self.trackManager recipeHistory:self.recipeHistory recipeValidationFilter:self.recipeValidationFilter];
+    [verifyCount(self.cacheManager, times(1)) loadArrayForKey:RecipesCacheKey];
+    
+    XCTestExpectation *exp = [self expectationWithDescription:@"Recipes"];
+    [recipesManager recipesWithCompletionHandler:^(NSArray<NITRecipe *> * _Nullable recipes, NSError * _Nullable error) {
+        XCTAssertTrue(networkManager.isMockCalled);
+        XCTAssertTrue(recipes.count == 6);
+        [exp fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
 // MARK: - Tags loading
