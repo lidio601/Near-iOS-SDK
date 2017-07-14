@@ -110,13 +110,11 @@
     
     NITJSONAPI *installationJson = [self jsonApiWithContentsOfFile:@"installation"];
     
-    __weak NITInstallationTest *weakSelf = self;
-    [given(self.configution.installationId) willReturn:installationId404];
+    [[given(self.configution.installationId) willReturn:installationId404] willReturn:nil];
     self.networkManager.mock = nil;
     self.networkManager.mockResponse = ^NITNetworkResponse *(NSURLRequest *request) {
         if ([request.URL.absoluteString containsString:[NSString stringWithFormat:@"/installations/%@", installationId404]]) {
             NSError *error = [[NSError alloc] initWithDomain:NITNetowkrErrorDomain code:1 userInfo:@{NITHttpStatusCode : [NSNumber numberWithInteger:404]}];
-            [given(weakSelf.configution.installationId) willReturn:nil];
             return [[NITNetworkResponse alloc] initWithError:error];
         } else {
             return [[NITNetworkResponse alloc] initWithJSONApi:installationJson];
@@ -138,7 +136,6 @@
     
     NITJSONAPI *installationJson = [self jsonApiWithContentsOfFile:@"installation"];
     
-    __weak NITInstallationTest *weakSelf = self;
     [given(self.configution.installationId) willReturn:installationId403];
     self.networkManager.mock = nil;
     self.networkManager.mockResponse = ^NITNetworkResponse *(NSURLRequest *request) {
