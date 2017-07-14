@@ -69,6 +69,7 @@
     }
     self.started = YES;
     
+    [self.locationManager requestLocation];
     self.locationTimerRetry = 0;
     self.locationTimer = [self makeLocationTimer];
     
