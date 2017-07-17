@@ -378,7 +378,7 @@
         CLProximity proximity = beacon.proximity;
         
         if (proximity == CLProximityUnknown) {
-            return;
+            continue;
         }
         
         NITBeaconNode *minorNode = [self.nodesManager beaconNodeWithBeacon:beacon inChildren:beaconNode.children];
