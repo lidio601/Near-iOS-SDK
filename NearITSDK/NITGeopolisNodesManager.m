@@ -90,7 +90,7 @@
             }
         }
     }
-    return [NSArray array];
+    return [self statelessMonitoredNoesOnExitWithId:node.ID];
 }
 
 - (NSArray<NITNode*>*)rangedNodesOnEnterWithId:(NSString*)nodeId {
