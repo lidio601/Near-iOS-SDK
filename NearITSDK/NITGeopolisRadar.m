@@ -84,6 +84,17 @@
     return self.started;
 }
 
+- (BOOL)restart {
+    NSLock *lock = [[NSLock alloc] init];
+    BOOL start = NO;
+    if ([lock tryLock]) {
+        [self stop];
+        start = [self start];
+        [lock unlock];
+    }
+    return start;
+}
+
 - (void)startMonitoringRoots {
     NITLogD(LOGTAG, @"Geopolis start monitoring roots");
     NSArray<NITNode*> *roots = [self.nodesManager roots];
@@ -98,6 +109,7 @@
 
 - (void)stop {
     self.started = NO;
+    self.stepResponse = NO;
     
     for (CLRegion *region in self.locationManager.monitoredRegions) {
         [self.locationManager stopMonitoringForRegion:region];

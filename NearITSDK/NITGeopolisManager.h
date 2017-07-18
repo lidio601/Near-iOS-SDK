@@ -28,6 +28,7 @@
 - (void)refreshConfigWithCompletionHandler:(void (^_Nonnull)(NSError * _Nullable error))completionHandler;
 - (BOOL)start;
 - (void)stop;
+- (BOOL)restart;
 - (BOOL)hasCurrentNode;
 - (NSArray<NITNode*>* _Nullable)nodes;
 

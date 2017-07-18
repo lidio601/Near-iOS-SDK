@@ -179,7 +179,7 @@
             [errors addObject:error];
         } else {
             if(self.started) {
-                [self.geopolisManager start];
+                [self.geopolisManager restart];
             }
         }
         dispatch_group_leave(group);

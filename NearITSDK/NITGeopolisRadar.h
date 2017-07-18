@@ -30,5 +30,6 @@
 
 - (BOOL)start;
 - (void)stop;
+- (BOOL)restart;
 
 @end

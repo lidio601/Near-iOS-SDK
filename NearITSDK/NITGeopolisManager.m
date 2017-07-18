@@ -96,6 +96,10 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
     [self.radar stop];
 }
 
+- (BOOL)restart {
+    return [self.radar restart];
+}
+
 - (BOOL)hasCurrentNode {
     if (self.currentNode) {
         return YES;
