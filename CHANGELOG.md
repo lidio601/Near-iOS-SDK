@@ -1,3 +1,19 @@
+1.0.2 Release notes (2017-07-18)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes a case where beacon has proximity value unknown.
+* Fixes a gefeonce/monitoring case.
+
 1.0.1 Release notes (2017-07-13)
 =============================================================
 

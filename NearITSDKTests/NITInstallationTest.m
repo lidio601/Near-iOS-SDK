@@ -15,6 +15,13 @@
 #import "NITConfiguration.h"
 #import "NITJSONAPI.h"
 #import "NITConstants.h"
+#import "NITJSONAPIResource.h"
+
+@interface NITInstallation (Tests)
+
+- (NITJSONAPIResource*)installationResourceWithInstallationId:(NSString*)installationId;
+
+@end
 
 @interface NITInstallationTest : NITTestCase
 
@@ -154,6 +161,16 @@
     [verifyCount(self.configution, never()) setInstallationId:nil];
     [verifyCount(self.configution, never()) setInstallationId:fileInstallationId];
     XCTAssertTrue(installation.isQueued);
+}
+
+- (void)testVersion {
+    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:self.configution networkManager:self.networkManager reachability:self.reachability];
+    
+    NSString *sdkVersion = [[NSBundle bundleWithIdentifier:@"com.nearit.NearITSDK"] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    NITJSONAPIResource *resource = [installation installationResourceWithInstallationId:@"installationId"];
+    NSString *version = [resource attributeForKey:@"sdk_version"];
+    XCTAssertNotNil(version);
+    XCTAssertTrue([version isEqualToString:sdkVersion]);
 }
 
 @end
