@@ -13,10 +13,21 @@
 @class Reachability;
 @class NSNotificationCenter;
 @class NITDateManager;
+@class NITTrackManager;
+
+extern NSString* _Nonnull const TrackCacheKey;
+
+@protocol NITTrackManagerDelegate <NSObject>
+
+- (void)trackManagerDidComplete:(NITTrackManager* _Nonnull)trackManager;
+
+@end
 
 @interface NITTrackManager : NSObject
 
-- (instancetype)initWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager reachability:(Reachability*)reachability notificationCenter:(NSNotificationCenter*)notificationCenter operationQueue:(NSOperationQueue*)queue dateManager:(NITDateManager*)dateManager;
-- (void)addTrackWithRequest:(NSURLRequest*)request;
+@property (nonatomic, weak) id<NITTrackManagerDelegate> _Nullable delegate;
+
+- (instancetype _Nonnull)initWithNetworkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager reachability:(Reachability* _Nonnull)reachability notificationCenter:(NSNotificationCenter* _Nonnull)notificationCenter dateManager:(NITDateManager* _Nonnull)dateManager;
+- (void)addTrackWithRequest:(NSURLRequest* _Nonnull)request;
 
 @end

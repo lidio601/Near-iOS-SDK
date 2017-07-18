@@ -501,7 +501,7 @@
         return [self jsonApiWithContentsOfFile:@"beacon_areas_in_bg"];
     };
     
-    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:cacheManager reachability:self.reachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:[[NSOperationQueue alloc] init] dateManager:[[NITDateManager alloc] init]];
+    NITTrackManager *trackManager = mock([NITTrackManager class]);
     
     NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration locationManager:nil trackManager:trackManager];
     

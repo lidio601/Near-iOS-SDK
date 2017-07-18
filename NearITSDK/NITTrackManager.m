@@ -32,14 +32,13 @@ NSString* const TrackCacheKey = @"Trackings";
 
 @implementation NITTrackManager
 
-- (instancetype)initWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager *)cacheManager reachability:(Reachability *)reachability notificationCenter:(NSNotificationCenter *)notificationCenter operationQueue:(NSOperationQueue *)queue dateManager:(NITDateManager *)dateManager {
+- (instancetype)initWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager *)cacheManager reachability:(Reachability *)reachability notificationCenter:(NSNotificationCenter *)notificationCenter dateManager:(NITDateManager *)dateManager {
     self = [super init];
     if (self) {
         self.networkManager = networkManager;
         self.cacheManager = cacheManager;
         self.reachability = reachability;
         self.notificationCenter = notificationCenter;
-        self.queue = queue;
         self.dateManager = dateManager;
         NSArray<NITTrackRequest*> *cachedRequests = [self.cacheManager loadArrayForKey:TrackCacheKey];
         if (cachedRequests) {
@@ -72,34 +71,36 @@ NSString* const TrackCacheKey = @"Trackings";
         return;
     }
     NITLogD(LOGTAG, @"Available trackings to send (%d)", [availableRequests count]);
-    [self.queue addOperationWithBlock:^{
-        if (self.reachability.currentReachabilityStatus != NotReachable) {
-            dispatch_group_t group = dispatch_group_create();
-            for (NITTrackRequest *request in availableRequests) {
-                if (self.reachability.currentReachabilityStatus != NotReachable) {
-                    dispatch_group_enter(group);
-                    [self.networkManager makeRequestWithURLRequest:request.request jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
-                        if (error == nil) {
-                            NITLogD(LOGTAG, @"Tracking sent");
+    if (self.reachability.currentReachabilityStatus != NotReachable) {
+        dispatch_group_t group = dispatch_group_create();
+        for (NITTrackRequest *request in availableRequests) {
+            if (self.reachability.currentReachabilityStatus != NotReachable) {
+                dispatch_group_enter(group);
+                [self.networkManager makeRequestWithURLRequest:request.request jsonApicompletionHandler:^(NITJSONAPI * _Nullable json, NSError * _Nullable error) {
+                    if (error == nil) {
+                        NITLogV(LOGTAG, @"Tracking sent");
+                        [self.requests removeObject:request];
+                    } else {
+                        NITLogD(LOGTAG, @"Tracking failure");
+                        if (request.retry > MAX_RETRY) {
                             [self.requests removeObject:request];
                         } else {
-                            NITLogD(LOGTAG, @"Tracking failure");
-                            if (request.retry > MAX_RETRY) {
-                                [self.requests removeObject:request];
-                            } else {
-                                [request increaseRetryWithTimeInterval:5.0];
-                                request.sending = NO;
-                            }
+                            [request increaseRetryWithTimeInterval:5.0];
+                            request.sending = NO;
                         }
-                        dispatch_group_leave(group);
-                    }];
-                }
+                    }
+                    dispatch_group_leave(group);
+                }];
             }
-            dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [self persistTrackings];
-            });
         }
-    }];
+        dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NITLogD(LOGTAG, @"Trackings completed");
+            [self persistTrackings];
+            if ([self.delegate respondsToSelector:@selector(trackManagerDidComplete:)]) {
+                [self.delegate trackManagerDidComplete:self];
+            }
+        });
+    }
 }
 
 - (NSArray<NITTrackRequest*>*)availableRequests {

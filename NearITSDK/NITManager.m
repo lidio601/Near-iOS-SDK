@@ -141,10 +141,9 @@
 }
 
 - (void)pluginSetup {
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     NITDateManager *dateManager = [[NITDateManager alloc] init];
     NITRecipeHistory *recipeHistory = [[NITRecipeHistory alloc] initWithCacheManager:self.cacheManager dateManager:dateManager];
-    self.trackManager = [[NITTrackManager alloc] initWithNetworkManager:self.networkManager cacheManager:self.cacheManager reachability:self.internetReachability notificationCenter:[NSNotificationCenter defaultCenter] operationQueue:queue dateManager:dateManager];
+    self.trackManager = [[NITTrackManager alloc] initWithNetworkManager:self.networkManager cacheManager:self.cacheManager reachability:self.internetReachability notificationCenter:[NSNotificationCenter defaultCenter] dateManager:dateManager];
     NITCooldownValidator *cooldownValidator = [[NITCooldownValidator alloc] initWithRecipeHistory:recipeHistory dateManager:dateManager];
     NITScheduleValidator *scheduleValidator = [[NITScheduleValidator alloc] initWithDateManager:dateManager];
     NITRecipeValidationFilter *recipeValidationFilter = [[NITRecipeValidationFilter alloc] initWithValidators:@[cooldownValidator, scheduleValidator]];
