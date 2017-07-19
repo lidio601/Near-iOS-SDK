@@ -24,7 +24,6 @@ NSString* const TrackCacheKey = @"Trackings";
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) Reachability *reachability;
 @property (nonatomic, strong) NSNotificationCenter *notificationCenter;
-@property (nonatomic, strong) NSOperationQueue *queue;
 @property (nonatomic, strong) NITDateManager *dateManager;
 @property (atomic, strong) NSMutableArray<NITTrackRequest*> *requests;
 
