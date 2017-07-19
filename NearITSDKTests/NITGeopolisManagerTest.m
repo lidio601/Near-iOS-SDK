@@ -23,7 +23,6 @@
 #import "NITNetworkMockManger.h"
 #import "NITLog.h"
 #import "NITGeopolisNodesManager.h"
-#import "NITFakeLocationManager.h"
 #import "NITTestBeacon.h"
 #import "NITTrackManager.h"
 #import "NITDateManager.h"
@@ -643,31 +642,10 @@
     XCTAssertTrue([beaconProximity proximityWithBeaconIdentifier:@"beacon4" regionIdentifier:region1] == CLProximityFar);
 }
 
-// MARK: - Fake Location Manager test
-
-- (void)testFakeLocationManager {
-    NITFakeLocationManager *fakeLocationManager = [[NITFakeLocationManager alloc] init];
-    
-    CLCircularRegion *regionCircular1 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(45.2, 9.0) radius:200 identifier:@"regionCircular1"];
-    [fakeLocationManager startMonitoringForRegion:regionCircular1];
-    XCTAssertTrue([[fakeLocationManager monitoredRegions] count] == 1);
-    
-    CLBeaconRegion *beaconRegion1 = [[CLBeaconRegion alloc] initWithProximityUUID:[[NSUUID alloc] initWithUUIDString:@"ffffffff-1234-aaaa-1a2b-a1b2c3d4e5f6"] major:520 identifier:@"beaconRegion1"];
-    [fakeLocationManager startRangingBeaconsInRegion:beaconRegion1];
-    XCTAssertTrue([[fakeLocationManager rangedRegions] count] == 1);
-    
-    [fakeLocationManager stopMonitoringForRegion:regionCircular1];
-    XCTAssertTrue([[fakeLocationManager monitoredRegions] count] == 0);
-    
-    [fakeLocationManager stopRangingBeaconsInRegion:beaconRegion1];
-    XCTAssertTrue([[fakeLocationManager rangedRegions] count] == 0);
-}
-
 // MARK: - Test gotPulse
 
 - (void)testGotPulse {
-    NITFakeLocationManager *fakeLocationManager = [[NITFakeLocationManager alloc] init];
-    
+    CLLocationManager *locationManager = mock([CLLocationManager class]);
     NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"config_22"];
     NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     [nodesManager setNodesWithJsonApi:jsonApi];
@@ -679,7 +657,7 @@
     };
     NITRecipesManager *recipeManager = mock([NITRecipesManager class]);
     
-    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration locationManager:fakeLocationManager trackManager:self.trackManager];
+    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration locationManager:locationManager trackManager:self.trackManager];
     geopolisManager.recipesManager = recipeManager;
     
     // Check pulseBundle

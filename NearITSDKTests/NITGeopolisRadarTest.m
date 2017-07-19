@@ -17,7 +17,6 @@
 #import "NITGeofenceNode.h"
 #import "NITBeaconNode.h"
 #import "NITStubGeopolisRadar.h"
-#import "NITFakeLocationManager.h"
 #import "NITBeaconProximityManager.h"
 
 #define ID_R1 @"R1"
@@ -38,7 +37,6 @@
 @property (nonatomic, strong) NITGeopolisNodesManager *nodesManagerOne;
 @property (nonatomic, strong) NITGeopolisNodesManager *nodesManager22;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, strong) NITFakeLocationManager *fakeLocationManager;
 @property (nonatomic, strong) NITBeaconProximityManager *beaconProximity;
 
 @end
@@ -59,7 +57,6 @@
     [self.nodesManager22 setNodesWithJsonApi:config22];
     
     self.locationManager = mock([CLLocationManager class]);
-    self.fakeLocationManager = [[NITFakeLocationManager alloc] init];
     self.beaconProximity = mock([NITBeaconProximityManager class]);
 }
 

@@ -11,11 +11,11 @@
 #import "NITGeopolisManager+Tests.h"
 #import "NITNetworkMockManger.h"
 #import "NITCacheManager.h"
-#import "NITFakeLocationManager.h"
 #import "NITGeopolisNodesManager.h"
 #import "NITRecipesManager.h"
 #import "NITNode.h"
 #import "NITSimpleNotification.h"
+#import <CoreLocation/CoreLocation.h>
 #import <OCMockitoIOS/OCMockitoIOS.h>
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
 #import <CoreBluetooth/CoreBluetooth.h>
@@ -72,51 +72,10 @@
     [super tearDown];
 }
 
-- (void)testManagerID1 {
-    NITConfiguration *configuration = [[NITConfiguration alloc] init];
-    [configuration setApiKey:APIKEY];
-    NITFakeLocationManager *locationManager = [[NITFakeLocationManager alloc] init];
-    NITCacheManager *cacheManager = mock([NITCacheManager class]);
-    [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
-    CBCentralManager *bluetoothManager = mock([CBCentralManager class]);
-    [given([bluetoothManager state]) willReturnInteger:CBManagerStatePoweredOn];
-    
-    __weak NITManagerTest *weakSelf = self;
-    [self.networkManager setMock:^NITJSONAPI *(NSURLRequest *request) {
-        if ([request.URL.absoluteString containsString:@"/plugins/content-notification/contents/n1r1"]) {
-            return [weakSelf jsonApiWithContentsOfFile:@"content_reaction_mgr_22"];
-        }
-        return nil;
-    } forKey:@"content-reaction"];
-    
-    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager locationManager:locationManager bluetoothManager:bluetoothManager];
-    manager.delegate = self;
-    
-    NITGeopolisManager *geopolis = [manager geopolisManager];
-    XCTAssertTrue([[[geopolis nodesManager] roots] count] == 2);
-    
-    // Enter R1 geofence node, should be a simple-notification
-    [self.expectations setObject:[self expectationWithDescription:@"r1_notification"] forKey:@"r1_notification"];
-    CLRegion *r1 = [[[geopolis nodesManager] nodeWithID:@"r1"] createRegion];
-    CLRegion *r2 = [[[geopolis nodesManager] nodeWithID:@"r2"] createRegion];
-    [locationManager simulateDidDetermineStateWithRegion:r1 state:CLRegionStateInside];
-    [locationManager simulateDidDetermineStateWithRegion:r2 state:CLRegionStateOutside];
-    XCTAssertTrue([[locationManager monitoredRegions] count] == 4);
-    
-    [self.expectations setObject:[self expectationWithDescription:@"n1r1_notification"] forKey:@"n1r1_notification"];
-    CLRegion *n1r1 = [[[geopolis nodesManager] nodeWithID:@"n1r1"] createRegion];
-    [locationManager simulateDidDetermineStateWithRegion:n1r1 state:CLRegionStateInside];
-    XCTAssertTrue([[locationManager monitoredRegions] count] == 3);
-    
-    [configuration clear];
-    
-    [self waitForExpectationsWithTimeout:4.0 handler:nil];
-}
-
 - (void)testManagerDataPoint {
     NITConfiguration *configuration = [[NITConfiguration alloc] init];
     [configuration setApiKey:APIKEY];
-    NITFakeLocationManager *locationManager = [[NITFakeLocationManager alloc] init];
+    CLLocationManager *locationManager = mock([CLLocationManager class]);
     NITCacheManager *cacheManager = mock([NITCacheManager class]);
     [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
     CBCentralManager *bluetoothManager = mock([CBCentralManager class]);
