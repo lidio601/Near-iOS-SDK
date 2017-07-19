@@ -126,8 +126,10 @@
     trackManager.delegate = self;
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
-    [trackManager addTrackWithRequest:[self simpleTrackRequest]];
-    [verifyCount(self.cacheManager, times(2)) saveWithObject:anything() forKey:@"Trackings"];
+    [self executeOnClientRunLoopAfterDelay:0.25 block:^{
+        [trackManager addTrackWithRequest:[self simpleTrackRequest]];
+        [verifyCount(self.cacheManager, times(2)) saveWithObject:anything() forKey:@"Trackings"];
+    }];
     
     [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWWAN];
     

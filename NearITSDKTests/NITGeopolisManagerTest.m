@@ -23,7 +23,6 @@
 #import "NITNetworkMockManger.h"
 #import "NITLog.h"
 #import "NITGeopolisNodesManager.h"
-#import "NITTestBeacon.h"
 #import "NITTrackManager.h"
 #import "NITDateManager.h"
 #import "Reachability.h"
