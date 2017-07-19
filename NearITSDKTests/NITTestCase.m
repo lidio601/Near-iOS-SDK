@@ -8,7 +8,18 @@
 
 #import "NITTestCase.h"
 
+@interface NITTestCase()
+
+@property (assign) CFRunLoopRef clientRunLoop;
+
+@end
+
 @implementation NITTestCase
+
+- (void)setUp {
+    [super setUp];
+    self.clientRunLoop = CFRunLoopGetCurrent();
+}
 
 - (NITRecipe*)recipeWithContentsOfFile:(NSString*)filename {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
@@ -77,6 +88,15 @@
     NSData *jsonData = [NSData dataWithContentsOfFile:path];
     
     return [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
+}
+
+- (void)executeOnClientRunLoopAfterDelay:(NSTimeInterval)delayInSeconds block:(dispatch_block_t)block
+{
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        CFRunLoopPerformBlock(self.clientRunLoop, kCFRunLoopDefaultMode, block);
+        CFRunLoopWakeUp(self.clientRunLoop);
+    });
 }
 
 @end

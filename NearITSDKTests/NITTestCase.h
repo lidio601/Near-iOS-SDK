@@ -23,5 +23,6 @@
 - (NSArray<NITContent*>*)contentsWithContentsOfFile:(NSString*)filename;
 - (NITJSONAPI*)jsonApiWithContentsOfFile:(NSString*)filename;
 - (NSDictionary*)jsonWithContentsOfFile:(NSString*)filename;
+- (void)executeOnClientRunLoopAfterDelay:(NSTimeInterval)delayInSeconds block:(dispatch_block_t)block;
 
 @end

@@ -37,6 +37,7 @@ NSErrorDomain const NITNetworkMockErrorDomain = @"com.nearit.networkmock";
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NSNumber*> *mockCalls;
 @property (nonatomic) BOOL isMockCalled;
 @property (nonatomic) NSInteger numberOfCalls;
+@property (assign) CFRunLoopRef clientRunLoop;
 
 @end
 
@@ -49,48 +50,57 @@ NSErrorDomain const NITNetworkMockErrorDomain = @"com.nearit.networkmock";
         self.mockCalls = [[NSMutableDictionary alloc] init];
         self.isMockCalled = NO;
         self.numberOfCalls = 0;
+        self.clientRunLoop = CFRunLoopGetCurrent();
+        self.responseTime = 0;
     }
     return self;
 }
 
 - (void)makeRequestWithURLRequest:(NSURLRequest *)request jsonApicompletionHandler:(void (^)(NITJSONAPI * _Nullable, NSError * _Nullable))completionHandler {
-    if (self.mockResponse) {
-        NITNetworkResponse *response = self.mockResponse(request);
-        if (response) {
-            self.isMockCalled = true;
-            self.numberOfCalls++;
-            if (response.jsonApi) {
-                completionHandler(response.jsonApi, nil);
-            } else if(response.error) {
-                completionHandler(nil, response.error);
+    dispatch_block_t block = ^{
+        if (self.mockResponse) {
+            NITNetworkResponse *response = self.mockResponse(request);
+            if (response) {
+                self.isMockCalled = true;
+                self.numberOfCalls++;
+                if (response.jsonApi) {
+                    completionHandler(response.jsonApi, nil);
+                } else if(response.error) {
+                    completionHandler(nil, response.error);
+                }
             }
-        }
-    } else if (self.mock) {
-        NITJSONAPI *json = self.mock(request);
-        if (json) {
-            self.isMockCalled = YES;
-            self.numberOfCalls++;
-            completionHandler(json, nil);
-        } else {
-            completionHandler(nil, [NSError errorWithDomain:NITNetworkMockErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"No json api given"}]);
-        }
-    } else if([self.mockBlocks count] > 0) {
-        NITJSONAPI *json = nil;
-        for (NSString *key in self.mockBlocks) {
-            NITMockBlock block = [self.mockBlocks objectForKey:key];
-            json = block(request);
+        } else if (self.mock) {
+            NITJSONAPI *json = self.mock(request);
             if (json) {
-                [self.mockCalls setObject:[NSNumber numberWithBool:YES] forKey:key];
-                break;
+                self.isMockCalled = YES;
+                self.numberOfCalls++;
+                completionHandler(json, nil);
+            } else {
+                completionHandler(nil, [NSError errorWithDomain:NITNetworkMockErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"No json api given"}]);
             }
-        }
-        if (json) {
-            completionHandler(json, nil);
+        } else if([self.mockBlocks count] > 0) {
+            NITJSONAPI *json = nil;
+            for (NSString *key in self.mockBlocks) {
+                NITMockBlock block = [self.mockBlocks objectForKey:key];
+                json = block(request);
+                if (json) {
+                    [self.mockCalls setObject:[NSNumber numberWithBool:YES] forKey:key];
+                    break;
+                }
+            }
+            if (json) {
+                completionHandler(json, nil);
+            } else {
+                completionHandler(nil, [NSError errorWithDomain:NITNetworkMockErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"No json api given"}]);
+            }
         } else {
-            completionHandler(nil, [NSError errorWithDomain:NITNetworkMockErrorDomain code:101 userInfo:@{NSLocalizedDescriptionKey:@"No json api given"}]);
+            completionHandler(nil, [NSError errorWithDomain:NITNetworkMockErrorDomain code:100 userInfo:@{NSLocalizedDescriptionKey:@"Invalid mock block"}]);
         }
+    };
+    if (self.responseTime != 0) {
+        [self executeOnClientRunLoopAfterDelay:self.responseTime block:block];
     } else {
-        completionHandler(nil, [NSError errorWithDomain:NITNetworkMockErrorDomain code:100 userInfo:@{NSLocalizedDescriptionKey:@"Invalid mock block"}]);
+        block();
     }
 }
 
@@ -108,6 +118,15 @@ NSErrorDomain const NITNetworkMockErrorDomain = @"com.nearit.networkmock";
         return YES;
     }
     return NO;
+}
+
+- (void)executeOnClientRunLoopAfterDelay:(NSTimeInterval)delayInSeconds block:(dispatch_block_t)block
+{
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        CFRunLoopPerformBlock(self.clientRunLoop, kCFRunLoopDefaultMode, block);
+        CFRunLoopWakeUp(self.clientRunLoop);
+    });
 }
 
 @end

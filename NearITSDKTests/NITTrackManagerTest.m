@@ -69,6 +69,7 @@
 
 - (void)testTrackManagerOnlineTriple {
     NITNetworkMockManger *networkManager = [[NITNetworkMockManger alloc] init];
+    networkManager.responseTime = 1.5;
     networkManager.mock = ^NITJSONAPI *(NSURLRequest *request) {
         return [self jsonApiWithContentsOfFile:@"track_response"];
     };
@@ -83,10 +84,18 @@
     [self.expectations setObject:[self expectationWithDescription:EXP_THREE] forKey:EXP_THREE];
     
     [trackManager addTrackWithRequest:[self simpleTrackRequest]];
-    [trackManager addTrackWithRequest:[self simpleTrackRequest]];
-    [trackManager addTrackWithRequest:[self simpleTrackRequest]];
     
-    [self waitForExpectationsWithTimeout:4.0 handler:nil];
+    [self executeOnClientRunLoopAfterDelay:0.5 block:^{
+        XCTAssertTrue(trackManager.requests.count == 1);
+        [trackManager addTrackWithRequest:[self simpleTrackRequest]];
+        
+        [self executeOnClientRunLoopAfterDelay:0.5 block:^{
+            XCTAssertTrue(trackManager.requests.count == 2);
+            [trackManager addTrackWithRequest:[self simpleTrackRequest]];
+        }];
+    }];
+    
+    [self waitForExpectationsWithTimeout:6.0 handler:nil];
 }
 
 - (void)testTrackManagerOffline {
@@ -350,11 +359,10 @@
             self.caseNumber++;
             [[self.expectations objectForKey:EXP_ONE] fulfill];
         } else if (self.caseNumber == 1) {
-            XCTAssertTrue([trackManager.requests count] == 1);
             self.caseNumber++;
             [[self.expectations objectForKey:EXP_TWO] fulfill];
         } else if (self.caseNumber == 2) {
-            XCTAssertTrue([trackManager.requests count] == 0);
+            XCTAssertTrue([trackManager.availableRequests count] == 0);
             [[self.expectations objectForKey:EXP_THREE] fulfill];
         }
     } else if ([[self name] containsString:@"testTrackManagerOnline"]) {

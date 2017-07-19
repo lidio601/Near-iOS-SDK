@@ -29,6 +29,7 @@ typedef NITNetworkResponse* (^NITMockResponseBlock)(NSURLRequest *request);
 
 @property (nonatomic, strong) NITMockBlock mock;
 @property (nonatomic, strong) NITMockResponseBlock mockResponse;
+@property (nonatomic) NSTimeInterval responseTime;
 
 - (void)setMock:(NITMockBlock)mock forKey:(NSString*)key;
 - (void)removeMockForKey:(NSString*)key;
