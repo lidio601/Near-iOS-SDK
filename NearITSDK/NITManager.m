@@ -54,6 +54,7 @@
 @property (nonatomic, strong) NITTrackManager *trackManager;
 @property (nonatomic, strong) CBCentralManager *bluetoothManager;
 @property (nonatomic, strong) NITNotificationProcessor *notificationProcessor;
+@property (nonatomic, strong) UIApplication *application;
 @property (nonatomic) CBManagerState lastBluetoothState;
 @property (nonatomic) BOOL started;
 
@@ -80,14 +81,15 @@
     
     NITRecipesManager *recipesManager = [self makeRecipesManagerWithNetworkManager:networkManager cacheManager:cacheManager configuration:configuration trackManager:trackManager];
     
-    self = [self initWithConfiguration:configuration networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:profile trackManager:trackManager recipesManager:recipesManager];
+    self = [self initWithConfiguration:configuration application:[UIApplication sharedApplication] networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:profile trackManager:trackManager recipesManager:recipesManager];
     return self;
 }
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager {
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration application:(UIApplication*)application networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager {
     self = [super init];
     if (self) {
         self.showBackgroundNotification = YES;
+        self.application = application;
         
         self.configuration = configuration;
         self.networkManager = networkManager;
@@ -414,7 +416,7 @@
                 }
             } else {
                 //Notify the delegate
-                if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive && self.showBackgroundNotification) {
+                if (self.application.applicationState != UIApplicationStateActive && self.showBackgroundNotification) {
                     [self sendTrackingWithRecipeId:recipe.ID event:NITRecipeNotified];
                     if (NSClassFromString(@"UNMutableNotificationContent")) {
                         UNMutableNotificationContent *notification = [[UNMutableNotificationContent alloc] init];
@@ -446,7 +448,7 @@
                             notification.userInfo = @{@"owner" : @"NearIT", @"recipeId" : recipe.ID, @"type" : @"local"};
                         }
                         notification.fireDate = [NSDate date];
-                        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+                        [self.application scheduleLocalNotification:notification];
                     }
                 } else if ([self.delegate respondsToSelector:@selector(manager:eventWithContent:recipe:)]) {
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -481,7 +483,7 @@
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
     NITLogD(LOGTAG, @"Bluetooth state change: %@", [NITUtils stringFromBluetoothState:central.state]);
-    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive || [[UIApplication sharedApplication] applicationState] == UIApplicationStateInactive) {
+    if ([self.application applicationState] == UIApplicationStateActive || [self.application applicationState] == UIApplicationStateInactive) {
         self.lastBluetoothState = central.state;
         self.profile.installation.bluetoothState = self.lastBluetoothState;
         [self.profile.installation registerInstallation];
