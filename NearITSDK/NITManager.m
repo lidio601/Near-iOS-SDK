@@ -52,7 +52,6 @@
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) NITUserProfile *profile;
 @property (nonatomic, strong) NITTrackManager *trackManager;
-@property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) CBCentralManager *bluetoothManager;
 @property (nonatomic, strong) NITNotificationProcessor *notificationProcessor;
 @property (nonatomic, strong) Reachability *internetReachability;
@@ -72,7 +71,7 @@
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:self.configuration.appId];
     CBCentralManager *bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey : [NSNumber numberWithBool:NO]}];
     
-    self = [self initWithConfiguration:configuration networkManager:networkManager cacheManager:cacheManager locationManager:nil bluetoothManager:bluetoothManager];
+    self = [self initWithConfiguration:configuration networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager];
     return self;
 }
 
@@ -83,11 +82,11 @@
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:self.configuration.appId];
     CBCentralManager *bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey : [NSNumber numberWithBool:NO]}];
     
-    self = [self initWithConfiguration:configuration networkManager:networkManager cacheManager:cacheManager locationManager:nil bluetoothManager:bluetoothManager];
+    self = [self initWithConfiguration:configuration networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager];
     return self;
 }
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager locationManager:(CLLocationManager*)locationManager bluetoothManager:(CBCentralManager*)bluetoothManager {
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager {
     self = [super init];
     if (self) {
         self.showBackgroundNotification = YES;
@@ -95,7 +94,6 @@
         self.configuration = configuration;
         self.networkManager = networkManager;
         self.cacheManager = cacheManager;
-        self.locationManager = locationManager;
         self.bluetoothManager = bluetoothManager;
         self.lastBluetoothState = self.bluetoothManager.state;
         self.internetReachability = [Reachability reachabilityForInternetConnection];
@@ -150,7 +148,7 @@
     self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration trackManager:self.trackManager recipeHistory:recipeHistory recipeValidationFilter:recipeValidationFilter];
     self.recipesManager.manager = self;
     NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
-    self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration locationManager:self.locationManager trackManager:self.trackManager];
+    self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration locationManager:nil trackManager:self.trackManager];
     self.geopolisManager.recipesManager = self.recipesManager;
 }
 

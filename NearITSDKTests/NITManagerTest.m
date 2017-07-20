@@ -7,7 +7,6 @@
 //
 
 #import "NITTestCase.h"
-#import "NITManager+Tests.h"
 #import "NITGeopolisManager+Tests.h"
 #import "NITNetworkMockManger.h"
 #import "NITCacheManager.h"
@@ -22,6 +21,12 @@
 
 #define APIKEY @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJ0ZXN0TWFuYWdlciIsInJvbGVfa2V5IjoiYXBwIn19fQ.2-xxd79pAtxJ648T9i_3HJzHRaQdZt0JEIHG5Fmiidg"
 #define APPID @"testManager"
+
+@interface NITManager (Tests)
+
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager bluetoothManager:(CBCentralManager* _Nonnull)bluetoothManager;
+
+@end
 
 @interface NITManagerTest : NITTestCase<NITManagerDelegate>
 
@@ -75,7 +80,6 @@
 - (void)testManagerDataPoint {
     NITConfiguration *configuration = [[NITConfiguration alloc] init];
     [configuration setApiKey:APIKEY];
-    CLLocationManager *locationManager = mock([CLLocationManager class]);
     NITCacheManager *cacheManager = mock([NITCacheManager class]);
     [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
     CBCentralManager *bluetoothManager = mock([CBCentralManager class]);
@@ -89,7 +93,7 @@
         return nil;
     } forKey:@"dataPoint"];
     
-    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager locationManager:locationManager bluetoothManager:bluetoothManager];
+    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager];
     manager.delegate = self;
     
     XCTestExpectation *expOne = [self expectationWithDescription:@"One"];

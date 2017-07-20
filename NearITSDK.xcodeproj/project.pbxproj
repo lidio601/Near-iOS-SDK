@@ -423,7 +423,6 @@
 		1374D4A81F0A3B0E002248D4 /* recipe_pulse_bundle_tags.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recipe_pulse_bundle_tags.json; sourceTree = "<group>"; };
 		1374E0991EA5F4FA00D613A5 /* NearITSDKSwift.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NearITSDKSwift.podspec; sourceTree = "<group>"; };
 		1374E09B1EA5F5C500D613A5 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
-		1374E0D31EA89D2000D613A5 /* NITManager+Tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NITManager+Tests.h"; sourceTree = "<group>"; };
 		1374E0D41EA89DDF00D613A5 /* NITManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITManagerTest.m; sourceTree = "<group>"; };
 		1374E0D61EA8C00200D613A5 /* NITLogTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITLogTest.m; sourceTree = "<group>"; };
 		1374E0D81EA8C03B00D613A5 /* NITTestLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITTestLogger.h; sourceTree = "<group>"; };
@@ -1058,7 +1057,6 @@
 				137E38AB1E8A94E4008E83E6 /* NITTestCase.m */,
 				135CD7941E9B7621005C75A4 /* NITNetworkMockManger.h */,
 				135CD7951E9B7621005C75A4 /* NITNetworkMockManger.m */,
-				1374E0D31EA89D2000D613A5 /* NITManager+Tests.h */,
 				1374E0D81EA8C03B00D613A5 /* NITTestLogger.h */,
 				1374E0D91EA8C03B00D613A5 /* NITTestLogger.m */,
 				1374E1041EAA34D800D613A5 /* NITTrackManager+Tests.h */,
