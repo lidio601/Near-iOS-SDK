@@ -15,6 +15,7 @@
 #import "NITNode.h"
 #import "NITUserProfile.h"
 #import "NITSimpleNotification.h"
+#import "NITTrackManager.h"
 #import <CoreLocation/CoreLocation.h>
 #import <OCMockitoIOS/OCMockitoIOS.h>
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
@@ -27,7 +28,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
 
 @interface NITManager (Tests)
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager bluetoothManager:(CBCentralManager* _Nonnull)bluetoothManager profile:(NITUserProfile*)profile;
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager bluetoothManager:(CBCentralManager* _Nonnull)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager;
 
 @end
 
@@ -35,6 +36,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
 
 @property (nonatomic, strong) NITNetworkMockManger *networkManager;
 @property (nonatomic, strong) NITUserProfile *profile;
+@property (nonatomic, strong) NITTrackManager *trackManager;
 @property (nonatomic) NSInteger contentIndex;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, XCTestExpectation*> *expectations;
 
@@ -55,6 +57,8 @@ typedef void (^SetUserDataBlock)(NSError* error);
         block(nil);
         return nil;
     }];
+    
+    self.trackManager = mock([NITTrackManager class]);
     
     __weak NITManagerTest *weakSelf = self;
     [self.networkManager setMock:^NITJSONAPI *(NSURLRequest *request) {
@@ -104,7 +108,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
         return nil;
     } forKey:@"dataPoint"];
     
-    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:self.profile];
+    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:self.profile trackManager:self.trackManager];
     manager.delegate = self;
     
     XCTestExpectation *expOne = [self expectationWithDescription:@"One"];

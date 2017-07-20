@@ -71,16 +71,19 @@
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:self.configuration.appId];
     CBCentralManager *bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey : [NSNumber numberWithBool:NO]}];
     
-    Reachability *internetReachabililty =  [Reachability reachabilityForInternetConnection];
-    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager reachability:internetReachabililty];
-    NITUserDataBackoff *userDataBackoff = [[NITUserDataBackoff alloc] initWithConfiguration:self.configuration networkManager:self.networkManager cacheManager:self.cacheManager];
-    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation userDataBackoff:userDataBackoff];
+    Reachability *internetReachability =  [Reachability reachabilityForInternetConnection];
+    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager reachability:internetReachability];
+    NITUserDataBackoff *userDataBackoff = [[NITUserDataBackoff alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:configuration networkManager:networkManager installation:installation userDataBackoff:userDataBackoff];
     
-    self = [self initWithConfiguration:configuration networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:profile];
+    NITDateManager *dateManager = [[NITDateManager alloc] init];
+    NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:cacheManager reachability:internetReachability notificationCenter:[NSNotificationCenter defaultCenter] dateManager:dateManager];
+    
+    self = [self initWithConfiguration:configuration networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:profile trackManager:trackManager];
     return self;
 }
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager profile:(NITUserProfile*)profile {
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager {
     self = [super init];
     if (self) {
         self.showBackgroundNotification = YES;
@@ -96,6 +99,9 @@
         
         self.profile = profile;
         self.profile.delegate = self;
+        
+        self.trackManager = trackManager;
+        
         [self.cacheManager setAppId:[self.configuration appId]];
         [self pluginSetup];
         [self reactionsSetup];
@@ -133,7 +139,6 @@
 - (void)pluginSetup {
     NITDateManager *dateManager = [[NITDateManager alloc] init];
     NITRecipeHistory *recipeHistory = [[NITRecipeHistory alloc] initWithCacheManager:self.cacheManager dateManager:dateManager];
-    self.trackManager = [[NITTrackManager alloc] initWithNetworkManager:self.networkManager cacheManager:self.cacheManager reachability:self.internetReachability notificationCenter:[NSNotificationCenter defaultCenter] dateManager:dateManager];
     NITCooldownValidator *cooldownValidator = [[NITCooldownValidator alloc] initWithRecipeHistory:recipeHistory dateManager:dateManager];
     NITScheduleValidator *scheduleValidator = [[NITScheduleValidator alloc] initWithDateManager:dateManager];
     NITRecipeValidationFilter *recipeValidationFilter = [[NITRecipeValidationFilter alloc] initWithValidators:@[cooldownValidator, scheduleValidator]];
