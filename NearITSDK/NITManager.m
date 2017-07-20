@@ -54,7 +54,6 @@
 @property (nonatomic, strong) NITTrackManager *trackManager;
 @property (nonatomic, strong) CBCentralManager *bluetoothManager;
 @property (nonatomic, strong) NITNotificationProcessor *notificationProcessor;
-@property (nonatomic, strong) Reachability *internetReachability;
 @property (nonatomic) CBManagerState lastBluetoothState;
 @property (nonatomic) BOOL started;
 
@@ -93,7 +92,6 @@
         self.cacheManager = cacheManager;
         self.bluetoothManager = bluetoothManager;
         self.lastBluetoothState = self.bluetoothManager.state;
-        self.internetReachability = [Reachability reachabilityForInternetConnection];
         
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
         
