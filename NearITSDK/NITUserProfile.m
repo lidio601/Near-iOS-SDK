@@ -16,7 +16,7 @@
 #import "NITInstallation.h"
 #import "NITUserDataBackoff.h"
 
-@interface NITUserProfile()
+@interface NITUserProfile()<NITUserDataBackoffDelegate>
 
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) NITNetworkManager *networkManager;
@@ -33,6 +33,7 @@
         self.networkManager = networkManager;
         self.installation = installation;
         self.userDataBackoff = userDataBackoff;
+        self.userDataBackoff.delegate = self;
     }
     return self;
 }
@@ -130,6 +131,16 @@
 
 - (void)shouldSendUserData {
     [self.userDataBackoff shouldSendDataPoints];
+}
+
+- (void)userDataBackoffDidComplete:(NITUserDataBackoff *)userDataBackoff {
+    if ([self.delegate respondsToSelector:@selector(profileUserDataBackoffDidComplete:)]) {
+        [self.delegate profileUserDataBackoffDidComplete:self];
+    }
+}
+
+- (void)userDataBackoffDidFailed:(NITUserDataBackoff *)userDataBackoff withError:(NSError *)error {
+    
 }
 
 @end

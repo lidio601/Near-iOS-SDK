@@ -13,9 +13,17 @@
 @class NITNetworkManager;
 @class NITInstallation;
 @class NITUserDataBackoff;
+@class NITUserProfile;
+
+@protocol NITUserProfileDelegate <NSObject>
+
+- (void)profileUserDataBackoffDidComplete:(NITUserProfile* _Nonnull)profile;
+
+@end
 
 @interface NITUserProfile : NSObject
 
+@property (nonatomic, weak) id<NITUserProfileDelegate> _Nullable delegate;
 @property (nonatomic, strong) NITInstallation * _Nonnull installation;
 
 - (instancetype _Nonnull )initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager installation:(NITInstallation* _Nonnull)installation userDataBackoff:(NITUserDataBackoff* _Nonnull)userDataBackoff;

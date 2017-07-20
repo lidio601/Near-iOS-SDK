@@ -13,6 +13,7 @@
 #import "NITGeopolisNodesManager.h"
 #import "NITRecipesManager.h"
 #import "NITNode.h"
+#import "NITUserProfile.h"
 #import "NITSimpleNotification.h"
 #import <CoreLocation/CoreLocation.h>
 #import <OCMockitoIOS/OCMockitoIOS.h>
@@ -22,15 +23,18 @@
 #define APIKEY @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJ0ZXN0TWFuYWdlciIsInJvbGVfa2V5IjoiYXBwIn19fQ.2-xxd79pAtxJ648T9i_3HJzHRaQdZt0JEIHG5Fmiidg"
 #define APPID @"testManager"
 
+typedef void (^SetUserDataBlock)(NSError* error);
+
 @interface NITManager (Tests)
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager bluetoothManager:(CBCentralManager* _Nonnull)bluetoothManager;
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager bluetoothManager:(CBCentralManager* _Nonnull)bluetoothManager profile:(NITUserProfile*)profile;
 
 @end
 
 @interface NITManagerTest : NITTestCase<NITManagerDelegate>
 
 @property (nonatomic, strong) NITNetworkMockManger *networkManager;
+@property (nonatomic, strong) NITUserProfile *profile;
 @property (nonatomic) NSInteger contentIndex;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, XCTestExpectation*> *expectations;
 
@@ -44,6 +48,13 @@
     self.networkManager = [[NITNetworkMockManger alloc] init];
     self.contentIndex = 0;
     self.expectations = [[NSMutableDictionary alloc] init];
+    
+    self.profile = mock([NITUserProfile class]);
+    [givenVoid([self.profile setUserDataWithKey:anything() value:anything() completionHandler:anything()]) willDo:^id _Nonnull(NSInvocation * _Nonnull invocation) {
+        SetUserDataBlock block = [invocation mkt_arguments][2];
+        block(nil);
+        return nil;
+    }];
     
     __weak NITManagerTest *weakSelf = self;
     [self.networkManager setMock:^NITJSONAPI *(NSURLRequest *request) {
@@ -93,7 +104,7 @@
         return nil;
     } forKey:@"dataPoint"];
     
-    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager];
+    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:self.profile];
     manager.delegate = self;
     
     XCTestExpectation *expOne = [self expectationWithDescription:@"One"];
@@ -111,6 +122,8 @@
         
         [expTwo fulfill];
     }];
+    
+    [verifyCount(self.profile, times(2)) setUserDataWithKey:anything() value:anything() completionHandler:anything()];
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
 }

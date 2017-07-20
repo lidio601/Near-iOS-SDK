@@ -40,7 +40,7 @@
 
 #define LOGTAG @"Manager"
 
-@interface NITManager()<NITManaging, CBCentralManagerDelegate, NITUserDataBackoffDelegate>
+@interface NITManager()<NITManaging, CBCentralManagerDelegate, NITUserProfileDelegate>
 
 @property (nonatomic, strong) NITGeopolisManager *geopolisManager;
 @property (nonatomic, strong) NITRecipesManager *recipesManager;
@@ -71,11 +71,16 @@
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:self.configuration.appId];
     CBCentralManager *bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey : [NSNumber numberWithBool:NO]}];
     
-    self = [self initWithConfiguration:configuration networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager];
+    Reachability *internetReachabililty =  [Reachability reachabilityForInternetConnection];
+    NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager reachability:internetReachabililty];
+    NITUserDataBackoff *userDataBackoff = [[NITUserDataBackoff alloc] initWithConfiguration:self.configuration networkManager:self.networkManager cacheManager:self.cacheManager];
+    NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation userDataBackoff:userDataBackoff];
+    
+    self = [self initWithConfiguration:configuration networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:profile];
     return self;
 }
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager {
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager profile:(NITUserProfile*)profile {
     self = [super init];
     if (self) {
         self.showBackgroundNotification = YES;
@@ -89,10 +94,8 @@
         
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
         
-        NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager reachability:self.internetReachability];
-        NITUserDataBackoff *userDataBackoff = [[NITUserDataBackoff alloc] initWithConfiguration:self.configuration networkManager:self.networkManager cacheManager:self.cacheManager];
-        userDataBackoff.delegate = self;
-        self.profile = [[NITUserProfile alloc] initWithConfiguration:self.configuration networkManager:self.networkManager installation:installation userDataBackoff:userDataBackoff];
+        self.profile = profile;
+        self.profile.delegate = self;
         [self.cacheManager setAppId:[self.configuration appId]];
         [self pluginSetup];
         [self reactionsSetup];
@@ -457,16 +460,12 @@
     }
 }
 
-// MARK: - User Data Backoff delegate
+// MARK: - Profile delegate
 
-- (void)userDataBackoffDidComplete:(NITUserDataBackoff *)userDataBackoff {
+- (void)profileUserDataBackoffDidComplete:(NITUserProfile *)profile {
     [self.recipesManager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
         NITLogI(LOGTAG, @"Recipes updated due to user data backoff completion");
     }];
-}
-
-- (void)userDataBackoffDidFailed:(NITUserDataBackoff *)userDataBackoff withError:(NSError *)error {
-    
 }
 
 // MARK: - Bluetooth manager delegate
