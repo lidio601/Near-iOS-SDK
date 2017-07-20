@@ -35,7 +35,6 @@
 @property (nonatomic) BOOL showBackgroundNotification;
 
 - (instancetype _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey;
-- (instancetype _Nonnull)initWithSuiteName:(NSString * _Nonnull)suiteName;
 
 - (void)start;
 - (void)stop;

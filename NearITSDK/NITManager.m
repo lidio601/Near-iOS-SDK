@@ -75,17 +75,6 @@
     return self;
 }
 
-- (instancetype)initWithSuiteName:(NSString *)suiteName {
-    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
-    NITConfiguration *configuration = [[NITConfiguration alloc] initWithUserDefaults:userDefaults];
-    id<NITNetworkManaging> networkManager = [[NITNetworkManager alloc] init];
-    NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:self.configuration.appId];
-    CBCentralManager *bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey : [NSNumber numberWithBool:NO]}];
-    
-    self = [self initWithConfiguration:configuration networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager];
-    return self;
-}
-
 - (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager {
     self = [super init];
     if (self) {

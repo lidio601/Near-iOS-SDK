@@ -232,7 +232,6 @@
 		130CCF971F02644000876327 /* NITNotificationProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITNotificationProcessor.h; sourceTree = "<group>"; };
 		130CCF981F02644000876327 /* NITNotificationProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITNotificationProcessor.m; sourceTree = "<group>"; };
 		130CCF9B1F02690D00876327 /* NITNotificationProcessorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITNotificationProcessorTest.m; sourceTree = "<group>"; };
-		130FB3781EEE7375008B24C1 /* notification-service.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "notification-service.md"; sourceTree = "<group>"; };
 		130FB37C1EEE8E78008B24C1 /* NITRecipeHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NITRecipeHistory.h; sourceTree = "<group>"; };
 		130FB37D1EEE8E78008B24C1 /* NITRecipeHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipeHistory.m; sourceTree = "<group>"; };
 		130FB3801EEE9309008B24C1 /* NITRecipeHistoryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NITRecipeHistoryTest.m; sourceTree = "<group>"; };
@@ -951,7 +950,6 @@
 				135CD78F1E976A40005C75A4 /* testing.md */,
 				135CD7901E976A40005C75A4 /* user-profilation.md */,
 				1374E0DB1EA8C67400D613A5 /* logging.md */,
-				130FB3781EEE7375008B24C1 /* notification-service.md */,
 				135BB6521EFBC0D0005DB5C9 /* local-background-notification.md */,
 				135BB6541EFBD2E7005DB5C9 /* apns_walkthrough.md */,
 			);

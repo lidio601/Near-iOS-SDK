@@ -11,6 +11,5 @@ pages:
     - 'Advanced topics' :
         - 'Testing' : 'testing.md'
         - 'Logging' : 'logging.md'
-        - 'Notification Service Extension' : 'notification-service.md'
         - 'Push capabilities and certificates' : 'apns_walkthrough.md'
         - 'Local background notification' : 'local-background-notification.md'

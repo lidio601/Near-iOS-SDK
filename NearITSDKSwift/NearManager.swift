@@ -44,12 +44,6 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.delegate = self
     }
     
-    public init(suiteName: String) {
-        super.init()
-        manager = NITManager(suiteName: suiteName)
-        manager.delegate = self
-    }
-    
     public func start() {
         manager.start()
     }
