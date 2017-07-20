@@ -78,11 +78,13 @@
     NITDateManager *dateManager = [[NITDateManager alloc] init];
     NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:cacheManager reachability:internetReachability notificationCenter:[NSNotificationCenter defaultCenter] dateManager:dateManager];
     
-    self = [self initWithConfiguration:configuration networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:profile trackManager:trackManager];
+    NITRecipesManager *recipesManager = [self makeRecipesManagerWithNetworkManager:networkManager cacheManager:cacheManager configuration:configuration trackManager:trackManager];
+    
+    self = [self initWithConfiguration:configuration networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:profile trackManager:trackManager recipesManager:recipesManager];
     return self;
 }
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager {
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager {
     self = [super init];
     if (self) {
         self.showBackgroundNotification = YES;
@@ -92,6 +94,8 @@
         self.cacheManager = cacheManager;
         self.bluetoothManager = bluetoothManager;
         self.lastBluetoothState = self.bluetoothManager.state;
+        self.recipesManager = recipesManager;
+        self.recipesManager.manager = self;
         
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
         
@@ -135,16 +139,18 @@
 }
 
 - (void)pluginSetup {
-    NITDateManager *dateManager = [[NITDateManager alloc] init];
-    NITRecipeHistory *recipeHistory = [[NITRecipeHistory alloc] initWithCacheManager:self.cacheManager dateManager:dateManager];
-    NITCooldownValidator *cooldownValidator = [[NITCooldownValidator alloc] initWithRecipeHistory:recipeHistory dateManager:dateManager];
-    NITScheduleValidator *scheduleValidator = [[NITScheduleValidator alloc] initWithDateManager:dateManager];
-    NITRecipeValidationFilter *recipeValidationFilter = [[NITRecipeValidationFilter alloc] initWithValidators:@[cooldownValidator, scheduleValidator]];
-    self.recipesManager = [[NITRecipesManager alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration trackManager:self.trackManager recipeHistory:recipeHistory recipeValidationFilter:recipeValidationFilter];
-    self.recipesManager.manager = self;
     NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration locationManager:nil trackManager:self.trackManager];
     self.geopolisManager.recipesManager = self.recipesManager;
+}
+
+- (NITRecipesManager*)makeRecipesManagerWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager configuration:(NITConfiguration*)configuration trackManager:(NITTrackManager*)trackManager {
+    NITDateManager *dateManager = [[NITDateManager alloc] init];
+    NITRecipeHistory *recipeHistory = [[NITRecipeHistory alloc] initWithCacheManager:cacheManager dateManager:dateManager];
+    NITCooldownValidator *cooldownValidator = [[NITCooldownValidator alloc] initWithRecipeHistory:recipeHistory dateManager:dateManager];
+    NITScheduleValidator *scheduleValidator = [[NITScheduleValidator alloc] initWithDateManager:dateManager];
+    NITRecipeValidationFilter *recipeValidationFilter = [[NITRecipeValidationFilter alloc] initWithValidators:@[cooldownValidator, scheduleValidator]];
+    return [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:configuration trackManager:trackManager recipeHistory:recipeHistory recipeValidationFilter:recipeValidationFilter];
 }
 
 - (void)reactionsSetup {

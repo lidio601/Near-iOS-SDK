@@ -28,7 +28,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
 
 @interface NITManager (Tests)
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager bluetoothManager:(CBCentralManager* _Nonnull)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager;
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager bluetoothManager:(CBCentralManager* _Nonnull)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager;
 
 @end
 
@@ -37,6 +37,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
 @property (nonatomic, strong) NITNetworkMockManger *networkManager;
 @property (nonatomic, strong) NITUserProfile *profile;
 @property (nonatomic, strong) NITTrackManager *trackManager;
+@property (nonatomic, strong) NITRecipesManager *recipesManager;
 @property (nonatomic) NSInteger contentIndex;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, XCTestExpectation*> *expectations;
 
@@ -59,6 +60,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
     }];
     
     self.trackManager = mock([NITTrackManager class]);
+    self.recipesManager = mock([NITRecipesManager class]);
     
     __weak NITManagerTest *weakSelf = self;
     [self.networkManager setMock:^NITJSONAPI *(NSURLRequest *request) {
@@ -108,7 +110,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
         return nil;
     } forKey:@"dataPoint"];
     
-    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:self.profile trackManager:self.trackManager];
+    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:self.profile trackManager:self.trackManager recipesManager:self.recipesManager];
     manager.delegate = self;
     
     XCTestExpectation *expOne = [self expectationWithDescription:@"One"];
