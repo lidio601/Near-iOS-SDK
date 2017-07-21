@@ -147,12 +147,6 @@
     [self.geopolisManager stop];
 }
 
-- (void)pluginSetup {
-    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
-    self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration trackManager:self.trackManager];
-    self.geopolisManager.recipesManager = self.recipesManager;
-}
-
 - (NITRecipesManager*)makeRecipesManagerWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager configuration:(NITConfiguration*)configuration trackManager:(NITTrackManager*)trackManager {
     NITDateManager *dateManager = [[NITDateManager alloc] init];
     NITRecipeHistory *recipeHistory = [[NITRecipeHistory alloc] initWithCacheManager:cacheManager dateManager:dateManager];
