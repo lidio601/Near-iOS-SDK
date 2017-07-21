@@ -8,6 +8,8 @@
 
 #import "NITReaction.h"
 
+extern NSString* const NITContentPluginName;
+
 @interface NITContentReaction : NITReaction
 
 @end

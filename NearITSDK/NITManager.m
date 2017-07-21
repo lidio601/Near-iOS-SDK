@@ -33,6 +33,7 @@
 #import "Reachability.h"
 #import "NSData+Zip.h"
 #import "NITJSONAPI.h"
+#import "NITReaction.h"
 #import "NITNotificationProcessor.h"
 #import "NITUserDataBackoff.h"
 #import <CoreBluetooth/CoreBluetooth.h>
@@ -45,8 +46,6 @@
 @property (nonatomic, strong) NITGeopolisManager *geopolisManager;
 @property (nonatomic, strong) NITRecipesManager *recipesManager;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NITReaction*> *reactions;
-@property (nonatomic, strong) NITFeedbackReaction *feedbackReaction;
-@property (nonatomic, strong) NITCouponReaction *couponReaction;
 @property (nonatomic, strong) id<NITNetworkManaging> networkManager;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) NITConfiguration *configuration;
@@ -81,11 +80,13 @@
     
     NITRecipesManager *recipesManager = [self makeRecipesManagerWithNetworkManager:networkManager cacheManager:cacheManager configuration:configuration trackManager:trackManager];
     
-    self = [self initWithConfiguration:configuration application:[UIApplication sharedApplication] networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:profile trackManager:trackManager recipesManager:recipesManager];
+    NSMutableDictionary<NSString*, NITReaction*> *reactions = [NITManager makeReactionsWithConfiguration:configuration cacheManager:cacheManager networkManager:networkManager];
+    
+    self = [self initWithConfiguration:configuration application:[UIApplication sharedApplication] networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:profile trackManager:trackManager recipesManager:recipesManager reactions:reactions];
     return self;
 }
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration application:(UIApplication*)application networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager {
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration application:(UIApplication*)application networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager reactions:(NSMutableDictionary<NSString*, NITReaction*>*)reactions {
     self = [super init];
     if (self) {
         self.showBackgroundNotification = YES;
@@ -98,6 +99,7 @@
         self.lastBluetoothState = self.bluetoothManager.state;
         self.recipesManager = recipesManager;
         self.recipesManager.manager = self;
+        self.reactions = reactions;
         
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
         
@@ -108,7 +110,6 @@
         
         [self.cacheManager setAppId:[self.configuration appId]];
         [self pluginSetup];
-        [self reactionsSetup];
         self.started = NO;
         self.notificationProcessor = [[NITNotificationProcessor alloc] initWithRecipesManager:self.recipesManager reactions:self.reactions];
         
@@ -155,17 +156,16 @@
     return [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:configuration trackManager:trackManager recipeHistory:recipeHistory recipeValidationFilter:recipeValidationFilter];
 }
 
-- (void)reactionsSetup {
-    self.reactions = [[NSMutableDictionary alloc] init];
++ (NSMutableDictionary<NSString*, NITReaction*>*)makeReactionsWithConfiguration:(NITConfiguration*)configuration cacheManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager {
+    NSMutableDictionary<NSString*, NITReaction*> *reactions = [[NSMutableDictionary alloc] init];
     
-    self.couponReaction = [[NITCouponReaction alloc] initWithCacheManager:self.cacheManager configuration:self.configuration networkManager:self.networkManager];
-    self.feedbackReaction = [[NITFeedbackReaction alloc] initWithCacheManager:self.cacheManager configuration:self.configuration networkManager:self.networkManager];
+    [reactions setObject:[[NITSimpleNotificationReaction alloc] initWithCacheManager:cacheManager networkManager:networkManager] forKey:NITSimpleNotificationPluginName];
+    [reactions setObject:[[NITContentReaction alloc] initWithCacheManager:cacheManager networkManager:networkManager] forKey:NITContentPluginName];
+    [reactions setObject:[[NITCouponReaction alloc] initWithCacheManager:cacheManager configuration:configuration networkManager:networkManager] forKey:NITCouponPluginName];
+    [reactions setObject:[[NITFeedbackReaction alloc] initWithCacheManager:cacheManager configuration:configuration networkManager:networkManager] forKey:NITFeedbackPluginName];
+    [reactions setObject:[[NITCustomJSONReaction alloc] initWithCacheManager:cacheManager networkManager:networkManager] forKey:NITCustomJSONPluginName];
     
-    [self.reactions setObject:[[NITSimpleNotificationReaction alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager] forKey:@"simple-notification"];
-    [self.reactions setObject:[[NITContentReaction alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager] forKey:@"content-notification"];
-    [self.reactions setObject:self.couponReaction forKey:@"coupon-blaster"];
-    [self.reactions setObject:self.feedbackReaction forKey:@"feedbacks"];
-    [self.reactions setObject:[[NITCustomJSONReaction alloc] initWithCacheManager:self.cacheManager networkManager:self.networkManager] forKey:@"json-sender"];
+    return reactions;
 }
 
 - (void)refreshConfigWithCompletionHandler:(void (^)(NSError * _Nullable))completionHandler {
@@ -286,7 +286,8 @@
 
 - (void)sendEventWithEvent:(NITEvent *)event completionHandler:(void (^)(NSError * _Nullable))handler {
     if ([[event pluginName] isEqualToString:NITFeedbackPluginName]) {
-        [self.feedbackReaction sendEventWithFeedbackEvent:(NITFeedbackEvent*)event completionHandler:^(NSError * _Nullable error) {
+        NITFeedbackReaction *feedbackReaction = (NITFeedbackReaction*)[self.reactions objectForKey:NITFeedbackPluginName];
+        [feedbackReaction sendEventWithFeedbackEvent:(NITFeedbackEvent*)event completionHandler:^(NSError * _Nullable error) {
             if (handler) {
                 [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                     handler(error);
@@ -304,7 +305,8 @@
 }
 
 - (void)couponsWithCompletionHandler:(void (^)(NSArray<NITCoupon*>*, NSError*))handler {
-    [self.couponReaction couponsWithCompletionHandler:^(NSArray<NITCoupon *> * coupons, NSError * error) {
+    NITCouponReaction *couponReaction = (NITCouponReaction*)[self.reactions objectForKey:NITCouponPluginName];
+    [couponReaction couponsWithCompletionHandler:^(NSArray<NITCoupon *> * coupons, NSError * error) {
         if (handler) {
             handler(coupons, error);
         }

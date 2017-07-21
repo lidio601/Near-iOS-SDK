@@ -9,6 +9,8 @@
 #import "NITReaction.h"
 #import "NITCustomJSON.h"
 
+extern NSString* const NITCustomJSONPluginName;
+
 @interface NITCustomJSONReaction : NITReaction
 
 @end

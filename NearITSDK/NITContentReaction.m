@@ -21,6 +21,8 @@
 #define CACHE_KEY @"ContentReaction"
 #define LOGTAG @"ContentReaction"
 
+NSString* const NITContentPluginName = @"content-notification";
+
 @interface NITContentReaction()
 
 @property (nonatomic, strong) NSArray<NITContent*> *contents;

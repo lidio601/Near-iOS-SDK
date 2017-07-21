@@ -15,6 +15,7 @@
 #import "NITConstants.h"
 #import "NITSimpleNotification.h"
 #import "NITLog.h"
+#import "NITSimpleNotificationReaction.h"
 
 #define LOGTAG @"NotificationProcessor"
 

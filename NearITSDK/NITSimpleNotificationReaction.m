@@ -15,6 +15,8 @@
 
 #define LOGTAG @"SimpleNotificationReaction"
 
+NSString* const NITSimpleNotificationPluginName = @"simple-notification";
+
 @implementation NITSimpleNotificationReaction
 
 - (void)contentWithRecipe:(NITRecipe *)recipe completionHandler:(void (^)(id content, NSError * error))handler {

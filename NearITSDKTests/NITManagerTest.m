@@ -16,6 +16,7 @@
 #import "NITUserProfile.h"
 #import "NITSimpleNotification.h"
 #import "NITTrackManager.h"
+#import "NITReaction.h"
 #import <CoreLocation/CoreLocation.h>
 #import <OCMockitoIOS/OCMockitoIOS.h>
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
@@ -28,7 +29,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
 
 @interface NITManager (Tests)
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration application:(UIApplication*)application networkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager bluetoothManager:(CBCentralManager* _Nonnull)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager;
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration application:(UIApplication*)application networkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager bluetoothManager:(CBCentralManager* _Nonnull)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager reactions:(NSMutableDictionary<NSString*, NITReaction*>*)reactions;
 
 @end
 
@@ -38,6 +39,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
 @property (nonatomic, strong) NITUserProfile *profile;
 @property (nonatomic, strong) NITTrackManager *trackManager;
 @property (nonatomic, strong) NITRecipesManager *recipesManager;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, id> *reactions;
 @property (nonatomic, strong) UIApplication *application;
 @property (nonatomic) NSInteger contentIndex;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, XCTestExpectation*> *expectations;
@@ -52,6 +54,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
     self.networkManager = [[NITNetworkMockManger alloc] init];
     self.contentIndex = 0;
     self.expectations = [[NSMutableDictionary alloc] init];
+    self.reactions = [[NSMutableDictionary alloc] init];
     
     self.profile = mock([NITUserProfile class]);
     [givenVoid([self.profile setUserDataWithKey:anything() value:anything() completionHandler:anything()]) willDo:^id _Nonnull(NSInvocation * _Nonnull invocation) {
@@ -114,7 +117,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
         return nil;
     } forKey:@"dataPoint"];
     
-    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration application:self.application networkManager:self.networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:self.profile trackManager:self.trackManager recipesManager:self.recipesManager];
+    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration application:self.application networkManager:self.networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:self.profile trackManager:self.trackManager recipesManager:self.recipesManager reactions:self.reactions];
     manager.delegate = self;
     
     XCTestExpectation *expOne = [self expectationWithDescription:@"One"];

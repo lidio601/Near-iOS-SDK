@@ -13,6 +13,8 @@
 @class NITConfiguration;
 @class NITCacheManager;
 
+extern NSString* _Nonnull const NITCouponPluginName;
+
 @interface NITCouponReaction : NITReaction
 
 - (instancetype _Nonnull)initWithCacheManager:(NITCacheManager * _Nonnull)cacheManager configuration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager;

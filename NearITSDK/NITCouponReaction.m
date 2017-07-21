@@ -21,6 +21,8 @@
 
 #define LOGTAG @"CouponReaction"
 
+NSString* const NITCouponPluginName = @"coupon-blaster";
+
 @interface NITCouponReaction()
 
 @property (nonatomic, strong) NITConfiguration *configuration;

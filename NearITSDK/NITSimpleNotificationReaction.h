@@ -8,6 +8,8 @@
 
 #import "NITReaction.h"
 
+extern NSString* const NITSimpleNotificationPluginName;
+
 @interface NITSimpleNotificationReaction : NITReaction
 
 @end

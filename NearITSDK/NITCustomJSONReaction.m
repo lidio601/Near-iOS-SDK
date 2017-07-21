@@ -16,6 +16,8 @@
 
 #define CACHE_KEY @"CustomJSONReaction"
 
+NSString* const NITCustomJSONPluginName = @"json-sender";
+
 @interface NITCustomJSONReaction()
 
 @property (nonatomic, strong) NSArray<NITCustomJSON*> *jsons;

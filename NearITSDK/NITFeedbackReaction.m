@@ -18,6 +18,8 @@
 
 #define CACHE_KEY @"FeedbackReaction"
 
+NSString* const NITFeedbackPluginName = @"feedbacks";
+
 @interface NITFeedbackReaction()
 
 @property (nonatomic, strong) NSArray<NITFeedback*> *feedbacks;

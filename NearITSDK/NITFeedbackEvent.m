@@ -8,6 +8,7 @@
 
 #import "NITFeedbackEvent.h"
 #import "NITFeedback.h"
+#import "NITFeedbackReaction.h"
 #import "NITJSONAPI.h"
 #import "NITJSONAPIResource.h"
 #import "NITConfiguration.h"

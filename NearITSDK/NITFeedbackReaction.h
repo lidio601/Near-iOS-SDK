@@ -12,6 +12,8 @@
 @class NITFeedbackEvent;
 @class NITConfiguration;
 
+extern NSString* _Nonnull const NITFeedbackPluginName;
+
 @interface NITFeedbackReaction : NITReaction
 
 - (instancetype _Nonnull)initWithCacheManager:(NITCacheManager * _Nonnull)cacheManager configuration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager;
