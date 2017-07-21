@@ -29,7 +29,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
 
 @interface NITManager (Tests)
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration application:(UIApplication*)application networkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager bluetoothManager:(CBCentralManager* _Nonnull)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager reactions:(NSMutableDictionary<NSString*, NITReaction*>*)reactions;
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration application:(UIApplication*)application networkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager bluetoothManager:(CBCentralManager* _Nonnull)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager geopolisManager:(NITGeopolisManager*)geopolisManager reactions:(NSMutableDictionary<NSString*, NITReaction*>*)reactions;
 
 @end
 
@@ -39,7 +39,8 @@ typedef void (^SetUserDataBlock)(NSError* error);
 @property (nonatomic, strong) NITUserProfile *profile;
 @property (nonatomic, strong) NITTrackManager *trackManager;
 @property (nonatomic, strong) NITRecipesManager *recipesManager;
-@property (nonatomic, strong) NSMutableDictionary<NSString*, id> *reactions;
+@property (nonatomic, strong) NITGeopolisManager *geopolisManager;
+@property (nonatomic, strong) NSMutableDictionary<NSString*, NITReaction*> *reactions;
 @property (nonatomic, strong) UIApplication *application;
 @property (nonatomic) NSInteger contentIndex;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, XCTestExpectation*> *expectations;
@@ -65,6 +66,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
     
     self.trackManager = mock([NITTrackManager class]);
     self.recipesManager = mock([NITRecipesManager class]);
+    self.geopolisManager = mock([NITGeopolisManager class]);
     
     self.application = mock([UIApplication class]);
     [given([self.application applicationState]) willReturnInteger:UIApplicationStateActive];
@@ -117,7 +119,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
         return nil;
     } forKey:@"dataPoint"];
     
-    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration application:self.application networkManager:self.networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:self.profile trackManager:self.trackManager recipesManager:self.recipesManager reactions:self.reactions];
+    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration application:self.application networkManager:self.networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:self.profile trackManager:self.trackManager recipesManager:self.recipesManager geopolisManager:self.geopolisManager reactions:self.reactions];
     manager.delegate = self;
     
     XCTestExpectation *expOne = [self expectationWithDescription:@"One"];

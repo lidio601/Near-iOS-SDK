@@ -79,14 +79,15 @@
     NITTrackManager *trackManager = [[NITTrackManager alloc] initWithNetworkManager:networkManager cacheManager:cacheManager reachability:internetReachability notificationCenter:[NSNotificationCenter defaultCenter] dateManager:dateManager];
     
     NITRecipesManager *recipesManager = [self makeRecipesManagerWithNetworkManager:networkManager cacheManager:cacheManager configuration:configuration trackManager:trackManager];
+    NITGeopolisManager *geopolisManager = [NITManager makeGeopolisManagerWithNetworkManager:networkManager cacheManager:cacheManager configuration:configuration trackManager:trackManager];
     
     NSMutableDictionary<NSString*, NITReaction*> *reactions = [NITManager makeReactionsWithConfiguration:configuration cacheManager:cacheManager networkManager:networkManager];
     
-    self = [self initWithConfiguration:configuration application:[UIApplication sharedApplication] networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:profile trackManager:trackManager recipesManager:recipesManager reactions:reactions];
+    self = [self initWithConfiguration:configuration application:[UIApplication sharedApplication] networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:profile trackManager:trackManager recipesManager:recipesManager geopolisManager:geopolisManager reactions:reactions];
     return self;
 }
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration application:(UIApplication*)application networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager reactions:(NSMutableDictionary<NSString*, NITReaction*>*)reactions {
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration*)configuration application:(UIApplication*)application networkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager bluetoothManager:(CBCentralManager*)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager geopolisManager:(NITGeopolisManager*)geopolisManager reactions:(NSMutableDictionary<NSString*, NITReaction*>*)reactions {
     self = [super init];
     if (self) {
         self.showBackgroundNotification = YES;
@@ -99,6 +100,8 @@
         self.lastBluetoothState = self.bluetoothManager.state;
         self.recipesManager = recipesManager;
         self.recipesManager.manager = self;
+        self.geopolisManager = geopolisManager;
+        self.geopolisManager.recipesManager = self.recipesManager;
         self.reactions = reactions;
         
         [[NITNetworkProvider sharedInstance] setConfiguration:self.configuration];
@@ -109,7 +112,6 @@
         self.trackManager = trackManager;
         
         [self.cacheManager setAppId:[self.configuration appId]];
-        [self pluginSetup];
         self.started = NO;
         self.notificationProcessor = [[NITNotificationProcessor alloc] initWithRecipesManager:self.recipesManager reactions:self.reactions];
         
@@ -143,7 +145,7 @@
 
 - (void)pluginSetup {
     NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
-    self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration locationManager:nil trackManager:self.trackManager];
+    self.geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:self.cacheManager networkManager:self.networkManager configuration:self.configuration trackManager:self.trackManager];
     self.geopolisManager.recipesManager = self.recipesManager;
 }
 
@@ -154,6 +156,12 @@
     NITScheduleValidator *scheduleValidator = [[NITScheduleValidator alloc] initWithDateManager:dateManager];
     NITRecipeValidationFilter *recipeValidationFilter = [[NITRecipeValidationFilter alloc] initWithValidators:@[cooldownValidator, scheduleValidator]];
     return [[NITRecipesManager alloc] initWithCacheManager:cacheManager networkManager:networkManager configuration:configuration trackManager:trackManager recipeHistory:recipeHistory recipeValidationFilter:recipeValidationFilter];
+}
+
++ (NITGeopolisManager*)makeGeopolisManagerWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager*)cacheManager configuration:(NITConfiguration*)configuration trackManager:(NITTrackManager*)trackManager {
+    NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
+    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:configuration trackManager:trackManager];
+    return geopolisManager;
 }
 
 + (NSMutableDictionary<NSString*, NITReaction*>*)makeReactionsWithConfiguration:(NITConfiguration*)configuration cacheManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager {

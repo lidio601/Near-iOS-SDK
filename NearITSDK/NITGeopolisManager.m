@@ -34,7 +34,6 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 
 @interface NITGeopolisManager()<CLLocationManagerDelegate, NITGeopolisRadarDelegate>
 
-@property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NITGeopolisNodesManager *nodesManager;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) NITConfiguration *configuration;
@@ -50,14 +49,9 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
 
 @implementation NITGeopolisManager
 
-- (instancetype)initWithNodesManager:(NITGeopolisNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration*)configuration locationManager:(CLLocationManager *)locationManager trackManager:(NITTrackManager *)trackManager {
+- (instancetype)initWithNodesManager:(NITGeopolisNodesManager*)nodesManager cachaManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager configuration:(NITConfiguration*)configuration trackManager:(NITTrackManager *)trackManager {
     self = [super init];
     if (self) {
-        if (locationManager) {
-            self.locationManager = locationManager;
-        } else {
-            self.locationManager = [[CLLocationManager alloc] init];
-        }
         self.nodesManager = nodesManager;
         self.cacheManager = cacheManager;
         self.networkManaeger = networkManager;
@@ -65,7 +59,9 @@ NSString* const NodeJSONCacheKey = @"GeopolisNodesJSON";
         self.configuration = configuration;
         self.pluginName = @"geopolis";
         self.beaconProximity = [[NITBeaconProximityManager alloc] init];
-        self.radar = [[NITGeopolisRadar alloc] initWithDelegate:self nodesManager:self.nodesManager locationManager:self.locationManager beaconProximityManager:self.beaconProximity];
+        
+        CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+        self.radar = [[NITGeopolisRadar alloc] initWithDelegate:self nodesManager:self.nodesManager locationManager:locationManager beaconProximityManager:self.beaconProximity];
     }
     return self;
 }

@@ -434,7 +434,7 @@
         return nil;
     };
     
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration locationManager:nil trackManager:self.trackManager];
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration trackManager:self.trackManager];
     [given([cacheManager loadObjectForKey:@"GeopolisNodesJSON"]) willReturn:jsonApi];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
@@ -457,7 +457,7 @@
         return nil;
     };
     
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration locationManager:nil trackManager:self.trackManager];
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration trackManager:self.trackManager];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
     [manager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
@@ -476,7 +476,7 @@
         return [self jsonApiWithContentsOfFile:@"beacon_areas_in_bg"];
     };
     
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration locationManager:nil trackManager:self.trackManager];
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration trackManager:self.trackManager];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
     [manager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
@@ -501,7 +501,7 @@
     
     NITTrackManager *trackManager = mock([NITTrackManager class]);
     
-    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration locationManager:nil trackManager:trackManager];
+    NITGeopolisManager *manager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration trackManager:trackManager];
     
     XCTestExpectation *geopolisExp = [self expectationWithDescription:@"Geopolis"];
     [manager refreshConfigWithCompletionHandler:^(NSError * _Nullable error) {
@@ -644,7 +644,6 @@
 // MARK: - Test gotPulse
 
 - (void)testGotPulse {
-    CLLocationManager *locationManager = mock([CLLocationManager class]);
     NITJSONAPI *jsonApi = [self jsonApiWithContentsOfFile:@"config_22"];
     NITGeopolisNodesManager *nodesManager = [[NITGeopolisNodesManager alloc] init];
     [nodesManager setNodesWithJsonApi:jsonApi];
@@ -656,7 +655,7 @@
     };
     NITRecipesManager *recipeManager = mock([NITRecipesManager class]);
     
-    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration locationManager:locationManager trackManager:self.trackManager];
+    NITGeopolisManager *geopolisManager = [[NITGeopolisManager alloc] initWithNodesManager:nodesManager cachaManager:cacheManager networkManager:networkManager configuration:self.configuration trackManager:self.trackManager];
     geopolisManager.recipesManager = recipeManager;
     
     // Check pulseBundle
