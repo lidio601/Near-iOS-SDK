@@ -17,6 +17,11 @@
 #import "NITSimpleNotification.h"
 #import "NITTrackManager.h"
 #import "NITReaction.h"
+#import "NITSimpleNotificationReaction.h"
+#import "NITContentReaction.h"
+#import "NITCouponReaction.h"
+#import "NITCustomJSONReaction.h"
+#import "NITFeedbackReaction.h"
 #import <CoreLocation/CoreLocation.h>
 #import <OCMockitoIOS/OCMockitoIOS.h>
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
@@ -26,20 +31,28 @@
 #define APPID @"testManager"
 
 typedef void (^SetUserDataBlock)(NSError* error);
+typedef void (^ReactionContentWithRecipeBlock)(id content, NSError * error);
 
 @interface NITManager (Tests)
 
 - (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration application:(UIApplication*)application networkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager bluetoothManager:(CBCentralManager* _Nonnull)bluetoothManager profile:(NITUserProfile*)profile trackManager:(NITTrackManager*)trackManager recipesManager:(NITRecipesManager*)recipesManager geopolisManager:(NITGeopolisManager*)geopolisManager reactions:(NSMutableDictionary<NSString*, NITReaction*>*)reactions;
+
++ (NSMutableDictionary<NSString*, NITReaction*>*)makeReactionsWithConfiguration:(NITConfiguration*)configuration cacheManager:(NITCacheManager*)cacheManager networkManager:(id<NITNetworkManaging>)networkManager;
+
+- (void)recipesManager:(NITRecipesManager *)recipesManager gotRecipe:(NITRecipe *)recipe;
 
 @end
 
 @interface NITManagerTest : NITTestCase<NITManagerDelegate>
 
 @property (nonatomic, strong) NITNetworkMockManger *networkManager;
+@property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) NITUserProfile *profile;
 @property (nonatomic, strong) NITTrackManager *trackManager;
 @property (nonatomic, strong) NITRecipesManager *recipesManager;
 @property (nonatomic, strong) NITGeopolisManager *geopolisManager;
+@property (nonatomic, strong) NITCacheManager *cacheManager;
+@property (nonatomic, strong) CBCentralManager *bluetoothManager;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NITReaction*> *reactions;
 @property (nonatomic, strong) UIApplication *application;
 @property (nonatomic) NSInteger contentIndex;
@@ -56,6 +69,13 @@ typedef void (^SetUserDataBlock)(NSError* error);
     self.contentIndex = 0;
     self.expectations = [[NSMutableDictionary alloc] init];
     self.reactions = [[NSMutableDictionary alloc] init];
+    self.configuration = mock([NITConfiguration class]);
+    [given(self.configuration.apiKey) willReturn:APIKEY];
+    [given(self.configuration.appId) willReturn:APPID];
+    self.cacheManager = mock([NITCacheManager class]);
+    [given([self.cacheManager loadArrayForKey:anything()]) willReturn:nil];
+    self.bluetoothManager = mock([CBCentralManager class]);
+    [given([self.bluetoothManager state]) willReturnInteger:CBManagerStatePoweredOn];
     
     self.profile = mock([NITUserProfile class]);
     [givenVoid([self.profile setUserDataWithKey:anything() value:anything() completionHandler:anything()]) willDo:^id _Nonnull(NSInvocation * _Nonnull invocation) {
@@ -104,13 +124,6 @@ typedef void (^SetUserDataBlock)(NSError* error);
 }
 
 - (void)testManagerDataPoint {
-    NITConfiguration *configuration = [[NITConfiguration alloc] init];
-    [configuration setApiKey:APIKEY];
-    NITCacheManager *cacheManager = mock([NITCacheManager class]);
-    [given([cacheManager loadArrayForKey:anything()]) willReturn:nil];
-    CBCentralManager *bluetoothManager = mock([CBCentralManager class]);
-    [given([bluetoothManager state]) willReturnInteger:CBManagerStatePoweredOn];
-    
     __weak NITManagerTest *weakSelf = self;
     [self.networkManager setMock:^NITJSONAPI *(NSURLRequest *request) {
         if ([request.URL.absoluteString containsString:@"/data_points"]) {
@@ -119,7 +132,7 @@ typedef void (^SetUserDataBlock)(NSError* error);
         return nil;
     } forKey:@"dataPoint"];
     
-    NITManager *manager = [[NITManager alloc] initWithConfiguration:configuration application:self.application networkManager:self.networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:self.profile trackManager:self.trackManager recipesManager:self.recipesManager geopolisManager:self.geopolisManager reactions:self.reactions];
+    NITManager *manager = [[NITManager alloc] initWithConfiguration:self.configuration application:self.application networkManager:self.networkManager cacheManager:self.cacheManager bluetoothManager:self.bluetoothManager profile:self.profile trackManager:self.trackManager recipesManager:self.recipesManager geopolisManager:self.geopolisManager reactions:self.reactions];
     manager.delegate = self;
     
     XCTestExpectation *expOne = [self expectationWithDescription:@"One"];
@@ -141,6 +154,32 @@ typedef void (^SetUserDataBlock)(NSError* error);
     [verifyCount(self.profile, times(2)) setUserDataWithKey:anything() value:anything() completionHandler:anything()];
     
     [self waitForExpectationsWithTimeout:4.0 handler:nil];
+}
+
+- (void)testMakeReactions {
+    NITConfiguration *configuration = mock([NITConfiguration class]);
+    NITCacheManager *cacheManager = mock([NITCacheManager class]);
+    NSMutableDictionary<NSString*, NITReaction*> *reactions = [NITManager makeReactionsWithConfiguration:configuration cacheManager:cacheManager networkManager:self.networkManager];
+    
+    NITReaction *simple = [reactions objectForKey:NITSimpleNotificationPluginName];
+    XCTAssertNotNil(simple);
+    XCTAssertTrue([simple isKindOfClass:[NITSimpleNotificationReaction class]]);
+    
+    NITReaction *content = [reactions objectForKey:NITContentPluginName];
+    XCTAssertNotNil(content);
+    XCTAssertTrue([content isKindOfClass:[NITContentReaction class]]);
+    
+    NITReaction *coupon = [reactions objectForKey:NITCouponPluginName];
+    XCTAssertNotNil(coupon);
+    XCTAssertTrue([coupon isKindOfClass:[NITCouponReaction class]]);
+    
+    NITReaction *customJson = [reactions objectForKey:NITCustomJSONPluginName];
+    XCTAssertNotNil(customJson);
+    XCTAssertTrue([customJson isKindOfClass:[NITCustomJSONReaction class]]);
+    
+    NITReaction *feedback = [reactions objectForKey:NITFeedbackPluginName];
+    XCTAssertNotNil(feedback);
+    XCTAssertTrue([feedback isKindOfClass:[NITFeedbackReaction class]]);
 }
 
 // MARK: - NITManager delegate

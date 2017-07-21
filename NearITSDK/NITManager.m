@@ -54,6 +54,7 @@
 @property (nonatomic, strong) CBCentralManager *bluetoothManager;
 @property (nonatomic, strong) NITNotificationProcessor *notificationProcessor;
 @property (nonatomic, strong) UIApplication *application;
+@property (nonatomic, strong) UNUserNotificationCenter *userNotificationCenter;
 @property (nonatomic) CBManagerState lastBluetoothState;
 @property (nonatomic) BOOL started;
 
@@ -84,6 +85,9 @@
     NSMutableDictionary<NSString*, NITReaction*> *reactions = [NITManager makeReactionsWithConfiguration:configuration cacheManager:cacheManager networkManager:networkManager];
     
     self = [self initWithConfiguration:configuration application:[UIApplication sharedApplication] networkManager:networkManager cacheManager:cacheManager bluetoothManager:bluetoothManager profile:profile trackManager:trackManager recipesManager:recipesManager geopolisManager:geopolisManager reactions:reactions];
+    if (NSClassFromString(@"UNUserNotificationCenter")) {
+        self.userNotificationCenter = [UNUserNotificationCenter currentNotificationCenter];
+    }
     return self;
 }
 
@@ -441,7 +445,7 @@
                         }
                         UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
                         UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:recipe.ID content:notification trigger:trigger];
-                        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+                        [self.userNotificationCenter addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
                             if (error) {
                                 NITLogE(LOGTAG, @"Background notification scheduling failed: %@", error);
                             }
