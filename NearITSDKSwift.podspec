@@ -17,6 +17,6 @@ s.source_files          = 'NearITSDKSwift', 'NearITSDKSwift/**/*.{swift}'
 s.ios.deployment_target = '9.0'
 s.requires_arc          = true
 
-s.dependency            'NearITSDK', '= 1.0.2'
+s.dependency            'NearITSDK', '= 1.0.3'
 
 end
