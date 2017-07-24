@@ -41,6 +41,9 @@
 
 #define LOGTAG @"Manager"
 
+static NSString *const defaultManagerLock = @"manager.lock";
+static NITManager *defaultManager;
+
 @interface NITManager()<NITManaging, CBCentralManagerDelegate, NITUserProfileDelegate>
 
 @property (nonatomic, strong) NITGeopolisManager *geopolisManager;
@@ -62,11 +65,24 @@
 
 @implementation NITManager
 
-- (instancetype _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey {
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NITConfiguration *configuration = [[NITConfiguration alloc] initWithUserDefaults:userDefaults];
++ (void)setupWithApiKey:(NSString*)apiKey {
+    NITConfiguration *configuration = [NITConfiguration defaultConfiguration];
     [configuration setApiKey:apiKey];
+    NITManager *manager = [NITManager defaultManager];
+    [manager firstRun];
+}
+
++ (NITManager*)defaultManager {
+    @synchronized (defaultManagerLock) {
+        if (!defaultManager) {
+            defaultManager = [[NITManager alloc] initManager];
+        }
+    }
+    return defaultManager;
+}
+
+- (instancetype _Nonnull)initManager {
+    NITConfiguration *configuration = [NITConfiguration defaultConfiguration];
     id<NITNetworkManaging> networkManager = [[NITNetworkManager alloc] init];
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:self.configuration.appId];
     CBCentralManager *bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey : [NSNumber numberWithBool:NO]}];
@@ -119,15 +135,6 @@
         self.started = NO;
         self.notificationProcessor = [[NITNotificationProcessor alloc] initWithRecipesManager:self.recipesManager reactions:self.reactions];
         
-        [self.profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
-            if(error == nil) {
-                NITLogD(LOGTAG, @"Profile creation successful: %@", profileId);
-                [self refreshConfigWithCompletionHandler:nil];
-            } else {
-                NITLogE(LOGTAG, @"Profile creation error");
-            }
-        }];
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBeacomActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     }
     return self;
@@ -135,6 +142,17 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)firstRun {
+    [self.profile createNewProfileWithCompletionHandler:^(NSString * _Nullable profileId, NSError * _Nullable error) {
+        if(error == nil) {
+            NITLogD(LOGTAG, @"Profile creation successful: %@", profileId);
+            [self refreshConfigWithCompletionHandler:nil];
+        } else {
+            NITLogE(LOGTAG, @"Profile creation error");
+        }
+    }];
 }
 
 - (void)start {

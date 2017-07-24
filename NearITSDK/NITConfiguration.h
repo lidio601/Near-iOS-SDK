@@ -10,6 +10,7 @@
 
 @interface NITConfiguration : NSObject
 
++ (NITConfiguration* _Nonnull)defaultConfiguration;
 - (instancetype _Nonnull)initWithUserDefaults:(NSUserDefaults* _Nonnull)userDefaults;
 
 - (NSString* _Nonnull)paramKeyWithKey:(NSString* _Nonnull)key;

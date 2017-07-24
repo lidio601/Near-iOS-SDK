@@ -15,6 +15,9 @@
 #define INSTALLATIONID @"installationid"
 #define DEVICETOKEN @"devicetoken"
 
+static NSString *const defaultConfigurationLock = @"configuration.lock";
+static NITConfiguration *defaultConfiguration;
+
 @interface NITConfiguration()
 
 @property (nonatomic, strong) NSString * _Nonnull apiKey;
@@ -36,6 +39,15 @@
 @synthesize installationId = _installationId;
 @synthesize deviceToken = _deviceToken;
 @synthesize suiteUserDefaults = _suiteUserDefaults;
+
++ (NITConfiguration*)defaultConfiguration {
+    @synchronized (defaultConfigurationLock) {
+        if (defaultConfiguration == nil) {
+            defaultConfiguration = [[NITConfiguration alloc] init];
+        }
+    }
+    return defaultConfiguration;
+}
 
 - (instancetype)init {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

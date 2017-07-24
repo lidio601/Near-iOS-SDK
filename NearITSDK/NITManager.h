@@ -34,7 +34,8 @@
 @property (nonatomic, weak) id<NITManagerDelegate> _Nullable delegate;
 @property (nonatomic) BOOL showBackgroundNotification;
 
-- (instancetype _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey;
++ (void)setupWithApiKey:(NSString* _Nonnull)apiKey;
++ (NITManager* _Nonnull)defaultManager;
 
 - (void)start;
 - (void)stop;
