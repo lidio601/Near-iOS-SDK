@@ -1,3 +1,18 @@
+1.0.3 Release notes (2017-07-24)
+=============================================================
+
+### API Breaking Changes
+
+* The Near Manager is now singleton, there are no more "initWithApiKey" and "init(apiKey)" methods.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes some cases for region monitoring.
+
 1.0.2 Release notes (2017-07-18)
 =============================================================
 
