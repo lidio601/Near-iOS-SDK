@@ -134,25 +134,6 @@
     [config clear];
 }
 
-- (void)testUserDefaultsSuite {
-    NSString *apiKey = @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJNeUFwcElkIiwicm9sZV9rZXkiOiJhcHAifX19.AalMftx-rJa-6O3ZzMdjSod4LzBfdvp2G7uT5sFx1Xg";
-    NSString *profileId = @"profile-id";
-    NSString *installationId = @"installation-id";
-    
-    NSUserDefaults *userDefaults = mock([NSUserDefaults class]);
-    NITConfiguration *config = [[NITConfiguration alloc] initWithUserDefaults:userDefaults];
-    [config setApiKey:apiKey];
-    [config setProfileId:profileId];
-    [config setInstallationId:installationId];
-    
-    NSUserDefaults *suiteUserDefaults = mock([NSUserDefaults class]);
-    [config setSuiteUserDefaults:suiteUserDefaults];
-    
-    [verify(suiteUserDefaults) setObject:apiKey forKey:@"apikey"];
-    [verify(suiteUserDefaults) setObject:profileId forKey:@"profileId"];
-    [verify(suiteUserDefaults) setObject:installationId forKey:@"installationid"];
-}
-
 - (void)testInitUserDefaultsPrefilled {
     NSString *apiKey = @"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3MDQ4MTU4NDcyZTU0NWU5ODJmYzk5NDcyYmI5MTMyNyIsImlhdCI6MTQ4OTQ5MDY5NCwiZXhwIjoxNjE1NzY2Mzk5LCJkYXRhIjp7ImFjY291bnQiOnsiaWQiOiJNeUFwcElkIiwicm9sZV9rZXkiOiJhcHAifX19.AalMftx-rJa-6O3ZzMdjSod4LzBfdvp2G7uT5sFx1Xg";
     NSString *profileId = @"profile-id";

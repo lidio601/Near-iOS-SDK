@@ -25,6 +25,5 @@
 - (NSString * _Nullable)deviceToken;
 - (void)setDeviceToken:(NSString * _Nonnull)deviceToken;
 - (void)clear;
-- (void)setSuiteUserDefaults:(NSUserDefaults * _Nullable)suiteUserDefaults;
 
 @end

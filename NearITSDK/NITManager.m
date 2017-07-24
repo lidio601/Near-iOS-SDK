@@ -371,11 +371,6 @@ static NITManager *defaultManager;
     [self.profile setProfileId:profileId];
 }
 
-- (void)setSuiteName:(NSString *)suiteName {
-    NSUserDefaults *suiteUserDefaults = [[NSUserDefaults alloc] initWithSuiteName:suiteName];
-    [self.configuration setSuiteUserDefaults:suiteUserDefaults];
-}
-
 - (BOOL)handleLocalNotificationResponse:(UNNotificationResponse *)response completionHandler:(void (^)(id _Nullable, NITRecipe * _Nullable, NSError * _Nullable))completionHandler {
     NSDictionary *userInfo = response.notification.request.content.userInfo;
     BOOL valid = [self handleLocalUserInfo:userInfo completionHandler:^(id _Nullable content, NITRecipe * _Nullable recipe, NSError * _Nullable error) {

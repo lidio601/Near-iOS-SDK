@@ -123,10 +123,6 @@ public final class NearManager: NSObject, NITManagerDelegate {
         manager.setProfileId(id)
     }
     
-    public func setSuiteName(_ name: String) {
-        manager.setSuiteName(name)
-    }
-    
     public func recipes(_ completionHandler:(([NITRecipe]?, Error?) -> Void)?) {
         manager.recipes { (recipes, error) in
             if let handler = completionHandler {

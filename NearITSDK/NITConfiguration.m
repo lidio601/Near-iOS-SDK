@@ -187,28 +187,4 @@ static NITConfiguration *defaultConfiguration;
     _deviceToken = nil;
 }
 
-- (void)setSuiteUserDefaults:(NSUserDefaults *)suiteUserDefaults {
-    if (suiteUserDefaults == nil) {
-        NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
-        [_suiteUserDefaults removePersistentDomainForName:appDomain];
-        _suiteUserDefaults = nil;
-    } else {
-        if (_suiteUserDefaults == nil) {
-            NSString *apiKey = self.apiKey;
-            NSString *profileId = self.profileId;
-            NSString *installationId = self.installationId;
-            if (apiKey) {
-                [suiteUserDefaults setObject:apiKey forKey:APIKEY];
-            }
-            if (profileId) {
-                [suiteUserDefaults setObject:profileId forKey:PROFILE_ID];
-            }
-            if (installationId) {
-                [suiteUserDefaults setObject:installationId forKey:INSTALLATIONID];
-            }
-        }
-        _suiteUserDefaults = suiteUserDefaults;
-    }
-}
-
 @end
