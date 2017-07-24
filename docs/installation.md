@@ -23,9 +23,8 @@ import NearITSDKSwift
 
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 	...
-
-	let manager = NearManager(apiKey: "<your API token here>")
-   
+    NearManager.setup(apiKey: "<your API token here>")
+	let manager = NearManager.shared
 	...
 }
 ```
@@ -36,9 +35,8 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     ...
-
-    NITManager *manager = [[NITManager alloc] initWithApiKey:"<your API token here>"];
-
+    [NITManager setupWithApiKey:@"<your API token here>"];
+    NITManager *manager = [NITManager defaultManager];
     ...
 }
 ```
