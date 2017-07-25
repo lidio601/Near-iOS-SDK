@@ -11,7 +11,7 @@
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
 #import "NITTestCase.h"
 #import "NITInstallation.h"
-#import "Reachability.h"
+#import "NITReachability.h"
 #import "NITConfiguration.h"
 #import "NITJSONAPI.h"
 #import "NITConstants.h"
@@ -25,7 +25,7 @@
 
 @interface NITInstallationTest : NITTestCase
 
-@property (nonatomic, strong) Reachability *reachability;
+@property (nonatomic, strong) NITReachability *reachability;
 @property (nonatomic, strong) NITConfiguration *configution;
 @property (nonatomic, strong) NITNetworkMockManger *networkManager;
 
@@ -36,7 +36,7 @@
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    self.reachability = mock([Reachability class]);
+    self.reachability = mock([NITReachability class]);
     [given([self.reachability currentReachabilityStatus]) willReturnInteger:ReachableViaWWAN];
     self.configution = mock([NITConfiguration class]);
     [given(self.configution.apiKey) willReturn:@"apiKey"];

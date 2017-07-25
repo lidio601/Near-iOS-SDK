@@ -10,7 +10,7 @@
 #import "NITTrackManager+Tests.h"
 #import "NITTrackRequest.h"
 #import "NITCacheManager.h"
-#import "Reachability.h"
+#import "NITReachability.h"
 #import "NITTestDateManager.h"
 #import <OCMockitoIOS/OCMockitoIOS.h>
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
@@ -25,7 +25,7 @@
 
 @property (nonatomic, strong) NITCacheManager *cacheManager;
 @property (nonatomic, strong) NITTestDateManager *dateManager;
-@property (nonatomic, strong) Reachability *reachability;
+@property (nonatomic, strong) NITReachability *reachability;
 @property (nonatomic, strong) id<NITTrackManagerDelegate> delegate;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, XCTestExpectation*> *expectations;
 @property (nonatomic) NSInteger caseNumber;
@@ -38,7 +38,7 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
     self.cacheManager = mock([NITCacheManager class]);
-    self.reachability = mock([Reachability class]);
+    self.reachability = mock([NITReachability class]);
     self.dateManager = [[NITTestDateManager alloc] init];
     self.expectations = [[NSMutableDictionary alloc] init];
     self.caseNumber = 0;

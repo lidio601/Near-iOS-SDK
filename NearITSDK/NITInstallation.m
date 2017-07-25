@@ -13,7 +13,7 @@
 #import "NITNetworkProvider.h"
 #import "NITConfiguration.h"
 #import "NITConstants.h"
-#import "Reachability.h"
+#import "NITReachability.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <CoreLocation/CoreLocation.h>
 #import "NITLog.h"
@@ -25,7 +25,7 @@
 
 @property (nonatomic, strong) NITConfiguration *configuration;
 @property (nonatomic, strong) id<NITNetworkManaging> networkManager;
-@property (nonatomic, strong) Reachability *reachability;
+@property (nonatomic, strong) NITReachability *reachability;
 @property (nonatomic) BOOL isBusy;
 @property (nonatomic) BOOL isQueued;
 
@@ -33,7 +33,7 @@
 
 @implementation NITInstallation
 
-- (instancetype)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager reachability:(Reachability * _Nonnull)reachability {
+- (instancetype)initWithConfiguration:(NITConfiguration*)configuration networkManager:(id<NITNetworkManaging>)networkManager reachability:(NITReachability * _Nonnull)reachability {
     self = [super init];
     if (self) {
         self.configuration = configuration;

@@ -11,13 +11,13 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 
 @class NITConfiguration;
-@class Reachability;
+@class NITReachability;
 
 @interface NITInstallation : NSObject
 
 @property (nonatomic) CBManagerState bluetoothState;
 
-- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager reachability:(Reachability* _Nonnull)reachability;
+- (instancetype _Nonnull)initWithConfiguration:(NITConfiguration* _Nonnull)configuration networkManager:(id<NITNetworkManaging> _Nonnull)networkManager reachability:(NITReachability* _Nonnull)reachability;
 
 - (void)registerInstallation;
 - (void)shouldRegisterInstallation;

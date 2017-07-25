@@ -8,7 +8,7 @@
 
 #import "NITTrackManager.h"
 #import "NITCacheManager.h"
-#import "Reachability.h"
+#import "NITReachability.h"
 #import "NITTrackRequest.h"
 #import "NITLog.h"
 #import "NITDateManager.h"
@@ -22,7 +22,7 @@ NSString* const TrackCacheKey = @"Trackings";
 
 @property (nonatomic, strong) id<NITNetworkManaging> networkManager;
 @property (nonatomic, strong) NITCacheManager *cacheManager;
-@property (nonatomic, strong) Reachability *reachability;
+@property (nonatomic, strong) NITReachability *reachability;
 @property (nonatomic, strong) NSNotificationCenter *notificationCenter;
 @property (nonatomic, strong) NITDateManager *dateManager;
 @property (atomic, strong) NSMutableArray<NITTrackRequest*> *requests;
@@ -31,7 +31,7 @@ NSString* const TrackCacheKey = @"Trackings";
 
 @implementation NITTrackManager
 
-- (instancetype)initWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager *)cacheManager reachability:(Reachability *)reachability notificationCenter:(NSNotificationCenter *)notificationCenter dateManager:(NITDateManager *)dateManager {
+- (instancetype)initWithNetworkManager:(id<NITNetworkManaging>)networkManager cacheManager:(NITCacheManager *)cacheManager reachability:(NITReachability *)reachability notificationCenter:(NSNotificationCenter *)notificationCenter dateManager:(NITDateManager *)dateManager {
     self = [super init];
     if (self) {
         self.networkManager = networkManager;

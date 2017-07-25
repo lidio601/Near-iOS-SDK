@@ -30,7 +30,7 @@
 #import "NITCooldownValidator.h"
 #import "NITScheduleValidator.h"
 #import "NITRecipeValidationFilter.h"
-#import "Reachability.h"
+#import "NITReachability.h"
 #import "NSData+Zip.h"
 #import "NITJSONAPI.h"
 #import "NITReaction.h"
@@ -87,7 +87,7 @@ static NITManager *defaultManager;
     NITCacheManager *cacheManager = [[NITCacheManager alloc] initWithAppId:self.configuration.appId];
     CBCentralManager *bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:@{CBCentralManagerOptionShowPowerAlertKey : [NSNumber numberWithBool:NO]}];
     
-    Reachability *internetReachability =  [Reachability reachabilityForInternetConnection];
+    NITReachability *internetReachability =  [NITReachability reachabilityForInternetConnection];
     NITInstallation *installation = [[NITInstallation alloc] initWithConfiguration:configuration networkManager:networkManager reachability:internetReachability];
     NITUserDataBackoff *userDataBackoff = [[NITUserDataBackoff alloc] initWithConfiguration:configuration networkManager:self.networkManager cacheManager:cacheManager];
     NITUserProfile *profile = [[NITUserProfile alloc] initWithConfiguration:configuration networkManager:networkManager installation:installation userDataBackoff:userDataBackoff];

@@ -10,7 +10,7 @@
 #import "NITNetworkManaging.h"
 
 @class NITCacheManager;
-@class Reachability;
+@class NITReachability;
 @class NSNotificationCenter;
 @class NITDateManager;
 @class NITTrackManager;
@@ -27,7 +27,7 @@ extern NSString* _Nonnull const TrackCacheKey;
 
 @property (nonatomic, weak) id<NITTrackManagerDelegate> _Nullable delegate;
 
-- (instancetype _Nonnull)initWithNetworkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager reachability:(Reachability* _Nonnull)reachability notificationCenter:(NSNotificationCenter* _Nonnull)notificationCenter dateManager:(NITDateManager* _Nonnull)dateManager;
+- (instancetype _Nonnull)initWithNetworkManager:(id<NITNetworkManaging> _Nonnull)networkManager cacheManager:(NITCacheManager* _Nonnull)cacheManager reachability:(NITReachability* _Nonnull)reachability notificationCenter:(NSNotificationCenter* _Nonnull)notificationCenter dateManager:(NITDateManager* _Nonnull)dateManager;
 - (void)addTrackWithRequest:(NSURLRequest* _Nonnull)request;
 
 @end
