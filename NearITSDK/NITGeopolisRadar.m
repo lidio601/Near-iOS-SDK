@@ -401,9 +401,11 @@
             [appeared addObject:beaconIdentifier];
             
             CLProximity previousProximity = [self.beaconProximity proximityWithBeaconIdentifier:beaconIdentifier regionIdentifier:region.identifier];
-            if (previousProximity != beacon.proximity) {
+            if (previousProximity != proximity) {
                 [self.beaconProximity addProximityWithBeaconIdentifier:beaconIdentifier regionIdentifier:region.identifier proximity:beacon.proximity];
-                [self triggerWithEvent:beaconEvent node:minorNode];
+                if (proximity != CLProximityFar) {
+                    [self triggerWithEvent:beaconEvent node:minorNode];
+                }
             }
         }
     }
