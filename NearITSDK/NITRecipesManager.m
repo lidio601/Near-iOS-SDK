@@ -211,6 +211,11 @@ NSString* const RecipesCacheKey = @"Recipes";
             NSArray<NITRecipe*> *recipes = [json parseToArrayOfObjects];
             if ([recipes count] > 0) {
                 NITRecipe *recipe = [recipes objectAtIndex:0];
+                if (![self.recipes containsObject:recipe]) {
+                    NSMutableArray *recipesCopy = [self.recipes mutableCopy];
+                    [recipesCopy addObject:recipe];
+                    self.recipes = [NSArray arrayWithArray:recipesCopy];
+                }
                 [self gotRecipe:recipe];
             }
         }

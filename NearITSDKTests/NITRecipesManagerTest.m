@@ -209,6 +209,21 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
+- (void)testRecipeEqual {
+    NITRecipe *recipe1 = [[NITRecipe alloc] init];
+    recipe1.ID = @"1";
+    NITRecipe *recipe2 = [[NITRecipe alloc] init];
+    recipe2.ID = @"1";
+    
+    XCTAssertTrue([recipe1 isEqual:recipe2]);
+    XCTAssertTrue([recipe2 isEqual:recipe1]);
+    XCTAssertTrue([recipe1 isEqual:recipe1]);
+    
+    recipe2.ID = @"2";
+    
+    XCTAssertFalse([recipe1 isEqual:recipe2]);
+}
+
 // MARK: - Tags loading
 
 - (void)testLoadingRecipesWithPulseBundleTags {

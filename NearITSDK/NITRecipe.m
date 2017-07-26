@@ -60,6 +60,16 @@ NSString* const NITRecipeEngaged = @"engaged";
     return nil;
 }
 
+- (BOOL)isEqual:(id)object {
+    if ([object isKindOfClass:[NITRecipe class]]) {
+        NITRecipe *recipe = (NITRecipe*)object;
+        if ([self.ID isEqualToString:recipe.ID]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 // MARK: - NSCoding
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {

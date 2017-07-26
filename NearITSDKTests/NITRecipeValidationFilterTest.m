@@ -65,7 +65,9 @@
 
 - (void)testASingleRecipeShouldFail {
     NITRecipe *shouldFailRecipe = [[NITRecipe alloc] init];
+    shouldFailRecipe.ID = @"shouldFail";
     NITRecipe *shouldPassRecipe = [[NITRecipe alloc] init];
+    shouldPassRecipe.ID = @"shouldPass";
     [given([self.firstValidator isValidWithRecipe:anything()]) willReturnBool:YES];
     [given([self.firstValidator isValidWithRecipe:sameInstance(shouldFailRecipe)]) willReturnBool:NO];
     [given([self.secondValidator isValidWithRecipe:anything()]) willReturnBool:YES];
