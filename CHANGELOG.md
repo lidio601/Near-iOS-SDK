@@ -1,3 +1,18 @@
+1.0.4 Release notes (2017-07-26)
+=============================================================
+
+### API Breaking Changes
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bugfixes
+
+* Fixes "Reachability" code collision.
+
 1.0.3 Release notes (2017-07-24)
 =============================================================
 
